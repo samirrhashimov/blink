@@ -1,34 +1,33 @@
-# Blink 2.0 - Shared Link Vault
+# Blink - Your links, organized
 
 A minimalist, web-based link storage and collaboration app built with React.js, TypeScript, and Firebase.
 
 ## Features
 
 ### Core Functionality
-- 🔐 **User Authentication** - Secure login and signup with Firebase Auth
-- 📁 **Vault Management** - Create, edit, and delete vaults (link containers)
-- 🔗 **Link Management** - Add, edit, and delete links within vaults
-- ⚡ **Real-time Sync** - Live data synchronization with Firebase Firestore
-- 🎨 **Theme System** - Light/dark mode with persistent storage
+- **User Authentication** - Secure login and signup with Firebase Auth
+- **Vault Management** - Create, edit, and delete vaults (link containers)
+- **Link Management** - Add, edit, and delete links within vaults
+- **Real-time Sync** - Live data synchronization with Firebase Firestore
+- **Theme System** - Light/dark mode with persistent storage
 
 ### Collaboration Features
-- 📧 **Email Invitations** - Send vault invitations to users by email
-- 🔑 **Permission Management** - View, comment, and edit permissions
-- 👥 **Collaborator Management** - Add, remove, and manage vault collaborators
-- 🔗 **Share Links** - Generate shareable links with expiration and usage limits
-- 🔔 **Notifications** - Real-time notification system for invitations and updates
+- **Email Invitations** - Send vault invitations to users by email
+- **Permission Management** - View, comment, and edit permissions
+- **Collaborator Management** - Add, remove, and manage vault collaborators
+- **Share Links** - Generate shareable links with expiration and usage limits
+- **Notifications** - Real-time notification system for invitations and updates
 
 ### User Experience
-- 🔍 **Search Functionality** - Search across vaults, links, titles, descriptions, and URLs
-- 📱 **Responsive Design** - Mobile-first design that works on all devices
-- ⏳ **Loading States** - Skeleton loaders and loading indicators
-- 🛡️ **Error Handling** - Error boundaries and user-friendly error messages
-- 📋 **Copy to Clipboard** - Quick copy functionality for links
+- **Search Functionality** - Search across vaults, links, titles, descriptions, and URLs
+- **Responsive Design** - Mobile-first design that works on all devices
+- **Loading States** - Skeleton loaders and loading indicators
+- **Copy to Clipboard** - Quick copy functionality for links
 
 ## Tech Stack
 
 - **Frontend**: React 18, TypeScript, Vite
-- **Styling**: Classic CSS (transitioned from Tailwind CSS)
+- **Styling**: Classic CSS , Tailwind CSS, PostCSS
 - **Backend**: Firebase (Authentication + Firestore)
 - **Icons**: Lucide React
 - **Routing**: React Router DOM
@@ -46,7 +45,7 @@ A minimalist, web-based link storage and collaboration app built with React.js, 
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/samirrhashimov/blink.git
 cd blink-app
 ```
 
@@ -71,7 +70,7 @@ npm run dev
 
 ```
 src/
-├── components/          # Reusable UI components
+├── components/          # UI components
 │   ├── AddLinkModal.tsx
 │   ├── CollaboratorsModal.tsx
 │   ├── CreateVaultModal.tsx
@@ -124,49 +123,38 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Users collection - allow authenticated users to read and query
     match /users/{userId} {
       allow read: if request.auth != null;
       allow create: if request.auth != null;
       allow update, delete: if request.auth != null && request.auth.uid == userId;
     }
     
-    // Vaults - simplified rules for sharing to work
     match /vaults/{vaultId} {
-      // Anyone authenticated can create a vault they own
       allow create: if request.auth != null && request.resource.data.ownerId == request.auth.uid;
-      
-      // Can read if owner or in authorizedUsers
       allow read: if request.auth != null && 
         (resource.data.ownerId == request.auth.uid || 
          request.auth.uid in resource.data.authorizedUsers);
       
-      // Only owner can delete
       allow delete: if request.auth != null && resource.data.ownerId == request.auth.uid;
-      
-      // Can update if owner, authorized user, OR adding yourself to authorizedUsers
+   
       allow update: if request.auth != null && 
         (resource.data.ownerId == request.auth.uid || 
          request.auth.uid in resource.data.authorizedUsers ||
          request.auth.uid in request.resource.data.authorizedUsers);
     }
     
-    // Share invitations - open for authenticated users
     match /shareInvites/{inviteId} {
       allow read, write: if request.auth != null;
     }
     
-    // Vault permissions
     match /vaultPermissions/{permissionId} {
       allow read, write: if request.auth != null;
     }
     
-    // Share links
     match /shareLinks/{linkId} {
       allow read, write: if request.auth != null;
     }
     
-    // Notifications - anyone can create, users can only read their own
     match /notifications/{notificationId} {
       allow create: if request.auth != null;
       allow read, update, delete: if request.auth != null && resource.data.userId == request.auth.uid;
@@ -192,4 +180,4 @@ service cloud.firestore {
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the AGPLv3 License.
