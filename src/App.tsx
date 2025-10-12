@@ -14,6 +14,7 @@ import VaultDetails from './pages/VaultDetails';
 import ShareVault from './pages/ShareVault';
 import Invitations from './pages/Invitations';
 import Settings from './pages/Settings';
+import AboutPage from './pages/About';
 import ProtectedRoute from './components/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary';
 
@@ -34,6 +35,10 @@ const AppRoutes: React.FC = () => {
         <Route 
           path="/signup" 
           element={currentUser ? <Navigate to="/dashboard" /> : <SignupPage />} 
+        />
+        <Route
+          path="/about"
+          element={<AboutPage />}
         />
         <Route 
           path="/dashboard" 

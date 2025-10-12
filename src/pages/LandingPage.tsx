@@ -24,7 +24,7 @@ const LandingPage: React.FC = () => {
                 </a>
               </div>
               <div className="flex items-center gap-2">
-                <Link to="/login" className="btn-secondary">
+                <Link to="/login" className="btn-secondary landing1">
                   Log in
                 </Link>
                 <Link to="/signup" className="btn-primary">
@@ -46,20 +46,20 @@ const LandingPage: React.FC = () => {
               <Link to="/signup" className="btn-primary">
                 Sign up for free
               </Link>
-              <button className="btn-secondary">
+              <Link to="/about" className="btn-secondary">
                 Learn more
-              </button>
+              </Link>
             </div>
           </div>
         </section>
 
         {/* Footer */}
         <footer className="landing-footer">
-          <p>© 2024 All rights reserved.</p>
-          <div className="flex gap-6">
+          <p>© 2025 All rights reserved.</p>
+          {/* <div className="flex gap-6">
             <a href="#">Terms of Service</a>
             <a href="#">Privacy Policy</a>
-          </div>
+          </div> */}
         </footer>
     </div>
   );

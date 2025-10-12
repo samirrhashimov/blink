@@ -1,0 +1,375 @@
+/* About Page Styles */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.about-page {
+  min-height: 100vh;
+  background: linear-gradient(to bottom right, #0f172a, #1e293b, #0f172a);
+  color: #ffffff;
+}
+
+/* Navigation */
+.about-navbar {
+  border-bottom: 1px solid #475569;
+  backdrop-filter: blur(10px);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgb(235, 235, 235);
+}
+
+.about-navbar-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.about-logo {
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.about-logo-img {
+  height: 40px;
+  width: auto;
+}
+
+.about-nav-back {
+  color: #292929;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.about-nav-back:hover {
+  color: #0082be;
+}
+
+/* Hero Section */
+.about-hero {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 5rem 1.5rem;
+}
+
+.about-hero-container {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.about-hero-title {
+  font-size: 3.5rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+@media (max-width: 768px) {
+  .about-hero-title {
+    font-size: 2.5rem;
+  }
+}
+
+.about-hero-highlight {
+  background: linear-gradient(to right, #60a5fa, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.about-hero-subtitle {
+  font-size: 1.25rem;
+  color: #cbd5e1;
+  max-width: 42rem;
+  margin: 0 auto 2rem;
+}
+
+/* Features Section */
+.about-features {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+
+.about-section-title {
+  font-size: 2.25rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.about-features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.about-feature-card {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid #475569;
+  border-radius: 0.5rem;
+  padding: 2rem;
+  transition: all 0.3s ease;
+}
+
+.about-feature-card:hover {
+  border-color: #3b82f6;
+}
+
+.about-feature-icon {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.about-icon-blue {
+  background: rgba(59, 130, 246, 0.2);
+}
+
+.about-icon-green {
+  background: rgba(34, 197, 94, 0.2);
+}
+
+.about-icon-purple {
+  background: rgba(168, 85, 247, 0.2);
+}
+
+.about-icon-pink {
+  background: rgba(236, 72, 153, 0.2);
+}
+
+.about-icon-yellow {
+  background: rgba(234, 179, 8, 0.2);
+}
+
+.about-icon-cyan {
+  background: rgba(6, 182, 212, 0.2);
+}
+
+.about-icon-svg {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+
+.about-feature-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.about-feature-text {
+  color: #94a3b8;
+}
+
+/* Use Cases Section */
+.about-usecases {
+  max-width: 1280px;
+  margin: 4rem auto 0;
+  padding: 4rem 1.5rem;
+  background: rgba(30, 41, 59, 0.3);
+  border-radius: 0.5rem;
+}
+
+.about-usecases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.about-usecase-card {
+  border-left: 4px solid;
+  padding-left: 1.5rem;
+}
+
+.about-usecase-blue {
+  border-left-color: #60a5fa;
+}
+
+.about-usecase-green {
+  border-left-color: #22c55e;
+}
+
+.about-usecase-purple {
+  border-left-color: #a855f7;
+}
+
+.about-usecase-pink {
+  border-left-color: #ec4899;
+}
+
+.about-usecase-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.about-usecase-text {
+  color: #cbd5e1;
+}
+
+/* Tech Stack Section */
+.about-techstack {
+  max-width: 1280px;
+  margin: 4rem auto;
+  padding: 4rem 1.5rem;
+  display: flex;
+  justify-content: center;
+}
+
+.about-techstack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem;
+}
+
+.about-tech-badge {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid #475569;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.about-tech-badge:hover {
+  border-color: #3b82f6;
+}
+
+.about-tech-name {
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+/* CTA Section */
+.about-cta {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 5rem 1.5rem;
+  text-align: center;
+}
+
+.about-cta-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.about-cta-title {
+  font-size: 2.25rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.about-cta-subtitle {
+  font-size: 1.125rem;
+  color: #cbd5e1;
+  max-width: 42rem;
+  margin-bottom: 2rem;
+}
+
+.about-cta-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.about-btn {
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+}
+
+.about-btn-primary {
+  background: linear-gradient(to right, #3b82f6, #06b6d4);
+  color: #ffffff;
+}
+
+.about-btn-primary:hover {
+  background: linear-gradient(to right, #2563eb, #0891b2);
+}
+
+.about-btn-secondary {
+  border: 1px solid #64748b;
+  color: #ffffff;
+}
+
+.about-btn-secondary:hover {
+  border-color: #cbd5e1;
+}
+
+.about-btn-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Footer */
+.about-footer {
+  border-top: 1px solid #475569;
+  margin-top: 4rem;
+  padding: 2rem;
+}
+
+.about-footer-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  text-align: center;
+  color: #64748b;
+}
+
+.about-footer-text {
+  margin-bottom: 0.5rem;
+}
+
+.about-footer-subtext {
+  font-size: 0.875rem;
+}
+
+.about-footer-heart {
+  color: #f87171;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .about-hero {
+    padding: 3rem 1rem;
+  }
+
+  .about-features {
+    padding: 2rem 1rem;
+  }
+
+  .about-features-grid {
+    gap: 1.5rem;
+  }
+
+  .about-cta-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .about-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
