@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Lock, Share2, Zap, Users, Search, Moon } from 'lucide-react';
 import coverImage from '../assets/blinklogo2.png';
