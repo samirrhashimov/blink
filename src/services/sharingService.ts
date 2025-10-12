@@ -10,7 +10,6 @@ import {
   where,
   serverTimestamp,
   arrayUnion,
-  arrayRemove
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import type { ShareInvite, VaultPermission } from '../types';
