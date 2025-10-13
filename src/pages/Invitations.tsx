@@ -131,10 +131,10 @@ const Invitations: React.FC = () => {
               <span className="active-link">Invitations</span>
             </nav>
             <div className="header-right">
-              <button onClick={toggleTheme} className="theme-toggle">
+              <button onClick={toggleTheme} className="theme-toggle mediaforbuttons">
                 {theme === 'light' ? <Moon /> : <Sun />}
               </button>
-              <Link to="/settings" className="settings-link">
+              <Link to="/settings" className="settings-link mediaforbuttons">
                 <Settings />
               </Link>
               <div className="user-avatar">

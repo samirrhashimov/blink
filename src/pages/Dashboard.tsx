@@ -99,16 +99,10 @@ const Dashboard: React.FC = () => {
               <span className="active-link">Home</span>
               <Link to="/invitations">Invitations</Link>
             </nav>
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="mobile-menu-button md:hidden"
-              aria-label="Toggle mobile menu"
-            >
-              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
+            
+            
             <div className="header-right">
-              <div className="modern-search-bar hidden sm:block" style={{ width: '16rem' }}>
+              {/* <div className="modern-search-bar hidden sm:block" style={{ width: '16rem' }}>
                 <Search className="modern-search-icon" size={16} />
                 <input
                   className="modern-search-input modern-search-header"
@@ -116,7 +110,15 @@ const Dashboard: React.FC = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
-              </div>
+              </div> */}
+              <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="mobile-menu-button md:hidden"
+              aria-label="Toggle mobile menu"
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+            
               <button 
                 onClick={() => setShowNotifications(true)}
                 className="theme-toggle"
@@ -128,10 +130,10 @@ const Dashboard: React.FC = () => {
                   </span>
                 )}
               </button>
-              <button onClick={toggleTheme} className="theme-toggle" title="Toggle Theme">
+              <button onClick={toggleTheme} className="theme-toggle mediaforbuttons" title="Toggle Theme">
                 {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
               </button>
-              <Link to="/settings" className="theme-toggle" title="Settings">
+              <Link to="/settings" className="theme-toggle mediaforbuttons" title="Settings">
                 <Settings className="h-5 w-5" />
               </Link>
               <div className="user-avatar">
@@ -170,6 +172,13 @@ const Dashboard: React.FC = () => {
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Invitations
+              </Link>
+              <Link
+                to="/settings"
+                className="mobile-nav-link"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Settings
               </Link>
             </nav>
           </div>

@@ -108,10 +108,10 @@ const Settings: React.FC = () => {
               <span className="active-link">Settings</span>
             </nav>
             <div className="header-right">
-              <button onClick={toggleTheme} className="theme-toggle">
+              <button onClick={toggleTheme} className="theme-toggle mediaforbuttons">
                 {theme === 'light' ? <Moon /> : <Sun />}
               </button>
-              <button onClick={logout} className="logout-button" title="Logout">
+              <button onClick={logout} className="logout-button mediaforbuttons" title="Logout">
                 <LogOut />
               </button>
               <div className="user-avatar">

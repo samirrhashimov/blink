@@ -13,7 +13,6 @@ import type { ShareInvite } from '../types';
 import blinkLogo from '../assets/blinklogo2.png';
 import { 
   ArrowLeft, 
-  UserPlus, 
   Moon, 
   Sun, 
   Settings,
@@ -21,8 +20,7 @@ import {
   Eye,
   MessageCircle,
   Edit3,
-  Mail,
-  Shield
+  Mail
 } from 'lucide-react';
 
 const ShareVault: React.FC = () => {
@@ -151,10 +149,10 @@ const ShareVault: React.FC = () => {
               <span className="active-link">Share</span>
             </nav>
             <div className="header-right">
-              <button onClick={toggleTheme} className="theme-toggle">
+              <button onClick={toggleTheme} className="theme-toggle mediaforbuttons">
                 {theme === 'light' ? <Moon /> : <Sun />}
               </button>
-              <Link to="/settings" className="settings-link">
+              <Link to="/settings" className="settings-link mediaforbuttons">
                 <Settings />
               </Link>
               <div className="user-avatar">
@@ -181,7 +179,6 @@ const ShareVault: React.FC = () => {
                     Invite by email or username
                   </label>
                   <div className="relative">
-                    <UserPlus className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-500" />
                     <input
                       id="invite-input"
                       type="email"
@@ -195,8 +192,7 @@ const ShareVault: React.FC = () => {
                 </div>
 
                 <div>
-                  <div className="flex items-center gap-2 mb-4">
-                    <Shield className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
+                  <div className="flex items-center gap-2 mb-2 mt-4">
                     <h3 className="text-base font-semibold text-gray-900 dark:text-white">Permissions</h3>
                   </div>
                   <div className="grid gap-3">
@@ -216,31 +212,6 @@ const ShareVault: React.FC = () => {
                         <div className="flex-grow">
                           <p className="permission-title">Can view</p>
                           <p className="permission-description">Read-only access to links.</p>
-                        </div>
-                        <div className="permission-radio">
-                          <div className="permission-radio-outer">
-                            <div className="permission-radio-inner"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </label>
-
-                    <label className="permission-card group cursor-pointer">
-                      <input
-                        type="radio"
-                        name="permissions"
-                        value="comment"
-                        checked={permission === 'comment'}
-                        onChange={(e) => setPermission(e.target.value as 'view' | 'comment' | 'edit')}
-                        className="sr-only"
-                      />
-                      <div className={`permission-card-content ${permission === 'comment' ? 'permission-card-selected' : ''}`}>
-                        <div className={`permission-icon-wrapper bg-green-50 dark:bg-green-900/20 ${permission === 'comment' ? 'bg-green-100 dark:bg-green-900/40' : ''}`}>
-                          <MessageCircle className="permission-icon text-green-600 dark:text-green-400" />
-                        </div>
-                        <div className="flex-grow">
-                          <p className="permission-title">Can comment</p>
-                          <p className="permission-description">View and add comments.</p>
                         </div>
                         <div className="permission-radio">
                           <div className="permission-radio-outer">
