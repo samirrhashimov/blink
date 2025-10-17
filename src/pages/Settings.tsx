@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { updateProfile } from 'firebase/auth';
@@ -23,11 +23,10 @@ const Settings: React.FC = () => {
     username: '',
     password: ''
   });
-  const [emailNotifications, setEmailNotifications] = useState(true);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
-  const language = 'English';
+  // const language = 'English';
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -97,22 +96,19 @@ const Settings: React.FC = () => {
         <div className="container">
           <div className="header-content">
             <div className="header-left">
-              <a href="/dashboard" className="back-link">
+              <Link to="/dashboard" className="back-link">
                 <ArrowLeft />
-              </a>
+              </Link>
               <img src={blinkLogo} alt="Blink" className="logo-image" style={{height: '40px', width: 'auto', marginLeft: '1rem'}} />
             </div>
             <nav className="main-nav">
-              <a href="/dashboard">Home</a>
-              <a href="/dashboard">My Links</a>
+              <Link to="/dashboard">Home</Link>
+              <Link to="/dashboard">My Links</Link>
               <span className="active-link">Settings</span>
             </nav>
             <div className="header-right">
               <button onClick={toggleTheme} className="theme-toggle mediaforbuttons">
                 {theme === 'light' ? <Moon /> : <Sun />}
-              </button>
-              <button onClick={logout} className="logout-button mediaforbuttons" title="Logout">
-                <LogOut />
               </button>
               <div className="user-avatar">
                 {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}
@@ -211,22 +207,7 @@ const Settings: React.FC = () => {
                   </button>
                 </div>
               </div>
-              <div className="settings-item">
-                <div className="settings-item-info">
-                  <h4>Email Notifications</h4>
-                  <p>Enable or disable email notifications.</p>
-                </div>
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    checked={emailNotifications}
-                    onChange={(e) => setEmailNotifications(e.target.checked)}
-                    className="sr-only peer"
-                  />
-                  <div className="w-11 h-6 bg-gray-300 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary/50 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary"></div>
-                </label>
-              </div>
-              <div className="settings-item">
+              {/* <div className="settings-item">
                 <div className="settings-item-info">
                   <h4>Language</h4>
                   <p>Set your preferred language for the app.</p>
@@ -237,7 +218,7 @@ const Settings: React.FC = () => {
                     <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,48,88H208a8,8,0,0,1,5.66,13.66Z"></path>
                   </svg>
                 </button>
-              </div>
+              </div> */}
             </div>
           </section>
 

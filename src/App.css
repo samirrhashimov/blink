@@ -54,11 +54,12 @@ input, textarea {
 .modern-search-bar {
   position: relative;
   width: 100%;
+  margin-top: 15px;
 }
 
 .modern-search-input {
   width: 100%;
-  padding: 0.875rem 1.125rem;
+  padding: 0.675rem 1.125rem;
   padding-left: 2.75rem;
   font-size: 0.9375rem;
   font-weight: 400;
@@ -170,7 +171,7 @@ input, textarea {
 }
 
 .dark .header {
-  background: linear-gradient(135deg, #e9ecef  0%,#e9ecef  19%, #162032 25%, #162032 100%) !important;
+  background: linear-gradient( #162032) !important;
   border-bottom-color: rgba(0, 0, 0, 0.08) !important;
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.06) !important;
 }
@@ -179,6 +180,13 @@ input, textarea {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 1.5rem;
+ width: 100%;
+}
+
+@media (min-width: 1600px) {
+  .container {
+    max-width: 1600px;
+  }
 }
 
 .header-content {
@@ -549,7 +557,6 @@ main.container {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: 0.5rem;
   line-height: 1.2;
 }
 

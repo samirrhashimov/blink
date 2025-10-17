@@ -119,9 +119,12 @@ const Dashboard: React.FC = () => {
               {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </button>
             
-              <button 
-                onClick={() => setShowNotifications(true)}
+              <button
+                type="button"
+                onClick={() => setShowNotifications(prev => !prev)}
                 className="theme-toggle"
+                aria-label="Toggle notifications"
+                aria-expanded={showNotifications}
               >
                 <Bell className="h-5 w-5" />
                 {unreadCount > 0 && (
@@ -198,8 +201,7 @@ const Dashboard: React.FC = () => {
               New Vault
             </button>
           </div>
-          
-          <p className="mb-5">Organize and manage your link containers</p>
+
           
           {/* Search Bar */}
           <div className="modern-search-bar">

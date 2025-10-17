@@ -12,17 +12,6 @@ const LandingPage: React.FC = () => {
               <div className="flex items-center gap-3 text-black dark:text-white">
                 <img src={blinkLogo} alt="Blink" style={{height: '40px', width: 'auto'}} />
               </div>
-              <div className="hidden items-center gap-6 md:flex">
-                <a className="text-sm font-medium text-black/60 dark:text-white/60 hover:text-black/80 dark:hover:text-white/80" href="#">
-                  Product
-                </a>
-                <a className="text-sm font-medium text-black/60 dark:text-white/60 hover:text-black/80 dark:hover:text-white/80" href="#">
-                  Pricing
-                </a>
-                <a className="text-sm font-medium text-black/60 dark:text-white/60 hover:text-black/80 dark:hover:text-white/80" href="#">
-                  Resources
-                </a>
-              </div>
               <div className="flex items-center gap-2">
                 <Link to="/login" className="btn-secondary landing1">
                   Log in

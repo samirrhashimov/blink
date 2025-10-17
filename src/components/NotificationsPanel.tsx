@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { X, Check, Trash2, CheckCheck } from 'lucide-react';
 import { NotificationService } from '../services/notificationService';
@@ -30,6 +30,19 @@ const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onClose
     };
     window.addEventListener('keydown', handleEsc);
     return () => window.removeEventListener('keydown', handleEsc);
+  }, [isOpen, onClose]);
+
+  // click-outside to close (since we don't render a full-page backdrop)
+  const panelRef = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (!isOpen) return;
+      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
+        onClose();
+      }
+    };
+    window.addEventListener('mousedown', handleClickOutside);
+    return () => window.removeEventListener('mousedown', handleClickOutside);
   }, [isOpen, onClose]);
 
   const loadNotifications = async () => {
@@ -118,36 +131,49 @@ const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onClose
 
   return (
     <>
-      {/* Backdrop */}
-      <div 
-        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[10000]"
+      {/* Backdrop (modal-like) */}
+      <div
+        className="fixed inset-0"
+        style={{ background: 'rgba(0,0,0,0.35)', zIndex: 10000, backdropFilter: 'blur(6px)' }}
         onClick={onClose}
-        style={{animation: 'fadeIn 0.2s ease'}}
-      ></div>
+      />
 
-      {/* Panel */}
-      <div 
-        className="fixed right-0 sm:right-4 top-0 sm:top-4 w-full sm:w-96 max-w-md h-full sm:h-auto sm:max-h-[calc(100vh-2rem)] sm:rounded-2xl z-[10001] flex flex-col overflow-hidden border border-gray-200/50 dark:border-gray-700/50" 
+      {/* Full-screen Panel */}
+      <div
+        ref={panelRef}
+        className="notifications-panel"
         style={{
-          animation: 'slideDown 0.3s ease',
-          background: 'rgba(255, 255, 255, 0.95)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
-          boxShadow: '0 20px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05)'
+          position: 'fixed',
+          inset: 0,
+          zIndex: 10001,
+          width: '100%',
+          height: '100%',
+          maxWidth: '100%',
+          borderRadius: 0,
+          overflow: 'auto',
+          animation: 'fadeIn 0.18s ease',
+          background: 'linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,250,0.96))',
+          backdropFilter: 'blur(6px)',
+          WebkitBackdropFilter: 'blur(6px)',
+          boxShadow: 'none',
+          border: 'none'
         }}
       >
         <style>{`
-          .dark .fixed.right-0.sm\\:right-4 {
-            background: rgba(17, 24, 39, 0.95) !important;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1) !important;
+          .dark .notifications-panel {
+            background: linear-gradient(180deg, rgba(10,12,18,0.85), rgba(15,18,25,0.8)) !important;
+            border: 1px solid rgba(255,255,255,0.06) !important;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5) !important;
+          }
+          @media (max-width: 640px) {
+            .notifications-panel { right: 0.5rem !important; left: 0.5rem !important; width: calc(100% - 1rem) !important; }
           }
         `}</style>
         {/* Header */}
-        <div 
-          className="flex items-center justify-between p-6 border-b border-gray-200/50 dark:border-gray-700/50"
+        <div
+          className="flex items-center justify-between px-5 py-4 border-b border-gray-200/50 dark:border-gray-700/50"
           style={{
-            background: 'rgba(249, 250, 251, 0.8)',
-            backdropFilter: 'blur(10px)'
+            background: 'transparent'
           }}
         >
           <style>{`
@@ -155,12 +181,12 @@ const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onClose
               background: rgba(17, 24, 39, 0.6) !important;
             }
           `}</style>
-          <h2 className="text-xl font-bold text-gray-900 dark:text-white" style={{textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)'}}>Notifications</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Notifications</h2>
           <div className="flex items-center gap-2">
             {notifications.some(n => !n.read) && (
               <button
                 onClick={handleMarkAllAsRead}
-                className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 transition-colors"
+                className="p-2 rounded-lg hover:bg-gray-200/60 dark:hover:bg-gray-800/40 text-gray-600 dark:text-gray-300 transition-colors"
                 title="Mark all as read"
               >
                 <CheckCheck className="h-5 w-5" />
@@ -168,7 +194,7 @@ const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onClose
             )}
             <button
               onClick={onClose}
-              className="p-2 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-800 text-gray-600 dark:text-gray-400 transition-colors"
+              className="p-2 rounded-lg hover:bg-gray-200/60 dark:hover:bg-gray-800/40 text-gray-600 dark:text-gray-300 transition-colors"
             >
               <X className="h-5 w-5" />
             </button>
@@ -176,7 +202,7 @@ const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onClose
         </div>
 
         {/* Content */}
-        <div className="flex-grow overflow-y-auto" style={{background: 'rgba(255, 255, 255, 0.5)'}}>
+        <div className="flex-grow overflow-y-auto px-2 py-2" style={{background: 'transparent'}}>
           <style>{`
             .dark .flex-grow.overflow-y-auto {
               background: rgba(17, 24, 39, 0.3) !important;
@@ -193,47 +219,32 @@ const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onClose
           ) : (
             <div className="divide-y divide-gray-200 dark:divide-gray-700">
               {notifications.map((notification) => (
-                <div
-                  key={notification.id}
-                  className={`p-4 transition-all ${
-                    !notification.read ? 'bg-blue-50/80 dark:bg-blue-900/20' : 'hover:bg-gray-100/50 dark:hover:bg-gray-700/30'
-                  }`}
-                  style={{
-                    backdropFilter: 'blur(10px)',
-                    borderBottom: '1px solid rgba(0, 0, 0, 0.05)'
-                  }}
-                >
-                  <div className="flex items-start gap-3">
-                    <div className="text-2xl flex-shrink-0">
-                      {getNotificationIcon(notification.type)}
+                <div key={notification.id} className="p-3">
+                  <div
+                    className={`flex items-start gap-3 p-3 rounded-lg transition-all cursor-pointer ${
+                      !notification.read ? 'ring-1 ring-primary/30 bg-blue-50/80 dark:bg-blue-900/12' : 'hover:bg-gray-100/50 dark:hover:bg-gray-700/30'
+                    }`}
+                    onClick={() => handleNotificationClick(notification)}
+                  >
+                    <div className="flex-shrink-0 text-2xl" style={{width: 38, height: 38, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                      <div style={{fontSize: 18}}>{getNotificationIcon(notification.type)}</div>
                     </div>
-                    <div 
-                      className="flex-grow cursor-pointer"
-                      onClick={() => handleNotificationClick(notification)}
-                    >
-                      <div className="flex items-start justify-between gap-2">
-                        <h3 className="font-medium text-gray-900 dark:text-white text-sm">
-                          {notification.title}
-                        </h3>
-                        {!notification.read && (
-                          <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-1"></div>
-                        )}
+                    <div className="flex-grow min-w-0">
+                      <div className="flex items-start justify-between gap-3">
+                        <h3 className="font-medium text-gray-900 dark:text-white text-sm truncate">{notification.title}</h3>
+                        {!notification.read && <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0 mt-1" />}
                       </div>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
-                        {notification.message}
-                      </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">
-                        {formatTime(notification.createdAt)}
-                      </p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 truncate">{notification.message}</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-500 mt-2">{formatTime(notification.createdAt)}</p>
                     </div>
-                    <div className="flex flex-col gap-1">
+                    <div className="flex flex-col gap-1 ml-2">
                       {!notification.read && (
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
                             handleMarkAsRead(notification.id);
                           }}
-                          className="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-400"
+                          className="p-1.5 rounded hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-300"
                           title="Mark as read"
                         >
                           <Check className="h-4 w-4" />

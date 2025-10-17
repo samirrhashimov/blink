@@ -1,6 +1,6 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Tailwind directives removed in-editor to avoid unknown at-rule linter errors.
+  Project uses compiled Tailwind (if available) and `src/css/tailwind-fallback.css` as a runtime fallback.
+*/
 
 /* Basic CSS Reset and Styles */
 * {
@@ -22,6 +22,18 @@ body {
   color: #f6f7f8;
 }
 
+/* Header logo: ensure visibility in dark mode for black PNG logo */
+.logo-image {
+  height: 40px;
+  width: auto;
+  transition: filter 0.15s ease, opacity 0.15s ease;
+}
+
+.dark .logo-image {
+  /* invert the logo so a black PNG appears light on dark backgrounds */
+  filter: invert(1) brightness(2) saturate(1.2);
+}
+
 /* Utility Classes */
 .font-display {
   font-family: 'Inter', sans-serif;
@@ -31,6 +43,7 @@ body {
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
+  line-clamp: 1;
   -webkit-line-clamp: 1;
 }
 
@@ -38,6 +51,7 @@ body {
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
+  line-clamp: 2;
   -webkit-line-clamp: 2;
 }
 
