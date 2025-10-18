@@ -179,7 +179,7 @@
   max-width: 1280px;
   margin: 4rem auto 0;
   padding: 4rem 1.5rem;
-  background: rgba(30, 41, 59, 0.3);
+  background: rgb(255, 255, 255);
   border-radius: 0.5rem;
 }
 
@@ -237,7 +237,7 @@
 
 .about-tech-badge {
   background: rgba(30, 41, 59, 0.5);
-  border: 1px solid #475569;
+  border: 1.5px solid #475569;
   border-radius: 0.5rem;
   padding: 1rem;
   text-align: center;

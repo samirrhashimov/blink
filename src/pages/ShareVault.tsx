@@ -268,7 +268,7 @@ const ShareVault: React.FC = () => {
               {/* Pending Invitations */}
               {pendingInvites.length > 0 && (
                 <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-                  <div className="flex items-center gap-2 mb-4">
+                  <div className="sharingcollabtitle flex items-center gap-2 mb-4">
                     <Mail className="h-5 w-5 text-amber-600 dark:text-amber-400" />
                     <h3 className="text-base font-semibold text-gray-900 dark:text-white">Pending Invitations</h3>
                     <span className="invitation-badge">{pendingInvites.length}</span>
