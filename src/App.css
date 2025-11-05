@@ -659,6 +659,21 @@ main.container {
   cursor: pointer;
 }
 
+.link-item-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.link-item-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
 .dark .link-item {
   background: rgba(255, 255, 255, 0.03);
   border-color: rgba(255, 255, 255, 0.06);
@@ -710,6 +725,42 @@ main.container {
 .link-info {
   flex: 1;
   min-width: 0;
+  overflow: hidden;
+}
+
+.link-info h4 {
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: #2c3e50;
+  margin-bottom: 0.25rem;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.dark .link-info h4 {
+  color: #e8ecf1;
+}
+
+.link-info p {
+  font-size: 0.9rem;
+  color: #64748b;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  margin-bottom: 0.25rem;
+}
+
+.dark .link-info p {
+  color: #94a3b8;
+}
+
+.link-info a {
+  display: inline-block;
+  max-width: 100%;
+  font-size: 0.85rem;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+  white-space: normal;
+  line-height: 1.4;
 }
 
 .link-info p:first-child {
@@ -741,11 +792,21 @@ main.container {
   justify-content: center;
   width: 2.25rem;
   height: 2.25rem;
+  min-width: 2.25rem;
+  min-height: 2.25rem;
   border-radius: 10px;
   background: transparent;
   color: #64748b;
   opacity: 0;
   transition: all 0.3s ease;
+  padding: 0;
+}
+
+.copy-button svg,
+.copy-button .lucide {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
 }
 
 .dark .copy-button {
@@ -756,9 +817,18 @@ main.container {
   opacity: 1;
 }
 
+.link-item-actions .copy-button {
+  transition: all 0.2s ease;
+}
+
 .copy-button:hover {
-  background: rgba(99, 102, 241, 0.1);
+  background: rgba(99, 102, 241, 0.15);
   color: #6366f1;
+  transform: scale(1.05);
+}
+
+.dark .copy-button:hover {
+  background: rgba(99, 102, 241, 0.2);
 }
 
 /* ============================================
@@ -1704,6 +1774,179 @@ main.container {
 }
 
 /* ============================================
+   Skeleton Loading
+   ============================================ */
+.skeleton-box {
+  background: linear-gradient(90deg, 
+    rgba(226, 232, 240, 0.8) 0%, 
+    rgba(226, 232, 240, 0.4) 50%, 
+    rgba(226, 232, 240, 0.8) 100%
+  );
+  background-size: 200% 100%;
+  border-radius: 8px;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+.dark .skeleton-box {
+  background: linear-gradient(90deg, 
+    rgba(51, 65, 85, 0.8) 0%, 
+    rgba(71, 85, 105, 0.6) 50%, 
+    rgba(51, 65, 85, 0.8) 100%
+  );
+  background-size: 200% 100%;
+}
+
+.skeleton-box--rounded {
+  border-radius: 16px;
+}
+
+.skeleton-box--circle {
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+}
+
+@keyframes skeleton-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Fullscreen Skeleton Loading */
+.skeleton-fullscreen {
+  min-height: 100vh;
+  width: 100%;
+  background: #f8fafc;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dark .skeleton-fullscreen {
+  background: #0f172a;
+}
+
+.skeleton-fullscreen__content {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.skeleton-fullscreen__logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3rem;
+  animation: skeleton-fade 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-fade {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.skeleton-fullscreen__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+  padding: 0 1rem;
+}
+
+@media (max-width: 768px) {
+  .skeleton-fullscreen {
+    padding: 1.5rem;
+  }
+  
+  .skeleton-fullscreen__grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    padding: 0;
+  }
+  
+  .skeleton-fullscreen__logo {
+    margin-bottom: 2rem;
+  }
+}
+
+.skeleton-fullscreen__card {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  animation: skeleton-card-appear 0.6s ease-out backwards;
+}
+
+.dark .skeleton-fullscreen__card {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes skeleton-card-appear {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.skeleton-fullscreen__card:nth-child(1) { animation-delay: 0.1s; }
+.skeleton-fullscreen__card:nth-child(2) { animation-delay: 0.2s; }
+.skeleton-fullscreen__card:nth-child(3) { animation-delay: 0.3s; }
+.skeleton-fullscreen__card:nth-child(4) { animation-delay: 0.4s; }
+.skeleton-fullscreen__card:nth-child(5) { animation-delay: 0.5s; }
+.skeleton-fullscreen__card:nth-child(6) { animation-delay: 0.6s; }
+
+/* Vault Skeleton */
+.vault-skeleton {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.dark .vault-skeleton {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Card Skeleton */
+.card-skeleton {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.dark .card-skeleton {
+  background: rgba(255, 255, 255, 0.03);
+  border-color: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+.card-skeleton__header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+/* ============================================
    Tables
    ============================================ */
 .table-container {
@@ -2388,6 +2631,75 @@ tr:hover {
   color: #c084fc;
 }
 
+/* Invitation Item */
+.invitation-item .link-item-content {
+  flex: 1;
+}
+
+.invitation-item .link-item-actions {
+  flex-shrink: 0;
+}
+
+/* Invitation Buttons */
+.invitation-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  border: none;
+  white-space: nowrap;
+  min-width: 100px;
+}
+
+.invitation-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.invitation-btn svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.invitation-btn-accept {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+
+.invitation-btn-accept:hover:not(:disabled) {
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+  transform: translateY(-1px);
+}
+
+.invitation-btn-accept:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.invitation-btn-decline {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+}
+
+.invitation-btn-decline:hover:not(:disabled) {
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+  transform: translateY(-1px);
+}
+
+.invitation-btn-decline:active:not(:disabled) {
+  transform: translateY(0);
+}
+
 .invitation-cancel-btn {
   display: flex;
   align-items: center;
@@ -2597,6 +2909,33 @@ tr:hover {
 /* ============================================
    Responsive Adjustments
    ============================================ */
+
+/* Tablet - Orta Boyutlu Ekranlar */
+@media (max-width: 1024px) and (min-width: 768px) {
+  .invitation-item {
+    flex-direction: column;
+  }
+  
+  .invitation-item .link-item-content {
+    width: 100%;
+  }
+  
+  .invitation-item .link-item-actions {
+    width: 100%;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+  }
+  
+  .dark .invitation-item .link-item-actions {
+    border-top-color: rgba(255, 255, 255, 0.06);
+  }
+  
+  .invitation-btn {
+    flex: 1;
+  }
+}
+
+/* Mobil - Küçük Ekranlar */
 @media (max-width: 767px) {
   .header-content {
     height: 4rem;
@@ -2617,7 +2956,104 @@ tr:hover {
   }
   
   .link-item {
-    padding: 1.25rem;
+    padding: 1.5rem 1.25rem;
+    gap: 1rem;
+    flex-direction: column;
+  }
+  
+  .link-item-content {
+    gap: 1rem;
+    width: 100%;
+  }
+  
+  .link-icon {
+    width: 3rem;
+    height: 3rem;
+  }
+  
+  .link-info {
+    flex: 1;
+  }
+  
+  .link-info h4 {
+    font-size: 1rem;
+    margin-bottom: 0.375rem;
+  }
+  
+  .link-info p {
+    font-size: 0.85rem;
+    margin-bottom: 0.375rem;
+  }
+  
+  .link-info a {
+    font-size: 0.75rem;
+    line-height: 1.4;
+  }
+  
+  /* Mobilde butonları her zaman göster */
+  .copy-button {
+    opacity: 1 !important;
+    width: 2.75rem;
+    height: 2.75rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+    background: rgba(99, 102, 241, 0.08);
+    font-size: 1rem;
+    padding: 0;
+  }
+  
+  .copy-button svg,
+  .copy-button .lucide {
+    width: 1.125rem;
+    height: 1.125rem;
+    flex-shrink: 0;
+  }
+  
+  .dark .copy-button {
+    background: rgba(99, 102, 241, 0.12);
+  }
+  
+  .copy-button:active {
+    transform: scale(0.95);
+    background: rgba(99, 102, 241, 0.2);
+  }
+  
+  .dark .copy-button:active {
+    background: rgba(99, 102, 241, 0.25);
+  }
+  
+  /* Butonları alt tarafa al - daha geniş ve rahat */
+  .link-item-actions {
+    width: 100%;
+    justify-content: flex-end;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    gap: 0.625rem;
+  }
+  
+  .dark .link-item-actions {
+    border-top-color: rgba(255, 255, 255, 0.06);
+  }
+  
+  /* Invitation Actions Mobil */
+  .invitation-actions {
+    justify-content: stretch;
+    gap: 0.75rem;
+  }
+  
+  .invitation-btn {
+    flex: 1;
+    padding: 0.875rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .invitation-btn svg {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+  
+  .invitation-btn span {
+    display: inline;
   }
   
   .collaborators-widget,

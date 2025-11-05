@@ -3,6 +3,7 @@ import { X, UserMinus, Eye, MessageCircle, Edit3, Crown } from 'lucide-react';
 import { SharingService } from '../services/sharingService';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
+import LoadingSkeleton from './LoadingSkeleton';
 
 interface CollaboratorsModalProps {
   isOpen: boolean;
@@ -192,9 +193,8 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
           )}
 
           {loading ? (
-            <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">Loading collaborators...</p>
+            <div className="py-8">
+              <LoadingSkeleton variant="card" count={2} />
             </div>
           ) : collaborators.length === 0 ? (
             <div className="text-center py-8">

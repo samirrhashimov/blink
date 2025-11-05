@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { X, Check, Trash2, CheckCheck } from 'lucide-react';
 import { NotificationService } from '../services/notificationService';
 import type { Notification } from '../types/notification';
+import LoadingSkeleton from './LoadingSkeleton';
 
 interface NotificationsPanelProps {
   isOpen: boolean;
@@ -209,8 +210,8 @@ const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onClose
             }
           `}</style>
           {loading ? (
-            <div className="flex items-center justify-center h-32">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            <div className="py-4">
+              <LoadingSkeleton variant="card" count={3} />
             </div>
           ) : notifications.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-32 text-gray-500 dark:text-gray-400">

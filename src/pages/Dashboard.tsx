@@ -17,6 +17,7 @@ import {
 import blinkLogo from '../assets/blinklogo2.png';
 import CreateVaultModal from '../components/CreateVaultModal';
 import NotificationsPanel from '../components/NotificationsPanel';
+import LoadingSkeleton from '../components/LoadingSkeleton';
 
 const Dashboard: React.FC = () => {
   const { currentUser } = useAuth();
@@ -76,14 +77,7 @@ const Dashboard: React.FC = () => {
   });
 
   if (loading) {
-    return (
-      <div className="loading-container">
-        <div className="text-center">
-          <div className="loading-spinner"></div>
-          <p className="loading-text">Loading your vaults...</p>
-        </div>
-      </div>
-    );
+    return <LoadingSkeleton variant="fullscreen" />;
   }
 
   return (

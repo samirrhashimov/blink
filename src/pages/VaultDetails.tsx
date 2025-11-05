@@ -31,6 +31,7 @@ import EditVaultModal from '../components/EditVaultModal';
 import DeleteConfirmModal from '../components/DeleteConfirmModal';
 import CollaboratorsModal from '../components/CollaboratorsModal';
 import ShareLinkModal from '../components/ShareLinkModal';
+import LoadingSkeleton from '../components/LoadingSkeleton';
 
 const VaultDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -216,14 +217,7 @@ const VaultDetails: React.FC = () => {
   const canEdit = isOwner || userPermission === 'edit';
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-background-light dark:bg-background-dark flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-          <p className="text-muted-light dark:text-muted-dark">Loading vault...</p>
-        </div>
-      </div>
-    );
+    return <LoadingSkeleton variant="fullscreen" />;
   }
 
   if (!vault) {
@@ -315,43 +309,45 @@ const VaultDetails: React.FC = () => {
                   const faviconUrl = LinkPreviewService.getPreviewImage(link);
                   return (
                   <div key={link.id} className="link-item">
-                    <div className="link-icon">
-                      {faviconUrl ? (
-                        <img 
-                          src={faviconUrl} 
-                          alt={`${link.title} favicon`}
-                          className="link-favicon"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.style.display = 'none';
-                            const parent = target.parentElement;
-                            if (parent && !parent.querySelector('.lucide-link')) {
-                              const icon = document.createElement('div');
-                              icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>';
-                              parent.appendChild(icon.firstChild!);
-                            }
-                          }}
-                        />
-                      ) : (
-                        <LinkIcon />
-                      )}
+                    <div className="link-item-content">
+                      <div className="link-icon">
+                        {faviconUrl ? (
+                          <img 
+                            src={faviconUrl} 
+                            alt={`${link.title} favicon`}
+                            className="link-favicon"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                              const parent = target.parentElement;
+                              if (parent && !parent.querySelector('.lucide-link')) {
+                                const icon = document.createElement('div');
+                                icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>';
+                                parent.appendChild(icon.firstChild!);
+                              }
+                            }}
+                          />
+                        ) : (
+                          <LinkIcon />
+                        )}
+                      </div>
+                      <div className="link-info">
+                        <h4 className="font-medium text-gray-900 dark:text-white">{link.title}</h4>
+                        {link.description && (
+                          <p className="text-sm text-gray-600 dark:text-gray-400">{link.description}</p>
+                        )}
+                        <a 
+                          href={link.url} 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          className="text-xs text-primary hover:underline flex items-center gap-1 mt-1"
+                        >
+                          {link.url}
+                          <ExternalLink className="h-3 w-3 flex-shrink-0" />
+                        </a>
+                      </div>
                     </div>
-                    <div className="link-info">
-                      <h4 className="font-medium text-gray-900 dark:text-white">{link.title}</h4>
-                      {link.description && (
-                        <p className="text-sm text-gray-600 dark:text-gray-400">{link.description}</p>
-                      )}
-                      <a 
-                        href={link.url} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        className="text-xs text-primary hover:underline flex items-center gap-1 mt-1"
-                      >
-                        {link.url}
-                        <ExternalLink className="h-3 w-3" />
-                      </a>
-                    </div>
-                    <div className="flex items-center gap-2">
+                    <div className="link-item-actions">
                       <button 
                         onClick={() => copyToClipboard(link.url, link.id)} 
                         className="copy-button"
@@ -366,14 +362,14 @@ const VaultDetails: React.FC = () => {
                             className="copy-button"
                             title="Edit link"
                           >
-                            <Edit className="h-4 w-4" />
+                            <Edit />
                           </button>
                           <button 
                             onClick={() => handleDeleteLink(link)} 
                             className="copy-button text-red-600 dark:text-red-400"
                             title="Delete link"
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 />
                           </button>
                         </>
                       )}

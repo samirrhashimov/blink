@@ -8,6 +8,7 @@ import { NotificationService } from '../services/notificationService';
 import { UserService } from '../services/userService';
 import type { ShareInvite } from '../types';
 import blinkLogo from '../assets/blinklogo2.png';
+import LoadingSkeleton from '../components/LoadingSkeleton';
 import { 
   ArrowLeft, 
   Check, 
@@ -162,9 +163,8 @@ const Invitations: React.FC = () => {
             )}
 
             {loading ? (
-              <div className="text-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
-                <p className="text-muted-light dark:text-muted-dark">Loading invitations...</p>
+              <div className="py-12">
+                <LoadingSkeleton variant="card" count={3} />
               </div>
             ) : invitations.length === 0 ? (
               <div className="text-center py-16">
@@ -189,49 +189,51 @@ const Invitations: React.FC = () => {
                 {invitations.map((invite) => (
                   <div
                     key={invite.id}
-                    className="link-item"
+                    className="link-item invitation-item"
                   >
-                    <div className="link-icon">
-                      <Mail />
-                    </div>
-                    <div className="link-info">
-                      <h4 className="font-semibold text-gray-900 dark:text-white">
-                        {invite.vaultName || 'Vault'} Invitation
-                      </h4>
-                      {invite.inviterName && (
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                          From: <span className="font-medium">{invite.inviterName}</span>
-                        </p>
-                      )}
-                      <div className="flex items-center gap-2 mt-2">
-                        <span className={`permission-badge permission-badge-${invite.permission}`}>
-                          {invite.permission === 'view' && <Eye className="h-3 w-3" />}
-                          {invite.permission === 'comment' && <MessageCircle className="h-3 w-3" />}
-                          {invite.permission === 'edit' && <Edit3 className="h-3 w-3" />}
-                          <span className="capitalize">{invite.permission}</span>
-                        </span>
-                        <span className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
-                          <Clock className="h-3 w-3" />
-                          {formatDate(invite.expiresAt)}
-                        </span>
+                    <div className="link-item-content">
+                      <div className="link-icon">
+                        <Mail />
+                      </div>
+                      <div className="link-info">
+                        <h4 className="font-semibold text-gray-900 dark:text-white">
+                          {invite.vaultName || 'Vault'} Invitation
+                        </h4>
+                        {invite.inviterName && (
+                          <p className="text-sm text-gray-600 dark:text-gray-400">
+                            From: <span className="font-medium">{invite.inviterName}</span>
+                          </p>
+                        )}
+                        <div className="flex items-center gap-2 mt-2 flex-wrap">
+                          <span className={`permission-badge permission-badge-${invite.permission}`}>
+                            {invite.permission === 'view' && <Eye className="h-3 w-3" />}
+                            {invite.permission === 'comment' && <MessageCircle className="h-3 w-3" />}
+                            {invite.permission === 'edit' && <Edit3 className="h-3 w-3" />}
+                            <span className="capitalize">{invite.permission}</span>
+                          </span>
+                          <span className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
+                            <Clock className="h-3 w-3" />
+                            {formatDate(invite.expiresAt)}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="link-item-actions invitation-actions">
                       <button
                         onClick={() => handleAccept(invite)}
                         disabled={processingId === invite.id}
-                        className="px-4 py-2 rounded-lg text-sm font-semibold bg-green-600 text-white hover:bg-green-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                        className="invitation-btn invitation-btn-accept"
                       >
-                        <Check className="h-4 w-4" />
-                        Accept
+                        <Check />
+                        <span>Accept</span>
                       </button>
                       <button
                         onClick={() => handleDecline(invite.id)}
                         disabled={processingId === invite.id}
-                        className="px-4 py-2 rounded-lg text-sm font-semibold bg-red-600 text-white hover:bg-red-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                        className="invitation-btn invitation-btn-decline"
                       >
-                        <X className="h-4 w-4" />
-                        Decline
+                        <X />
+                        <span>Decline</span>
                       </button>
                     </div>
                   </div>
