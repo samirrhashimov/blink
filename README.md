@@ -1,6 +1,16 @@
-# Blink - Your links, organized
+<h1 align="center">Blink - Your links, organized</h1>
 
-A minimalist, web-based link storage and collaboration app built with React.js, TypeScript, and Firebase.
+<p align="center">
+<img src="https://skillicons.dev/icons?i=html,css,ts,react,firebase,netlify" />
+</p>
+<p align="center">
+   <img src="https://img.shields.io/github/license/samirrhashimov/blink?style=flat">
+   <img src="https://img.shields.io/github/v/release/samirrhashimov/blink?style=flat">
+   <img src="https://img.shields.io/github/repo-size/samirrhashimov/blink?style=flat">
+   <img src="https://img.shields.io/github/languages/top/samirrhashimov/blink?style=flat">
+</p>
+
+<p align="center">A minimalist, web-based link storage and collaboration app built with React.js, TypeScript, and Firebase.</p>
 
 ## Features
 
@@ -65,51 +75,6 @@ npm run dev
 ```
 
 5. Open [http://localhost:5173](http://localhost:5173) in your browser
-
-## Project Structure
-
-```
-src/
-├── components/          # UI components
-│   ├── AddLinkModal.tsx
-│   ├── CollaboratorsModal.tsx
-│   ├── CreateVaultModal.tsx
-│   ├── DeleteConfirmModal.tsx
-│   ├── EditLinkModal.tsx
-│   ├── EditVaultModal.tsx
-│   ├── ErrorBoundary.tsx
-│   ├── LoadingSkeleton.tsx
-│   ├── NotificationsPanel.tsx
-│   ├── ProtectedRoute.tsx
-│   └── ShareLinkModal.tsx
-├── contexts/           # React contexts
-│   ├── AuthContext.tsx      # Authentication state
-│   ├── ThemeContext.tsx     # Theme management
-│   └── VaultContext.tsx     # Vault state management
-├── firebase/           # Firebase configuration
-│   └── config.ts
-├── pages/              # Page components
-│   ├── Dashboard.tsx
-│   ├── LandingPage.tsx
-│   ├── LoginPage.tsx
-│   ├── Settings.tsx
-│   ├── ShareVault.tsx
-│   ├── SignupPage.tsx
-│   └── VaultDetails.tsx
-├── services/           # Business logic services
-│   ├── notificationService.ts
-│   ├── shareLinkService.ts
-│   ├── sharingService.ts
-│   └── vaultService.ts
-├── types/              # TypeScript type definitions
-│   ├── index.ts
-│   └── notification.ts
-├── utils/              # Utility functions
-│   └── firebaseTest.ts
-├── App.tsx             # Main app component
-├── index.css           # Global styles
-└── main.tsx            # App entry point
-```
 
 ## Firebase Setup
 
@@ -177,7 +142,16 @@ service cloud.firestore {
 3. Make your changes
 4. Add tests if applicable
 5. Submit a pull request
+## Security
+If you discover a security vulnerability in the project, **do not open a public issue**.  
+Instead, submit a private report through the [Security advisories](../../security/advisories) section.  
+
+---
 
 ## License
+This project is licensed under the **APGLv3 License**. For more details, see the [LICENSE](LICENSE) file.
 
-This project is licensed under the AGPLv3 License.
+---
+## Support
+
+For issues and questions, please open an issue on GitHub.
