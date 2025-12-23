@@ -1,11 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { 
+import {
   type User as FirebaseUser,
   onAuthStateChanged,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut,
-  updateProfile
+  updateProfile,
+  signInWithPopup,
+  GoogleAuthProvider
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
@@ -15,6 +17,7 @@ interface AuthContextType {
   currentUser: User | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
+  loginWithGoogle: () => Promise<void>;
   signup: (email: string, password: string, displayName: string) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -36,7 +39,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const createUserDocument = async (firebaseUser: FirebaseUser, displayName?: string) => {
     const userRef = doc(db, 'users', firebaseUser.uid);
     const userSnap = await getDoc(userRef);
-    
+
     if (!userSnap.exists()) {
       const userData: any = {
         uid: firebaseUser.uid,
@@ -44,21 +47,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         displayName: displayName || firebaseUser.displayName || 'Anonymous',
         createdAt: new Date()
       };
-      
+
       // Only add photoURL if it exists (not undefined)
       if (firebaseUser.photoURL) {
         userData.photoURL = firebaseUser.photoURL;
       }
-      
+
       await setDoc(userRef, userData);
       return userData as User;
     }
-    
+
     return userSnap.data() as User;
   };
 
   const login = async (email: string, password: string) => {
     await signInWithEmailAndPassword(auth, email, password);
+  };
+
+  const loginWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    await createUserDocument(result.user);
   };
 
   const signup = async (email: string, password: string, displayName: string) => {
@@ -89,6 +98,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     currentUser,
     loading,
     login,
+    loginWithGoogle,
     signup,
     logout
   };

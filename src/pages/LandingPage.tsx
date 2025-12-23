@@ -1,162 +1,212 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Lock, Share2, Zap, Users, Search, Moon } from 'lucide-react';
+import { useTheme } from '../contexts/ThemeContext';
+import { Lock, Share2, Zap, Users, Search, Moon, Sun, Shield, Layout, Globe } from 'lucide-react';
 import blinkLogo from '../assets/blinklogo2.png';
+import homepageImg from '../assets/Screenshots/homepage.png';
+import inviteImg from '../assets/Screenshots/invite.png';
+import shareImg from '../assets/Screenshots/share.png';
+import vaultDetailsImg from '../assets/Screenshots/vaultdetails.png';
 import '../css/About.css';
 
 const LandingPage: React.FC = () => {
+  const { theme, toggleTheme } = useTheme();
+
   return (
-    <div className="landing-page bg-white text-black" style={{ backgroundColor: '#ffffff', color: '#000000' }}>
+    <div className="landing-page bg-white dark:bg-gray-900 text-black dark:text-white overflow-hidden">
       {/* Header */}
       <header className="landing-header">
         <div className="container">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3 text-black">
-              <img src={blinkLogo} alt="Blink" style={{ height: '40px', width: 'auto' }} />
+              <img src={blinkLogo} alt="Blink" className="landing-logo" />
             </div>
             <div className="flex items-center gap-2">
-              <Link to="/login" className="btn-secondary landing1">
+              <button
+                onClick={toggleTheme}
+                className="theme-toggle-btn"
+                aria-label="Toggle theme"
+              >
+                {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+              <Link to="/login" className="landing-auth-btn font-medium hover:text-blue-500 transition-colors">
                 Log in
               </Link>
-              <Link to="/signup" className="btn-primary">
-                Sign up
+              <Link to="/signup" className="btn-primary landing-auth-btn px-6 py-2 rounded-full">
+                Get Started
               </Link>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Hero Section (from original landing) */}
-      <section className="hero-section about-hero" style={{ backgroundColor: '#ffffff' }}>
-        <div className="about-hero-container">
-          <div className="about-hero-content hero-content">
-            <h1 className="about-hero-title">Your Links, <span className="about-hero-highlight">Organized</span></h1>
-            <p className="about-hero-subtitle">The place to store and share links with your team. Keep everything organized and up-to-date.</p>
-            <div className="hero-buttons about-cta-buttons">
-              <Link to="/signup" className="btn-primary about-btn-primary">
-                Sign up for free
+      {/* Hero Section */}
+      <section className="about-hero bg-white dark:bg-gray-900 pt-20 pb-16">
+        <div className="hero-grid">
+          <div className="hero-content text-left">
+            <h1 className="about-hero-title text-5xl md:text-6xl font-extrabold tracking-tight mb-6">
+              Your Links, <span className="about-hero-highlight block mt-2">Organized</span>
+            </h1>
+            <p className="about-hero-subtitle text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-lg">
+              The ultimate workspace to store, manage, and collaborate on links with your team. Secure, fast, and beautifully designed.
+            </p>
+            <div className="hero-buttons flex gap-4">
+              <Link to="/signup" className="btn-primary about-btn-primary px-8 py-3 text-lg rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+                Start for free
               </Link>
-              <Link to="https://github.com/samirrhashimov/blink.git" className="btn-secondary about-btn-secondary">
-                See on GitHub
+              <Link to="https://github.com/samirrhashimov/blink.git" className="btn-secondary about-btn-secondary px-8 py-3 text-lg rounded-full">
+                View on GitHub
               </Link>
             </div>
+          </div>
+          <div className="hero-image-wrapper">
+            <img src={homepageImg} alt="Blink Dashboard" className="hero-screenshot" />
+            <div className="absolute inset-0 bg-gradient-to-t from-gray-900/10 to-transparent pointer-events-none"></div>
           </div>
         </div>
       </section>
 
-      {/* Features Grid (from About) */}
-      <section className="about-features">
+      {/* Visual Feature Breakdown */}
+      <section className="feature-section-alternating">
+
+        {/* Feature 1 */}
+        <div className="feature-row">
+          <div className="feature-text">
+            <div className="inline-flex items-center justify-center p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg mb-4 text-blue-600 dark:text-blue-400">
+              <Layout className="w-6 h-6" />
+            </div>
+            <h2 className="feature-section-title">Centralized Vaults</h2>
+            <p className="feature-section-desc">
+              Create dedicated workspaces called "Containers" for different projects, teams, or personal interests. Keep your links customized and organized in one secure place.
+            </p>
+          </div>
+          <div className="feature-image-container">
+            <img src={vaultDetailsImg} alt="Vault Details" className="feature-screenshot rotate-1 hover:rotate-0 transition-transform duration-500" />
+          </div>
+        </div>
+
+        {/* Feature 2 */}
+        <div className="feature-row">
+          <div className="feature-text">
+            <div className="inline-flex items-center justify-center p-2 bg-green-100 dark:bg-green-900/30 rounded-lg mb-4 text-green-600 dark:text-green-400">
+              <Share2 className="w-6 h-6" />
+            </div>
+            <h2 className="feature-section-title">Easy Sharing</h2>
+            <p className="feature-section-desc">
+              Share your collections with the world or specific people. Manage permissions, elevate or revoke them when necessary.
+            </p>
+          </div>
+          <div className="feature-image-container">
+            <img src={shareImg} alt="Sharing Modal" className="feature-screenshot -rotate-1 hover:rotate-0 transition-transform duration-500" />
+          </div>
+        </div>
+
+        {/* Feature 3 */}
+        <div className="feature-row">
+          <div className="feature-text">
+            <div className="inline-flex items-center justify-center p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg mb-4 text-purple-600 dark:text-purple-400">
+              <Users className="w-6 h-6" />
+            </div>
+            <h2 className="feature-section-title">Incoming Invitations</h2>
+            <p className="feature-section-desc">
+              Manage requests to join other workspaces. Review, accept, or decline incoming invitations to collaborate on and help manage shared containers.
+            </p>
+          </div>
+          <div className="feature-image-container">
+            <img src={inviteImg} alt="Team Invitation" className="feature-screenshot rotate-1 hover:rotate-0 transition-transform duration-500" />
+          </div>
+        </div>
+
+      </section>
+
+      {/* Grid Features (Why Choose Blink?) */}
+      <section className="about-features bg-gray-50 dark:bg-gray-800/50 py-20 rounded-3xl mx-4 md:mx-auto max-w-7xl">
         <div className="about-features-container">
-          <h2 className="about-section-title">Why Choose Blink?</h2>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Everything you need</h2>
+            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto" style={{ marginBottom: '2rem' }}>Powerful features designed to make link management effortless and secure.</p>
+          </div>
+
           <div className="about-features-grid">
-            <div className="about-feature-card">
-              <div className="about-feature-icon about-icon-blue">
-                <Lock className="about-icon-svg" />
+            <div className="about-feature-card group hover:-translate-y-2 transition-transform">
+              <div className="about-feature-icon about-icon-blue group-hover:scale-110 transition-transform">
+                <Shield className="about-icon-svg" />
               </div>
-              <h3 className="about-feature-title">Secure & Private</h3>
-              <p className="about-feature-text">Your data is protected with enterprise-grade Firebase security. Only you and authorized collaborators can access your vaults.</p>
+              <h3 className="about-feature-title">Top-tier Security</h3>
+              <p className="about-feature-text">Enterprise-grade encryption aim to keep your data private and protected.</p>
             </div>
 
-            <div className="about-feature-card">
-              <div className="about-feature-icon about-icon-green">
-                <Share2 className="about-icon-svg" />
-              </div>
-              <h3 className="about-feature-title">Easy Sharing</h3>
-              <p className="about-feature-text">Collaborate effortlessly by sharing vaults with team members. Send invitations and manage permissions.</p>
-            </div>
-
-            <div className="about-feature-card">
-              <div className="about-feature-icon about-icon-purple">
+            <div className="about-feature-card group hover:-translate-y-2 transition-transform">
+              <div className="about-feature-icon about-icon-purple group-hover:scale-110 transition-transform">
                 <Zap className="about-icon-svg" />
               </div>
-              <h3 className="about-feature-title">Lightning Fast</h3>
-              <p className="about-feature-text">Real-time synchronization ensures your links are always up-to-date across all devices instantly.</p>
+              <h3 className="about-feature-title">Real-time Sync</h3>
+              <p className="about-feature-text">Changes happen instantly across all devices. Just smooth, real-time updates.</p>
             </div>
 
-            <div className="about-feature-card">
-              <div className="about-feature-icon about-icon-pink">
-                <Users className="about-icon-svg" />
+            <div className="about-feature-card group hover:-translate-y-2 transition-transform">
+              <div className="about-feature-icon about-icon-pink group-hover:scale-110 transition-transform">
+                <Globe className="about-icon-svg" />
               </div>
-              <h3 className="about-feature-title">Team Collaboration</h3>
-              <p className="about-feature-text">Work together seamlessly with granular permission controls and real-time notifications for all team activities.</p>
+              <h3 className="about-feature-title">Accessible Anywhere</h3>
+              <p className="about-feature-text">Access your links from any device, anywhere in the world. Your personal cloud for the web.</p>
             </div>
 
-            <div className="about-feature-card">
-              <div className="about-feature-icon about-icon-yellow">
+            <div className="about-feature-card group hover:-translate-y-2 transition-transform">
+              <div className="about-feature-icon about-icon-yellow group-hover:scale-110 transition-transform">
                 <Search className="about-icon-svg" />
               </div>
               <h3 className="about-feature-title">Smart Search</h3>
-              <p className="about-feature-text">Find any link instantly with our powerful search across titles, descriptions, URLs, and vault names.</p>
+              <p className="about-feature-text">Instant search across titles, URLs, and descriptions helps you find what you need in milliseconds.</p>
             </div>
 
-            <div className="about-feature-card">
-              <div className="about-feature-icon about-icon-cyan">
+            <div className="about-feature-card group hover:-translate-y-2 transition-transform">
+              <div className="about-feature-icon about-icon-cyan group-hover:scale-110 transition-transform">
                 <Moon className="about-icon-svg" />
               </div>
-              <h3 className="about-feature-title">Light & Dark Mode</h3>
-              <p className="about-feature-text">Choose your preferred theme. Blink adapts to your style and is easy on the eyes, day or night.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Use Cases */}
-      <section className="about-usecases">
-        <div className="about-usecases-container">
-          <h2 className="about-section-title">Perfect For</h2>
-          <div className="about-usecases-grid">
-            <div className="about-usecase-card about-usecase-blue">
-              <h3 className="about-usecase-title">Teams & Organizations</h3>
-              <p className="about-usecase-text">Centralize important resources, project documentation, and team links. Share with specific team members and control who can edit.</p>
+              <h3 className="about-feature-title">Dark Mode</h3>
+              <p className="about-feature-text">Native dark mode support that respects your system preferences and saves your eyes at night.</p>
             </div>
 
-            <div className="about-usecase-card about-usecase-green">
-              <h3 className="about-usecase-title">Content Creators</h3>
-              <p className="about-usecase-text">Organize reference materials, inspiration links, and resources. Generate shareable vault links for your audience.</p>
-            </div>
-
-            <div className="about-usecase-card about-usecase-purple">
-              <h3 className="about-usecase-title">Developers & Designers</h3>
-              <p className="about-usecase-text">Keep API documentation, design tools, development resources, and useful utilities in one organized place.</p>
-            </div>
-
-            <div className="about-usecase-card about-usecase-pink">
-              <h3 className="about-usecase-title">Personal Organization</h3>
-              <p className="about-usecase-text">Manage bookmarks, research materials, and personal projects with a clean, distraction-free interface.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Tech Stack */}
-      <section className="about-techstack">
-        <div className="about-techstack-container">
-          <h2 className="about-section-title">Built with Modern Technology</h2>
-          <div className="about-techstack-grid">
-            {['React 18', 'TypeScript', 'Firebase', 'CSS3', 'Firestore', 'React Router', 'Vite', 'Lucide Icons'].map((tech) => (
-              <div key={tech} className="about-tech-badge">
-                <p className="about-tech-name">{tech}</p>
+            <div className="about-feature-card group hover:-translate-y-2 transition-transform">
+              <div className="about-feature-icon about-icon-green group-hover:scale-110 transition-transform">
+                <Lock className="about-icon-svg" />
               </div>
-            ))}
+              <h3 className="about-feature-title">Permission Control</h3>
+              <p className="about-feature-text">Control who can view, edit, or manage your links.</p>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="about-cta">
-        <div className="about-cta-container">
-          <div className="about-cta-buttons">
-            <Link to="/signup" className="about-btn about-btn-primary">
-              Get Started <ArrowRight className="about-btn-icon" />
-            </Link>
+        <div className="bg-blue-50 dark:bg-blue-700 rounded-3xl p-12 mx-4 max-w-6xl md:mx-auto text-gray-900 dark:text-white shadow-2xl relative overflow-hidden">
+          <div className="absolute top-0 right-0 -mr-20 -mt-20 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 -ml-20 -mb-20 w-64 h-64 bg-black opacity-10 rounded-full blur-3xl"></div>
+
+          <div className="relative z-10 flex flex-col items-center text-center">
+            <h2 className="text-3xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white">Stop losing links. Start blinking.</h2>
+            <p className="text-black dark:text-blue-100 text-xl mb-10 max-w-2xl">A faster, cleaner way to share what matters.</p>
+            <div className="flex gap-4 flex-col sm:flex-row">
+              <Link to="/login" style={{ marginTop: '2rem', padding: '1rem 1.5rem' }} className="px-8 py-4 bg-blue-200 dark:bg-blue-700 bg-opacity-50 text-black dark:text-white font-semibold rounded-full hover:bg-opacity-70 transition-colors border border-blue-400">
+                Get Started for Free
+              </Link>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="about-footer">
-        <div className="about-footer-container">
-          <p className="about-footer-text">© 2025 Blink. All rights reserved.</p>
+      <footer className="about-footer border-t border-gray-200 dark:border-gray-800">
+        <div className="about-footer-container flex flex-col md:flex-row justify-between items-center">
+          <div className="flex items-center gap-2 mb-4 md:mb-0">
+            <span className="text-gray-500 font-medium">© 2025 Blink - by LinzaApps</span>
+          </div>
+          <div className="flex gap-6 text-gray-500 text-sm">
+            <a href="#" className="hover:text-blue-500 transition-colors">Privacy</a>
+            <a href="#" className="hover:text-blue-500 transition-colors">Terms</a>
+            <a href="https://github.com/samirrhashimov/blink.git" className="hover:text-blue-500 transition-colors">GitHub</a>
+          </div>
         </div>
       </footer>
     </div>
@@ -164,3 +214,4 @@ const LandingPage: React.FC = () => {
 };
 
 export default LandingPage;
+

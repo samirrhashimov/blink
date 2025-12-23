@@ -10,12 +10,12 @@ const LoginPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email || !password) {
       setError('Please fill in all fields');
       return;
@@ -39,7 +39,7 @@ const LoginPage: React.FC = () => {
       <div className="auth-container">
         <div className="auth-header">
           <div className="auth-logo">
-            <img src={blinkLogo} alt="Blink" style={{height: '60px', width: 'auto'}} />
+            <img src={blinkLogo} alt="Blink" style={{ height: '60px', width: 'auto' }} />
           </div>
           <h2>Welcome back</h2>
           <p>Sign in to continue</p>
@@ -82,7 +82,8 @@ const LoginPage: React.FC = () => {
               />
               <button
                 type="button"
-                className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors cursor-pointer bg-transparent border-0 p-0"
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors cursor-pointer bg-transparent border-0 p-0"
+                style={{ position: 'absolute', top: '50%', right: '12px', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? (
@@ -100,6 +101,15 @@ const LoginPage: React.FC = () => {
             className="submit-button"
           >
             {loading ? 'Signing in...' : 'Log in'}
+          </button>
+
+          <button
+            type="button"
+            className="submit-button google-btn desktop-only"
+            onClick={loginWithGoogle}
+          >
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style={{ width: '20px', height: '20px' }} />
+            Continue with Google
           </button>
 
           <div className="auth-footer">

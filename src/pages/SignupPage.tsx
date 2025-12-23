@@ -15,7 +15,7 @@ const SignupPage: React.FC = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { signup } = useAuth();
+  const { signup, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -27,7 +27,7 @@ const SignupPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.displayName || !formData.email || !formData.password || !formData.confirmPassword) {
       setError('Please fill in all fields');
       return;
@@ -50,7 +50,7 @@ const SignupPage: React.FC = () => {
       navigate('/dashboard');
     } catch (error: any) {
       console.error('Signup error:', error);
-      
+
       // Provide more specific error messages
       if (error.code === 'auth/email-already-in-use') {
         setError('This email is already registered. Please try logging in instead.');
@@ -73,7 +73,7 @@ const SignupPage: React.FC = () => {
       <div className="auth-container">
         <div className="auth-header">
           <div className="auth-logo">
-            <img src={blinkLogo} alt="Blink" style={{height: '60px', width: 'auto'}} />
+            <img src={blinkLogo} alt="Blink" style={{ height: '60px', width: 'auto' }} />
           </div>
           <h2>Create your account</h2>
           <p>Join us to organize your links</p>
@@ -130,7 +130,8 @@ const SignupPage: React.FC = () => {
               />
               <button
                 type="button"
-                className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors cursor-pointer bg-transparent border-0 p-0"
+                style={{ position: 'absolute', top: '50%', right: '12px', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors cursor-pointer bg-transparent border-0 p-0"
                 onClick={() => setShowPassword(!showPassword)}
               >
                 {showPassword ? (
@@ -157,7 +158,8 @@ const SignupPage: React.FC = () => {
               />
               <button
                 type="button"
-                className="absolute top-1/2 -translate-y-1/2 right-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors cursor-pointer bg-transparent border-0 p-0"
+                style={{ position: 'absolute', top: '50%', right: '12px', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-colors cursor-pointer bg-transparent border-0 p-0"
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               >
                 {showConfirmPassword ? (
@@ -175,6 +177,15 @@ const SignupPage: React.FC = () => {
             className="submit-button"
           >
             {loading ? 'Creating account...' : 'Sign up'}
+          </button>
+
+          <button
+            type="button"
+            className="submit-button google-btn desktop-only"
+            onClick={loginWithGoogle}
+          >
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style={{ width: '20px', height: '20px' }} />
+            Continue with Google
           </button>
 
           <div className="auth-footer">

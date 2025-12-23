@@ -192,7 +192,7 @@ const Dashboard: React.FC = () => {
               className="add-link-button"
             >
               <Plus className="h-5 w-5" />
-              New Vault
+              New Container
             </button>
           </div>
 
