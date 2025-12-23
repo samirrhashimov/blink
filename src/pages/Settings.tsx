@@ -12,6 +12,7 @@ import {
   Sun,
   ArrowLeft
 } from 'lucide-react';
+import ConfirmModal from '../components/ConfirmModal';
 
 const Settings: React.FC = () => {
   const { currentUser, logout } = useAuth();
@@ -25,7 +26,10 @@ const Settings: React.FC = () => {
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState('');
+
   const [error, setError] = useState('');
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   // const language = 'English';
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,21 +75,35 @@ const Settings: React.FC = () => {
     }
   };
 
-  const handleLogout = async () => {
-    if (window.confirm('Are you sure you want to logout?')) {
-      try {
-        await logout();
-        navigate('/');
-      } catch (error) {
-        console.error('Logout error:', error);
-      }
+  const handleLogout = () => {
+    setShowLogoutModal(true);
+  };
+
+  const performLogout = async () => {
+    try {
+      await logout();
+      navigate('/');
+    } catch (error) {
+      console.error('Logout error:', error);
     }
   };
 
   const handleDeleteAccount = () => {
-    if (window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
-      // TODO: Implement account deletion logic
-      console.log('Deleting account');
+    setShowDeleteModal(true);
+  };
+
+  const performDeleteAccount = async () => {
+    try {
+      // TODO: Implement actual account deletion logic with Firebase
+      console.log('Deleting account...');
+      // await deleteUser(auth.currentUser);
+
+      // For now, just logout to simulate deletion
+      await logout();
+      navigate('/');
+    } catch (error) {
+      console.error('Delete account error:', error);
+      setError('Failed to delete account. You may need to re-authenticate.');
     }
   };
 
@@ -192,19 +210,26 @@ const Settings: React.FC = () => {
                   <h4>Theme</h4>
                   <p>Choose between a light or dark theme.</p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => theme === 'light' ? null : toggleTheme()}
-                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${theme === 'light' ? 'bg-primary/20 dark:bg-primary/30 text-primary' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`}
-                  >
-                    Light
-                  </button>
-                  <button
-                    onClick={() => theme === 'dark' ? null : toggleTheme()}
-                    className={`px-4 py-2 text-sm font-medium rounded-lg transition-all ${theme === 'dark' ? 'bg-primary/20 dark:bg-primary/30 text-primary' : 'hover:bg-gray-100 dark:hover:bg-gray-800'}`}
-                  >
-                    Dark
-                  </button>
+                <div
+                  className={`toggle-switch ${theme === 'dark' ? 'checked' : ''}`}
+                  onClick={toggleTheme}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      toggleTheme();
+                    }
+                  }}
+                  aria-label="Toggle theme"
+                >
+                  <div className="toggle-thumb">
+                    {theme === 'dark' ? (
+                      <Moon className="toggle-icon" />
+                    ) : (
+                      <Sun className="toggle-icon" />
+                    )}
+                  </div>
                 </div>
               </div>
               {/* <div className="settings-item">
@@ -256,6 +281,26 @@ const Settings: React.FC = () => {
               </div>
             </div>
           </section>
+          <ConfirmModal
+            isOpen={showLogoutModal}
+            onClose={() => setShowLogoutModal(false)}
+            onConfirm={performLogout}
+            title="Logout"
+            message="Are you sure you want to logout of your account?"
+            confirmText="Logout"
+            variant="danger"
+            icon={<LogOut className="h-4 w-4" />}
+          />
+          <ConfirmModal
+            isOpen={showDeleteModal}
+            onClose={() => setShowDeleteModal(false)}
+            onConfirm={performDeleteAccount}
+            title="Delete Account"
+            message="Are you sure you want to permanently delete your account? This action cannot be undone and all your data will be lost."
+            confirmText="Delete Account"
+            variant="danger"
+            icon={<LogOut className="h-4 w-4" />}
+          />
         </div>
       </main>
     </div>

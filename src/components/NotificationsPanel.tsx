@@ -139,7 +139,7 @@ const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onClose
             {notifications.some(n => !n.read) && (
               <button
                 onClick={handleMarkAllAsRead}
-                className="p-2 rounded-lg hover:bg-gray-200 text-gray-600 transition-colors"
+                className="notification-header-btn"
                 title="Mark all as read"
               >
                 <CheckCheck className="h-5 w-5" />
@@ -147,7 +147,7 @@ const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onClose
             )}
             <button
               onClick={onClose}
-              className="p-2 rounded-lg hover:bg-gray-200 text-gray-600 transition-colors"
+              className="notification-header-btn"
             >
               <X className="h-5 w-5" />
             </button>

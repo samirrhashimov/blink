@@ -649,6 +649,29 @@ body {
   border-bottom: 1px solid var(--border-color);
 }
 
+.notification-header-btn {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  /* Ensure icon is centered */
+  align-items: center;
+  justify-content: center;
+}
+
+.notification-header-btn:hover {
+  background-color: var(--bg-hover);
+  color: var(--text-main);
+}
+
+.dark .notification-header-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
 .notification-content {
   flex-grow: 1;
   overflow-y: auto;
@@ -704,4 +727,57 @@ body {
   -webkit-box-orient: vertical;
   line-clamp: 2;
   -webkit-line-clamp: 2;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+  position: relative;
+  width: 50px;
+  height: 28px;
+  background-color: var(--bg-active);
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: 1px solid var(--border-color);
+}
+
+.toggle-switch.checked {
+  background-color: var(--primary);
+  border-color: var(--primary);
+}
+
+.toggle-thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 22px;
+  height: 22px;
+  background-color: white;
+  border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fbbf24;
+  /* Sun color default */
+}
+
+.toggle-switch.checked .toggle-thumb {
+  transform: translateX(22px);
+  color: var(--primary);
+}
+
+.dark .toggle-switch {
+  background-color: #374151;
+}
+
+.dark .toggle-switch.checked {
+  background-color: var(--primary);
+}
+
+/* Icon inside thumb */
+.toggle-icon {
+  width: 14px;
+  height: 14px;
 }
