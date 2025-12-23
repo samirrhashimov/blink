@@ -116,7 +116,7 @@
 .about-feature-card {
   background: rgba(30, 41, 59, 0.5);
   border: 1px solid #475569;
-  border-radius: 0.5rem;
+  border-radius: 10px;
   padding: 2rem;
   transition: all 0.3s ease;
 }
@@ -128,7 +128,7 @@
 .about-feature-icon {
   width: 3.5rem;
   height: 3.5rem;
-  border-radius: 0.5rem;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -180,7 +180,7 @@
   margin: 4rem auto 0;
   padding: 4rem 1.5rem;
   background: rgb(255, 255, 255);
-  border-radius: 0.5rem;
+  border-radius: 10px;
 }
 
 .about-usecases-grid {
@@ -238,7 +238,7 @@
 .about-tech-badge {
   background: rgba(30, 41, 59, 0.5);
   border: 1.5px solid #475569;
-  border-radius: 0.5rem;
+  border-radius: 10px;
   padding: 1rem;
   text-align: center;
   transition: all 0.3s ease;
@@ -290,7 +290,7 @@
 .about-btn {
   font-weight: 600;
   padding: 0.75rem 2rem;
-  border-radius: 0.5rem;
+  border-radius: 10px;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
@@ -371,5 +371,101 @@
   .about-btn {
     width: 100%;
     justify-content: center;
+  }
+}
+
+/* Prevent horizontal overflow globally for landing page */
+.landing-page,
+.landing-page * {
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  overflow-x: hidden !important;
+}
+
+/* Ensure container padding doesn't create overflow on small screens */
+.container {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+/* Force white-themed surfaces for the merged About sections */
+.about-features .about-feature-card,
+.about-tech-badge,
+.about-usecase-card {
+  background: #ffffff !important;
+  color: #111827 !important;
+  /* dark text */
+  box-shadow: 0 2px 12px rgba(2, 6, 23, 0.06) !important;
+}
+
+/* Adjust badge text color */
+.about-tech-name,
+.about-feature-title,
+.about-usecase-title,
+.about-feature-text,
+.about-usecase-text {
+  color: #0f172a !important;
+}
+
+/* Make hero text dark on white background */
+.about-hero-title,
+.about-hero-subtitle,
+.hero-content p,
+.hero-content h1 {
+  color: #0f172a !important;
+}
+
+/* Buttons contrast on white theme */
+.about-btn-primary,
+.btn-primary {
+  background: #06b6d4;
+  color: #ffffff !important;
+}
+
+.about-btn-secondary,
+.btn-secondary {
+  background: transparent;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  color: #0f172a;
+}
+
+/* Mobile specific adjustments */
+@media (max-width: 480px) {
+
+  .about-hero-container,
+  .about-features-container,
+  .about-usecases-container,
+  .about-techstack-container,
+  .about-cta-container {
+    padding-left: 0.5rem !important;
+    padding-right: 0.5rem !important;
+  }
+
+  .about-features-grid,
+  .about-usecases-grid,
+  .about-techstack-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .landing-header .container {
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
+  }
+
+  /* Reduce large margins that push content off-screen */
+  .about-hero,
+  .about-features,
+  .about-usecases,
+  .about-techstack,
+  .about-cta {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0.75rem !important;
+    padding-right: 0.75rem !important;
   }
 }

@@ -1,8 +1,48 @@
-/* Tailwind directives removed in-editor to avoid unknown at-rule linter errors.
-  Project uses compiled Tailwind (if available) and `src/css/tailwind-fallback.css` as a runtime fallback.
-*/
+/* CSS Variables & Utilities (Replacing Tailwind) */
+:root {
+  --primary: #13a4ec;
+  --secondary: #64748b;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  --info: #3b82f6;
+  --primary-rgb: 19, 164, 236;
+  /* RGB for #13a4ec */
 
-/* Basic CSS Reset and Styles */
+  /* Theme Variables (Light Default) */
+  --bg-body: #f9fafb;
+  --bg-surface: #ffffff;
+  --bg-hover: #f3f4f6;
+  --bg-active: #e5e7eb;
+
+  --text-main: #111827;
+  --text-secondary: #4b5563;
+  --text-muted: #9ca3af;
+  --text-on-primary: #ffffff;
+
+  --border-color: #e5e7eb;
+}
+
+.dark {
+  /* Theme Variables (Dark Override) */
+  --bg-body: #111827;
+  --bg-surface: #1f2937;
+  /* Gray 800 */
+  --bg-hover: #374151;
+  /* Gray 700 */
+  --bg-active: #4b5563;
+
+  --text-main: #f9fafb;
+  /* Gray 50 */
+  --text-secondary: #d1d5db;
+  /* Gray 300 */
+  --text-muted: #9ca3af;
+  /* Gray 400 */
+
+  --border-color: #374151;
+}
+
+/* Base Styles */
 * {
   margin: 0;
   padding: 0;
@@ -11,18 +51,547 @@
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  line-height: 1.6;
-  color: #101c22;
-  background-color: #f6f7f8;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  color: var(--text-main);
+  background-color: var(--bg-body);
+  transition: background-color 0.2s, color 0.2s;
 }
 
-.dark body {
-  background-color: #101c22;
-  color: #f6f7f8;
+/* Layout Utilities */
+.flex {
+  display: flex;
 }
 
-/* Header logo: ensure visibility in dark mode for black PNG logo */
+.grid {
+  display: grid;
+}
+
+.grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.flex-shrink-0 {
+  flex-shrink: 0;
+}
+
+.gap-1 {
+  gap: 0.25rem;
+}
+
+.gap-2 {
+  gap: 0.5rem;
+}
+
+.gap-3 {
+  gap: 0.75rem;
+}
+
+.gap-4 {
+  gap: 1rem;
+}
+
+.gap-6 {
+  gap: 1.5rem;
+}
+
+.space-y-4 {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.space-y-6 {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.space-y-8 {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.inset-0 {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+.-top-1 {
+  top: -0.25rem;
+}
+
+.-right-1 {
+  right: -0.25rem;
+}
+
+.left-0 {
+  left: 0;
+}
+
+.left-3 {
+  left: 0.75rem;
+}
+
+.left-4 {
+  left: 1rem;
+}
+
+.inset-y-0 {
+  top: 0;
+  bottom: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+.block {
+  display: block;
+}
+
+@media (min-width: 768px) {
+  .md\:hidden {
+    display: none;
+  }
+}
+
+/* Sizing */
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.min-w-0 {
+  min-width: 0;
+}
+
+.h-4,
+.w-4 {
+  height: 1rem;
+  width: 1rem;
+}
+
+.h-5,
+.w-5 {
+  height: 1.25rem;
+  width: 1.25rem;
+}
+
+.h-6,
+.w-6 {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.h-8,
+.w-8 {
+  height: 2rem;
+  width: 2rem;
+}
+
+/* Spacing */
+.p-1 {
+  padding: 0.25rem;
+}
+
+.p-2 {
+  padding: 0.5rem;
+}
+
+.p-3 {
+  padding: 0.75rem;
+}
+
+.p-4 {
+  padding: 1rem;
+}
+
+.p-6 {
+  padding: 1.5rem;
+}
+
+.px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.px-5 {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.pl-4 {
+  padding-left: 1rem;
+}
+
+.pl-10 {
+  padding-left: 2.5rem;
+}
+
+.pl-12 {
+  padding-left: 3rem;
+}
+
+.pr-10 {
+  padding-right: 2.5rem;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem;
+}
+
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
+.mt-2 {
+  margin-top: 0.5rem;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
+/* Typography */
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.text-xl {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-medium {
+  font-weight: 500;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Semantic Color Utilities */
+.text-gray-900 {
+  color: var(--text-main);
+}
+
+.text-gray-600 {
+  color: var(--text-secondary);
+}
+
+.text-gray-500 {
+  color: var(--text-muted);
+}
+
+.text-white {
+  color: #ffffff;
+}
+
+.text-primary {
+  color: var(--primary);
+}
+
+.text-red-600 {
+  color: #dc2626;
+}
+
+/* Using a fixed red or var(--danger) */
+.dark .text-red-400 {
+  color: #f87171;
+}
+
+/* Specific dark mode red override if needed */
+
+.bg-white {
+  background-color: var(--bg-surface);
+}
+
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.bg-red-500 {
+  background-color: var(--danger);
+}
+
+/* Interactive */
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.hover\:bg-gray-200:hover {
+  background-color: var(--bg-hover);
+}
+
+.hover\:bg-red-100:hover {
+  background-color: #fee2e2;
+}
+
+/* Keep light red */
+.dark .hover\:bg-red-900\/20:hover {
+  background-color: rgba(127, 29, 29, 0.2);
+}
+
+.transition-colors {
+  transition: background-color 0.2s, color 0.2s;
+}
+
+/* Decoration */
+.rounded {
+  border-radius: 10px;
+}
+
+.rounded-md {
+  border-radius: 10px;
+}
+
+.rounded-lg {
+  border-radius: 10px;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}
+
+.shadow-sm {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.shadow-lg {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.border {
+  border: 1px solid var(--border-color);
+}
+
+.border-b {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.border-t {
+  border-top: 1px solid var(--border-color);
+}
+
+.border-b-2 {
+  border-bottom-width: 2px;
+}
+
+.border-white {
+  border-color: white;
+}
+
+.divide-y>*+* {
+  border-top: 1px solid var(--border-color);
+}
+
+/* Animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Components */
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-secondary:hover {
+  background-color: var(--bg-hover);
+  border-color: var(--text-secondary);
+}
+
+.dark .btn-secondary {
+  background-color: #374151;
+  /* Explicit lighter gray for dark mode */
+  border-color: #4b5563;
+  color: #ffffff;
+}
+
+.dark .btn-secondary:hover {
+  background-color: #4b5563;
+}
+
+.btn-danger {
+  background-color: var(--danger);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 2px 5px rgba(239, 68, 68, 0.3);
+}
+
+.btn-danger:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+}
+
+
+
+.input-field {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background-color: var(--bg-surface);
+  color: var(--text-main);
+  transition: border-color 0.2s;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(19, 164, 236, 0.1);
+}
+
+.card {
+  background-color: var(--bg-surface);
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--border-color);
+}
+
 .logo-image {
   height: 40px;
   width: auto;
@@ -30,11 +599,93 @@ body {
 }
 
 .dark .logo-image {
-  /* invert the logo so a black PNG appears light on dark backgrounds */
   filter: invert(1) brightness(2) saturate(1.2);
 }
 
-/* Utility Classes */
+/* Notifications Panel Specifics */
+.notification-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 10000;
+  backdrop-filter: blur(6px);
+}
+
+.notifications-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 10001;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-surface);
+  box-shadow: none;
+  border: none;
+}
+
+.dark .notifications-panel {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 640px) {
+  .notifications-panel {
+    right: 0.5rem;
+    left: 0.5rem;
+    width: calc(100% - 1rem);
+    height: auto;
+    max-height: 90vh;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 10px;
+  }
+}
+
+.notification-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.notification-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 10px;
+  transition: all 0.15s;
+  cursor: pointer;
+  margin-bottom: 0.25rem;
+}
+
+.notification-item.unread {
+  background-color: rgba(19, 164, 236, 0.1);
+  /* primary tint */
+  box-shadow: 0 0 0 1px rgba(19, 164, 236, 0.3);
+}
+
+.notification-item:hover {
+  background-color: var(--bg-hover);
+}
+
+.notification-icon-container {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.5rem;
+}
+
 .font-display {
   font-family: 'Inter', sans-serif;
 }
@@ -53,68 +704,4 @@ body {
   -webkit-box-orient: vertical;
   line-clamp: 2;
   -webkit-line-clamp: 2;
-}
-
-/* Custom Properties for Colors */
-:root {
-  --primary: #13a4ec;
-  --background-light: #f6f7f8;
-  --background-dark: #101c22;
-  --foreground-light: #101c22;
-  --foreground-dark: #f6f7f8;
-  --subtle-light: #e4e5e7;
-  --subtle-dark: #1b2931;
-  --muted-light: #6b7280;
-  --muted-dark: #9ca3af;
-}
-
-/* Basic Component Styles */
-.btn-primary {
-  background-color: var(--primary);
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.2s;
-}
-
-.btn-primary:hover {
-  opacity: 0.9;
-}
-
-.input-field {
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  background-color: white;
-  color: #101c22;
-  transition: border-color 0.2s;
-}
-
-.input-field:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(19, 164, 236, 0.1);
-}
-
-.dark .input-field {
-  background-color: #1b2931;
-  border-color: #374151;
-  color: #f6f7f8;
-}
-
-.card {
-  background-color: white;
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
-}
-
-.dark .card {
-  background-color: #1b2931;
-  border-color: #374151;
 }

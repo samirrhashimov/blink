@@ -6,7 +6,7 @@ import { updateProfile } from 'firebase/auth';
 import { doc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
 import blinkLogo from '../assets/blinklogo2.png';
-import { 
+import {
   LogOut,
   Moon,
   Sun,
@@ -37,13 +37,13 @@ const Settings: React.FC = () => {
 
   const handleUpdateAccount = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!currentUser || !auth.currentUser) return;
-    
+
     setLoading(true);
     setError('');
     setSuccess('');
-    
+
     try {
       // Update display name in Firebase Auth using the Firebase auth instance
       if (formData.displayName !== currentUser.displayName) {
@@ -51,16 +51,16 @@ const Settings: React.FC = () => {
           displayName: formData.displayName
         });
       }
-      
+
       // Update user document in Firestore
       const userRef = doc(db, 'users', currentUser.uid);
       await updateDoc(userRef, {
         displayName: formData.displayName,
         updatedAt: new Date()
       });
-      
+
       setSuccess('Account updated successfully!');
-      
+
       // Clear success message after 3 seconds
       setTimeout(() => setSuccess(''), 3000);
     } catch (err: any) {
@@ -99,7 +99,7 @@ const Settings: React.FC = () => {
               <Link to="/dashboard" className="back-link">
                 <ArrowLeft />
               </Link>
-              <img src={blinkLogo} alt="Blink" className="logo-image" style={{height: '40px', width: 'auto', marginLeft: '1rem'}} />
+              <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
             </div>
             <nav className="main-nav">
               <Link to="/dashboard">Home</Link>
@@ -130,19 +130,19 @@ const Settings: React.FC = () => {
           {/* Account Section */}
           <section className="settings-section">
             <h3>Account</h3>
-            
+
             {success && (
               <div className="mb-4 p-4 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200">
                 {success}
               </div>
             )}
-            
+
             {error && (
               <div className="mb-4 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200">
                 {error}
               </div>
             )}
-            
+
             <form onSubmit={handleUpdateAccount} className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="form-group">
                 <label className="form-label" htmlFor="name">Name</label>
@@ -166,7 +166,7 @@ const Settings: React.FC = () => {
                   placeholder="Email address"
                   value={formData.email}
                   disabled
-                  style={{opacity: 0.6, cursor: 'not-allowed'}}
+                  style={{ opacity: 0.6, cursor: 'not-allowed' }}
                   title="Email cannot be changed"
                 />
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Email cannot be changed</p>
@@ -177,7 +177,7 @@ const Settings: React.FC = () => {
               onClick={handleUpdateAccount}
               disabled={loading}
               className="btn-primary"
-              style={{marginTop: '1.5rem', opacity: loading ? 0.6 : 1, cursor: loading ? 'not-allowed' : 'pointer'}}
+              style={{ marginTop: '1.5rem', opacity: loading ? 0.6 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
             >
               {loading ? 'Updating...' : 'Update Account'}
             </button>
@@ -186,7 +186,7 @@ const Settings: React.FC = () => {
           {/* Preferences Section */}
           <section className="settings-section">
             <h3>Preferences</h3>
-            <div style={{display: 'flex', flexDirection: 'column', gap: '1rem'}}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div className="settings-item">
                 <div className="settings-item-info">
                   <h4>Theme</h4>
@@ -223,9 +223,9 @@ const Settings: React.FC = () => {
           </section>
 
           {/* Danger Zone */}
-          <section className="settings-section" style={{borderColor: 'rgba(239, 68, 68, 0.3)'}}>
-            <h3 style={{color: '#ef4444'}}>Danger Zone</h3>
-            <div style={{padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(100, 116, 139, 0.3)', background: 'rgba(100, 116, 139, 0.05)', marginBottom: '1.5rem'}}>
+          <section className="settings-section" style={{ borderColor: 'rgba(239, 68, 68, 0.3)' }}>
+            <h3 style={{ color: '#ef4444' }}>Danger Zone</h3>
+            <div style={{ padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(100, 116, 139, 0.3)', background: 'rgba(100, 116, 139, 0.05)', marginBottom: '1.5rem' }}>
               <div className="flex items-center justify-between">
                 <div className="settings-item-info">
                   <h4>Logout</h4>
@@ -233,23 +233,23 @@ const Settings: React.FC = () => {
                 </div>
                 <button
                   onClick={handleLogout}
-                  className="px-6 py-3 bg-gray-600 text-white font-semibold rounded-xl hover:bg-gray-700 transition-all flex items-center gap-2"
+                  className="btn-secondary"
                 >
                   <LogOut className="h-4 w-4" />
                   Logout
                 </button>
               </div>
             </div>
-            
-            <div style={{padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(239, 68, 68, 0.3)', background: 'rgba(239, 68, 68, 0.1)'}}>
+
+            <div style={{ padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(239, 68, 68, 0.3)', background: 'rgba(239, 68, 68, 0.1)' }}>
               <div className="flex items-center justify-between">
                 <div className="settings-item-info">
-                  <h4 style={{color: '#ef4444'}}>Delete Account</h4>
+                  <h4 style={{ color: '#ef4444' }}>Delete Account</h4>
                   <p>Permanently delete your account and all of your data.</p>
                 </div>
                 <button
                   onClick={handleDeleteAccount}
-                  className="px-6 py-3 bg-red-600 text-white font-semibold rounded-xl hover:bg-red-700 transition-all"
+                  className="btn-danger"
                 >
                   Delete Account
                 </button>

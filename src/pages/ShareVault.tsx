@@ -11,10 +11,10 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import type { ShareInvite } from '../types';
 import blinkLogo from '../assets/blinklogo2.png';
-import { 
-  ArrowLeft, 
-  Moon, 
-  Sun, 
+import {
+  ArrowLeft,
+  Moon,
+  Sun,
   Settings,
   X,
   Eye,
@@ -36,6 +36,16 @@ const ShareVault: React.FC = () => {
   const [pendingInvites, setPendingInvites] = useState<ShareInvite[]>([]);
 
   const vault = vaults.find(v => v.id === id);
+  const colors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
+  const vaultColor = vault?.color || (id ? colors[id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length] : colors[0]);
+
+  // Helper to get RGB from hex
+  const hexToRgb = (hex: string) => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ?
+      `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` :
+      '99, 102, 241';
+  };
 
   useEffect(() => {
     if (id) {
@@ -55,11 +65,11 @@ const ShareVault: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!id || !currentUser) return;
 
     setLoading(true);
-    
+
     try {
       // Validate email
       if (!email.trim()) {
@@ -73,16 +83,16 @@ const ShareVault: React.FC = () => {
 
       // Format inviter name consistently
       const inviterName = UserService.formatUserName(currentUser.displayName, currentUser.email);
-      
+
       await SharingService.sendInvitation(
-        id, 
-        email.trim(), 
-        permission, 
+        id,
+        email.trim(),
+        permission,
         currentUser.uid,
         vault?.name,
         inviterName
       );
-      
+
       // Try to find the invited user by email and send notification
       try {
         const usersQuery = query(
@@ -90,7 +100,7 @@ const ShareVault: React.FC = () => {
           where('email', '==', email.trim().toLowerCase())
         );
         const usersSnapshot = await getDocs(usersQuery);
-        
+
         if (!usersSnapshot.empty) {
           const userData = usersSnapshot.docs[0].data();
           await NotificationService.notifyInvitation(
@@ -104,13 +114,13 @@ const ShareVault: React.FC = () => {
       } catch (err) {
         console.log('Could not send notification:', err);
       }
-      
+
       toast.success('Invitation sent successfully!');
       setEmail('');
       setPermission('view');
-      
+
       await loadPendingInvites();
-      
+
       setTimeout(() => {
         navigate(`/vault/${id}`);
       }, 1500);
@@ -132,7 +142,14 @@ const ShareVault: React.FC = () => {
   };
 
   return (
-    <div className="vault-details-page">
+    <div
+      className="vault-details-page"
+      style={{
+        '--accent-color': vaultColor,
+        '--primary': vaultColor,
+        '--primary-rgb': hexToRgb(vaultColor)
+      } as React.CSSProperties}
+    >
       {/* Header */}
       <header className="header">
         <div className="container">
@@ -141,7 +158,7 @@ const ShareVault: React.FC = () => {
               <Link to={`/vault/${id}`} className="back-link">
                 <ArrowLeft />
               </Link>
-              <img src={blinkLogo} alt="Blink" className="logo-image" style={{height: '40px', width: 'auto', marginLeft: '1rem'}} />
+              <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
             </div>
             <nav className="main-nav">
               <Link to="/dashboard">Home</Link>
@@ -173,29 +190,34 @@ const ShareVault: React.FC = () => {
         <div className="vault-content">
           <div className="links-section">
             <div className="collaborators-widget">
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="form-group">
                   <label className="form-label" htmlFor="invite-input">
                     Invite by email or username
                   </label>
                   <div className="relative">
+                    <div
+                      className="absolute left-4 pointer-events-none text-gray-400"
+                      style={{ top: '50%', transform: 'translateY(-50%)', display: 'flex', alignItems: 'center' }}
+                    >
+                    </div>
                     <input
                       id="invite-input"
                       type="email"
-                      placeholder="Enter email or username"
+                      placeholder="Enter email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="form-input pl-10"
+                      className="form-input pl-12"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <div className="flex items-center gap-2 mb-2 mt-4">
+                  <div className="flex items-center gap-2 mb-2 mt-6">
                     <h3 className="text-base font-semibold text-gray-900 dark:text-white">Permissions</h3>
                   </div>
-                  <div className="grid gap-3">
+                  <div className="permissions-container" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                     <label className="permission-card group cursor-pointer">
                       <input
                         type="radio"
@@ -206,8 +228,8 @@ const ShareVault: React.FC = () => {
                         className="sr-only"
                       />
                       <div className={`permission-card-content ${permission === 'view' ? 'permission-card-selected' : ''}`}>
-                        <div className={`permission-icon-wrapper bg-blue-50 dark:bg-blue-900/20 ${permission === 'view' ? 'bg-blue-100 dark:bg-blue-900/40' : ''}`}>
-                          <Eye className="permission-icon text-blue-600 dark:text-blue-400" />
+                        <div className="permission-icon-wrapper">
+                          <Eye className="permission-icon" />
                         </div>
                         <div className="flex-grow">
                           <p className="permission-title">Can view</p>
@@ -231,8 +253,8 @@ const ShareVault: React.FC = () => {
                         className="sr-only"
                       />
                       <div className={`permission-card-content ${permission === 'edit' ? 'permission-card-selected' : ''}`}>
-                        <div className={`permission-icon-wrapper bg-purple-50 dark:bg-purple-900/20 ${permission === 'edit' ? 'bg-purple-100 dark:bg-purple-900/40' : ''}`}>
-                          <Edit3 className="permission-icon text-purple-600 dark:text-purple-400" />
+                        <div className="permission-icon-wrapper">
+                          <Edit3 className="permission-icon" />
                         </div>
                         <div className="flex-grow">
                           <p className="permission-title">Can edit</p>
@@ -248,7 +270,7 @@ const ShareVault: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex justify-end gap-3 pt-4">
+                <div className="flex justify-end gap-3 pt-6">
                   <Link
                     to={`/vault/${id}`}
                     className="btn-cancel"

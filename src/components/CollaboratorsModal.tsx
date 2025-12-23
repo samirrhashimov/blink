@@ -12,6 +12,7 @@ interface CollaboratorsModalProps {
   authorizedUsers: string[];
   ownerId: string;
   currentUserId: string;
+  vaultColor?: string;
 }
 
 interface CollaboratorInfo {
@@ -22,13 +23,14 @@ interface CollaboratorInfo {
   isPending?: boolean;
 }
 
-const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({ 
-  isOpen, 
-  onClose, 
+const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
+  isOpen,
+  onClose,
   vaultId,
   authorizedUsers,
   ownerId,
-  currentUserId
+  currentUserId,
+  vaultColor
 }) => {
   const [collaborators, setCollaborators] = useState<CollaboratorInfo[]>([]);
   const [loading, setLoading] = useState(false);
@@ -43,7 +45,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
   const loadCollaborators = async () => {
     setLoading(true);
     setError('');
-    
+
     try {
       const permissions = await SharingService.getVaultPermissions(vaultId);
       const pendingInvites = await SharingService.getVaultInvitations(vaultId);
@@ -86,11 +88,11 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
       // Add other authorized users
       for (const userId of authorizedUsers) {
         if (userId === ownerId) continue; // Skip owner, already added
-        
+
         try {
           const userDoc = await getDoc(doc(db, 'users', userId));
           const userPermission = permissions.find(p => p.userId === userId);
-          
+
           if (userDoc.exists()) {
             const userData = userDoc.data();
             collabInfos.push({
@@ -176,7 +178,11 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div
+      className="modal-overlay"
+      onClick={onClose}
+      style={{ '--primary': vaultColor } as React.CSSProperties}
+    >
       <div className="modal-content max-h-[80vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Collaborators</h2>
@@ -207,7 +213,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
                 const isCurrentUser = collab.userId === currentUserId;
                 const canManageThisUser = currentUserId === ownerId && !isOwner;
                 const isPending = collab.isPending || false;
-                
+
                 return (
                   <div key={collab.userId} className="collaborator-item">
                     <div className="flex items-center gap-3 flex-grow min-w-0">

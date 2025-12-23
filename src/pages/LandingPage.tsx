@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Lock, Share2, Zap, Users, Search, Moon } from 'lucide-react';
 import blinkLogo from '../assets/blinklogo2.png';
 import '../css/About.css';
-import '../css/LandingOverrides.css';
 
 const LandingPage: React.FC = () => {
   return (
@@ -134,7 +133,7 @@ const LandingPage: React.FC = () => {
         <div className="about-techstack-container">
           <h2 className="about-section-title">Built with Modern Technology</h2>
           <div className="about-techstack-grid">
-            {['React 18', 'TypeScript', 'Firebase', 'Tailwind CSS', 'Firestore', 'React Router', 'Vite', 'Lucide Icons'].map((tech) => (
+            {['React 18', 'TypeScript', 'Firebase', 'CSS3', 'Firestore', 'React Router', 'Vite', 'Lucide Icons'].map((tech) => (
               <div key={tech} className="about-tech-badge">
                 <p className="about-tech-name">{tech}</p>
               </div>

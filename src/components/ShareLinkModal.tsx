@@ -8,14 +8,16 @@ interface ShareLinkModalProps {
   vaultId: string;
   vaultName: string;
   currentUserId: string;
+  vaultColor?: string;
 }
 
-const ShareLinkModal: React.FC<ShareLinkModalProps> = ({ 
-  isOpen, 
-  onClose, 
+const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
+  isOpen,
+  onClose,
   vaultId,
   vaultName,
-  currentUserId 
+  currentUserId,
+  vaultColor
 }) => {
   const [shareLinks, setShareLinks] = useState<ShareLink[]>([]);
   const [loading, setLoading] = useState(false);
@@ -93,7 +95,11 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div
+      className="modal-overlay"
+      onClick={onClose}
+      style={{ '--primary': vaultColor } as React.CSSProperties}
+    >
       <div className="modal-content max-w-2xl max-h-[80vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div>
@@ -115,7 +121,7 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
           {!showCreateForm && (
             <button
               onClick={() => setShowCreateForm(true)}
-              className="w-full mb-4 px-4 py-3 bg-primary text-white rounded-lg hover:opacity-90 transition-opacity flex items-center justify-center gap-2 font-medium"
+              className="btn-primary w-full mb-4"
             >
               <Plus className="h-5 w-5" />
               Create New Share Link
@@ -125,7 +131,7 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
           {showCreateForm && (
             <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
               <h3 className="font-medium text-gray-900 dark:text-white mb-3">New Share Link</h3>
-              
+
               <div className="space-y-3">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -178,7 +184,7 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
                   <button
                     onClick={handleCreateLink}
                     disabled={creating}
-                    className="flex-1 px-4 py-2 bg-primary text-white rounded hover:opacity-90 transition-opacity disabled:opacity-50"
+                    className="btn-primary flex-1"
                   >
                     {creating ? 'Creating...' : 'Create Link'}
                   </button>
@@ -203,7 +209,7 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-grow min-w-0">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="text-xs px-2 py-1 rounded bg-primary/10 text-primary font-medium">
+                        <span className="text-xs px-2 py-1 rounded bg-primary/10 text-primary font-medium" style={{ backgroundColor: `${vaultColor}15`, color: vaultColor }}>
                           {link.permission}
                         </span>
                         <span className="text-xs text-gray-600 dark:text-gray-400">

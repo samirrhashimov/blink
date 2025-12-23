@@ -7,9 +7,10 @@ interface AddLinkModalProps {
   isOpen: boolean;
   onClose: () => void;
   vaultId: string;
+  vaultColor?: string;
 }
 
-const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId }) => {
+const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, vaultColor }) => {
   const { addLinkToVault } = useVault();
   const [formData, setFormData] = useState({
     title: '',
@@ -21,7 +22,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.title.trim() || !formData.url.trim()) {
       setError('Title and URL are required');
       return;
@@ -38,7 +39,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId })
     try {
       setError('');
       setLoading(true);
-      
+
       // Get favicon (non-blocking)
       let favicon: string | undefined;
       try {
@@ -48,7 +49,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId })
         // Favicon fetch failed, continue without it
         favicon = undefined;
       }
-      
+
       await addLinkToVault(vaultId, {
         title: formData.title.trim(),
         url: formData.url.trim(),
@@ -85,7 +86,11 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId })
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div
+      className="modal-overlay"
+      onClick={onClose}
+      style={{ '--primary': vaultColor } as React.CSSProperties}
+    >
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Add New Link</h2>
@@ -152,7 +157,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId })
           </div>
 
         </form>
-        
+
         <div className="modal-footer">
           <button
             type="button"

@@ -28,6 +28,7 @@ export interface Vault {
   updatedAt: Date;
   isShared: boolean;
   coverImage?: string;
+  color?: string;
 }
 
 export interface VaultPermission {

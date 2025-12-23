@@ -9,14 +9,14 @@ import { UserService } from '../services/userService';
 import LinkPreviewService from '../services/linkPreviewService';
 import type { Link as LinkType } from '../types';
 import blinkLogo from '../assets/blinklogo2.png';
-import { 
+import {
   LinkIcon,
-  ArrowLeft, 
-  Plus, 
-  Copy, 
-  Edit, 
-  Trash2, 
-  Share2, 
+  ArrowLeft,
+  Plus,
+  Copy,
+  Edit,
+  Trash2,
+  Share2,
   Moon,
   Sun,
   Settings,
@@ -56,7 +56,7 @@ const VaultDetails: React.FC = () => {
 
   // Find the current vault from the vaults array
   const vault = vaults.find(v => v.id === id) || null;
-  
+
   // Debug vault data
   useEffect(() => {
     if (vault) {
@@ -77,20 +77,20 @@ const VaultDetails: React.FC = () => {
         console.log('No vault to load');
         return;
       }
-      
+
       console.log('Loading collaborator names...');
       console.log('Vault owner:', vault.ownerId);
       console.log('Authorized users:', vault.authorizedUsers);
       console.log('Current user:', currentUser?.uid);
-      
+
       const names: Record<string, string> = {};
       const userIdsToFetch = new Set<string>();
-      
+
       // Add owner if not current user
       if (vault.ownerId && vault.ownerId !== currentUser?.uid) {
         userIdsToFetch.add(vault.ownerId);
       }
-      
+
       // Add all authorized users who are not current user
       if (vault.authorizedUsers && vault.authorizedUsers.length > 0) {
         vault.authorizedUsers.forEach(userId => {
@@ -99,9 +99,9 @@ const VaultDetails: React.FC = () => {
           }
         });
       }
-      
+
       console.log('Fetching names for users:', Array.from(userIdsToFetch));
-      
+
       // Fetch names for all users
       await Promise.all(
         Array.from(userIdsToFetch).map(async (userId) => {
@@ -116,11 +116,11 @@ const VaultDetails: React.FC = () => {
           }
         })
       );
-      
+
       console.log('All collaborator names loaded:', names);
       setCollaboratorNames(names);
     };
-    
+
     loadCollaboratorNames();
   }, [vault?.ownerId, vault?.authorizedUsers, currentUser?.uid]);
 
@@ -128,18 +128,18 @@ const VaultDetails: React.FC = () => {
   useEffect(() => {
     const loadUserPermission = async () => {
       if (!vault || !currentUser) return;
-      
+
       // Owner has full permissions
       if (vault.ownerId === currentUser.uid) {
         setUserPermission('edit');
         return;
       }
-      
+
       // Check permission for shared users
       const permission = await SharingService.getUserPermission(vault.id, currentUser.uid);
       setUserPermission(permission?.permission || null);
     };
-    
+
     loadUserPermission();
   }, [vault?.id, currentUser]);
 
@@ -212,7 +212,7 @@ const VaultDetails: React.FC = () => {
 
   // Check if current user is the owner
   const isOwner = vault?.ownerId === currentUser?.uid;
-  
+
   // Check if user can edit (owner or has edit permission)
   const canEdit = isOwner || userPermission === 'edit';
 
@@ -233,8 +233,26 @@ const VaultDetails: React.FC = () => {
     );
   }
 
+  const colors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
+  const vaultColor = vault.color || colors[vault.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length];
+
+  // Helper to get RGB from hex
+  const hexToRgb = (hex: string) => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ?
+      `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` :
+      '99, 102, 241';
+  };
+
   return (
-    <div className="vault-details-page">
+    <div
+      className="vault-details-page"
+      style={{
+        '--accent-color': vaultColor,
+        '--primary': vaultColor,
+        '--primary-rgb': hexToRgb(vaultColor)
+      } as React.CSSProperties}
+    >
       <header className="header">
         <div className="container">
           <div className="header-content">
@@ -242,7 +260,7 @@ const VaultDetails: React.FC = () => {
               <Link to="/dashboard" className="back-link">
                 <ArrowLeft />
               </Link>
-              <img src={blinkLogo} alt="Blink" className="logo-image" style={{height: '40px', width: 'auto', marginLeft: '1rem'}} />
+              <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
             </div>
             <nav className="main-nav">
               <Link to="/dashboard">Home</Link>
@@ -265,8 +283,10 @@ const VaultDetails: React.FC = () => {
 
       <main className="container">
         <div className="vault-header">
-          <h2>{vault.name}</h2>
-          <p>{vault.description}</p>
+          <div className="flex flex-col gap-1">
+            <h2>{vault.name}</h2>
+            {vault.description && <p>{vault.description}</p>}
+          </div>
         </div>
 
         <div className="vault-content">
@@ -274,8 +294,11 @@ const VaultDetails: React.FC = () => {
             <div className="links-header">
               <h3>Links ({vault.links.length})</h3>
               {canEdit && (
-                <button onClick={() => setShowAddLinkModal(true)} className="add-link-button">
-                  <Plus />
+                <button
+                  onClick={() => setShowAddLinkModal(true)}
+                  className="add-link-button"
+                >
+                  <Plus size={18} />
                   Add Link
                 </button>
               )}
@@ -308,73 +331,73 @@ const VaultDetails: React.FC = () => {
                 filteredLinks.map((link) => {
                   const faviconUrl = LinkPreviewService.getPreviewImage(link);
                   return (
-                  <div key={link.id} className="link-item">
-                    <div className="link-item-content">
-                      <div className="link-icon">
-                        {faviconUrl ? (
-                          <img 
-                            src={faviconUrl} 
-                            alt={`${link.title} favicon`}
-                            className="link-favicon"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.style.display = 'none';
-                              const parent = target.parentElement;
-                              if (parent && !parent.querySelector('.lucide-link')) {
-                                const icon = document.createElement('div');
-                                icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>';
-                                parent.appendChild(icon.firstChild!);
-                              }
-                            }}
-                          />
-                        ) : (
-                          <LinkIcon />
-                        )}
+                    <div key={link.id} className="link-item">
+                      <div className="link-item-content">
+                        <div className="link-icon">
+                          {faviconUrl ? (
+                            <img
+                              src={faviconUrl}
+                              alt={`${link.title} favicon`}
+                              className="link-favicon"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.style.display = 'none';
+                                const parent = target.parentElement;
+                                if (parent && !parent.querySelector('.lucide-link')) {
+                                  const icon = document.createElement('div');
+                                  icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>';
+                                  parent.appendChild(icon.firstChild!);
+                                }
+                              }}
+                            />
+                          ) : (
+                            <LinkIcon />
+                          )}
+                        </div>
+                        <div className="link-info">
+                          <h4 className="font-medium text-gray-900 dark:text-white">{link.title}</h4>
+                          {link.description && (
+                            <p className="text-sm text-gray-600 dark:text-gray-400">{link.description}</p>
+                          )}
+                          <a
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-sm text-primary hover:underline inline-flex items-center gap-1.5 mt-1 align-middle"
+                          >
+                            <span>{link.url}</span>
+                            <ExternalLink className="h-4 w-4 flex-shrink-0" />
+                          </a>
+                        </div>
                       </div>
-                      <div className="link-info">
-                        <h4 className="font-medium text-gray-900 dark:text-white">{link.title}</h4>
-                        {link.description && (
-                          <p className="text-sm text-gray-600 dark:text-gray-400">{link.description}</p>
-                        )}
-                        <a 
-                          href={link.url} 
-                          target="_blank" 
-                          rel="noopener noreferrer"
-                          className="text-xs text-primary hover:underline flex items-center gap-1 mt-1"
+                      <div className="link-item-actions">
+                        <button
+                          onClick={() => copyToClipboard(link.url, link.id)}
+                          className="copy-button"
+                          title={copiedLinkId === link.id ? 'Copied!' : 'Copy URL'}
                         >
-                          {link.url}
-                          <ExternalLink className="h-3 w-3 flex-shrink-0" />
-                        </a>
+                          {copiedLinkId === link.id ? '✓' : <Copy />}
+                        </button>
+                        {canEdit && (
+                          <>
+                            <button
+                              onClick={() => handleEditLink(link)}
+                              className="copy-button"
+                              title="Edit link"
+                            >
+                              <Edit />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteLink(link)}
+                              className="copy-button text-red-600 dark:text-red-400"
+                              title="Delete link"
+                            >
+                              <Trash2 />
+                            </button>
+                          </>
+                        )}
                       </div>
                     </div>
-                    <div className="link-item-actions">
-                      <button 
-                        onClick={() => copyToClipboard(link.url, link.id)} 
-                        className="copy-button"
-                        title={copiedLinkId === link.id ? 'Copied!' : 'Copy URL'}
-                      >
-                        {copiedLinkId === link.id ? '✓' : <Copy />}
-                      </button>
-                      {canEdit && (
-                        <>
-                          <button 
-                            onClick={() => handleEditLink(link)} 
-                            className="copy-button"
-                            title="Edit link"
-                          >
-                            <Edit />
-                          </button>
-                          <button 
-                            onClick={() => handleDeleteLink(link)} 
-                            className="copy-button text-red-600 dark:text-red-400"
-                            title="Delete link"
-                          >
-                            <Trash2 />
-                          </button>
-                        </>
-                      )}
-                    </div>
-                  </div>
                   );
                 })
               )}
@@ -389,18 +412,18 @@ const VaultDetails: React.FC = () => {
                 <div className="avatar" title={currentUser?.displayName || 'You (Owner)'}>
                   {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}
                 </div>
-                
+
                 {/* Owner (if not current user) */}
                 {vault.ownerId !== currentUser?.uid && (
-                  <div 
-                    key={vault.ownerId} 
-                    className="avatar" 
+                  <div
+                    key={vault.ownerId}
+                    className="avatar"
                     title={`${collaboratorNames[vault.ownerId] || 'Owner'} (Owner)`}
                   >
                     {(collaboratorNames[vault.ownerId] || 'O').charAt(0).toUpperCase()}
                   </div>
                 )}
-                
+
                 {/* Other Authorized Users (excluding owner and current user) */}
                 {vault.authorizedUsers
                   .filter(userId => userId !== currentUser?.uid && userId !== vault.ownerId)
@@ -413,7 +436,7 @@ const VaultDetails: React.FC = () => {
                       </div>
                     );
                   })}
-                
+
                 {/* Show +N more if there are additional collaborators */}
                 {(() => {
                   const otherUsers = vault.authorizedUsers.filter(
@@ -429,16 +452,19 @@ const VaultDetails: React.FC = () => {
               </div>
               <div className="flex gap-3 mt-3">
                 {canEdit && (
-                  <Link to={`/vault/${vault.id}/share`} className="manage-collaborators-button flex-1">
-                    <Share2 />
+                  <Link
+                    to={`/vault/${vault.id}/share`}
+                    className="manage-collaborators-button flex-1"
+                  >
+                    <Share2 size={18} />
                     Invite
                   </Link>
                 )}
-                <button 
+                <button
                   onClick={() => setShowCollaboratorsModal(true)}
                   className="manage-collaborators-button flex-1"
                 >
-                  <Users />
+                  <Users size={18} />
                   Manage
                 </button>
               </div>
@@ -448,7 +474,7 @@ const VaultDetails: React.FC = () => {
               <h3>Actions</h3>
               <div className="actions-list">
                 {isOwner && (
-                  <button 
+                  <button
                     onClick={() => setShowEditVaultModal(true)}
                     className="action-button"
                   >
@@ -457,7 +483,7 @@ const VaultDetails: React.FC = () => {
                   </button>
                 )}
                 {isOwner ? (
-                  <button 
+                  <button
                     onClick={() => setShowDeleteVaultModal(true)}
                     className="action-button delete-button"
                   >
@@ -465,7 +491,7 @@ const VaultDetails: React.FC = () => {
                     <span>Delete Container</span>
                   </button>
                 ) : (
-                  <button 
+                  <button
                     onClick={() => setShowLeaveVaultModal(true)}
                     className="action-button delete-button"
                   >
@@ -487,39 +513,42 @@ const VaultDetails: React.FC = () => {
 
       {/* Add Link Modal */}
       {vault && canEdit && (
-        <AddLinkModal 
-          isOpen={showAddLinkModal} 
+        <AddLinkModal
+          isOpen={showAddLinkModal}
           onClose={() => setShowAddLinkModal(false)}
           vaultId={vault.id}
+          vaultColor={vaultColor}
         />
       )}
 
       {/* Edit Link Modal */}
       {vault && selectedLink && canEdit && (
-        <EditLinkModal 
-          isOpen={showEditLinkModal} 
+        <EditLinkModal
+          isOpen={showEditLinkModal}
           onClose={() => {
             setShowEditLinkModal(false);
             setSelectedLink(null);
           }}
           vaultId={vault.id}
           link={selectedLink}
+          vaultColor={vaultColor}
         />
       )}
 
       {/* Edit Vault Modal */}
       {vault && isOwner && (
-        <EditVaultModal 
-          isOpen={showEditVaultModal} 
+        <EditVaultModal
+          isOpen={showEditVaultModal}
           onClose={() => setShowEditVaultModal(false)}
           vault={vault}
+          vaultColor={vaultColor}
         />
       )}
 
       {/* Delete Link Confirmation */}
       {selectedLink && (
-        <DeleteConfirmModal 
-          isOpen={showDeleteLinkModal} 
+        <DeleteConfirmModal
+          isOpen={showDeleteLinkModal}
           onClose={() => {
             setShowDeleteLinkModal(false);
             setSelectedLink(null);
@@ -528,53 +557,58 @@ const VaultDetails: React.FC = () => {
           title="Delete Link"
           message="Are you sure you want to delete this link?"
           itemName={selectedLink.title}
+          vaultColor={vaultColor}
         />
       )}
 
       {/* Delete Vault Confirmation */}
       {vault && (
-        <DeleteConfirmModal 
-          isOpen={showDeleteVaultModal} 
+        <DeleteConfirmModal
+          isOpen={showDeleteVaultModal}
           onClose={() => setShowDeleteVaultModal(false)}
           onConfirm={confirmDeleteVault}
           title="Delete Vault"
           message="Are you sure you want to delete this vault? All links will be permanently deleted."
           itemName={vault.name}
+          vaultColor={vaultColor}
         />
       )}
 
       {/* Leave Vault Confirmation */}
       {vault && (
-        <DeleteConfirmModal 
-          isOpen={showLeaveVaultModal} 
+        <DeleteConfirmModal
+          isOpen={showLeaveVaultModal}
           onClose={() => setShowLeaveVaultModal(false)}
           onConfirm={confirmLeaveVault}
           title="Leave Vault"
           message="Are you sure you want to leave this vault? You will lose access to all its contents."
           itemName={vault.name}
+          vaultColor={vaultColor}
         />
       )}
 
       {/* Collaborators Modal */}
       {vault && currentUser && (
-        <CollaboratorsModal 
-          isOpen={showCollaboratorsModal} 
+        <CollaboratorsModal
+          isOpen={showCollaboratorsModal}
           onClose={() => setShowCollaboratorsModal(false)}
           vaultId={vault.id}
           authorizedUsers={vault.authorizedUsers}
           ownerId={vault.ownerId}
           currentUserId={currentUser.uid}
+          vaultColor={vaultColor}
         />
       )}
 
       {/* Share Link Modal */}
       {vault && currentUser && (
-        <ShareLinkModal 
-          isOpen={showShareLinkModal} 
+        <ShareLinkModal
+          isOpen={showShareLinkModal}
           onClose={() => setShowShareLinkModal(false)}
           vaultId={vault.id}
           vaultName={vault.name}
           currentUserId={currentUser.uid}
+          vaultColor={vaultColor}
         />
       )}
     </div>

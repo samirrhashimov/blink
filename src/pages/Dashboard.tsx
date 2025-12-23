@@ -4,8 +4,8 @@ import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useVault } from '../contexts/VaultContext';
 import { NotificationService } from '../services/notificationService';
-import { 
-  Bell, 
+import {
+  Bell,
   Plus,
   Settings,
   Moon,
@@ -56,8 +56,8 @@ const Dashboard: React.FC = () => {
     const query = searchQuery.toLowerCase();
     const nameMatch = vault.name.toLowerCase().includes(query);
     const descMatch = vault.description?.toLowerCase().includes(query);
-    const linkMatch = vault.links.some(link => 
-      link.title.toLowerCase().includes(query) || 
+    const linkMatch = vault.links.some(link =>
+      link.title.toLowerCase().includes(query) ||
       link.description?.toLowerCase().includes(query) ||
       link.url.toLowerCase().includes(query)
     );
@@ -68,8 +68,8 @@ const Dashboard: React.FC = () => {
     const query = searchQuery.toLowerCase();
     const nameMatch = vault.name.toLowerCase().includes(query);
     const descMatch = vault.description?.toLowerCase().includes(query);
-    const linkMatch = vault.links.some(link => 
-      link.title.toLowerCase().includes(query) || 
+    const linkMatch = vault.links.some(link =>
+      link.title.toLowerCase().includes(query) ||
       link.description?.toLowerCase().includes(query) ||
       link.url.toLowerCase().includes(query)
     );
@@ -87,14 +87,14 @@ const Dashboard: React.FC = () => {
         <div className="container">
           <div className="header-content">
             <div className="header-left">
-              <img src={blinkLogo} alt="Blink" className="logo-image" style={{height: '40px', width: 'auto'}} />
+              <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto' }} />
             </div>
             <nav className="main-nav">
               <span className="active-link">Home</span>
               <Link to="/invitations">Invitations</Link>
             </nav>
-            
-            
+
+
             <div className="header-right">
               {/* <div className="modern-search-bar hidden sm:block" style={{ width: '16rem' }}>
                 <Search className="modern-search-icon" size={16} />
@@ -106,17 +106,17 @@ const Dashboard: React.FC = () => {
                 />
               </div> */}
               <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="mobile-menu-button md:hidden"
-              aria-label="Toggle mobile menu"
-            >
-              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
-            
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="mobile-menu-button md:hidden"
+                aria-label="Toggle mobile menu"
+              >
+                {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </button>
+
               <button
                 type="button"
                 onClick={() => setShowNotifications(prev => !prev)}
-                className="theme-toggle"
+                className="theme-toggle relative"
                 aria-label="Toggle notifications"
                 aria-expanded={showNotifications}
               >
@@ -187,7 +187,7 @@ const Dashboard: React.FC = () => {
         <div className="vault-header">
           <div className="flex items-center justify-between mb-6">
             <h2>My Library</h2>
-            <button 
+            <button
               onClick={() => setShowCreateModal(true)}
               className="add-link-button"
             >
@@ -196,7 +196,7 @@ const Dashboard: React.FC = () => {
             </button>
           </div>
 
-          
+
           {/* Search Bar */}
           <div className="modern-search-bar">
             <Search className="modern-search-icon" size={18} />
@@ -215,43 +215,43 @@ const Dashboard: React.FC = () => {
           <h2 className="section-title">Personal</h2>
           <div className="vault-grid">
             {filteredPersonalVaults.map((vault) => {
-              const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2', '#F8B739', '#52B788'];
-              const randomColor = colors[Math.floor(Math.random() * colors.length)];
+              const colors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
+              const vaultColor = vault.color || colors[vault.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length];
               return (
-              <Link
-                key={vault.id}
-                to={`/vault/${vault.id}`}
-                className="vault-card"
-              >
-                <div className="vault-card-overlay" style={{backgroundColor: randomColor}}></div>
-                <div className="vault-card-content">
-                  <h3 className="vault-card-title">{vault.name}</h3>
-                </div>
-              </Link>
-            );
+                <Link
+                  key={vault.id}
+                  to={`/vault/${vault.id}`}
+                  className="vault-card"
+                >
+                  <div className="vault-card-overlay" style={{ backgroundColor: vaultColor }}></div>
+                  <div className="vault-card-content">
+                    <h3 className="vault-card-title">{vault.name}</h3>
+                  </div>
+                </Link>
+              );
             })}
           </div>
         </section>
 
         {/* Shared Vaults */}
-        <section style={{marginTop: '3rem'}}>
+        <section style={{ marginTop: '3rem' }}>
           <h2 className="section-title">Shared</h2>
           <div className="vault-grid">
             {filteredSharedVaults.map((vault) => {
-              const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E2', '#F8B739', '#52B788'];
-              const randomColor = colors[Math.floor(Math.random() * colors.length)];
+              const colors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
+              const vaultColor = vault.color || colors[vault.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length];
               return (
-              <Link
-                key={vault.id}
-                to={`/vault/${vault.id}`}
-                className="vault-card"
-              >
-                <div className="vault-card-overlay" style={{backgroundColor: randomColor}}></div>
-                <div className="vault-card-content">
-                  <h3 className="vault-card-title">{vault.name}</h3>
-                </div>
-              </Link>
-            );
+                <Link
+                  key={vault.id}
+                  to={`/vault/${vault.id}`}
+                  className="vault-card"
+                >
+                  <div className="vault-card-overlay" style={{ backgroundColor: vaultColor }}></div>
+                  <div className="vault-card-content">
+                    <h3 className="vault-card-title">{vault.name}</h3>
+                  </div>
+                </Link>
+              );
             })}
           </div>
         </section>
@@ -265,15 +265,15 @@ const Dashboard: React.FC = () => {
       </main>
 
       {/* Create Vault Modal */}
-      <CreateVaultModal 
-        isOpen={showCreateModal} 
-        onClose={() => setShowCreateModal(false)} 
+      <CreateVaultModal
+        isOpen={showCreateModal}
+        onClose={() => setShowCreateModal(false)}
       />
 
       {/* Notifications Panel */}
       {currentUser && (
-        <NotificationsPanel 
-          isOpen={showNotifications} 
+        <NotificationsPanel
+          isOpen={showNotifications}
           onClose={() => {
             setShowNotifications(false);
             loadUnreadCount(); // Refresh count when closing

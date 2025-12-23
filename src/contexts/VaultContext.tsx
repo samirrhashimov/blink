@@ -58,13 +58,17 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     try {
       setError(null);
+      const vaultColors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
+      const randomColor = vaultColors[Math.floor(Math.random() * vaultColors.length)];
+
       const vaultData = {
         name,
         description: description || '',
         ownerId: currentUser.uid,
         authorizedUsers: [],
         links: [],
-        isShared: false
+        isShared: false,
+        color: randomColor
       };
 
       await VaultService.createVault(vaultData);
@@ -79,11 +83,11 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     try {
       setError(null);
       await VaultService.updateVault(vaultId, updates);
-      
+
       // Update local state
-      setVaults(prevVaults => 
-        prevVaults.map(vault => 
-          vault.id === vaultId 
+      setVaults(prevVaults =>
+        prevVaults.map(vault =>
+          vault.id === vaultId
             ? { ...vault, ...updates, updatedAt: new Date() }
             : vault
         )
@@ -98,7 +102,7 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     try {
       setError(null);
       await VaultService.deleteVault(vaultId);
-      
+
       // Remove from local state
       setVaults(prevVaults => prevVaults.filter(vault => vault.id !== vaultId));
     } catch (err: any) {
@@ -116,9 +120,9 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         ...link,
         createdBy: currentUser.uid
       };
-      
+
       await VaultService.addLinkToVault(vaultId, linkData);
-      
+
       // Update local state
       const newLink: Link = {
         id: `link_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -127,14 +131,14 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         updatedAt: new Date()
       };
 
-      setVaults(prevVaults => 
-        prevVaults.map(vault => 
-          vault.id === vaultId 
-            ? { 
-                ...vault, 
-                links: [...vault.links, newLink],
-                updatedAt: new Date()
-              }
+      setVaults(prevVaults =>
+        prevVaults.map(vault =>
+          vault.id === vaultId
+            ? {
+              ...vault,
+              links: [...vault.links, newLink],
+              updatedAt: new Date()
+            }
             : vault
         )
       );
@@ -148,20 +152,20 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     try {
       setError(null);
       await VaultService.updateLinkInVault(vaultId, linkId, updates);
-      
+
       // Update local state
-      setVaults(prevVaults => 
-        prevVaults.map(vault => 
-          vault.id === vaultId 
+      setVaults(prevVaults =>
+        prevVaults.map(vault =>
+          vault.id === vaultId
             ? {
-                ...vault,
-                links: vault.links.map(link => 
-                  link.id === linkId 
-                    ? { ...link, ...updates, updatedAt: new Date() }
-                    : link
-                ),
-                updatedAt: new Date()
-              }
+              ...vault,
+              links: vault.links.map(link =>
+                link.id === linkId
+                  ? { ...link, ...updates, updatedAt: new Date() }
+                  : link
+              ),
+              updatedAt: new Date()
+            }
             : vault
         )
       );
@@ -175,16 +179,16 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     try {
       setError(null);
       await VaultService.deleteLinkFromVault(vaultId, linkId);
-      
+
       // Update local state
-      setVaults(prevVaults => 
-        prevVaults.map(vault => 
-          vault.id === vaultId 
+      setVaults(prevVaults =>
+        prevVaults.map(vault =>
+          vault.id === vaultId
             ? {
-                ...vault,
-                links: vault.links.filter(link => link.id !== linkId),
-                updatedAt: new Date()
-              }
+              ...vault,
+              links: vault.links.filter(link => link.id !== linkId),
+              updatedAt: new Date()
+            }
             : vault
         )
       );

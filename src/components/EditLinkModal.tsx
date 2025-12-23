@@ -8,9 +8,10 @@ interface EditLinkModalProps {
   onClose: () => void;
   vaultId: string;
   link: Link;
+  vaultColor?: string;
 }
 
-const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, vaultId, link }) => {
+const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, vaultId, link, vaultColor }) => {
   const { updateLinkInVault } = useVault();
   const [formData, setFormData] = useState({
     title: link.title,
@@ -33,7 +34,7 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, vaultId,
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.title.trim() || !formData.url.trim()) {
       setError('Title and URL are required');
       return;
@@ -73,7 +74,11 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, vaultId,
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div
+      className="modal-overlay"
+      onClick={onClose}
+      style={{ '--primary': vaultColor } as React.CSSProperties}
+    >
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Edit Link</h2>

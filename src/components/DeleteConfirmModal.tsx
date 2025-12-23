@@ -8,15 +8,17 @@ interface DeleteConfirmModalProps {
   title: string;
   message: string;
   itemName: string;
+  vaultColor?: string;
 }
 
-const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({ 
-  isOpen, 
-  onClose, 
-  onConfirm, 
-  title, 
+const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
+  isOpen,
+  onClose,
+  onConfirm,
+  title,
   message,
-  itemName 
+  itemName,
+  vaultColor
 }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -37,7 +39,11 @@ const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div
+      className="modal-overlay"
+      onClick={onClose}
+      style={{ '--primary': vaultColor } as React.CSSProperties}
+    >
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>{title}</h2>
@@ -56,7 +62,7 @@ const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
           <p className="text-gray-700 dark:text-gray-300 mb-3">
             {message}
           </p>
-          
+
           <p className="text-gray-900 dark:text-white font-semibold mb-3">
             "{itemName}"
           </p>
@@ -72,13 +78,14 @@ const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
             onClick={onClose}
             disabled={loading}
             className="btn-cancel"
+            style={{ '--primary': vaultColor } as React.CSSProperties}
           >
             Cancel
           </button>
           <button
             onClick={handleConfirm}
             disabled={loading}
-            className="px-6 py-2.5 text-sm font-semibold text-white bg-red-600 hover:bg-red-700 rounded-xl transition-all disabled:opacity-50 flex items-center gap-2"
+            className="btn-danger flex items-center gap-2"
           >
             {loading ? (
               <>

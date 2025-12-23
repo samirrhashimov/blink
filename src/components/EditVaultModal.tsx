@@ -7,9 +7,10 @@ interface EditVaultModalProps {
   isOpen: boolean;
   onClose: () => void;
   vault: Vault;
+  vaultColor?: string;
 }
 
-const EditVaultModal: React.FC<EditVaultModalProps> = ({ isOpen, onClose, vault }) => {
+const EditVaultModal: React.FC<EditVaultModalProps> = ({ isOpen, onClose, vault, vaultColor }) => {
   const { updateVault } = useVault();
   const [formData, setFormData] = useState({
     name: vault.name,
@@ -30,7 +31,7 @@ const EditVaultModal: React.FC<EditVaultModalProps> = ({ isOpen, onClose, vault 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name.trim()) {
       setError('Vault name is required');
       return;
@@ -61,7 +62,11 @@ const EditVaultModal: React.FC<EditVaultModalProps> = ({ isOpen, onClose, vault 
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
+    <div
+      className="modal-overlay"
+      onClick={onClose}
+      style={{ '--primary': vaultColor } as React.CSSProperties}
+    >
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Edit Vault</h2>
