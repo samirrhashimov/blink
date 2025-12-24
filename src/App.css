@@ -2316,6 +2316,10 @@ tr:hover {
   .desktop-only {
     display: none !important;
   }
+  
+  .google-btn.desktop-only {
+    display: none !important;
+  }
 }
 
 .google-btn {

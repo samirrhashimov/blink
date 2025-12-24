@@ -15,7 +15,7 @@ import {
 import ConfirmModal from '../components/ConfirmModal';
 
 const Settings: React.FC = () => {
-  const { currentUser, logout } = useAuth();
+  const { currentUser, logout, deleteAccount } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -93,17 +93,23 @@ const Settings: React.FC = () => {
   };
 
   const performDeleteAccount = async () => {
-    try {
-      // TODO: Implement actual account deletion logic with Firebase
-      console.log('Deleting account...');
-      // await deleteUser(auth.currentUser);
+    if (!currentUser || !auth.currentUser) {
+      setError('No user is currently signed in.');
+      return;
+    }
 
-      // For now, just logout to simulate deletion
-      await logout();
+    setLoading(true);
+    setError('');
+    setShowDeleteModal(false);
+
+    try {
+      await deleteAccount();
+      // Account deleted successfully, navigate to home
       navigate('/');
-    } catch (error) {
+    } catch (error: any) {
       console.error('Delete account error:', error);
-      setError('Failed to delete account. You may need to re-authenticate.');
+      setError(error.message || 'Failed to delete account. You may need to re-authenticate.');
+      setLoading(false);
     }
   };
 
