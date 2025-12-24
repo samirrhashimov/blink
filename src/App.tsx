@@ -9,6 +9,8 @@ import { useAuth } from './contexts/AuthContext';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
+import VerifyEmailPage from './pages/VerifyEmailPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import Dashboard from './pages/Dashboard';
 import VaultDetails from './pages/VaultDetails';
 import ShareVault from './pages/ShareVault';
@@ -34,6 +36,14 @@ const AppRoutes: React.FC = () => {
         <Route 
           path="/signup" 
           element={currentUser ? <Navigate to="/dashboard" /> : <SignupPage />} 
+        />
+        <Route 
+          path="/verify-email" 
+          element={<VerifyEmailPage />} 
+        />
+        <Route 
+          path="/forgot-password" 
+          element={<ForgotPasswordPage />} 
         />
         <Route 
           path="/dashboard" 

@@ -15,6 +15,7 @@ const SignupPage: React.FC = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showVerificationMessage, setShowVerificationMessage] = useState(false);
   const { signup, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
 
@@ -47,7 +48,11 @@ const SignupPage: React.FC = () => {
       setError('');
       setLoading(true);
       await signup(formData.email, formData.password, formData.displayName);
-      navigate('/dashboard');
+      setShowVerificationMessage(true);
+      // Navigate to verify email page after 3 seconds
+      setTimeout(() => {
+        navigate('/verify-email');
+      }, 3000);
     } catch (error: any) {
       console.error('Signup error:', error);
 
@@ -83,6 +88,23 @@ const SignupPage: React.FC = () => {
           {error && (
             <div className="error-alert">
               {error}
+            </div>
+          )}
+
+          {showVerificationMessage && (
+            <div className="success-alert" style={{ 
+              background: '#d1fae5', 
+              border: '1px solid #10b981', 
+              color: '#065f46',
+              padding: '1rem',
+              borderRadius: '8px',
+              marginBottom: '1rem'
+            }}>
+              <strong>Account created!</strong>
+              <br />
+              A verification email has been sent. Please check your inbox.
+              <br />
+              <small style={{ fontSize: '0.85rem' }}>Redirecting to email verification page...</small>
             </div>
           )}
 

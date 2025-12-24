@@ -8,7 +8,10 @@ import {
   updateProfile,
   signInWithPopup,
   GoogleAuthProvider,
-  deleteUser
+  deleteUser,
+  sendEmailVerification,
+  reload,
+  sendPasswordResetEmail
 } from 'firebase/auth';
 import { 
   doc, 
@@ -33,6 +36,10 @@ interface AuthContextType {
   signup: (email: string, password: string, displayName: string) => Promise<void>;
   logout: () => Promise<void>;
   deleteAccount: () => Promise<void>;
+  sendEmailVerification: () => Promise<void>;
+  resendEmailVerification: () => Promise<void>;
+  checkEmailVerification: () => Promise<boolean>;
+  sendPasswordReset: (email: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -99,8 +106,39 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const { user } = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(user, { displayName });
     const userData = await createUserDocument(user, displayName);
+    // Send email verification
+    await sendEmailVerification(user);
     // Manually update currentUser state to ensure displayName is immediately available
     setCurrentUser(userData);
+  };
+
+  const sendEmailVerificationLink = async () => {
+    const user = auth.currentUser;
+    if (!user) {
+      throw new Error('No user is currently signed in');
+    }
+    if (user.emailVerified) {
+      throw new Error('Email is already verified');
+    }
+    await sendEmailVerification(user);
+  };
+
+  const resendEmailVerificationLink = async () => {
+    await sendEmailVerificationLink();
+  };
+
+  const checkEmailVerification = async (): Promise<boolean> => {
+    const user = auth.currentUser;
+    if (!user) {
+      return false;
+    }
+    // Reload user to get latest emailVerified status
+    await reload(user);
+    return user.emailVerified;
+  };
+
+  const sendPasswordReset = async (email: string) => {
+    await sendPasswordResetEmail(auth, email);
   };
 
   const logout = async () => {
@@ -230,7 +268,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     loginWithGoogle,
     signup,
     logout,
-    deleteAccount
+    deleteAccount,
+    sendEmailVerification: sendEmailVerificationLink,
+    resendEmailVerification: resendEmailVerificationLink,
+    checkEmailVerification,
+    sendPasswordReset
   };
 
   return (
