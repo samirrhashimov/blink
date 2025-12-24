@@ -15,12 +15,25 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  
+  const MAX_NAME_LENGTH = 50;
+  const MAX_DESCRIPTION_LENGTH = 200;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.name.trim()) {
       setError('Vault name is required');
+      return;
+    }
+
+    if (formData.name.trim().length > MAX_NAME_LENGTH) {
+      setError(`Vault name must be ${MAX_NAME_LENGTH} characters or less`);
+      return;
+    }
+
+    if (formData.description.trim().length > MAX_DESCRIPTION_LENGTH) {
+      setError(`Description must be ${MAX_DESCRIPTION_LENGTH} characters or less`);
       return;
     }
 
@@ -66,12 +79,16 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
           <div className="form-group">
             <label htmlFor="name" className="form-label">
               Vault Name *
+              <span className="char-counter">
+                {formData.name.length}/{MAX_NAME_LENGTH}
+              </span>
             </label>
             <input
               id="name"
               name="name"
               type="text"
               required
+              maxLength={MAX_NAME_LENGTH}
               value={formData.name}
               onChange={handleChange}
               className="form-input"
@@ -83,10 +100,14 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
           <div className="form-group">
             <label htmlFor="description" className="form-label">
               Description
+              <span className="char-counter">
+                {formData.description.length}/{MAX_DESCRIPTION_LENGTH}
+              </span>
             </label>
             <textarea
               id="description"
               name="description"
+              maxLength={MAX_DESCRIPTION_LENGTH}
               value={formData.description}
               onChange={handleChange}
               className="form-input resize-none"

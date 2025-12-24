@@ -12,7 +12,9 @@ import {
   Sun,
   Search,
   Menu,
-  X
+  X,
+  FolderOpen,
+  FolderPlus
 } from 'lucide-react';
 import blinkLogo from '../assets/blinklogo2.png';
 import CreateVaultModal from '../components/CreateVaultModal';
@@ -213,47 +215,90 @@ const Dashboard: React.FC = () => {
         {/* Personal Vaults */}
         <section>
           <h2 className="section-title">Personal</h2>
-          <div className="vault-grid">
-            {filteredPersonalVaults.map((vault) => {
-              const colors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
-              const vaultColor = vault.color || colors[vault.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length];
-              return (
-                <Link
-                  key={vault.id}
-                  to={`/vault/${vault.id}`}
-                  className="vault-card"
+          {filteredPersonalVaults.length === 0 ? (
+            <div className="empty-state">
+              <FolderOpen className="empty-state-icon" size={64} />
+              <h3 className="empty-state-title">
+                {searchQuery ? 'No containers found' : 'No personal containers yet'}
+              </h3>
+              <p className="empty-state-description">
+                {searchQuery 
+                  ? 'Try adjusting your search terms or create a new container.'
+                  : 'Create your first container to start organizing your links and resources.'}
+              </p>
+              {!searchQuery && (
+                <button
+                  onClick={() => setShowCreateModal(true)}
+                  className="empty-state-button"
                 >
-                  <div className="vault-card-overlay" style={{ backgroundColor: vaultColor }}></div>
-                  <div className="vault-card-content">
-                    <h3 className="vault-card-title">{vault.name}</h3>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
+                  <Plus className="h-5 w-5" />
+                  Create Container
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="vault-grid">
+              {filteredPersonalVaults.map((vault) => {
+                const colors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
+                const vaultColor = vault.color || colors[vault.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length];
+                return (
+                  <Link
+                    key={vault.id}
+                    to={`/vault/${vault.id}`}
+                    className="vault-card"
+                  >
+                    <div className="vault-card-overlay" style={{ backgroundColor: vaultColor }}></div>
+                    <div className="vault-card-content">
+                      <h3 className="vault-card-title">{vault.name}</h3>
+                      {vault.description && (
+                        <p className="vault-card-description">{vault.description}</p>
+                      )}
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </section>
 
         {/* Shared Vaults */}
         <section style={{ marginTop: '3rem' }}>
           <h2 className="section-title">Shared</h2>
-          <div className="vault-grid">
-            {filteredSharedVaults.map((vault) => {
-              const colors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
-              const vaultColor = vault.color || colors[vault.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length];
-              return (
-                <Link
-                  key={vault.id}
-                  to={`/vault/${vault.id}`}
-                  className="vault-card"
-                >
-                  <div className="vault-card-overlay" style={{ backgroundColor: vaultColor }}></div>
-                  <div className="vault-card-content">
-                    <h3 className="vault-card-title">{vault.name}</h3>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
+          {filteredSharedVaults.length === 0 ? (
+            <div className="empty-state">
+              <FolderPlus className="empty-state-icon" size={64} />
+              <h3 className="empty-state-title">
+                {searchQuery ? 'No shared containers found' : 'No shared containers yet'}
+              </h3>
+              <p className="empty-state-description">
+                {searchQuery 
+                  ? 'Try adjusting your search terms.'
+                  : 'Containers shared with you will appear here.'}
+              </p>
+            </div>
+          ) : (
+            <div className="vault-grid">
+              {filteredSharedVaults.map((vault) => {
+                const colors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
+                const vaultColor = vault.color || colors[vault.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length];
+                return (
+                  <Link
+                    key={vault.id}
+                    to={`/vault/${vault.id}`}
+                    className="vault-card"
+                  >
+                    <div className="vault-card-overlay" style={{ backgroundColor: vaultColor }}></div>
+                    <div className="vault-card-content">
+                      <h3 className="vault-card-title">{vault.name}</h3>
+                      {vault.description && (
+                        <p className="vault-card-description">{vault.description}</p>
+                      )}
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
         </section>
 
         {/* Error Display */}
