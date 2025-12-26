@@ -10,7 +10,8 @@ import {
   LogOut,
   Moon,
   Sun,
-  ArrowLeft
+  ArrowLeft,
+  Github
 } from 'lucide-react';
 import ConfirmModal from '../components/ConfirmModal';
 
@@ -250,6 +251,25 @@ const Settings: React.FC = () => {
                   </svg>
                 </button>
               </div> */}
+            </div>
+          </section>
+
+          <section className="settings-section" style={{ borderColor: 'rgba(255, 255, 255, 0.06)' }}>
+            <h3 style={{ color: '#ffffffff' }}>App Info</h3>
+            <div style={{ padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(100, 116, 139, 0.3)', background: 'rgba(100, 116, 139, 0.05)', marginBottom: '1.5rem' }}>
+              <div className="flex items-center justify-between">
+                <div className="settings-item-info">
+                  <h4>Open source</h4>
+                  <p>Explore the source code or give a star on GitHub.</p>
+                </div>
+                <button
+                  onClick={() => window.open('https://github.com/samirrhashimov/blink', '_blank', 'noopener,noreferrer')}
+                  className="btn-secondary"
+                >
+                  <Github className="h-4 w-4" />
+                  GitHub
+                </button>
+              </div>
             </div>
           </section>
 

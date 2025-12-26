@@ -19,7 +19,6 @@
 
 ## Features
 
-### Core Functionality
 - **Vault Management** - Create, edit, and delete link containers
 - **Link Management** - Add, edit, and delete links within vaults
 - **Theme System** - Native Dark Mode Support
