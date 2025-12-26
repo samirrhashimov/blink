@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, UserMinus, Eye, MessageCircle, Edit3, Crown } from 'lucide-react';
+import { X, UserMinus, Eye, Edit3, Crown } from 'lucide-react';
 import { SharingService } from '../services/sharingService';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
@@ -19,7 +19,7 @@ interface CollaboratorInfo {
   userId: string;
   email: string;
   displayName: string;
-  permission: 'view' | 'comment' | 'edit';
+  permission: 'view' | 'edit';
   isPending?: boolean;
 }
 
@@ -37,9 +37,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (isOpen) {
-      loadCollaborators();
-    }
+    if (isOpen) loadCollaborators();
   }, [isOpen, vaultId, authorizedUsers]);
 
   const loadCollaborators = async () => {
@@ -51,31 +49,17 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
       const pendingInvites = await SharingService.getVaultInvitations(vaultId);
       const collabInfos: CollaboratorInfo[] = [];
 
-      // Add owner first
       try {
         const ownerDoc = await getDoc(doc(db, 'users', ownerId));
-        if (ownerDoc.exists()) {
-          const ownerData = ownerDoc.data();
-          collabInfos.push({
-            userId: ownerId,
-            email: ownerData.email || 'Unknown',
-            displayName: ownerData.displayName || ownerData.email || 'Owner',
-            permission: 'edit', // Owner always has edit permission
-            isPending: false
-          });
-        } else {
-          // Fallback if owner document doesn't exist
-          collabInfos.push({
-            userId: ownerId,
-            email: 'Unknown',
-            displayName: 'Owner',
-            permission: 'edit',
-            isPending: false
-          });
-        }
-      } catch (err) {
-        console.error('Error loading owner:', err);
-        // Still add owner even if there's an error
+        const ownerData = ownerDoc.exists() ? ownerDoc.data() : {};
+        collabInfos.push({
+          userId: ownerId,
+          email: ownerData?.email || 'Unknown',
+          displayName: ownerData?.displayName || ownerData?.email || 'Owner',
+          permission: 'edit',
+          isPending: false
+        });
+      } catch {
         collabInfos.push({
           userId: ownerId,
           email: 'Unknown',
@@ -85,57 +69,39 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
         });
       }
 
-      // Add other authorized users
       for (const userId of authorizedUsers) {
-        if (userId === ownerId) continue; // Skip owner, already added
-
+        if (userId === ownerId) continue;
         try {
           const userDoc = await getDoc(doc(db, 'users', userId));
           const userPermission = permissions.find(p => p.userId === userId);
-
-          if (userDoc.exists()) {
-            const userData = userDoc.data();
-            collabInfos.push({
-              userId,
-              email: userData.email || 'Unknown',
-              displayName: userData.displayName || userData.email || 'User',
-              permission: userPermission?.permission || 'view',
-              isPending: false
-            });
-          } else {
-            // User document doesn't exist yet - show as accepted but with placeholder
-            collabInfos.push({
-              userId,
-              email: 'Unknown',
-              displayName: 'User (No profile)',
-              permission: userPermission?.permission || 'view',
-              isPending: false
-            });
-          }
-        } catch (err) {
-          console.error('Error loading user:', err);
-          // Still add the user with placeholder data
+          const userData = userDoc.exists() ? userDoc.data() : {};
+          collabInfos.push({
+            userId,
+            email: userData?.email || 'Unknown',
+            displayName: userData?.displayName || userData?.email || 'User',
+            permission: (userPermission?.permission === 'edit' ? 'edit' : 'view'),
+            isPending: false
+          });
+        } catch {
           const userPermission = permissions.find(p => p.userId === userId);
           collabInfos.push({
             userId,
             email: 'Unknown',
             displayName: 'User (Error loading)',
-            permission: userPermission?.permission || 'view',
+            permission: (userPermission?.permission === 'edit' ? 'edit' : 'view'),
             isPending: false
           });
         }
       }
 
-      // Add pending invitations
       for (const invite of pendingInvites) {
-        // Check if this email is already in the collaborators (accepted)
         const alreadyAccepted = collabInfos.some(c => c.email.toLowerCase() === invite.email.toLowerCase());
         if (!alreadyAccepted) {
           collabInfos.push({
-            userId: invite.id, // Use invite ID as temporary userId
+            userId: invite.id,
             email: invite.email,
             displayName: `${invite.email} (Invited)`,
-            permission: invite.permission,
+            permission: (invite.permission === 'edit' ? 'edit' : 'view'),
             isPending: true
           });
         }
@@ -152,20 +118,15 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
   const handleRemoveCollaborator = async (userId: string, isPending: boolean = false) => {
     try {
       setError('');
-      if (isPending) {
-        // If it's a pending invitation, cancel the invite
-        await SharingService.cancelInvitation(userId);
-      } else {
-        // Otherwise remove the user from the vault
-        await SharingService.removeUserFromVault(vaultId, userId);
-      }
+      if (isPending) await SharingService.cancelInvitation(userId);
+      else await SharingService.removeUserFromVault(vaultId, userId);
       await loadCollaborators();
     } catch (err: any) {
       setError(err.message || 'Failed to remove collaborator');
     }
   };
 
-  const handlePermissionChange = async (userId: string, newPermission: 'view' | 'comment' | 'edit') => {
+  const handlePermissionChange = async (userId: string, newPermission: 'view' | 'edit') => {
     try {
       setError('');
       await SharingService.setUserPermission(vaultId, userId, newPermission, currentUserId);
@@ -192,11 +153,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
         </div>
 
         <div className="modal-body overflow-y-auto flex-grow">
-          {error && (
-            <div className="error-message mb-4">
-              {error}
-            </div>
-          )}
+          {error && <div className="error-message mb-4">{error}</div>}
 
           {loading ? (
             <div className="py-8">
@@ -218,17 +175,11 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
                   <div key={collab.userId} className="collaborator-item">
                     <div className="flex items-center gap-3 flex-grow min-w-0">
                       <div className="collaborator-avatar">
-                        {isOwner ? (
-                          <Crown className="h-5 w-5 text-amber-500" />
-                        ) : (
-                          collab.displayName.charAt(0).toUpperCase()
-                        )}
+                        {isOwner ? <Crown className="h-5 w-5 text-amber-500" /> : collab.displayName.charAt(0).toUpperCase()}
                       </div>
                       <div className="flex-grow min-w-0">
                         <div className="flex items-center gap-2">
-                          <p className="collaborator-name">
-                            {collab.displayName}
-                          </p>
+                          <p className="collaborator-name">{collab.displayName}</p>
                           {isOwner && <span className="status-badge status-badge-owner">Owner</span>}
                           {isCurrentUser && !isOwner && <span className="status-badge status-badge-you">You</span>}
                           {isPending && <span className="status-badge status-badge-pending">Pending</span>}
@@ -238,21 +189,17 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
                           {canManageThisUser && !isPending ? (
                             <select
                               value={collab.permission}
-                              onChange={(e) => handlePermissionChange(collab.userId, e.target.value as 'view' | 'comment' | 'edit')}
+                              onChange={(e) => handlePermissionChange(collab.userId, e.target.value as 'view' | 'edit')}
                               className="permission-select"
                             >
-                              <option value="view">👁️ Can view</option>
-                              <option value="comment">💬 Can comment</option>
-                              <option value="edit">✏️ Can edit</option>
+                              <option value="view">View</option>
+                              <option value="edit">Edit</option>
                             </select>
                           ) : (
                             <span className={`permission-badge permission-badge-${collab.permission}`}>
                               {collab.permission === 'view' && <Eye className="h-3 w-3" />}
-                              {collab.permission === 'comment' && <MessageCircle className="h-3 w-3" />}
                               {collab.permission === 'edit' && <Edit3 className="h-3 w-3" />}
-                              <span className="capitalize">
-                                {collab.permission === 'view' ? 'Can view' : collab.permission === 'comment' ? 'Can comment' : 'Can edit'}
-                              </span>
+                              <span className="capitalize">{collab.permission === 'view' ? 'Can view' : 'Can edit'}</span>
                             </span>
                           )}
                         </div>
@@ -275,12 +222,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
         </div>
 
         <div className="modal-footer">
-          <button
-            onClick={onClose}
-            className="btn-cancel w-full"
-          >
-            Close
-          </button>
+          <button onClick={onClose} className="btn-cancel w-full">Close</button>
         </div>
       </div>
     </div>
