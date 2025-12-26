@@ -1124,6 +1124,12 @@ main.container {
   flex-wrap: wrap;
 }
 
+@media (max-width: 1024px) {
+  .hero-buttons {
+    justify-content: center;
+  }
+}
+
 .btn-primary {
   padding: 0.875rem 2.25rem;
   font-size: 1rem;
