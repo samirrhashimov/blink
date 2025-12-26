@@ -1,7 +1,12 @@
+<div align="center">
+<img src="./src/assets/blinklogo1.png" width="100px">
+</div>
+
 <h1 align="center">Blink - Your links, organized</h1>
 
+
 <p align="center">
-<img src="https://skillicons.dev/icons?i=html,css,ts,react,firebase,netlify" />
+<img src="https://skillicons.dev/icons?i=html,css,ts,react,firebase,netlify,tailwind" />
 </p>
 <p align="center">
    <img src="https://img.shields.io/github/license/samirrhashimov/blink?style=flat">
@@ -15,24 +20,22 @@
 ## Features
 
 ### Core Functionality
-- **User Authentication** - Secure login and signup with Firebase Auth
-- **Vault Management** - Create, edit, and delete vaults (link containers)
+- **Vault Management** - Create, edit, and delete link containers
 - **Link Management** - Add, edit, and delete links within vaults
-- **Real-time Sync** - Live data synchronization with Firebase Firestore
-- **Theme System** - Light/dark mode with persistent storage
-
-### Collaboration Features
+- **Theme System** - Native Dark Mode Support
 - **Email Invitations** - Send vault invitations to users by email
-- **Permission Management** - View, comment, and edit permissions
+- **Permission Management** - View and edit permissions
 - **Collaborator Management** - Add, remove, and manage vault collaborators
-- **Share Links** - Generate shareable links with expiration and usage limits
 - **Notifications** - Real-time notification system for invitations and updates
-
-### User Experience
-- **Search Functionality** - Search across vaults, links, titles, descriptions, and URLs
+- **Search Functionality** - Search across containers, links, titles, descriptions, and URLs
 - **Responsive Design** - Mobile-first design that works on all devices
-- **Loading States** - Skeleton loaders and loading indicators
 - **Copy to Clipboard** - Quick copy functionality for links
+
+<br></br>
+<img align="center" src="./src/assets/Screenshots/homepage.png">
+<br></br>
+<img align="center" src="./src/assets/Screenshots/vaultdetails.png">
+
 
 ## Tech Stack
 
@@ -140,8 +143,8 @@ service cloud.firestore {
 1. Fork the repository
 2. Create a feature branch
 3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+4. Submit a pull request
+
 ## Security
 If you discover a security vulnerability in the project, **do not open a public issue**.  
 Instead, submit a private report through the [Security advisories](../../security/advisories) section.  
