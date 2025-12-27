@@ -18,7 +18,7 @@ const EditVaultModal: React.FC<EditVaultModalProps> = ({ isOpen, onClose, vault,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  
+
   const MAX_NAME_LENGTH = 50;
   const MAX_DESCRIPTION_LENGTH = 200;
 

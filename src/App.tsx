@@ -16,6 +16,7 @@ import VaultDetails from './pages/VaultDetails';
 import ShareVault from './pages/ShareVault';
 import Invitations from './pages/Invitations';
 import Settings from './pages/Settings';
+import Tags from './pages/Tags';
 import ProtectedRoute from './components/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary';
 
@@ -25,65 +26,73 @@ const AppRoutes: React.FC = () => {
   return (
     <Router>
       <Routes>
-        <Route 
-          path="/" 
-          element={currentUser ? <Navigate to="/dashboard" /> : <LandingPage />} 
+        <Route
+          path="/"
+          element={currentUser ? <Navigate to="/dashboard" /> : <LandingPage />}
         />
-        <Route 
-          path="/login" 
-          element={currentUser ? <Navigate to="/dashboard" /> : <LoginPage />} 
+        <Route
+          path="/login"
+          element={currentUser ? <Navigate to="/dashboard" /> : <LoginPage />}
         />
-        <Route 
-          path="/signup" 
-          element={currentUser ? <Navigate to="/dashboard" /> : <SignupPage />} 
+        <Route
+          path="/signup"
+          element={currentUser ? <Navigate to="/dashboard" /> : <SignupPage />}
         />
-        <Route 
-          path="/verify-email" 
-          element={<VerifyEmailPage />} 
+        <Route
+          path="/verify-email"
+          element={<VerifyEmailPage />}
         />
-        <Route 
-          path="/forgot-password" 
-          element={<ForgotPasswordPage />} 
+        <Route
+          path="/forgot-password"
+          element={<ForgotPasswordPage />}
         />
-        <Route 
-          path="/dashboard" 
+        <Route
+          path="/dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/vault/:id" 
+        <Route
+          path="/vault/:id"
           element={
             <ProtectedRoute>
               <VaultDetails />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/vault/:id/share" 
+        <Route
+          path="/vault/:id/share"
           element={
             <ProtectedRoute>
               <ShareVault />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/invitations" 
+        <Route
+          path="/invitations"
           element={
             <ProtectedRoute>
               <Invitations />
             </ProtectedRoute>
-          } 
+          }
         />
-        <Route 
-          path="/settings" 
+        <Route
+          path="/settings"
           element={
             <ProtectedRoute>
               <Settings />
             </ProtectedRoute>
-          } 
+          }
+        />
+        <Route
+          path="/tags"
+          element={
+            <ProtectedRoute>
+              <Tags />
+            </ProtectedRoute>
+          }
         />
       </Routes>
     </Router>

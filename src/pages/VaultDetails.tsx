@@ -187,6 +187,7 @@ const VaultDetails: React.FC = () => {
 
       try {
         await reorderLinks(vault.id, newLinks);
+        toast.success('Order updated');
       } catch (err: any) {
         toast.error('Failed to update order');
       }
@@ -319,6 +320,7 @@ const VaultDetails: React.FC = () => {
             </div>
             <nav className="main-nav">
               <Link to="/dashboard">Home</Link>
+              <Link to="/tags">Tags</Link>
               <span className="active-link">My Links</span>
             </nav>
             <div className="header-right">

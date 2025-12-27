@@ -94,6 +94,13 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                         <span>{link.url}</span>
                         <ExternalLink className="h-4 w-4 flex-shrink-0" />
                     </a>
+                    {link.tags && link.tags.length > 0 && (
+                        <div className="link-tags-display">
+                            {link.tags.map(tag => (
+                                <span key={tag} className="link-tag-chip">#{tag}</span>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
             <div className="link-item-actions">

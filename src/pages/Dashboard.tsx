@@ -93,6 +93,7 @@ const Dashboard: React.FC = () => {
             </div>
             <nav className="main-nav">
               <span className="active-link">Home</span>
+              <Link to="/tags">Tags</Link>
               <Link to="/invitations">Invitations</Link>
             </nav>
 
@@ -159,11 +160,18 @@ const Dashboard: React.FC = () => {
             </div>
             <nav className="mobile-nav-links">
               <Link
-                to="#"
+                to="/dashboard"
                 className="mobile-nav-link active"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Home
+              </Link>
+              <Link
+                to="/tags"
+                className="mobile-nav-link"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Tags
               </Link>
               <Link
                 to="/invitations"
@@ -222,7 +230,7 @@ const Dashboard: React.FC = () => {
                 {searchQuery ? 'No containers found' : 'No personal containers yet'}
               </h3>
               <p className="empty-state-description">
-                {searchQuery 
+                {searchQuery
                   ? 'Try adjusting your search terms or create a new container.'
                   : 'Create your first container to start organizing your links and resources.'}
               </p>
@@ -271,7 +279,7 @@ const Dashboard: React.FC = () => {
                 {searchQuery ? 'No shared containers found' : 'No shared containers yet'}
               </h3>
               <p className="empty-state-description">
-                {searchQuery 
+                {searchQuery
                   ? 'Try adjusting your search terms.'
                   : 'Containers shared with you will appear here.'}
               </p>

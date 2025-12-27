@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useVault } from '../contexts/VaultContext';
-import { X, Link as LinkIcon, Sparkles } from 'lucide-react';
+import { X, Link as LinkIcon, Sparkles, Tag, Plus } from 'lucide-react';
 import LinkPreviewService from '../services/linkPreviewService';
 
 interface AddLinkModalProps {
@@ -22,6 +22,8 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
   const [isTitleAutoFilled, setIsTitleAutoFilled] = useState(false);
   const [isDescAutoFilled, setIsDescAutoFilled] = useState(false);
   const [error, setError] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState('');
   const [fetchTimeout, setFetchTimeout] = useState<any>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -57,7 +59,8 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
         title: formData.title.trim(),
         url: formData.url.trim(),
         description: formData.description.trim(),
-        favicon
+        favicon,
+        tags
       });
       setFormData({ title: '', url: '', description: '' });
       setIsTitleAutoFilled(false);
@@ -146,9 +149,24 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
     }
   };
 
+  const handleAddTag = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const trimmed = tagInput.trim().toLowerCase();
+    if (trimmed && !tags.includes(trimmed)) {
+      setTags([...tags, trimmed]);
+      setTagInput('');
+    }
+  };
+
+  const removeTag = (tagToRemove: string) => {
+    setTags(tags.filter(t => t !== tagToRemove));
+  };
+
   useEffect(() => {
     if (!isOpen) {
       setFormData({ title: '', url: '', description: '' });
+      setTags([]);
+      setTagInput('');
       setIsTitleAutoFilled(false);
       setIsDescAutoFilled(false);
       setIsAutoFetching(false);
@@ -277,6 +295,49 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
             </div>
           </div>
 
+          <div className="form-group">
+            <label htmlFor="tags" className="form-label">
+              Tags
+            </label>
+            <div className="tags-input-wrapper">
+              <div className="tags-list">
+                {tags.map(tag => (
+                  <span key={tag} className="tag-badge">
+                    {tag}
+                    <button type="button" onClick={() => removeTag(tag)} className="remove-tag">
+                      <X size={10} />
+                    </button>
+                  </span>
+                ))}
+              </div>
+              <div className="tag-input-field-wrapper">
+                <div className="tag-input-icon">
+                  <Tag size={16} />
+                </div>
+                <input
+                  type="text"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleAddTag();
+                    }
+                  }}
+                  className="form-input tag-input-padding"
+                  placeholder="Add a tag..."
+                />
+                <button
+                  type="button"
+                  onClick={handleAddTag}
+                  className="tag-add-btn"
+                  title="Add tag"
+                >
+                  <Plus size={16} />
+                </button>
+              </div>
+            </div>
+          </div>
         </form>
 
         <div className="modal-footer">

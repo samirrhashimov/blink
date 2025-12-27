@@ -15,13 +15,13 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  
+
   const MAX_NAME_LENGTH = 50;
   const MAX_DESCRIPTION_LENGTH = 200;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.name.trim()) {
       setError('Vault name is required');
       return;

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useVault } from '../contexts/VaultContext';
-import { X, Save } from 'lucide-react';
+import { X, Save, Tag, Plus } from 'lucide-react';
 import type { Link } from '../types';
 
 interface EditLinkModalProps {
@@ -20,6 +20,8 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, vaultId,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [tags, setTags] = useState<string[]>(link.tags || []);
+  const [tagInput, setTagInput] = useState('');
 
   useEffect(() => {
     if (isOpen) {
@@ -28,6 +30,8 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, vaultId,
         url: link.url,
         description: link.description || ''
       });
+      setTags(link.tags || []);
+      setTagInput('');
       setError('');
     }
   }, [isOpen, link]);
@@ -54,7 +58,8 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, vaultId,
       await updateLinkInVault(vaultId, link.id, {
         title: formData.title.trim(),
         url: formData.url.trim(),
-        description: formData.description.trim()
+        description: formData.description.trim(),
+        tags
       });
       onClose();
     } catch (err: any) {
@@ -69,6 +74,19 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, vaultId,
       ...prev,
       [e.target.name]: e.target.value
     }));
+  };
+
+  const handleAddTag = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    const trimmed = tagInput.trim().toLowerCase();
+    if (trimmed && !tags.includes(trimmed)) {
+      setTags([...tags, trimmed]);
+      setTagInput('');
+    }
+  };
+
+  const removeTag = (tagToRemove: string) => {
+    setTags(tags.filter(t => t !== tagToRemove));
   };
 
   if (!isOpen) return null;
@@ -142,6 +160,51 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, vaultId,
               placeholder="Enter link description (optional)"
               disabled={loading}
             />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="edit-tags" className="form-label">
+              Tags
+            </label>
+            <div className="tags-input-wrapper">
+              <div className="tags-list">
+                {tags.map(tag => (
+                  <span key={tag} className="tag-badge">
+                    {tag}
+                    <button type="button" onClick={() => removeTag(tag)} className="remove-tag">
+                      <X size={10} />
+                    </button>
+                  </span>
+                ))}
+              </div>
+              <div className="tag-input-field-wrapper">
+                <div className="tag-input-icon">
+                  <Tag size={16} />
+                </div>
+                <input
+                  id="edit-tags"
+                  type="text"
+                  value={tagInput}
+                  onChange={(e) => setTagInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleAddTag();
+                    }
+                  }}
+                  className="form-input tag-input-padding"
+                  placeholder="Add a tag..."
+                />
+                <button
+                  type="button"
+                  onClick={handleAddTag}
+                  className="tag-add-btn"
+                  title="Add tag"
+                >
+                  <Plus size={16} />
+                </button>
+              </div>
+            </div>
           </div>
         </form>
 
