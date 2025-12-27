@@ -683,7 +683,6 @@ main.container {
 }
 
 .link-item:hover {
-  transform: translateY(-2px);
   box-shadow: 0 0px 12px rgba(99, 102, 241, 0.25);
   border-color: rgba(141, 143, 245, 0.2);
 }
@@ -866,12 +865,12 @@ main.container {
 
 .copy-button:hover {
   background: rgba(99, 102, 241, 0.15);
-  color: #6366f1;
+  color: #ffffff;
   transform: scale(1.05);
 }
 
 .dark .copy-button:hover {
-  background: rgba(99, 102, 241, 0.2);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 /* ============================================
@@ -1366,6 +1365,122 @@ main.container {
 
 .form-input::placeholder {
   color: #94a3b8;
+}
+
+.url-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.loading-bar-container {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: transparent;
+  overflow: hidden;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+}
+
+.loading-bar {
+  width: 100%;
+  height: 100%;
+  background: var(--primary);
+  transform: translateX(-100%);
+  animation: loading-bar-progress 1.5s infinite ease-in-out;
+}
+
+@keyframes loading-bar-progress {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  50% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.form-group-relative {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.input-with-icon {
+  position: relative;
+}
+
+.input-magic-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--primary);
+  pointer-events: none;
+  animation: sparkle 1.5s infinite;
+}
+
+.input-with-magic .form-input {
+  padding-left: 2.75rem;
+}
+
+.input-with-clear .form-input {
+  padding-right: 2.75rem;
+}
+
+.input-clear-btn {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(100, 116, 139, 0.1);
+  color: #64748b;
+  border-radius: 50%;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.input-clear-btn:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+@keyframes sparkle {
+
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: translateY(-50%) scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.2);
+  }
+}
+
+.auto-filled-hint {
+  font-size: 0.7rem;
+  color: var(--primary);
+  opacity: 0.8;
+  font-weight: 500;
+  margin-top: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 /* Password input with icon */
@@ -1884,6 +1999,16 @@ main.container {
 
 .dark .modal-header h2 {
   color: #e8ecf1;
+}
+
+.vault-select-item-selected {
+  border-color: #10b981 !important;
+  background-color: rgba(16, 185, 129, 0.05) !important;
+}
+
+.dark .vault-select-item-selected {
+  border-color: #34d399 !important;
+  background-color: rgba(52, 211, 153, 0.05) !important;
 }
 
 .modal-close {

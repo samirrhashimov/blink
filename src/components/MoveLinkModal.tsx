@@ -76,7 +76,7 @@ const MoveLinkModal: React.FC<MoveLinkModalProps> = ({
                                     <label
                                         key={vault.id}
                                         className={`flex items-center p-3 rounded-lg border cursor-pointer transition-all ${targetVaultId === vault.id
-                                            ? 'border-primary bg-primary/5'
+                                            ? 'vault-select-item-selected'
                                             : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'
                                             }`}
                                     >
