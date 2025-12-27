@@ -201,7 +201,7 @@ const Settings: React.FC = () => {
               type="submit"
               onClick={handleUpdateAccount}
               disabled={loading}
-              className="btn-primary"
+              className="btn-primary update-account-btn"
               style={{ marginTop: '1.5rem', opacity: loading ? 0.6 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
             >
               {loading ? 'Updating...' : 'Update Account'}
@@ -257,7 +257,7 @@ const Settings: React.FC = () => {
           <section className="settings-section" style={{ borderColor: 'rgba(255, 255, 255, 0.06)' }}>
             <h3 style={{ color: '#ffffffff' }}>App Info</h3>
             <div style={{ padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(100, 116, 139, 0.3)', background: 'rgba(100, 116, 139, 0.05)', marginBottom: '1.5rem' }}>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between settings-action-row">
                 <div className="settings-item-info">
                   <h4>Open source</h4>
                   <p>Explore the source code or give a star on GitHub.</p>
@@ -277,7 +277,7 @@ const Settings: React.FC = () => {
           <section className="settings-section" style={{ borderColor: 'rgba(239, 68, 68, 0.3)' }}>
             <h3 style={{ color: '#ef4444' }}>Danger Zone</h3>
             <div style={{ padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(100, 116, 139, 0.3)', background: 'rgba(100, 116, 139, 0.05)', marginBottom: '1.5rem' }}>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between settings-action-row">
                 <div className="settings-item-info">
                   <h4>Logout</h4>
                   <p>Sign out of your account on this device.</p>
@@ -293,7 +293,7 @@ const Settings: React.FC = () => {
             </div>
 
             <div style={{ padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(239, 68, 68, 0.3)', background: 'rgba(239, 68, 68, 0.1)' }}>
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between settings-action-row">
                 <div className="settings-item-info">
                   <h4 style={{ color: '#ef4444' }}>Delete Account</h4>
                   <p>Permanently delete your account and all of your data.</p>

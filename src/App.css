@@ -684,12 +684,12 @@ main.container {
 
 .link-item:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.15);
-  border-color: rgba(99, 102, 241, 0.2);
+  box-shadow: 0 0px 12px rgba(99, 102, 241, 0.25);
+  border-color: rgba(141, 143, 245, 0.2);
 }
 
 .dark .link-item:hover {
-  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.25);
+  box-shadow: 0 0px 3px rgba(141, 143, 245, 0.15);
 }
 
 .link-icon {
@@ -874,6 +874,7 @@ main.container {
   font-size: 1.25rem;
   font-weight: 700;
   color: #2c3e50;
+  margin-bottom: 1rem;
 }
 
 .dark .collaborators-widget h3,
@@ -1000,11 +1001,12 @@ main.container {
   gap: 1rem;
   text-align: left;
   padding: 0.875rem 1rem;
-  border-radius: 12px;
+  border-radius: 10px;
   background: transparent;
   color: #2c3e50;
   font-weight: 500;
   transition: all 0.3s ease;
+  border: 1.5px solid rgba(200, 200, 200, 0.1);
 }
 
 .dark .action-button {
@@ -1012,17 +1014,18 @@ main.container {
 }
 
 .action-button:hover {
-  background: rgba(99, 102, 241, 0.1);
-  color: #6366f1 !important;
-  transform: translateX(4px);
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.3);
 }
 
 .action-button.delete-button {
   color: #ef4444;
+  border: 1.5px solid rgba(221, 0, 0, 0.5);
+  background: rgba(239, 68, 68, 0.1);
 }
 
 .action-button.delete-button:hover {
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(239, 68, 68, 0.233);
   color: #ef4444 !important;
 }
 
@@ -1721,6 +1724,23 @@ main.container {
   color: #94a3b8;
 }
 
+@media (max-width: 768px) {
+  .settings-action-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.25rem;
+  }
+
+  .settings-action-row button {
+    width: 100%;
+  }
+
+  .update-account-btn {
+    width: 100%;
+  }
+}
+
+
 /* ============================================
    Modals
    ============================================ */
@@ -1871,8 +1891,15 @@ main.container {
 
 @media (max-width: 768px) {
   .modal-footer {
-    gap: 1rem;
-    padding: 1rem 1rem;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.5rem 0;
+  }
+
+  .modal-footer button {
+    width: 100%;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
   }
 }
 
@@ -2337,7 +2364,7 @@ tr:hover {
   .desktop-only {
     display: none !important;
   }
-  
+
   .google-btn.desktop-only {
     display: none !important;
   }
@@ -3375,4 +3402,4 @@ tr:hover {
   .error-boundary-content {
     padding: 2rem;
   }
-} 
+}
