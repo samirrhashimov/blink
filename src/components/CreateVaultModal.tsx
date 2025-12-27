@@ -11,7 +11,8 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
   const { createVault } = useVault();
   const [formData, setFormData] = useState({
     name: '',
-    description: ''
+    description: '',
+    color: '#6366f1' // Default color
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -40,8 +41,8 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
     try {
       setError('');
       setLoading(true);
-      await createVault(formData.name.trim(), formData.description.trim());
-      setFormData({ name: '', description: '' });
+      await createVault(formData.name.trim(), formData.description.trim(), formData.color);
+      setFormData({ name: '', description: '', color: '#6366f1' });
       onClose();
     } catch (err: any) {
       setError(err.message || 'Failed to create vault');
@@ -56,6 +57,12 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
       [e.target.name]: e.target.value
     }));
   };
+
+  const VAULT_COLORS = [
+    '#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6',
+    '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d',
+    '#facc15', '#a3e635', '#22d3ee', '#fb7185', '#94a3b8'
+  ];
 
   if (!isOpen) return null;
 
@@ -115,6 +122,22 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
               placeholder="Enter vault description (optional)"
               disabled={loading}
             />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Vault Color</label>
+            <div className="color-picker-grid">
+              {VAULT_COLORS.map(color => (
+                <button
+                  key={color}
+                  type="button"
+                  className={`color-option ${formData.color === color ? 'selected' : ''}`}
+                  style={{ backgroundColor: color }}
+                  onClick={() => setFormData(prev => ({ ...prev, color }))}
+                  title={color}
+                />
+              ))}
+            </div>
           </div>
         </form>
 

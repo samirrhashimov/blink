@@ -249,11 +249,23 @@ const Dashboard: React.FC = () => {
               {filteredPersonalVaults.map((vault) => {
                 const colors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
                 const vaultColor = vault.color || colors[vault.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length];
+
+                // Helper to check if color is light
+                const isLightColor = (color: string) => {
+                  const hex = color.replace('#', '');
+                  const r = parseInt(hex.substr(0, 2), 16);
+                  const g = parseInt(hex.substr(2, 2), 16);
+                  const b = parseInt(hex.substr(4, 2), 16);
+                  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+                  return brightness > 180;
+                };
+
                 return (
                   <Link
                     key={vault.id}
                     to={`/vault/${vault.id}`}
-                    className="vault-card"
+                    className={`vault-card ${isLightColor(vaultColor) ? 'light-color' : ''}`}
+                    style={{ '--vault-color': vaultColor } as React.CSSProperties}
                   >
                     <div className="vault-card-overlay" style={{ backgroundColor: vaultColor }}></div>
                     <div className="vault-card-content">
@@ -289,11 +301,22 @@ const Dashboard: React.FC = () => {
               {filteredSharedVaults.map((vault) => {
                 const colors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
                 const vaultColor = vault.color || colors[vault.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length];
+
+                const isLightColor = (color: string) => {
+                  const hex = color.replace('#', '');
+                  const r = parseInt(hex.substr(0, 2), 16);
+                  const g = parseInt(hex.substr(2, 2), 16);
+                  const b = parseInt(hex.substr(4, 2), 16);
+                  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+                  return brightness > 180;
+                };
+
                 return (
                   <Link
                     key={vault.id}
                     to={`/vault/${vault.id}`}
-                    className="vault-card"
+                    className={`vault-card ${isLightColor(vaultColor) ? 'light-color' : ''}`}
+                    style={{ '--vault-color': vaultColor } as React.CSSProperties}
                   >
                     <div className="vault-card-overlay" style={{ backgroundColor: vaultColor }}></div>
                     <div className="vault-card-content">

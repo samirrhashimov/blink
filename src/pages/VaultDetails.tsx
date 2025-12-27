@@ -552,7 +552,6 @@ const VaultDetails: React.FC = () => {
           isOpen={showEditVaultModal}
           onClose={() => setShowEditVaultModal(false)}
           vault={vault}
-          vaultColor={vaultColor}
         />
       )}
 
