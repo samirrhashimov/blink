@@ -688,6 +688,47 @@ main.container {
   border-color: rgba(141, 143, 245, 0.2);
 }
 
+/* Dragging state handled by consolidated block below */
+
+.drag-handle {
+  opacity: 0;
+  transition: all 0.2s;
+  padding: 4px;
+  border-radius: 4px;
+  cursor: grab;
+}
+
+.link-item:hover .drag-handle {
+  opacity: 0.5;
+}
+
+.drag-handle:hover {
+  opacity: 1 !important;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.dark .drag-handle:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.link-item.dragging {
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.2) !important;
+  cursor: grabbing !important;
+  z-index: 9999 !important;
+  background: white !important;
+  opacity: 1 !important;
+}
+
+.dark .link-item.dragging {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.5) !important;
+}
+
+.link-item.dragging * {
+  pointer-events: none;
+}
+
 .dark .link-item:hover {
   box-shadow: 0 0px 3px rgba(141, 143, 245, 0.15);
 }

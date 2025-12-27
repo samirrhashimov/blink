@@ -14,6 +14,8 @@ interface VaultContextType {
   updateLinkInVault: (vaultId: string, linkId: string, updates: Partial<Link>) => Promise<void>;
   deleteLinkFromVault: (vaultId: string, linkId: string) => Promise<void>;
   shareVault: (vaultId: string, userId: string, permission: 'view' | 'comment' | 'edit') => Promise<void>;
+  reorderLinks: (vaultId: string, links: Link[]) => Promise<void>;
+  moveLinkToVault: (sourceVaultId: string, targetVaultId: string, linkId: string) => Promise<void>;
   refreshVaults: () => Promise<void>;
 }
 
@@ -198,6 +200,37 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
+  const reorderLinks = async (vaultId: string, sortedLinks: Link[]) => {
+    try {
+      setError(null);
+      // Optimistic update
+      setVaults(prevVaults =>
+        prevVaults.map(vault =>
+          vault.id === vaultId
+            ? { ...vault, links: sortedLinks, updatedAt: new Date() }
+            : vault
+        )
+      );
+      await VaultService.reorderLinks(vaultId, sortedLinks);
+    } catch (err: any) {
+      setError(err.message || 'Failed to reorder links');
+      // Revert on error if necessary - for now just refresh
+      await fetchVaults();
+      throw err;
+    }
+  };
+
+  const moveLinkToVault = async (sourceVaultId: string, targetVaultId: string, linkId: string) => {
+    try {
+      setError(null);
+      await VaultService.moveLinkToVault(sourceVaultId, targetVaultId, linkId);
+      await fetchVaults(); // Refresh to update both vaults
+    } catch (err: any) {
+      setError(err.message || 'Failed to move link');
+      throw err;
+    }
+  };
+
   const shareVault = async (vaultId: string, userId: string, permission: 'view' | 'comment' | 'edit') => {
     try {
       setError(null);
@@ -228,6 +261,8 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     updateLinkInVault,
     deleteLinkFromVault,
     shareVault,
+    reorderLinks,
+    moveLinkToVault,
     refreshVaults
   };
 
