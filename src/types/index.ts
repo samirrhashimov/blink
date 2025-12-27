@@ -15,6 +15,8 @@ export interface Link {
   createdAt: Date;
   updatedAt: Date;
   createdBy: string; // User ID
+  order?: number; // Optional order field
+  tags?: string[];
 }
 
 export interface Vault {

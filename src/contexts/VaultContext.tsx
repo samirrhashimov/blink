@@ -7,13 +7,15 @@ interface VaultContextType {
   vaults: Vault[];
   loading: boolean;
   error: string | null;
-  createVault: (name: string, description?: string) => Promise<void>;
+  createVault: (name: string, description?: string, color?: string) => Promise<void>;
   updateVault: (vaultId: string, updates: Partial<Vault>) => Promise<void>;
   deleteVault: (vaultId: string) => Promise<void>;
   addLinkToVault: (vaultId: string, link: Omit<Link, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>) => Promise<void>;
   updateLinkInVault: (vaultId: string, linkId: string, updates: Partial<Link>) => Promise<void>;
   deleteLinkFromVault: (vaultId: string, linkId: string) => Promise<void>;
   shareVault: (vaultId: string, userId: string, permission: 'view' | 'comment' | 'edit') => Promise<void>;
+  reorderLinks: (vaultId: string, links: Link[]) => Promise<void>;
+  moveLinkToVault: (sourceVaultId: string, targetVaultId: string, linkId: string) => Promise<void>;
   refreshVaults: () => Promise<void>;
 }
 
@@ -53,13 +55,13 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
-  const createVault = async (name: string, description?: string) => {
+  const createVault = async (name: string, description?: string, color?: string) => {
     if (!currentUser) throw new Error('User not authenticated');
 
     try {
       setError(null);
       const vaultColors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
-      const randomColor = vaultColors[Math.floor(Math.random() * vaultColors.length)];
+      const randomColor = color || vaultColors[Math.floor(Math.random() * vaultColors.length)];
 
       const vaultData = {
         name,
@@ -198,6 +200,37 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
+  const reorderLinks = async (vaultId: string, sortedLinks: Link[]) => {
+    try {
+      setError(null);
+      // Optimistic update
+      setVaults(prevVaults =>
+        prevVaults.map(vault =>
+          vault.id === vaultId
+            ? { ...vault, links: sortedLinks, updatedAt: new Date() }
+            : vault
+        )
+      );
+      await VaultService.reorderLinks(vaultId, sortedLinks);
+    } catch (err: any) {
+      setError(err.message || 'Failed to reorder links');
+      // Revert on error if necessary - for now just refresh
+      await fetchVaults();
+      throw err;
+    }
+  };
+
+  const moveLinkToVault = async (sourceVaultId: string, targetVaultId: string, linkId: string) => {
+    try {
+      setError(null);
+      await VaultService.moveLinkToVault(sourceVaultId, targetVaultId, linkId);
+      await fetchVaults(); // Refresh to update both vaults
+    } catch (err: any) {
+      setError(err.message || 'Failed to move link');
+      throw err;
+    }
+  };
+
   const shareVault = async (vaultId: string, userId: string, permission: 'view' | 'comment' | 'edit') => {
     try {
       setError(null);
@@ -228,6 +261,8 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     updateLinkInVault,
     deleteLinkFromVault,
     shareVault,
+    reorderLinks,
+    moveLinkToVault,
     refreshVaults
   };
 

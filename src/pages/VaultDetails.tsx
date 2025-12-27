@@ -6,21 +6,17 @@ import { useVault } from '../contexts/VaultContext';
 import { useToast } from '../contexts/ToastContext';
 import { SharingService } from '../services/sharingService';
 import { UserService } from '../services/userService';
-import LinkPreviewService from '../services/linkPreviewService';
 import type { Link as LinkType } from '../types';
 import blinkLogo from '../assets/blinklogo2.png';
 import {
-  LinkIcon,
   ArrowLeft,
   Plus,
-  Copy,
   Edit,
   Trash2,
   Share2,
   Moon,
   Sun,
   Settings,
-  ExternalLink,
   Users,
   LogOut,
   Search
@@ -32,12 +28,30 @@ import DeleteConfirmModal from '../components/DeleteConfirmModal';
 import CollaboratorsModal from '../components/CollaboratorsModal';
 import ShareLinkModal from '../components/ShareLinkModal';
 import LoadingSkeleton from '../components/LoadingSkeleton';
+import SortableLinkItem from '../components/SortableLinkItem';
+import MoveLinkModal from '../components/MoveLinkModal';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  TouchSensor,
+  type DragEndEvent
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy
+} from '@dnd-kit/sortable';
 
 const VaultDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { currentUser } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const { vaults, loading, error, deleteLinkFromVault, deleteVault } = useVault();
+  const { vaults, loading, error, deleteLinkFromVault, deleteVault, reorderLinks } = useVault();
   const navigate = useNavigate();
   const toast = useToast();
   const [showAddLinkModal, setShowAddLinkModal] = useState(false);
@@ -48,6 +62,7 @@ const VaultDetails: React.FC = () => {
   const [showLeaveVaultModal, setShowLeaveVaultModal] = useState(false);
   const [showCollaboratorsModal, setShowCollaboratorsModal] = useState(false);
   const [showShareLinkModal, setShowShareLinkModal] = useState(false);
+  const [showMoveLinkModal, setShowMoveLinkModal] = useState(false);
   const [selectedLink, setSelectedLink] = useState<LinkType | null>(null);
   const [copiedLinkId, setCopiedLinkId] = useState<string | null>(null);
   const [linkSearchQuery, setLinkSearchQuery] = useState('');
@@ -142,6 +157,47 @@ const VaultDetails: React.FC = () => {
 
     loadUserPermission();
   }, [vault?.id, currentUser]);
+
+  // Handle Drag and Drop Sensors
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        delay: 250,
+        tolerance: 5,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id && vault) {
+      const oldIndex = vault.links.findIndex((l) => l.id === active.id);
+      const newIndex = vault.links.findIndex((l) => l.id === over.id);
+
+      const newLinks = arrayMove(vault.links, oldIndex, newIndex);
+
+      try {
+        await reorderLinks(vault.id, newLinks);
+        toast.success('Order updated');
+      } catch (err: any) {
+        toast.error('Failed to update order');
+      }
+    }
+  };
+
+  const handleMoveLink = (link: LinkType) => {
+    setSelectedLink(link);
+    setShowMoveLinkModal(true);
+  };
 
   // Filter links based on search query
   const filteredLinks = vault?.links.filter(link => {
@@ -264,6 +320,7 @@ const VaultDetails: React.FC = () => {
             </div>
             <nav className="main-nav">
               <Link to="/dashboard">Home</Link>
+              <Link to="/tags">Tags</Link>
               <span className="active-link">My Links</span>
             </nav>
             <div className="header-right">
@@ -328,78 +385,32 @@ const VaultDetails: React.FC = () => {
                   <p>No links match your search.</p>
                 </div>
               ) : (
-                filteredLinks.map((link) => {
-                  const faviconUrl = LinkPreviewService.getPreviewImage(link);
-                  return (
-                    <div key={link.id} className="link-item">
-                      <div className="link-item-content">
-                        <div className="link-icon">
-                          {faviconUrl ? (
-                            <img
-                              src={faviconUrl}
-                              alt={`${link.title} favicon`}
-                              className="link-favicon"
-                              onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                target.style.display = 'none';
-                                const parent = target.parentElement;
-                                if (parent && !parent.querySelector('.lucide-link')) {
-                                  const icon = document.createElement('div');
-                                  icon.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path></svg>';
-                                  parent.appendChild(icon.firstChild!);
-                                }
-                              }}
-                            />
-                          ) : (
-                            <LinkIcon />
-                          )}
-                        </div>
-                        <div className="link-info">
-                          <h4 className="font-medium text-gray-900 dark:text-white">{link.title}</h4>
-                          {link.description && (
-                            <p className="text-sm text-gray-600 dark:text-gray-400">{link.description}</p>
-                          )}
-                          <a
-                            href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-sm text-primary hover:underline inline-flex items-center gap-1.5 mt-1 align-middle"
-                          >
-                            <span>{link.url}</span>
-                            <ExternalLink className="h-4 w-4 flex-shrink-0" />
-                          </a>
-                        </div>
-                      </div>
-                      <div className="link-item-actions">
-                        <button
-                          onClick={() => copyToClipboard(link.url, link.id)}
-                          className="copy-button"
-                          title={copiedLinkId === link.id ? 'Copied!' : 'Copy URL'}
-                        >
-                          {copiedLinkId === link.id ? '✓' : <Copy />}
-                        </button>
-                        {canEdit && (
-                          <>
-                            <button
-                              onClick={() => handleEditLink(link)}
-                              className="copy-button"
-                              title="Edit link"
-                            >
-                              <Edit />
-                            </button>
-                            <button
-                              onClick={() => handleDeleteLink(link)}
-                              className="copy-button text-red-600 dark:text-red-400"
-                              title="Delete link"
-                            >
-                              <Trash2 />
-                            </button>
-                          </>
-                        )}
-                      </div>
+                <DndContext
+                  sensors={sensors}
+                  collisionDetection={closestCenter}
+                  onDragEnd={handleDragEnd}
+                >
+                  <SortableContext
+                    items={filteredLinks.map(l => l.id)}
+                    strategy={verticalListSortingStrategy}
+                  >
+                    <div className="flex flex-col gap-3">
+                      {filteredLinks.map((link) => (
+                        <SortableLinkItem
+                          key={link.id}
+                          link={link}
+                          canEdit={canEdit}
+                          disabled={linkSearchQuery.trim().length > 0}
+                          copiedLinkId={copiedLinkId}
+                          onCopy={copyToClipboard}
+                          onEdit={handleEditLink}
+                          onDelete={handleDeleteLink}
+                          onMove={handleMoveLink}
+                        />
+                      ))}
                     </div>
-                  );
-                })
+                  </SortableContext>
+                </DndContext>
               )}
             </div>
           </div>
@@ -541,7 +552,6 @@ const VaultDetails: React.FC = () => {
           isOpen={showEditVaultModal}
           onClose={() => setShowEditVaultModal(false)}
           vault={vault}
-          vaultColor={vaultColor}
         />
       )}
 
@@ -608,6 +618,20 @@ const VaultDetails: React.FC = () => {
           vaultId={vault.id}
           vaultName={vault.name}
           currentUserId={currentUser.uid}
+          vaultColor={vaultColor}
+        />
+      )}
+
+      {/* Move Link Modal */}
+      {vault && selectedLink && (
+        <MoveLinkModal
+          isOpen={showMoveLinkModal}
+          onClose={() => {
+            setShowMoveLinkModal(false);
+            setSelectedLink(null);
+          }}
+          link={selectedLink}
+          currentVaultId={vault.id}
           vaultColor={vaultColor}
         />
       )}

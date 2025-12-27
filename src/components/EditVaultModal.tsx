@@ -7,18 +7,18 @@ interface EditVaultModalProps {
   isOpen: boolean;
   onClose: () => void;
   vault: Vault;
-  vaultColor?: string;
 }
 
-const EditVaultModal: React.FC<EditVaultModalProps> = ({ isOpen, onClose, vault, vaultColor }) => {
+const EditVaultModal: React.FC<EditVaultModalProps> = ({ isOpen, onClose, vault }) => {
   const { updateVault } = useVault();
   const [formData, setFormData] = useState({
     name: vault.name,
-    description: vault.description || ''
+    description: vault.description || '',
+    color: vault.color || '#6366f1'
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  
+
   const MAX_NAME_LENGTH = 50;
   const MAX_DESCRIPTION_LENGTH = 200;
 
@@ -26,7 +26,8 @@ const EditVaultModal: React.FC<EditVaultModalProps> = ({ isOpen, onClose, vault,
     if (isOpen) {
       setFormData({
         name: vault.name,
-        description: vault.description || ''
+        description: vault.description || '',
+        color: vault.color || '#6366f1'
       });
       setError('');
     }
@@ -55,7 +56,8 @@ const EditVaultModal: React.FC<EditVaultModalProps> = ({ isOpen, onClose, vault,
       setLoading(true);
       await updateVault(vault.id, {
         name: formData.name.trim(),
-        description: formData.description.trim()
+        description: formData.description.trim(),
+        color: formData.color
       });
       onClose();
     } catch (err: any) {
@@ -72,13 +74,19 @@ const EditVaultModal: React.FC<EditVaultModalProps> = ({ isOpen, onClose, vault,
     }));
   };
 
+  const VAULT_COLORS = [
+    '#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6',
+    '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d',
+    '#facc15', '#a3e635', '#22d3ee', '#fb7185', '#94a3b8'
+  ];
+
   if (!isOpen) return null;
 
   return (
     <div
       className="modal-overlay"
       onClick={onClose}
-      style={{ '--primary': vaultColor } as React.CSSProperties}
+      style={{ '--primary': formData.color } as React.CSSProperties}
     >
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
@@ -134,6 +142,22 @@ const EditVaultModal: React.FC<EditVaultModalProps> = ({ isOpen, onClose, vault,
               placeholder="Enter vault description (optional)"
               disabled={loading}
             />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Vault Color</label>
+            <div className="color-picker-grid">
+              {VAULT_COLORS.map(color => (
+                <button
+                  key={color}
+                  type="button"
+                  className={`color-option ${formData.color === color ? 'selected' : ''}`}
+                  style={{ backgroundColor: color }}
+                  onClick={() => setFormData(prev => ({ ...prev, color }))}
+                  title={color}
+                />
+              ))}
+            </div>
           </div>
         </form>
 

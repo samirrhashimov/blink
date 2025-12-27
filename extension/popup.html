@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <style>
+    :root {
+      --primary: #6366f1;
+      --primary-hover: #4f46e5;
+      --bg: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --danger: #ef4444;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f172a;
+        --text: #f1f5f9;
+        --text-muted: #94a3b8;
+        --border: #1e293b;
+      }
+    }
+
+    body {
+      width: 320px;
+      margin: 0;
+      padding: 16px;
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .logo-img {
+      height: 28px;
+      width: auto;
+      filter: brightness(0) invert(1);
+    }
+
+    .btn-disconnect {
+      position: absolute;
+      right: 0;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-disconnect:hover {
+      color: var(--danger);
+      border-color: var(--danger);
+    }
+
+    .preview-card {
+      background: rgba(99, 102, 241, 0.05);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 20px;
+    }
+
+    .preview-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .preview-url {
+      font-size: 12px;
+      color: var(--text-muted);
+      word-break: break-all;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    select,
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 14px;
+      box-sizing: border-box;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    select:focus,
+    input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .btn-save,
+    .btn-login {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-save:hover,
+    .btn-login:hover {
+      background: var(--primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-save:disabled,
+    .btn-login:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .status-msg {
+      margin-top: 12px;
+      padding: 8px;
+      border-radius: 8px;
+      font-size: 12px;
+      text-align: center;
+      display: none;
+    }
+
+    .status-success {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10b981;
+    }
+
+    .status-error {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+    }
+
+    .view {
+      display: none;
+    }
+
+    .auth-help {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 12px;
+      text-align: center;
+      line-height: 1.4;
+    }
+
+    .loading-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      display: none;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="header">
+    <div class="header-left">
+      <img src="logo.png" alt="Blink" class="logo-img">
+    </div>
+    <button id="disconnect-btn" class="btn-disconnect" style="display: none;">Logout</button>
+  </div>
+
+  <!-- Main View -->
+  <div id="main-view" class="view">
+    <div class="preview-card">
+      <div id="page-title" class="preview-title">Loading...</div>
+      <div id="page-url" class="preview-url">Loading...</div>
+    </div>
+
+    <div class="form-group">
+      <label for="vault-select">Target Container</label>
+      <select id="vault-select">
+        <option value="">Loading containers...</option>
+      </select>
+    </div>
+
+    <button id="save-btn" class="btn-save">
+      <div id="spinner-save" class="loading-spinner"></div>
+      <span id="save-text">Save Page</span>
+    </button>
+  </div>
+
+  <!-- Login View -->
+  <div id="login-view" class="view">
+    <p style="font-size: 13px; margin-bottom: 20px; color: var(--text-muted);">Sign in to your Blink account to sync
+      your containers.</p>
+
+    <div class="form-group">
+      <label for="email">E-MAIL</label>
+      <input type="email" id="email" placeholder="email@example.com">
+    </div>
+
+    <div class="form-group">
+      <label for="password">PASSWORD</label>
+      <input type="password" id="password" placeholder="••••••••">
+    </div>
+
+    <button id="login-btn" class="btn-login">
+      <div id="spinner-login" class="loading-spinner"></div>
+      <span id="login-text">Sign In</span>
+    </button>
+
+    <p class="auth-help">Don't have an account? <br>Create one at <a href="https://blinklinknet.netlify.app/"
+        target="_blank" style="color: var(--primary); text-decoration: none;">our site</a></p>
+  </div>
+
+  <div id="status" class="status-msg"></div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>
