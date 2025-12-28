@@ -14,7 +14,9 @@ import {
   Menu,
   X,
   FolderOpen,
-  FolderPlus
+  FolderPlus,
+  Tag,
+  UserPlus
 } from 'lucide-react';
 import blinkLogo from '../assets/blinklogo2.png';
 import CreateVaultModal from '../components/CreateVaultModal';
@@ -91,11 +93,6 @@ const Dashboard: React.FC = () => {
             <div className="header-left">
               <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto' }} />
             </div>
-            <nav className="main-nav">
-              <span className="active-link">Home</span>
-              <Link to="/tags">Tags</Link>
-              <Link to="/invitations">Invitations</Link>
-            </nav>
 
 
             <div className="header-right">
@@ -116,11 +113,18 @@ const Dashboard: React.FC = () => {
                 {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
 
+              <Link to="/tags" className="theme-toggle mediaforbuttons" title="Tags">
+                <Tag className="h-5 w-5" />
+              </Link>
+              <Link to="/invitations" className="theme-toggle mediaforbuttons" title="Invitations">
+                <UserPlus className="h-5 w-5" />
+              </Link>
               <button
                 type="button"
                 onClick={() => setShowNotifications(prev => !prev)}
                 className="theme-toggle relative"
-                aria-label="Toggle notifications"
+                aria-label="Notifications"
+                title="Notifications"
                 aria-expanded={showNotifications}
               >
                 <Bell className="h-5 w-5" />
@@ -130,10 +134,10 @@ const Dashboard: React.FC = () => {
                   </span>
                 )}
               </button>
-              <button onClick={toggleTheme} className="theme-toggle mediaforbuttons" title="Toggle Theme">
+              <button onClick={toggleTheme} className="theme-toggle mediaforbuttons" title="Switch Theme">
                 {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
               </button>
-              <Link to="/settings" className="theme-toggle mediaforbuttons" title="Settings">
+              <Link to="/settings" className="theme-toggle" title="Settings">
                 <Settings className="h-5 w-5" />
               </Link>
               <div className="user-avatar">
@@ -188,6 +192,31 @@ const Dashboard: React.FC = () => {
                 Settings
               </Link>
             </nav>
+            <div className="mobile-nav-actions">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowNotifications(prev => !prev);
+                  setMobileMenuOpen(false);
+                }}
+                className="mobile-action-btn"
+              >
+                <Bell className="h-5 w-5" />
+                <span>Notifications</span>
+                {unreadCount > 0 && (
+                  <span className="notification-badge">{unreadCount > 9 ? '9+' : unreadCount}</span>
+                )}
+              </button>
+              <button
+                onClick={() => {
+                  toggleTheme();
+                }}
+                className="mobile-action-btn"
+              >
+                {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+                <span>Switch Theme</span>
+              </button>
+            </div>
           </div>
         </div>
       )}

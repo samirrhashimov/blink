@@ -25,7 +25,8 @@ const LandingPage: React.FC = () => {
               <button
                 onClick={toggleTheme}
                 className="theme-toggle-btn"
-                aria-label="Toggle theme"
+                aria-label="Switch Theme"
+                title="Switch Theme"
               >
                 {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
               </button>

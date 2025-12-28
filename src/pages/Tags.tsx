@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { useTheme } from '../contexts/ThemeContext';
 import { useVault } from '../contexts/VaultContext';
 import {
     Settings,
-    Moon,
-    Sun,
     Search,
     Tag,
     ArrowLeft,
@@ -19,7 +16,6 @@ import LoadingSkeleton from '../components/LoadingSkeleton';
 
 const Tags: React.FC = () => {
     const { currentUser } = useAuth();
-    const { theme, toggleTheme } = useTheme();
     const { vaults, loading } = useVault();
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedTag, setSelectedTag] = useState<string | null>(null);
@@ -63,16 +59,9 @@ const Tags: React.FC = () => {
                             </Link>
                             <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
                         </div>
-                        <nav className="main-nav">
-                            <Link to="/dashboard">Home</Link>
-                            <span className="active-link">Tags</span>
-                        </nav>
                         <div className="header-right">
-                            <button onClick={toggleTheme} className="theme-toggle">
-                                {theme === 'light' ? <Moon /> : <Sun />}
-                            </button>
-                            <Link to="/settings" className="theme-toggle">
-                                <Settings />
+                            <Link to="/settings" className="theme-toggle" title="Settings">
+                                <Settings size={20} />
                             </Link>
                             <div className="user-avatar text-white">
                                 {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}

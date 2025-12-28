@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { useTheme } from '../contexts/ThemeContext';
 import { useVault } from '../contexts/VaultContext';
 import { useToast } from '../contexts/ToastContext';
 import { SharingService } from '../services/sharingService';
@@ -14,8 +13,6 @@ import {
   Edit,
   Trash2,
   Share2,
-  Moon,
-  Sun,
   Settings,
   Users,
   LogOut,
@@ -50,7 +47,6 @@ import {
 const VaultDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { currentUser } = useAuth();
-  const { theme, toggleTheme } = useTheme();
   const { vaults, loading, error, deleteLinkFromVault, deleteVault, reorderLinks } = useVault();
   const navigate = useNavigate();
   const toast = useToast();
@@ -318,17 +314,9 @@ const VaultDetails: React.FC = () => {
               </Link>
               <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
             </div>
-            <nav className="main-nav">
-              <Link to="/dashboard">Home</Link>
-              <Link to="/tags">Tags</Link>
-              <span className="active-link">My Links</span>
-            </nav>
             <div className="header-right">
-              <button onClick={toggleTheme} className="theme-toggle mediaforbuttons">
-                {theme === 'light' ? <Moon /> : <Sun />}
-              </button>
-              <Link to="/settings" className="settings-link mediaforbuttons">
-                <Settings />
+              <Link to="/settings" className="settings-link" title="Settings">
+                <Settings className="h-5 w-5" />
               </Link>
               <div className="user-avatar">
                 {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}
