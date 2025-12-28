@@ -1920,8 +1920,8 @@ main.container {
 @media (max-height: 700px),
 (max-width: 768px) {
   .modal-overlay {
-    align-items: flex-start;
-    padding: 2rem 1rem;
+    align-items: center;
+    padding: 1rem;
   }
 }
 
