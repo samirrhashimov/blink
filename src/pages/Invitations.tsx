@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { useTheme } from '../contexts/ThemeContext';
 import { useVault } from '../contexts/VaultContext';
 import { SharingService } from '../services/sharingService';
 import { NotificationService } from '../services/notificationService';
@@ -9,14 +8,12 @@ import { UserService } from '../services/userService';
 import type { ShareInvite } from '../types';
 import blinkLogo from '../assets/blinklogo2.png';
 import LoadingSkeleton from '../components/LoadingSkeleton';
-import { 
-  ArrowLeft, 
-  Check, 
-  X, 
-  Moon, 
-  Sun, 
+import {
+  ArrowLeft,
+  Check,
+  X,
   Settings,
-  Mail,
+  UserPlus,
   Clock,
   Eye,
   MessageCircle,
@@ -25,7 +22,6 @@ import {
 
 const Invitations: React.FC = () => {
   const { currentUser } = useAuth();
-  const { theme, toggleTheme } = useTheme();
   const { refreshVaults } = useVault();
   const navigate = useNavigate();
   const [invitations, setInvitations] = useState<ShareInvite[]>([]);
@@ -41,10 +37,10 @@ const Invitations: React.FC = () => {
 
   const loadInvitations = async () => {
     if (!currentUser?.email) return;
-    
+
     setLoading(true);
     setError('');
-    
+
     try {
       const invites = await SharingService.getUserInvitations(currentUser.email);
       setInvitations(invites);
@@ -57,13 +53,13 @@ const Invitations: React.FC = () => {
 
   const handleAccept = async (invite: ShareInvite) => {
     if (!currentUser) return;
-    
+
     setProcessingId(invite.id);
     setError('');
-    
+
     try {
       await SharingService.acceptInvitation(invite.id, currentUser.uid);
-      
+
       // Send notification to vault owner
       try {
         const sharerName = UserService.formatUserName(currentUser.displayName, currentUser.email);
@@ -77,13 +73,13 @@ const Invitations: React.FC = () => {
       } catch (err) {
         console.log('Could not send notification:', err);
       }
-      
+
       // Refresh vaults to include the newly shared vault
       await refreshVaults();
-      
+
       // Remove from list
       setInvitations(prev => prev.filter(inv => inv.id !== invite.id));
-      
+
       // Navigate to the vault
       navigate(`/vault/${invite.vaultId}`);
     } catch (err: any) {
@@ -96,7 +92,7 @@ const Invitations: React.FC = () => {
   const handleDecline = async (inviteId: string) => {
     setProcessingId(inviteId);
     setError('');
-    
+
     try {
       await SharingService.declineInvitation(inviteId);
       setInvitations(prev => prev.filter(inv => inv.id !== inviteId));
@@ -125,18 +121,11 @@ const Invitations: React.FC = () => {
               <Link to="/dashboard" className="back-link">
                 <ArrowLeft />
               </Link>
-              <img src={blinkLogo} alt="Blink" className="logo-image" style={{height: '40px', width: 'auto', marginLeft: '1rem'}} />
+              <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
             </div>
-            <nav className="main-nav">
-              <Link to="/dashboard">Home</Link>
-              <span className="active-link">Invitations</span>
-            </nav>
             <div className="header-right">
-              <button onClick={toggleTheme} className="theme-toggle mediaforbuttons">
-                {theme === 'light' ? <Moon /> : <Sun />}
-              </button>
-              <Link to="/settings" className="settings-link mediaforbuttons">
-                <Settings />
+              <Link to="/settings" className="settings-link" title="Settings">
+                <Settings size={20} />
               </Link>
               <div className="user-avatar">
                 {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}
@@ -168,8 +157,8 @@ const Invitations: React.FC = () => {
               </div>
             ) : invitations.length === 0 ? (
               <div className="text-center py-16">
-                <div className="collaborators-widget" style={{maxWidth: '500px', margin: '0 auto'}}>
-                  <Mail className="h-16 w-16 text-gray-400 dark:text-gray-600 mx-auto mb-4" />
+                <div className="collaborators-widget" style={{ maxWidth: '500px', margin: '0 auto' }}>
+                  <UserPlus className="h-16 w-16 text-gray-400 dark:text-gray-600 mx-auto mb-4" />
                   <h3 className="text-xl font-semibold mb-2">
                     No pending invitations
                   </h3>
@@ -193,7 +182,7 @@ const Invitations: React.FC = () => {
                   >
                     <div className="link-item-content">
                       <div className="link-icon">
-                        <Mail />
+                        <UserPlus />
                       </div>
                       <div className="link-info">
                         <h4 className="font-semibold text-gray-900 dark:text-white">

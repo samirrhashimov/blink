@@ -11,7 +11,8 @@ import {
   Moon,
   Sun,
   ArrowLeft,
-  Github
+  Github,
+  Settings as SettingsIcon
 } from 'lucide-react';
 import ConfirmModal from '../components/ConfirmModal';
 
@@ -126,15 +127,10 @@ const Settings: React.FC = () => {
               </Link>
               <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
             </div>
-            <nav className="main-nav">
-              <Link to="/dashboard">Home</Link>
-              <Link to="/dashboard">My Links</Link>
-              <span className="active-link">Settings</span>
-            </nav>
             <div className="header-right">
-              <button onClick={toggleTheme} className="theme-toggle mediaforbuttons">
-                {theme === 'light' ? <Moon /> : <Sun />}
-              </button>
+              <Link to="/settings" className="theme-toggle" title="Settings">
+                <SettingsIcon size={20} />
+              </Link>
               <div className="user-avatar">
                 {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}
               </div>

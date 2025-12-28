@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { useTheme } from '../contexts/ThemeContext';
 import { useVault } from '../contexts/VaultContext';
 import { useToast } from '../contexts/ToastContext';
 import { SharingService } from '../services/sharingService';
@@ -13,20 +12,17 @@ import type { ShareInvite } from '../types';
 import blinkLogo from '../assets/blinklogo2.png';
 import {
   ArrowLeft,
-  Moon,
-  Sun,
   Settings,
   X,
   Eye,
   MessageCircle,
   Edit3,
-  Mail
+  UserPlus
 } from 'lucide-react';
 
 const ShareVault: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { currentUser } = useAuth();
-  const { theme, toggleTheme } = useTheme();
   const { vaults } = useVault();
   const navigate = useNavigate();
   const toast = useToast();
@@ -160,17 +156,9 @@ const ShareVault: React.FC = () => {
               </Link>
               <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
             </div>
-            <nav className="main-nav">
-              <Link to="/dashboard">Home</Link>
-              <Link to="/dashboard">My Links</Link>
-              <span className="active-link">Share</span>
-            </nav>
             <div className="header-right">
-              <button onClick={toggleTheme} className="theme-toggle mediaforbuttons">
-                {theme === 'light' ? <Moon /> : <Sun />}
-              </button>
-              <Link to="/settings" className="settings-link mediaforbuttons">
-                <Settings />
+              <Link to="/settings" className="settings-link" title="Settings">
+                <Settings size={20} />
               </Link>
               <div className="user-avatar">
                 {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}
@@ -291,7 +279,7 @@ const ShareVault: React.FC = () => {
               {pendingInvites.length > 0 && (
                 <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
                   <div className="sharingcollabtitle flex items-center gap-2 mb-4">
-                    <Mail className="h-5 w-5 text-amber-600 dark:text-amber-400" />
+                    <UserPlus className="h-5 w-5 text-amber-600 dark:text-amber-400" />
                     <h3 className="text-base font-semibold text-gray-900 dark:text-white">Pending Invitations</h3>
                     <span className="invitation-badge">{pendingInvites.length}</span>
                   </div>
