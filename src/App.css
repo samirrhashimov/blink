@@ -1236,7 +1236,6 @@ main.container {
 }
 
 .btn-primary:hover {
-  transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(var(--primary-rgb, 99, 102, 241), 0.3);
   opacity: 0.95;
 }
@@ -1253,7 +1252,6 @@ main.container {
 
 .btn-secondary:hover {
   background: rgba(var(--primary-rgb, 99, 102, 241), 0.2);
-  transform: translateY(-3px);
 }
 
 .landing-footer {

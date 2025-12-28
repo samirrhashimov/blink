@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
-import { Lock, Share2, Zap, Users, Search, Moon, Sun, Shield, Layout, Globe } from 'lucide-react';
+import { Lock, Share2, Zap, Users, Search, Moon, Sun, Shield, Layout, Globe, Tag, Palette } from 'lucide-react';
 import blinkLogo from '../assets/blinklogo2.png';
 import homepageImg from '../assets/Screenshots/homepage.png';
 import inviteImg from '../assets/Screenshots/invite.png';
 import shareImg from '../assets/Screenshots/share.png';
 import vaultDetailsImg from '../assets/Screenshots/vaultdetails.png';
+import tagsImg from '../assets/Screenshots/tags.png';
 import '../css/About.css';
 
 const LandingPage: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
+  const [demoColor, setDemoColor] = useState('#6366f1');
 
   return (
     <div className="landing-page bg-white dark:bg-gray-900 text-black dark:text-white overflow-hidden">
@@ -52,7 +54,7 @@ const LandingPage: React.FC = () => {
               The ultimate workspace to store, manage, and collaborate on links with your team. Secure, fast, and beautifully designed.
             </p>
             <div className="hero-buttons flex gap-4">
-              <Link to="/signup" className="btn-primary about-btn-primary px-8 py-3 text-lg rounded-full shadow-lg hover:shadow-xl transition-all transform hover:-translate-y-1">
+              <Link to="/signup" className="btn-primary about-btn-primary px-8 py-3 text-lg rounded-full shadow-lg hover:shadow-xl transition-all">
                 Start for free
               </Link>
               <Link to="https://github.com/samirrhashimov/blink.git" className="btn-secondary about-btn-secondary px-8 py-3 text-lg rounded-full">
@@ -76,7 +78,7 @@ const LandingPage: React.FC = () => {
             <div className="inline-flex items-center justify-center p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg mb-4 text-blue-600 dark:text-blue-400">
               <Layout className="w-6 h-6" />
             </div>
-            <h2 className="feature-section-title">Centralized Vaults</h2>
+            <h2 className="feature-section-title">Centralized Containers</h2>
             <p className="feature-section-desc">
               Create dedicated workspaces called "Containers" for different projects, teams, or personal interests. Keep your links customized and organized in one secure place.
             </p>
@@ -115,6 +117,59 @@ const LandingPage: React.FC = () => {
           </div>
           <div className="feature-image-container">
             <img src={inviteImg} alt="Team Invitation" className="feature-screenshot rotate-1 hover:rotate-0 transition-transform duration-500" />
+          </div>
+        </div>
+
+        {/* Feature 4 - Smart Tagging System */}
+        <div className="feature-row">
+          <div className="feature-text">
+            <div className="inline-flex items-center justify-center p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg mb-4 text-orange-600 dark:text-orange-400">
+              <Tag className="w-6 h-6" />
+            </div>
+            <h2 className="feature-section-title">Smart Tagging System</h2>
+            <p className="feature-section-desc">
+              Organize your links with powerful tags. Create custom tags, filter by categories, and find exactly what you need in seconds. Perfect for managing large collections.
+            </p>
+          </div>
+          <div className="feature-image-container">
+            <img src={tagsImg} alt="Tagging System" className="feature-screenshot rotate-1 hover:rotate-0 transition-transform duration-500" />
+          </div>
+        </div>
+
+        {/* Feature 5 - Customizable Themes */}
+        <div className="feature-row">
+          <div className="feature-text">
+            <div className="inline-flex items-center justify-center p-2 bg-pink-100 dark:bg-pink-900/30 rounded-lg mb-4 text-pink-600 dark:text-pink-400">
+              <Palette className="w-6 h-6" />
+            </div>
+            <h2 className="feature-section-title">Customizable Themes</h2>
+            <p className="feature-section-desc">
+              Personalize your workspace with custom container colors. Choose from our curated color palette to make each container uniquely yours. Try it out below!
+            </p>
+            <div className="color-demo-palette" style={{ marginTop: '1.5rem' }}>
+              {['#6366f1', '#8b5cf6', '#ec4899', '#f43f5e', '#f97316', '#eab308', '#22c55e', '#14b8a6', '#06b6d4'].map((color) => (
+                <button
+                  key={color}
+                  onClick={() => setDemoColor(color)}
+                  className="color-demo-option"
+                  style={{
+                    backgroundColor: color,
+                    border: demoColor === color ? '3px solid white' : '3px solid transparent',
+                    boxShadow: demoColor === color ? `0 0 0 2px ${color}` : 'none',
+                  }}
+                  aria-label={`Select color ${color}`}
+                />
+              ))}
+            </div>
+          </div>
+          <div className="feature-image-container">
+            <div className="demo-container-card" style={{ backgroundColor: demoColor }}>
+              <div className="demo-container-overlay" style={{ backgroundColor: demoColor }}></div>
+              <div className="demo-container-content">
+                <h3 className="demo-container-title">My Container</h3>
+                <p className="demo-container-description">Custom colored workspace</p>
+              </div>
+            </div>
           </div>
         </div>
 
