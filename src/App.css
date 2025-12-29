@@ -2629,7 +2629,7 @@ tr:hover {
   margin-bottom: 1.5rem;
 }
 
-/* @media (max-width: 768px) {
+@media (max-width: 768px) {
   .desktop-only {
     display: none !important;
   }
@@ -2637,7 +2637,7 @@ tr:hover {
   .google-btn.desktop-only {
     display: none !important;
   }
-} */
+}
 
 .google-btn {
   margin-top: 1rem !important;
