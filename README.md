@@ -29,6 +29,7 @@
 - **Search Functionality** - Search across containers, links, titles, descriptions, and URLs
 - **Responsive Design** - Mobile-first design that works on all devices
 - **Copy to Clipboard** - Quick copy functionality for links
+- **Firefox Extension** - Save links directly from your browser
 
 <br></br>
 <img align="center" src="./src/assets/Screenshots/homepage.png">

@@ -797,3 +797,66 @@ body,
     font-size: 1.25rem;
   }
 }
+
+/* Firefox Extension Button */
+.firefox-download-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0060df;
+  color: #ffffff;
+  padding: 14px 24px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  border: none;
+  line-height: 1.5;
+  margin-top: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.firefox-download-btn:hover {
+  background-color: #003eaa;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  color: #ffffff;
+}
+
+.firefox-download-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.firefox-icon {
+  width: 24px;
+  height: 24px;
+  margin-right: 12px;
+  fill: currentColor;
+}
+
+.feature-text-firefox {
+  max-width: 600px;
+  display: flex;
+  align-self: center;
+  flex-direction: column;
+  background-color: #ffffff;
+  padding: 25px;
+  border-radius: 10px;
+  margin-top: 100px;
+}
+
+.feature-row-firefox {
+  align-items: center !important;
+  flex-direction: column !important;
+}
+
+.firefox-title {
+  color: #0e0e0e !important;
+}
+
+.firefox-desc {
+  color: #1a1a1a !important;
+}
