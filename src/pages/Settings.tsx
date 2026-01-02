@@ -438,7 +438,7 @@ const Settings: React.FC = () => {
                 </div>
                 <p>Import bookmarks from your browser or other services (HTML file).</p>
               </div>
-              <div>
+              <div className='data-management-buttons'>
                 <input
                   type="file"
                   accept=".html"
@@ -449,7 +449,7 @@ const Settings: React.FC = () => {
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   disabled={importing}
-                  className="btn-secondary flex items-center gap-2"
+                  className="btn-secondary flex items-center gap-2 data-management-button"
                 >
                   <Download size={16} />
                   {importing ? 'Importing...' : 'Import HTML'}
@@ -457,12 +457,12 @@ const Settings: React.FC = () => {
               </div>
             </div>
 
-            <div className="settings-item settings-item-media">
+            <div className="settings-item settings-item-media settings-item-non-mobile">
               <div className="settings-item-info">
                 <h4>Export Bookmarks</h4>
                 <p>Export all your containers and links to an HTML file (Netscape format).</p>
               </div>
-              <div>
+              <div className='data-management-buttons'>
                 <button
                   onClick={handleExport}
                   disabled={exporting}
@@ -479,7 +479,7 @@ const Settings: React.FC = () => {
 
           <section className="settings-section" style={{ borderColor: 'rgba(255, 255, 255, 0.06)' }}>
             <h3 style={{ color: '#ffffffff' }}>App Info</h3>
-            <div style={{ padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(100, 116, 139, 0.3)', background: 'rgba(100, 116, 139, 0.05)', marginBottom: '1.5rem' }}>
+            <div style={{ marginBottom: '1.5rem' }}>
               <div className="flex items-center justify-between settings-action-row">
                 <div className="settings-item-info">
                   <h4>Open source</h4>

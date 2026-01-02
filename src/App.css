@@ -1910,6 +1910,18 @@ main.container {
     flex-direction: column;
     gap: 20px;
   }
+
+  .settings-item-non-mobile {
+    display: none;
+  }
+
+  .data-management-buttons {
+    width: 100% !important;
+  }
+
+  .data-management-button {
+    width: 100% !important;
+  }
 }
 
 .dark .settings-item {
