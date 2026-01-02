@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { useVault } from '../contexts/VaultContext';
 import { updateProfile } from 'firebase/auth';
 import { doc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
@@ -12,13 +13,20 @@ import {
   Sun,
   ArrowLeft,
   Github,
-  Settings as SettingsIcon
+  Settings as SettingsIcon,
+  Download,
+  Upload,
+  HelpCircle
 } from 'lucide-react';
 import ConfirmModal from '../components/ConfirmModal';
+import { parseNetscapeBookmarks } from '../utils/bookmarkParser';
+import { downloadBookmarks } from '../utils/bookmarkExporter';
+import { VaultService } from '../services/vaultService';
 
 const Settings: React.FC = () => {
   const { currentUser, logout, deleteAccount } = useAuth();
   const { theme, toggleTheme } = useTheme();
+  const { refreshVaults, vaults } = useVault();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     displayName: currentUser?.displayName || '',
@@ -32,7 +40,133 @@ const Settings: React.FC = () => {
   const [error, setError] = useState('');
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
   // const language = 'English';
+
+  const [importing, setImporting] = useState(false);
+
+  const [importSummary, setImportSummary] = useState<{ vaults: number, links: number, data: any } | null>(null);
+  const [exporting, setExporting] = useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setSuccess('');
+    setError('');
+
+    try {
+      const text = await file.text();
+      const results = parseNetscapeBookmarks(text);
+      if (results.length === 0) {
+        throw new Error('No bookmarks found in the file.');
+      }
+
+      // Group by folder
+      const grouped: Record<string, typeof results> = {};
+      results.forEach(item => {
+        const folder = item.folder || 'Imported Bookmarks';
+        if (!grouped[folder]) grouped[folder] = [];
+        grouped[folder].push(item);
+      });
+
+      const totalVaults = Object.keys(grouped).length;
+      const totalLinks = results.length;
+
+      setImportSummary({ vaults: totalVaults, links: totalLinks, data: grouped });
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || 'Failed to parse bookmarks.');
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  const confirmImport = async () => {
+    if (!importSummary || !currentUser) return;
+
+    setImporting(true);
+    const { data: grouped } = importSummary;
+
+    try {
+      for (const [folderName, items] of Object.entries(grouped)) {
+        await VaultService.createVault({
+          name: folderName,
+          description: `Imported from browser bookmarks on ${new Date().toLocaleDateString()}`,
+          ownerId: currentUser.uid,
+          authorizedUsers: [],
+          links: (items as any[]).map(item => ({
+            id: `import_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            title: item.title,
+            url: item.url,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            createdBy: currentUser.uid
+          })),
+          isShared: false,
+          color: '#6366f1'
+        });
+      }
+
+      await refreshVaults();
+      setSuccess(`Successfully imported ${importSummary.links} bookmarks into ${importSummary.vaults} containers.`);
+      setImportSummary(null);
+
+      // Redirect to dashboard after short delay
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 1500);
+
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message || 'Failed to import bookmarks.');
+    } finally {
+      setImporting(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
+  const cancelImport = () => {
+    setImportSummary(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleExport = async () => {
+    if (vaults.length === 0) {
+      setError('No containers to export.');
+      return;
+    }
+
+    setExporting(true);
+    setSuccess('');
+    setError('');
+
+    try {
+      downloadBookmarks(vaults, `blink_backup_${new Date().toISOString().split('T')[0]}.html`);
+      setSuccess('Bookmarks exported successfully!');
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (err: any) {
+      console.error(err);
+      setError('Failed to export bookmarks.');
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  const [showImportHelp, setShowImportHelp] = useState(false);
+  const helpRef = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (helpRef.current && !helpRef.current.contains(event.target as Node)) {
+        setShowImportHelp(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [helpRef]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({
@@ -40,6 +174,9 @@ const Settings: React.FC = () => {
       [e.target.name]: e.target.value
     }));
   };
+
+  // ... rest of imports/functions
+
 
   const handleUpdateAccount = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -250,6 +387,96 @@ const Settings: React.FC = () => {
             </div>
           </section>
 
+          {/* Import / Export Section */}
+          <section className="settings-section">
+            <h3>Data Management</h3>
+            <div className="settings-item">
+              <div className="settings-item-info">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <h4>Import Bookmarks</h4>
+                  <div
+                    style={{ position: 'relative', display: 'flex', alignItems: 'center' }}
+                    ref={helpRef}
+                    onMouseEnter={() => setShowImportHelp(true)}
+                    onMouseLeave={() => setShowImportHelp(false)}
+                  >
+                    <button
+                      onClick={() => setShowImportHelp(!showImportHelp)}
+                      style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', color: '#94a3b8' }}
+                      title="How to import?"
+                    >
+                      <HelpCircle size={18} />
+                    </button>
+                    {showImportHelp && (
+                      <div style={{
+                        position: 'absolute',
+                        top: '100%',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        marginTop: '10px',
+                        width: '280px',
+                        backgroundColor: theme === 'dark' ? '#1f2937' : '#ffffff',
+                        border: theme === 'dark' ? '1px solid #374151' : '1px solid #e5e7eb',
+                        borderRadius: '8px',
+                        padding: '16px',
+                        boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+                        zIndex: 50,
+                        color: theme === 'dark' ? '#e5e7eb' : '#1f2937',
+                        fontSize: '14px',
+                        textAlign: 'left'
+                      }}>
+                        <h5 style={{ fontWeight: 600, marginBottom: '8px', color: theme === 'dark' ? '#93c5fd' : '#2563eb' }}>How to import:</h5>
+                        <ol style={{ paddingLeft: '20px', margin: 0, listStyleType: 'decimal' }}>
+                          <li style={{ marginBottom: '4px' }}>Open <strong>Bookmarks Manager</strong> in browser.</li>
+                          <li style={{ marginBottom: '4px' }}>Choose <strong>Export Bookmarks</strong> (HTML).</li>
+                          <li style={{ marginBottom: '4px' }}>Save the file to your computer.</li>
+                          <li>Click <strong>Import HTML</strong> button.</li>
+                        </ol>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <p>Import bookmarks from your browser or other services (HTML file).</p>
+              </div>
+              <div>
+                <input
+                  type="file"
+                  accept=".html"
+                  ref={fileInputRef}
+                  onChange={handleFileUpload}
+                  style={{ display: 'none' }}
+                />
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={importing}
+                  className="btn-secondary flex items-center gap-2"
+                >
+                  <Download size={16} />
+                  {importing ? 'Importing...' : 'Import HTML'}
+                </button>
+              </div>
+            </div>
+
+            <div className="settings-item">
+              <div className="settings-item-info">
+                <h4>Export Bookmarks</h4>
+                <p>Export all your containers and links to an HTML file (Netscape format).</p>
+              </div>
+              <div>
+                <button
+                  onClick={handleExport}
+                  disabled={exporting}
+                  className="btn-secondary flex items-center gap-2"
+                >
+                  <Upload className={exporting ? 'animate-bounce' : ''} size={16} />
+                  {exporting ? 'Exporting...' : 'Export HTML'}
+                </button>
+              </div>
+            </div>
+
+
+          </section>
+
           <section className="settings-section" style={{ borderColor: 'rgba(255, 255, 255, 0.06)' }}>
             <h3 style={{ color: '#ffffffff' }}>App Info</h3>
             <div style={{ padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(100, 116, 139, 0.3)', background: 'rgba(100, 116, 139, 0.05)', marginBottom: '1.5rem' }}>
@@ -303,6 +530,19 @@ const Settings: React.FC = () => {
               </div>
             </div>
           </section>
+
+
+
+          <ConfirmModal
+            isOpen={!!importSummary}
+            onClose={cancelImport}
+            onConfirm={confirmImport}
+            title="Confirm Import"
+            message={`This will create ${importSummary?.vaults} new containers and import ${importSummary?.links} links. Do you want to proceed?`}
+            confirmText={importing ? "Importing..." : "Confirm Import"}
+            variant="primary"
+            icon={<Download className="h-4 w-4" />}
+          />
           <ConfirmModal
             isOpen={showLogoutModal}
             onClose={() => setShowLogoutModal(false)}

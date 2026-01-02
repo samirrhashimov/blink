@@ -193,29 +193,7 @@ const Dashboard: React.FC = () => {
               </Link>
             </nav>
             <div className="mobile-nav-actions">
-              <button
-                type="button"
-                onClick={() => {
-                  setShowNotifications(prev => !prev);
-                  setMobileMenuOpen(false);
-                }}
-                className="mobile-action-btn"
-              >
-                <Bell className="h-5 w-5" />
-                <span>Notifications</span>
-                {unreadCount > 0 && (
-                  <span className="notification-badge">{unreadCount > 9 ? '9+' : unreadCount}</span>
-                )}
-              </button>
-              <button
-                onClick={() => {
-                  toggleTheme();
-                }}
-                className="mobile-action-btn"
-              >
-                {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-                <span>Switch Theme</span>
-              </button>
+              {/* add mobile actions here */}
             </div>
           </div>
         </div>

@@ -65,6 +65,9 @@ export class VaultService {
       const sharedSnapshot = await getDocs(sharedQ);
       sharedSnapshot.forEach((doc) => {
         const data = doc.data();
+        // Skip if the current user is the owner (already fetched above)
+        if (data.ownerId === userId) return;
+
         vaults.push({
           id: doc.id,
           ...data,
