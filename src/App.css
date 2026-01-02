@@ -743,6 +743,12 @@ main.container {
   cursor: grab;
 }
 
+@media ( max-width: 768px ) {
+  .drag-handle {
+    display: none !important;
+  }
+}
+
 .link-item:hover .drag-handle {
   opacity: 0.5;
 }
