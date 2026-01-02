@@ -355,7 +355,7 @@ const LandingPage: React.FC = () => {
       <footer className="about-footer border-t border-gray-200 dark:border-gray-800">
         <div className="about-footer-container flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center gap-2 mb-4 md:mb-0">
-            <span className="text-gray-500 font-medium">© 2025 Blink - by LinzaApps</span>
+            <span className="text-gray-500 font-medium">© {new Date().getFullYear()} Blink - by LinzaApps</span>
           </div>
           <div className="flex gap-6 text-gray-500 text-sm">
             <a href="#" className="hover:text-blue-500 transition-colors">Privacy</a>
