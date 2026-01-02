@@ -3625,6 +3625,10 @@ tr:hover {
     gap: 0.625rem;
   }
 
+  .drag-handle {
+    display: none !important;
+  }
+
   .dark .link-item-actions {
     border-top-color: rgba(255, 255, 255, 0.06);
   }
