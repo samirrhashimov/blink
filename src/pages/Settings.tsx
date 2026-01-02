@@ -390,7 +390,7 @@ const Settings: React.FC = () => {
           {/* Import / Export Section */}
           <section className="settings-section">
             <h3>Data Management</h3>
-            <div className="settings-item">
+            <div className="settings-item settings-item-media">
               <div className="settings-item-info">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <h4>Import Bookmarks</h4>
@@ -457,7 +457,7 @@ const Settings: React.FC = () => {
               </div>
             </div>
 
-            <div className="settings-item">
+            <div className="settings-item settings-item-media">
               <div className="settings-item-info">
                 <h4>Export Bookmarks</h4>
                 <p>Export all your containers and links to an HTML file (Netscape format).</p>
