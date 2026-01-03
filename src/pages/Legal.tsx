@@ -12,7 +12,7 @@ const Legal = () => {
     return (
         <div style={{ maxWidth: '600px', margin: '0 auto', marginTop: '80px', padding: '20px' }}>
             <button
-                onClick={() => navigate('/')}
+                onClick={() => navigate(-1)}
                 style={{
                     position: 'absolute',
                     top: '20px',

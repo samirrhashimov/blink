@@ -13,6 +13,7 @@ import {
   Sun,
   ArrowLeft,
   Github,
+  Scale,
   Settings as SettingsIcon,
   Download,
   Upload,
@@ -480,7 +481,7 @@ const Settings: React.FC = () => {
           <section className="settings-section" style={{ borderColor: 'rgba(255, 255, 255, 0.06)' }}>
             <h3 style={{ color: '#ffffffff' }}>App Info</h3>
             <div style={{ marginBottom: '1.5rem' }}>
-              <div className="flex items-center justify-between settings-action-row">
+              <div className="flex items-center justify-between settings-action-row " style={{ padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(100, 116, 139, 0.3)', background: 'rgba(100, 116, 139, 0.05)', marginBottom: '1.5rem' }}>
                 <div className="settings-item-info">
                   <h4>Open source</h4>
                   <p>Explore the source code or give a star on GitHub.</p>
@@ -491,6 +492,20 @@ const Settings: React.FC = () => {
                 >
                   <Github className="h-4 w-4" />
                   GitHub
+                </button>
+              </div>
+
+              <div className="flex items-center justify-between settings-action-row" style={{ padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(100, 116, 139, 0.3)', background: 'rgba(100, 116, 139, 0.05)', marginBottom: '1.5rem' }}>
+                <div className="settings-item-info" >
+                  <h4>Legal</h4>
+                  <p>Privacy Policy and Terms of Service.</p>
+                </div>
+                <button
+                  onClick={() => navigate('/legal')}
+                  className="btn-secondary"
+                >
+                  <Scale className="h-4 w-4" />
+                  Legal
                 </button>
               </div>
             </div>
