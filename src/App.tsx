@@ -19,6 +19,9 @@ import Settings from './pages/Settings';
 import Tags from './pages/Tags';
 import ProtectedRoute from './components/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary';
+import Legal from './pages/Legal';
+import TermsAndConditions from './pages/TermsAndConditions';
+import PrivacyPolicy from './pages/PrivacyPolicy';
 
 const AppRoutes: React.FC = () => {
   const { currentUser } = useAuth();
@@ -46,6 +49,19 @@ const AppRoutes: React.FC = () => {
           path="/forgot-password"
           element={<ForgotPasswordPage />}
         />
+        <Route
+          path="/legal"
+          element={<Legal />}
+        />
+        <Route
+          path="legal/terms-and-conditions"
+          element={<TermsAndConditions />}
+        />
+        <Route
+          path="legal/privacy-policy"
+          element={<PrivacyPolicy />}
+        />
+
         <Route
           path="/dashboard"
           element={

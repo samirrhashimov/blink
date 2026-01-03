@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
 import { Lock, Share2, Zap, Users, Search, Moon, Sun, Shield, Layout, Globe, Tag, Palette } from 'lucide-react';
 import blinkLogo from '../assets/blinklogo2.png';
@@ -14,6 +14,7 @@ import '../css/About.css';
 const LandingPage: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const [demoColor, setDemoColor] = useState('#6366f1');
+  const navigate = useNavigate();
 
   return (
     <div className="landing-page bg-white dark:bg-gray-900 text-black dark:text-white overflow-hidden">
@@ -355,16 +356,24 @@ const LandingPage: React.FC = () => {
       <footer className="about-footer border-t border-gray-200 dark:border-gray-800">
         <div className="about-footer-container flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center gap-2 mb-4 md:mb-0">
-            <span className="text-gray-500 font-medium">© {new Date().getFullYear()} Blink - by LinzaApps</span>
+            <span className="text-gray-300 font-medium">© {new Date().getFullYear()} Blink - by LinzaApps</span>
           </div>
-          <div className="flex gap-6 text-gray-500 text-sm">
-            <a href="#" className="hover:text-blue-500 transition-colors">Privacy</a>
-            <a href="#" className="hover:text-blue-500 transition-colors">Terms</a>
+          <div className="flex gap-6 text-gray-300 text-sm">
+            <a href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('legal/privacy-policy');
+              }} className="hover:text-blue-500 transition-colors">Privacy</a>
+            <a href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('legal/terms-and-conditions');
+              }} className="hover:text-blue-500 transition-colors">Terms</a>
             <a href="https://github.com/samirrhashimov/blink.git" className="hover:text-blue-500 transition-colors">GitHub</a>
           </div>
         </div>
-      </footer>
-    </div>
+      </footer >
+    </div >
   );
 };
 
