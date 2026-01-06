@@ -29,7 +29,20 @@
 - **Search Functionality** - Search across containers, links, titles, descriptions, and URLs
 - **Responsive Design** - Mobile-first design that works on all devices
 - **Copy to Clipboard** - Quick copy functionality for links
-- **Firefox Extension** - Save links directly from your browser
+
+## 🦊 Firefox Extension
+
+Enhance your productivity with the **Blink Firefox Extension**! Save any webpage directly to your containers with a single click. No more jumping between tabs—stay organized right from your browser.
+
+[**Download from Firefox Add-ons**](https://addons.mozilla.org/en-US/firefox/addon/blinklinknet/)
+
+## 📱 Android App
+
+Take your links on the go with the official **Blink Android App**! Access your workspaces, manage your links, and share content directly from your phone. 
+
+[**Download Latest APK from Releases**](https://github.com/samirrhashimov/blink/releases)
+
+---
 
 <br></br>
 <img align="center" src="./src/assets/Screenshots/homepage.png">
