@@ -285,65 +285,99 @@ textarea {
   }
 }
 
-.header-nav-btn {
+/* Dashboard Navigation Styles (Restored) */
+.theme-toggle {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 12px;
-  background: transparent;
+  background: rgba(99, 102, 241, 0.05);
+  border: 1px solid rgba(99, 102, 241, 0.1);
   color: #64748b;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
   position: relative;
   border: none;
-  cursor: pointer;
 }
 
-.dark .header-nav-btn {
-  color: #94a3b8;
+.dark .theme-toggle {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(255, 255, 255, 0.05);
+  color: #cbd5e1;
 }
 
-.header-nav-btn:hover {
+.theme-toggle:hover {
   background: rgba(99, 102, 241, 0.1);
+  border-color: rgba(99, 102, 241, 0.2);
   color: #6366f1;
   transform: translateY(-2px);
 }
 
-.dark .header-nav-btn:hover {
+.dark .theme-toggle:hover {
   background: rgba(255, 255, 255, 0.05);
   color: #818cf8;
 }
 
-.nav-icon {
+.h-5 {
+  height: 1.25rem;
+}
+
+.w-5 {
   width: 1.25rem;
-  height: 1.25rem;
 }
 
-.notification-badge {
+.relative {
+  position: relative;
+}
+
+.absolute {
   position: absolute;
-  top: -2px;
-  right: -2px;
-  background: #ef4444;
-  color: white;
-  font-size: 0.7rem;
-  font-weight: 700;
-  min-width: 1.25rem;
-  height: 1.25rem;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid white;
-  padding: 0 4px;
 }
 
-.dark .notification-badge {
-  border-color: #1e293b;
+.-top-1 {
+  top: -0.25rem;
+}
+
+.-right-1 {
+  right: -0.25rem;
+}
+
+.bg-red-500 {
+  background-color: #ef4444;
+}
+
+.text-white {
+  color: white;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}
+
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.font-bold {
+  font-weight: 700;
 }
 
 @media (max-width: 767.98px) {
-  .media-btn-hidden {
+  .mediaforbuttons {
     display: none !important;
   }
 }

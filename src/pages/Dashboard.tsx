@@ -112,35 +112,35 @@ const Dashboard: React.FC = () => {
                 className="mobile-menu-toggle"
                 aria-label="Toggle mobile menu"
               >
-                {mobileMenuOpen ? <X className="nav-icon" /> : <Menu className="nav-icon" />}
+                {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
 
-              <Link to="/tags" className="header-nav-btn media-btn-hidden" title="Tags">
-                <Tag className="nav-icon" />
+              <Link to="/tags" className="theme-toggle mediaforbuttons" title="Tags">
+                <Tag className="h-5 w-5" />
               </Link>
-              <Link to="/invitations" className="header-nav-btn media-btn-hidden" title="Invitations">
-                <UserPlus className="nav-icon" />
+              <Link to="/invitations" className="theme-toggle mediaforbuttons" title="Invitations">
+                <UserPlus className="h-5 w-5" />
               </Link>
               <button
                 type="button"
                 onClick={() => setShowNotifications(prev => !prev)}
-                className="header-nav-btn notification-trigger"
+                className="theme-toggle relative"
                 aria-label="Notifications"
                 title="Notifications"
                 aria-expanded={showNotifications}
               >
-                <Bell className="nav-icon" />
+                <Bell className="h-5 w-5" />
                 {unreadCount > 0 && (
-                  <span className="notification-badge">
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-bold">
                     {unreadCount > 9 ? '9+' : unreadCount}
                   </span>
                 )}
               </button>
-              <button onClick={toggleTheme} className="header-nav-btn media-btn-hidden" title="Switch Theme">
-                {theme === 'light' ? <Moon className="nav-icon" /> : <Sun className="nav-icon" />}
+              <button onClick={toggleTheme} className="theme-toggle mediaforbuttons" title="Switch Theme">
+                {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
               </button>
-              <Link to="/settings" className="header-nav-btn" title="Settings">
-                <Settings className="nav-icon" />
+              <Link to="/settings" className="theme-toggle" title="Settings">
+                <Settings className="h-5 w-5" />
               </Link>
               <div className="user-avatar">
                 {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}
