@@ -8,7 +8,8 @@ import {
     Trash2,
     ExternalLink,
     GripVertical,
-    ArrowRightLeft
+    ArrowRightLeft,
+    Pin
 } from 'lucide-react';
 import type { Link as LinkType } from '../types';
 import LinkPreviewService from '../services/linkPreviewService';
@@ -21,6 +22,7 @@ interface SortableLinkItemProps {
     onEdit: (link: LinkType) => void;
     onDelete: (link: LinkType) => void;
     onMove: (link: LinkType) => void;
+    onTogglePin?: (link: LinkType) => void;
     disabled?: boolean;
 }
 
@@ -32,6 +34,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
     onEdit,
     onDelete,
     onMove,
+    onTogglePin,
     disabled
 }) => {
     const {
@@ -56,7 +59,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
         <div
             ref={setNodeRef}
             style={style}
-            className={`link-item ${isDragging ? 'dragging' : ''}`}
+            className={`link-item ${isDragging ? 'dragging' : ''} ${link.isPinned ? 'pinned-link' : ''}`}
         >
             <div className="link-item-content">
                 <div className="link-icon">
@@ -111,6 +114,15 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                 >
                     {copiedLinkId === link.id ? '✓' : <Copy size={18} />}
                 </button>
+                {canEdit && onTogglePin && (
+                    <button
+                        onClick={() => onTogglePin(link)}
+                        className={`copy-button ${link.isPinned ? 'text-primary' : ''}`}
+                        title={link.isPinned ? 'Unpin link' : 'Pin link to top'}
+                    >
+                        <Pin size={18} fill={link.isPinned ? 'currentColor' : 'none'} style={{ transform: link.isPinned ? 'none' : 'rotate(45deg)' }} />
+                    </button>
+                )}
                 {canEdit && (
                     <>
                         <button

@@ -17,6 +17,7 @@ export interface Link {
   createdBy: string; // User ID
   order?: number; // Optional order field
   tags?: string[];
+  isPinned?: boolean;
 }
 
 export interface Vault {

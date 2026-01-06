@@ -9,7 +9,8 @@ import {
     ArrowLeft,
     ExternalLink,
     ChevronRight,
-    SearchX
+    SearchX,
+    Pin
 } from 'lucide-react';
 import blinkLogo from '../assets/blinklogo2.png';
 import LoadingSkeleton from '../components/LoadingSkeleton';
@@ -47,7 +48,12 @@ const Tags: React.FC = () => {
         tag.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    const displayedLinks = selectedTag ? tagsMap[selectedTag] : [];
+    const displayedLinks = (selectedTag ? tagsMap[selectedTag] : [])
+        .sort((a, b) => {
+            if (a.isPinned && !b.isPinned) return -1;
+            if (!a.isPinned && b.isPinned) return 1;
+            return 0;
+        });
 
     return (
         <div className="dashboard-page">
@@ -133,7 +139,10 @@ const Tags: React.FC = () => {
                                                 <div className="vault-indicator" style={{ backgroundColor: link.vaultColor || '#6366f1' }}>
                                                     {link.vaultName}
                                                 </div>
-                                                <h4 className="text-gray-900 dark:text-white font-medium truncate">{link.title}</h4>
+                                                <div className="flex items-start gap-2 flex-1 min-width-0">
+                                                    <h4 className="text-gray-900 dark:text-white font-medium truncate flex-1">{link.title}</h4>
+                                                    {link.isPinned && <Pin size={14} className="text-primary mt-1 flex-shrink-0" fill="currentColor" />}
+                                                </div>
                                             </div>
                                             {link.description && (
                                                 <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-3">

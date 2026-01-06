@@ -48,7 +48,7 @@ import {
 const VaultDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { currentUser } = useAuth();
-  const { vaults, loading, error, deleteLinkFromVault, deleteVault, reorderLinks } = useVault();
+  const { vaults, loading, error, deleteLinkFromVault, deleteVault, reorderLinks, updateLinkInVault } = useVault();
   const navigate = useNavigate();
   const toast = useToast();
   const [showAddLinkModal, setShowAddLinkModal] = useState(false);
@@ -206,6 +206,13 @@ const VaultDetails: React.FC = () => {
     );
   }) || [];
 
+  // Sort: Pinned links stay at the top
+  const sortedLinks = [...filteredLinks].sort((a, b) => {
+    if (a.isPinned && !b.isPinned) return -1;
+    if (!a.isPinned && b.isPinned) return 1;
+    return 0; // Maintain original order otherwise
+  });
+
   const copyToClipboard = (url: string, linkId: string) => {
     navigator.clipboard.writeText(url);
     setCopiedLinkId(linkId);
@@ -220,6 +227,16 @@ const VaultDetails: React.FC = () => {
   const handleDeleteLink = (link: LinkType) => {
     setSelectedLink(link);
     setShowDeleteLinkModal(true);
+  };
+
+  const handleTogglePin = async (link: LinkType) => {
+    if (!vault) return;
+    try {
+      await updateLinkInVault(vault.id, link.id, { isPinned: !link.isPinned });
+      toast.success(link.isPinned ? 'Link unpinned' : 'Link pinned to top');
+    } catch (err: any) {
+      toast.error('Failed to update pin status');
+    }
   };
 
   const confirmDeleteLink = async () => {
@@ -384,21 +401,22 @@ const VaultDetails: React.FC = () => {
                   onDragEnd={handleDragEnd}
                 >
                   <SortableContext
-                    items={filteredLinks.map(l => l.id)}
+                    items={sortedLinks.map(l => l.id)}
                     strategy={verticalListSortingStrategy}
                   >
                     <div className="flex flex-col gap-3">
-                      {filteredLinks.map((link) => (
+                      {sortedLinks.map((link) => (
                         <SortableLinkItem
                           key={link.id}
                           link={link}
                           canEdit={canEdit}
-                          disabled={linkSearchQuery.trim().length > 0}
+                          disabled={linkSearchQuery.trim().length > 0 || link.isPinned} // Disable drag if searching OR if pinned (since pinning manual sorting might clash with auto-top sorting)
                           copiedLinkId={copiedLinkId}
                           onCopy={copyToClipboard}
                           onEdit={handleEditLink}
                           onDelete={handleDeleteLink}
                           onMove={handleMoveLink}
+                          onTogglePin={handleTogglePin}
                         />
                       ))}
                     </div>

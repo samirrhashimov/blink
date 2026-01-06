@@ -733,6 +733,17 @@ main.container {
   border-color: rgba(141, 143, 245, 0.2);
 }
 
+.pinned-link {
+  background: rgba(99, 102, 241, 0.04) !important;
+  border-color: rgba(99, 102, 241, 0.2) !important;
+  border-left: 3px solid var(--accent-color, #6366f1) !important;
+}
+
+.dark .pinned-link {
+  background: rgba(99, 102, 241, 0.08) !important;
+  border-color: rgba(99, 102, 241, 0.3) !important;
+}
+
 /* Dragging state handled by consolidated block below */
 
 .drag-handle {
@@ -743,7 +754,7 @@ main.container {
   cursor: grab;
 }
 
-@media ( max-width: 768px ) {
+@media (max-width: 768px) {
   .drag-handle {
     display: none !important;
   }
@@ -3959,7 +3970,8 @@ tr:hover {
   transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
-  min-width: 0; /* Prevents overflow in grid */
+  min-width: 0;
+  /* Prevents overflow in grid */
   overflow: hidden;
 }
 
