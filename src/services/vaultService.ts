@@ -186,6 +186,44 @@ export class VaultService {
     }
   }
 
+  // Track a link click
+  static async trackLinkClick(vaultId: string, linkId: string): Promise<void> {
+    try {
+      const vaultRef = doc(db, VAULTS_COLLECTION, vaultId);
+      const vaultSnap = await getDoc(vaultRef);
+
+      if (vaultSnap.exists()) {
+        const vaultData = vaultSnap.data();
+        const links = vaultData.links || [];
+        const today = new Date().toISOString().split('T')[0];
+
+        const updatedLinks = links.map((link: Link) => {
+          if (link.id === linkId) {
+            const currentStats = link.clickStats || {};
+            return {
+              ...link,
+              clicks: (link.clicks || 0) + 1,
+              clickStats: {
+                ...currentStats,
+                [today]: (currentStats[today] || 0) + 1
+              },
+              updatedAt: new Date()
+            };
+          }
+          return link;
+        });
+
+        await updateDoc(vaultRef, {
+          links: updatedLinks,
+          updatedAt: serverTimestamp()
+        });
+      }
+    } catch (error) {
+      console.error('Error tracking link click:', error);
+      // We don't throw here to avoid interrupting the user's navigation
+    }
+  }
+
   // Delete a link from a vault
   static async deleteLinkFromVault(vaultId: string, linkId: string): Promise<void> {
     try {

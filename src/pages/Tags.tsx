@@ -68,10 +68,10 @@ const Tags: React.FC = () => {
                             <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
                         </div>
                         <div className="header-right">
-                            <Link to="/settings" className="theme-toggle" title="Settings">
-                                <Settings size={20} />
+                            <Link to="/settings" className="header-nav-btn" title="Settings">
+                                <Settings className="nav-icon" />
                             </Link>
-                            <div className="user-avatar text-white">
+                            <div className="user-avatar">
                                 {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}
                             </div>
                         </div>
@@ -81,10 +81,10 @@ const Tags: React.FC = () => {
 
             <main className="container">
                 <div className="vault-header">
-                    <h2>Explore by Tags</h2>
-                    <p className="text-gray-500 dark:text-gray-400">Find your links across all containers using tags</p>
+                    <h2 className="vault-name-title">Explore by Tags</h2>
+                    <p className="vault-description-text">Find your links across all containers using tags</p>
 
-                    <div className="modern-search-bar mt-6">
+                    <div className="modern-search-bar search-tags-wrapper">
                         <Search className="modern-search-icon" size={18} />
                         <input
                             type="text"
@@ -139,13 +139,13 @@ const Tags: React.FC = () => {
                                                 <div className="vault-indicator" style={{ backgroundColor: link.vaultColor || '#6366f1' }}>
                                                     {link.vaultName}
                                                 </div>
-                                                <div className="flex items-start gap-2 flex-1 min-width-0">
-                                                    <h4 className="text-gray-900 dark:text-white font-medium truncate flex-1">{link.title}</h4>
-                                                    {link.isPinned && <Pin size={14} className="text-primary mt-1 flex-shrink-0" fill="currentColor" />}
+                                                <div className="tag-link-title-group">
+                                                    <h4 className="tag-link-card-title">{link.title}</h4>
+                                                    {link.isPinned && <Pin size={14} className="tag-pinned-icon" fill="currentColor" />}
                                                 </div>
                                             </div>
                                             {link.description && (
-                                                <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-3">
+                                                <p className="tag-link-description">
                                                     {link.description}
                                                 </p>
                                             )}
@@ -173,14 +173,14 @@ const Tags: React.FC = () => {
                             </>
                         ) : uniqueTags.length === 0 ? (
                             <div className="empty-selection-state">
-                                <SearchX size={48} className="text-gray-300 dark:text-gray-700 mb-4" />
+                                <SearchX size={48} className="empty-state-icon" />
                                 <h3>No tags found yet</h3>
                                 <p>Start adding tags to your links in your containers to enable cross-searching.</p>
-                                <Link to="/dashboard" className="btn-primary mt-6">Go to Dashboard</Link>
+                                <Link to="/dashboard" className="btn-primary go-to-dashboard-btn">Go to Dashboard</Link>
                             </div>
                         ) : (
                             <div className="empty-selection-state">
-                                <Tag size={48} className="text-gray-300 dark:text-gray-700 mb-4" />
+                                <Tag size={48} className="empty-state-icon" />
                                 <h3>Select a tag to see links</h3>
                                 <p>Choose a tag from the sidebar to view all associated links across your library.</p>
                             </div>

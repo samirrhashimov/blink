@@ -16,6 +16,7 @@ interface VaultContextType {
   shareVault: (vaultId: string, userId: string, permission: 'view' | 'comment' | 'edit') => Promise<void>;
   reorderLinks: (vaultId: string, links: Link[]) => Promise<void>;
   moveLinkToVault: (sourceVaultId: string, targetVaultId: string, linkId: string) => Promise<void>;
+  trackClick: (vaultId: string, linkId: string) => Promise<void>;
   refreshVaults: () => Promise<void>;
 }
 
@@ -231,6 +232,41 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
+  const trackClick = async (vaultId: string, linkId: string) => {
+    try {
+      const today = new Date().toISOString().split('T')[0];
+
+      // Optimistic local update
+      setVaults(prevVaults =>
+        prevVaults.map(vault =>
+          vault.id === vaultId
+            ? {
+              ...vault,
+              links: vault.links.map(link => {
+                if (link.id === linkId) {
+                  const currentStats = link.clickStats || {};
+                  return {
+                    ...link,
+                    clicks: (link.clicks || 0) + 1,
+                    clickStats: {
+                      ...currentStats,
+                      [today]: (currentStats[today] || 0) + 1
+                    }
+                  };
+                }
+                return link;
+              })
+            }
+            : vault
+        )
+      );
+
+      await VaultService.trackLinkClick(vaultId, linkId);
+    } catch (err: any) {
+      console.error('Error tracking click:', err);
+    }
+  };
+
   const shareVault = async (vaultId: string, userId: string, permission: 'view' | 'comment' | 'edit') => {
     try {
       setError(null);
@@ -263,6 +299,7 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     shareVault,
     reorderLinks,
     moveLinkToVault,
+    trackClick,
     refreshVaults
   };
 

@@ -9,7 +9,8 @@ import {
     ExternalLink,
     GripVertical,
     ArrowRightLeft,
-    Pin
+    Pin,
+    BarChart2
 } from 'lucide-react';
 import type { Link as LinkType } from '../types';
 import LinkPreviewService from '../services/linkPreviewService';
@@ -23,6 +24,8 @@ interface SortableLinkItemProps {
     onDelete: (link: LinkType) => void;
     onMove: (link: LinkType) => void;
     onTogglePin?: (link: LinkType) => void;
+    onStats?: (link: LinkType) => void;
+    onTrackClick?: (id: string) => void;
     disabled?: boolean;
 }
 
@@ -35,6 +38,8 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
     onDelete,
     onMove,
     onTogglePin,
+    onStats,
+    onTrackClick,
     disabled
 }) => {
     const {
@@ -93,6 +98,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-sm text-primary hover:underline inline-flex items-center gap-1.5 mt-1 align-middle"
+                        onClick={() => onTrackClick?.(link.id)}
                     >
                         <span>{link.url}</span>
                         <ExternalLink className="h-4 w-4 flex-shrink-0" />
@@ -123,6 +129,13 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                         <Pin size={18} fill={link.isPinned ? 'currentColor' : 'none'} style={{ transform: link.isPinned ? 'none' : 'rotate(45deg)' }} />
                     </button>
                 )}
+                <button
+                    onClick={() => onStats?.(link)}
+                    className="copy-button"
+                    title="View statistics"
+                >
+                    <BarChart2 size={18} />
+                </button>
                 {canEdit && (
                     <>
                         <button

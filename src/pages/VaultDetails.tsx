@@ -27,6 +27,7 @@ import ShareLinkModal from '../components/ShareLinkModal';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import SortableLinkItem from '../components/SortableLinkItem';
 import MoveLinkModal from '../components/MoveLinkModal';
+import LinkStatsModal from '../components/LinkStatsModal';
 import SEO from '../components/SEO';
 import {
   DndContext,
@@ -48,7 +49,7 @@ import {
 const VaultDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { currentUser } = useAuth();
-  const { vaults, loading, error, deleteLinkFromVault, deleteVault, reorderLinks, updateLinkInVault } = useVault();
+  const { vaults, loading, error, deleteLinkFromVault, deleteVault, reorderLinks, updateLinkInVault, trackClick } = useVault();
   const navigate = useNavigate();
   const toast = useToast();
   const [showAddLinkModal, setShowAddLinkModal] = useState(false);
@@ -60,6 +61,7 @@ const VaultDetails: React.FC = () => {
   const [showCollaboratorsModal, setShowCollaboratorsModal] = useState(false);
   const [showShareLinkModal, setShowShareLinkModal] = useState(false);
   const [showMoveLinkModal, setShowMoveLinkModal] = useState(false);
+  const [showStatsModal, setShowStatsModal] = useState(false);
   const [selectedLink, setSelectedLink] = useState<LinkType | null>(null);
   const [copiedLinkId, setCopiedLinkId] = useState<string | null>(null);
   const [linkSearchQuery, setLinkSearchQuery] = useState('');
@@ -239,6 +241,16 @@ const VaultDetails: React.FC = () => {
     }
   };
 
+  const handleTrackClick = (linkId: string) => {
+    if (!vault) return;
+    trackClick(vault.id, linkId);
+  };
+
+  const handleShowStats = (link: LinkType) => {
+    setSelectedLink(link);
+    setShowStatsModal(true);
+  };
+
   const confirmDeleteLink = async () => {
     if (!selectedLink || !vault) return;
     try {
@@ -350,9 +362,9 @@ const VaultDetails: React.FC = () => {
 
       <main className="container">
         <div className="vault-header">
-          <div className="flex flex-col gap-1">
-            <h2>{vault.name}</h2>
-            {vault.description && <p>{vault.description}</p>}
+          <div className="vault-header-info">
+            <h2 className="vault-name-title">{vault.name}</h2>
+            {vault.description && <p className="vault-description-text">{vault.description}</p>}
           </div>
         </div>
 
@@ -373,7 +385,7 @@ const VaultDetails: React.FC = () => {
 
             {/* Search Input */}
             {vault.links.length > 0 && (
-              <div className="modern-search-bar mb-4">
+              <div className="modern-search-bar search-links-wrapper">
                 <Search className="modern-search-icon" size={18} />
                 <input
                   type="text"
@@ -387,11 +399,11 @@ const VaultDetails: React.FC = () => {
 
             <div className="links-list">
               {vault.links.length === 0 ? (
-                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                <div className="empty-links-state">
                   <p>No links yet. Click "Add Link" to get started.</p>
                 </div>
               ) : filteredLinks.length === 0 ? (
-                <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                <div className="empty-search-state">
                   <p>No links match your search.</p>
                 </div>
               ) : (
@@ -404,7 +416,7 @@ const VaultDetails: React.FC = () => {
                     items={sortedLinks.map(l => l.id)}
                     strategy={verticalListSortingStrategy}
                   >
-                    <div className="flex flex-col gap-3">
+                    <div className="links-cards-grid">
                       {sortedLinks.map((link) => (
                         <SortableLinkItem
                           key={link.id}
@@ -417,6 +429,8 @@ const VaultDetails: React.FC = () => {
                           onDelete={handleDeleteLink}
                           onMove={handleMoveLink}
                           onTogglePin={handleTogglePin}
+                          onStats={handleShowStats}
+                          onTrackClick={handleTrackClick}
                         />
                       ))}
                     </div>
@@ -472,11 +486,11 @@ const VaultDetails: React.FC = () => {
                   );
                 })()}
               </div>
-              <div className="flex gap-3 mt-3">
+              <div className="collaborators-actions">
                 {canEdit && (
                   <Link
                     to={`/vault/${vault.id}/share`}
-                    className="manage-collaborators-button flex-1"
+                    className="manage-collaborators-button"
                   >
                     <Share2 size={18} />
                     Invite
@@ -484,7 +498,7 @@ const VaultDetails: React.FC = () => {
                 )}
                 <button
                   onClick={() => setShowCollaboratorsModal(true)}
-                  className="manage-collaborators-button flex-1"
+                  className="manage-collaborators-button"
                 >
                   <Users size={18} />
                   Manage
@@ -643,6 +657,19 @@ const VaultDetails: React.FC = () => {
           }}
           link={selectedLink}
           currentVaultId={vault.id}
+          vaultColor={vaultColor}
+        />
+      )}
+
+      {/* Link Stats Modal */}
+      {vault && selectedLink && (
+        <LinkStatsModal
+          isOpen={showStatsModal}
+          onClose={() => {
+            setShowStatsModal(false);
+            setSelectedLink(null);
+          }}
+          link={selectedLink}
           vaultColor={vaultColor}
         />
       )}

@@ -18,6 +18,8 @@ export interface Link {
   order?: number; // Optional order field
   tags?: string[];
   isPinned?: boolean;
+  clicks?: number;
+  clickStats?: Record<string, number>; // Format: { "YYYY-MM-DD": count }
 }
 
 export interface Vault {
