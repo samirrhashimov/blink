@@ -11,8 +11,7 @@
 <p align="center">
    <img src="https://img.shields.io/github/license/samirrhashimov/blink?style=flat">
    <img src="https://img.shields.io/github/v/release/samirrhashimov/blink?style=flat">
-   <img src="https://img.shields.io/github/repo-size/samirrhashimov/blink?style=flat">
-   <img src="https://img.shields.io/github/languages/top/samirrhashimov/blink?style=flat">
+   <img src="https://api.netlify.com/api/v1/badges/ef10eda2-aa73-433a-9afd-c0c084e76bf9/deploy-status">
 </p>
 
 <p align="center">A minimalist, web-based link storage and collaboration app built with React.js, TypeScript, and Firebase.</p>
