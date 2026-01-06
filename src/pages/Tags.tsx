@@ -68,8 +68,8 @@ const Tags: React.FC = () => {
                             <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
                         </div>
                         <div className="header-right">
-                            <Link to="/settings" className="header-nav-btn" title="Settings">
-                                <Settings className="nav-icon" />
+                            <Link to="/settings" className="theme-toggle" title="Settings">
+                                <Settings className="h-5 w-5" />
                             </Link>
                             <div className="user-avatar">
                                 {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}
