@@ -3,6 +3,7 @@ import blinkLogo from '../assets/blinklogo2.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Eye, EyeOff } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -36,6 +37,7 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="auth-page">
+      <SEO title="Log In" description="Log in to your Blink account to access your links." />
       <div className="auth-container">
         <div className="auth-header">
           <div className="auth-logo">
@@ -69,10 +71,10 @@ const LoginPage: React.FC = () => {
           <div className="form-group">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
               <label className="form-label" htmlFor="password">Password</label>
-              <Link 
-                to="/forgot-password" 
-                style={{ 
-                  fontSize: '0.875rem', 
+              <Link
+                to="/forgot-password"
+                style={{
+                  fontSize: '0.875rem',
                   color: 'var(--primary, #6366f1)',
                   textDecoration: 'none',
                   fontWeight: 500

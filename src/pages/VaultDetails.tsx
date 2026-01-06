@@ -27,6 +27,7 @@ import ShareLinkModal from '../components/ShareLinkModal';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import SortableLinkItem from '../components/SortableLinkItem';
 import MoveLinkModal from '../components/MoveLinkModal';
+import SEO from '../components/SEO';
 import {
   DndContext,
   closestCenter,
@@ -305,6 +306,10 @@ const VaultDetails: React.FC = () => {
         '--primary-rgb': hexToRgb(vaultColor)
       } as React.CSSProperties}
     >
+      <SEO
+        title={vault.name}
+        description={vault.description || `Browse links in the ${vault.name} container on Blink.`}
+      />
       <header className="header">
         <div className="container">
           <div className="header-content">

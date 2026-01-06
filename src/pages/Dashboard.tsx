@@ -22,6 +22,7 @@ import blinkLogo from '../assets/blinklogo2.png';
 import CreateVaultModal from '../components/CreateVaultModal';
 import NotificationsPanel from '../components/NotificationsPanel';
 import LoadingSkeleton from '../components/LoadingSkeleton';
+import SEO from '../components/SEO';
 
 const Dashboard: React.FC = () => {
   const { currentUser } = useAuth();
@@ -86,6 +87,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="dashboard-page">
+      <SEO title="Dashboard" description="Manage your link containers and workspaces in Blink." />
       {/* Header */}
       <header className="header">
         <div className="container">

@@ -3,6 +3,7 @@ import blinkLogo from '../assets/blinklogo2.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Eye, EyeOff } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const SignupPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -75,6 +76,7 @@ const SignupPage: React.FC = () => {
 
   return (
     <div className="auth-page">
+      <SEO title="Create Account" description="Join Blink to organize and share your links with ease." />
       <div className="auth-container">
         <div className="auth-header">
           <div className="auth-logo">
@@ -92,9 +94,9 @@ const SignupPage: React.FC = () => {
           )}
 
           {showVerificationMessage && (
-            <div className="success-alert" style={{ 
-              background: '#d1fae5', 
-              border: '1px solid #10b981', 
+            <div className="success-alert" style={{
+              background: '#d1fae5',
+              border: '1px solid #10b981',
               color: '#065f46',
               padding: '1rem',
               borderRadius: '8px',

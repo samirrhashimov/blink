@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import blinkLogo from '../assets/blinklogo2.png';
 import LoadingSkeleton from '../components/LoadingSkeleton';
+import SEO from '../components/SEO';
 
 const Tags: React.FC = () => {
     const { currentUser } = useAuth();
@@ -50,6 +51,7 @@ const Tags: React.FC = () => {
 
     return (
         <div className="dashboard-page">
+            <SEO title="Explore Tags" description="Browse and search all your saved links across different containers using tags." />
             <header className="header">
                 <div className="container">
                     <div className="header-content">
@@ -131,11 +133,13 @@ const Tags: React.FC = () => {
                                                 <div className="vault-indicator" style={{ backgroundColor: link.vaultColor || '#6366f1' }}>
                                                     {link.vaultName}
                                                 </div>
-                                                <h4 className="text-gray-900 dark:text-white font-medium">{link.title}</h4>
+                                                <h4 className="text-gray-900 dark:text-white font-medium truncate">{link.title}</h4>
                                             </div>
-                                            <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-3">
-                                                {link.description || 'No description provided'}
-                                            </p>
+                                            {link.description && (
+                                                <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-3">
+                                                    {link.description}
+                                                </p>
+                                            )}
                                             <div className="card-bottom">
                                                 <a
                                                     href={link.url}
@@ -158,20 +162,18 @@ const Tags: React.FC = () => {
                                     ))}
                                 </div>
                             </>
-                        ) : (
-                            <div className="empty-selection-state">
-                                <Tag size={48} className="text-gray-300 dark:text-gray-700 mb-4" />
-                                <h3>Select a tag to see links</h3>
-                                <p>Choose a tag from the sidebar to view all associated links across your library.</p>
-                            </div>
-                        )}
-
-                        {uniqueTags.length === 0 && !loading && (
+                        ) : uniqueTags.length === 0 ? (
                             <div className="empty-selection-state">
                                 <SearchX size={48} className="text-gray-300 dark:text-gray-700 mb-4" />
                                 <h3>No tags found yet</h3>
                                 <p>Start adding tags to your links in your containers to enable cross-searching.</p>
                                 <Link to="/dashboard" className="btn-primary mt-6">Go to Dashboard</Link>
+                            </div>
+                        ) : (
+                            <div className="empty-selection-state">
+                                <Tag size={48} className="text-gray-300 dark:text-gray-700 mb-4" />
+                                <h3>Select a tag to see links</h3>
+                                <p>Choose a tag from the sidebar to view all associated links across your library.</p>
                             </div>
                         )}
                     </section>

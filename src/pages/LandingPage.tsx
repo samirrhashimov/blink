@@ -10,6 +10,7 @@ import vaultDetailsImg from '../assets/Screenshots/vaultdetails.png';
 import tagsImg from '../assets/Screenshots/tags.png';
 import firefoxExtImg from '../assets/Screenshots/firefox_extension.png';
 import '../css/About.css';
+import SEO from '../components/SEO';
 
 const LandingPage: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
@@ -18,6 +19,10 @@ const LandingPage: React.FC = () => {
 
   return (
     <div className="landing-page bg-white dark:bg-gray-900 text-black dark:text-white overflow-hidden">
+      <SEO
+        title="Your links, organized"
+        description="Blink is the ultimate workspace to store, manage, and collaborate on links with your team. Secure, fast, and beautifully designed."
+      />
       {/* Header */}
       <header className="landing-header">
         <div className="container">
