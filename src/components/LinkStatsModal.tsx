@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, TrendingUp, Calendar, MousePointer2 } from 'lucide-react';
+import { X, TrendingUp, Clock, MousePointer2 } from 'lucide-react';
 import {
     XAxis,
     YAxis,
@@ -29,6 +29,8 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
     // Prepare data for the chart
     const stats = link.clickStats || {};
     const sortedDates = Object.keys(stats).sort();
+    const today = new Date().toISOString().split('T')[0];
+    const clicksToday = stats[today] || 0;
 
     let chartData = [];
     if (sortedDates.length === 0) {
@@ -42,8 +44,18 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
         }
     } else {
         const startDate = new Date(sortedDates[0]);
+        // Always show at least last 7 days even if empty, or until today
         const endDate = new Date();
         const current = new Date(startDate);
+
+        // Ensure we show at least a week of context if the link is new
+        if (chartData.length < 7 && sortedDates.length > 0) {
+            const sevenDaysAgo = new Date();
+            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+            if (startDate > sevenDaysAgo) {
+                current.setTime(sevenDaysAgo.getTime());
+            }
+        }
 
         while (current <= endDate) {
             const dateStr = current.toISOString().split('T')[0];
@@ -88,26 +100,26 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
                 <div className="stats-cards-row">
                     <div className="premium-stat-card">
                         <div className="stat-card-icon" style={{ color: vaultColor, background: `${vaultColor}10` }}>
-                            <MousePointer2 size={20} />
+                            <MousePointer2 size={24} />
                         </div>
                         <div className="stat-card-data">
-                            <span className="stat-card-label">Total Clicks</span>
+                            <span className="stat-card-label">Lifetime Clicks</span>
                             <span className="stat-card-number">{link.clicks || 0}</span>
                         </div>
                     </div>
-                    <div className="premium-stat-card">
-                        <div className="stat-card-icon stat-icon-green">
-                            <Calendar size={20} />
+                    <div className="premium-stat-card today-highlight">
+                        <div className="stat-card-icon stat-icon-blue">
+                            <Clock size={24} />
                         </div>
                         <div className="stat-card-data">
-                            <span className="stat-card-label">Active Days</span>
-                            <span className="stat-card-number">{Object.keys(stats).length}</span>
+                            <span className="stat-card-label">Today</span>
+                            <span className="stat-card-number">{clicksToday}</span>
                         </div>
                     </div>
                 </div>
 
                 <div className="premium-chart-area">
-                    <h3 className="chart-section-title">Click History</h3>
+                    <h3 className="chart-section-title">Click history</h3>
                     <div className="chart-wrapper-inner">
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
