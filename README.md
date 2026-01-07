@@ -28,6 +28,7 @@
 - **Search Functionality** - Search across containers, links, titles, descriptions, and URLs
 - **Responsive Design** - Mobile-first design that works on all devices
 - **Copy to Clipboard** - Quick copy functionality for links
+- **Link Statistics** - Real-time click tracking and visual history with interactive charts
 
 ## 🦊 Firefox Extension
 
@@ -55,6 +56,7 @@ Take your links on the go with the official **Blink Android App**! Access your w
 - **Styling**: Classic CSS , Tailwind CSS, PostCSS
 - **Backend**: Firebase (Authentication + Firestore)
 - **Icons**: Lucide React
+- **Data Visualization**: Recharts
 - **Routing**: React Router DOM
 - **State Management**: React Context API
 
