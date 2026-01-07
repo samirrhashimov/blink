@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import {
@@ -10,7 +10,9 @@ import {
     GripVertical,
     ArrowRightLeft,
     Pin,
-    BarChart2
+    BarChart2,
+    MoreVertical,
+    Check
 } from 'lucide-react';
 import type { Link as LinkType } from '../types';
 import LinkPreviewService from '../services/linkPreviewService';
@@ -42,6 +44,9 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
     onTrackClick,
     disabled
 }) => {
+    const [menuOpen, setMenuOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
+
     const {
         attributes,
         listeners,
@@ -54,17 +59,38 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
     const style = {
         transform: transform ? `${CSS.Transform.toString(transform)} scale(1.02)` : CSS.Transform.toString(transform),
         transition,
-        zIndex: isDragging ? 100 : 1,
+        zIndex: isDragging ? 100 : (menuOpen ? 50 : 1),
         opacity: isDragging ? 0.9 : 1,
     };
 
     const faviconUrl = LinkPreviewService.getPreviewImage(link);
 
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                setMenuOpen(false);
+            }
+        };
+
+        if (menuOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [menuOpen]);
+
+    const handleAction = (e: React.MouseEvent, action: () => void) => {
+        e.stopPropagation();
+        setMenuOpen(false);
+        action();
+    };
+
     return (
         <div
             ref={setNodeRef}
             style={style}
-            className={`link-item ${isDragging ? 'dragging' : ''} ${link.isPinned ? 'pinned-link' : ''}`}
+            className={`link-item ${isDragging ? 'dragging' : ''} ${link.isPinned ? 'pinned-link' : ''} ${menuOpen ? 'menu-active' : ''}`}
         >
             <div className="link-item-content">
                 <div className="link-icon">
@@ -114,59 +140,64 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
             </div>
             <div className="link-item-actions">
                 <button
-                    onClick={() => onCopy(link.url, link.id)}
-                    className="copy-button"
+                    onClick={(e) => { e.stopPropagation(); onCopy(link.url, link.id); }}
+                    className="action-pill copy-pill"
                     title={copiedLinkId === link.id ? 'Copied!' : 'Copy URL'}
                 >
-                    {copiedLinkId === link.id ? '✓' : <Copy size={18} />}
+                    {copiedLinkId === link.id ? <Check size={16} /> : <Copy size={16} />}
                 </button>
-                {canEdit && onTogglePin && (
+
+                <div className="more-menu-container" ref={menuRef}>
                     <button
-                        onClick={() => onTogglePin(link)}
-                        className={`copy-button ${link.isPinned ? 'text-primary' : ''}`}
-                        title={link.isPinned ? 'Unpin link' : 'Pin link to top'}
+                        onClick={(e) => { e.stopPropagation(); setMenuOpen(!menuOpen); }}
+                        className={`action-pill more-pill ${menuOpen ? 'active' : ''}`}
+                        title="More actions"
                     >
-                        <Pin size={18} fill={link.isPinned ? 'currentColor' : 'none'} style={{ transform: link.isPinned ? 'none' : 'rotate(45deg)' }} />
+                        <MoreVertical size={18} />
                     </button>
-                )}
-                <button
-                    onClick={() => onStats?.(link)}
-                    className="copy-button"
-                    title="View statistics"
-                >
-                    <BarChart2 size={18} />
-                </button>
-                {canEdit && (
-                    <>
-                        <button
-                            onClick={() => onMove(link)}
-                            className="copy-button"
-                            title="Move to another container"
-                        >
-                            <ArrowRightLeft size={18} />
-                        </button>
-                        <button
-                            onClick={() => onEdit(link)}
-                            className="copy-button"
-                            title="Edit link"
-                        >
-                            <Edit size={18} />
-                        </button>
-                        <button
-                            onClick={() => onDelete(link)}
-                            className="copy-button text-red-600 dark:text-red-400"
-                            title="Delete link"
-                        >
-                            <Trash2 size={18} />
-                        </button>
-                    </>
-                )}
+
+                    {menuOpen && (
+                        <div className="link-menu-dropdown" onClick={(e) => e.stopPropagation()}>
+                            <button className="menu-item" onClick={(e) => handleAction(e, () => onStats?.(link))}>
+                                <BarChart2 size={16} />
+                                <span>Statistics</span>
+                            </button>
+
+                            {canEdit && (
+                                <>
+                                    {onTogglePin && (
+                                        <button
+                                            className={`menu-item ${link.isPinned ? 'pinned-active' : ''}`}
+                                            onClick={(e) => handleAction(e, () => onTogglePin(link))}
+                                        >
+                                            <Pin size={16} fill={link.isPinned ? 'currentColor' : 'none'} />
+                                            <span>{link.isPinned ? 'Unpin Link' : 'Pin to Top'}</span>
+                                        </button>
+                                    )}
+                                    <button className="menu-item" onClick={(e) => handleAction(e, () => onMove(link))}>
+                                        <ArrowRightLeft size={16} />
+                                        <span>Move Link</span>
+                                    </button>
+                                    <button className="menu-item" onClick={(e) => handleAction(e, () => onEdit(link))}>
+                                        <Edit size={16} />
+                                        <span>Edit Details</span>
+                                    </button>
+                                    <div className="menu-divider"></div>
+                                    <button className="menu-item delete-item" onClick={(e) => handleAction(e, () => onDelete(link))}>
+                                        <Trash2 size={16} />
+                                        <span>Delete Link</span>
+                                    </button>
+                                </>
+                            )}
+                        </div>
+                    )}
+                </div>
+
                 {canEdit && !disabled && (
                     <div
-                        className="drag-handle"
+                        className="drag-handle-new"
                         {...attributes}
                         {...listeners}
-                        style={{ cursor: 'grab', display: 'flex', alignItems: 'center', color: '#94a3b8', marginLeft: '0.25rem' }}
                     >
                         <GripVertical size={20} />
                     </div>
