@@ -18,13 +18,13 @@
 
 ## Features
 
-- **Vault Management** - Create, edit, and delete link containers
-- **Link Management** - Add, edit, and delete links within vaults
-- **Theme System** - Native Dark Mode Support
-- **Email Invitations** - Send vault invitations to users by email
+- **Container Management** - Create, edit, and delete link containers
+- **Link Management** - Add, edit, and delete links within containers
+- **Light / Dark Mode** - Native Dark Mode Support
+- **Email Invitations** - Send container invitations to users by email
 - **Permission Management** - View and edit permissions
-- **Collaborator Management** - Add, remove, and manage vault collaborators
-- **Notifications** - Real-time notification system for invitations and updates
+- **Collaborator Management** - Add, remove, and manage container collaborators
+- **Notifications** - Notification system for invitations and updates
 - **Search Functionality** - Search across containers, links, titles, descriptions, and URLs
 - **Responsive Design** - Mobile-first design that works on all devices
 - **Copy to Clipboard** - Quick copy functionality for links
@@ -73,7 +73,6 @@ Take your links on the go with the official **Blink Android App**! Access your w
 1. Clone the repository:
 ```bash
 git clone https://github.com/samirrhashimov/blink.git
-cd blink-app
 ```
 
 2. Install dependencies:
