@@ -67,6 +67,31 @@ const VaultDetails: React.FC = () => {
   const [linkSearchQuery, setLinkSearchQuery] = useState('');
   const [userPermission, setUserPermission] = useState<'view' | 'comment' | 'edit' | null>(null);
   const [collaboratorNames, setCollaboratorNames] = useState<Record<string, string>>({});
+  const [showNavbar, setShowNavbar] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
+  // Navbar scroll behavior - hide on scroll down, show on scroll up
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY < 10) {
+        // Always show navbar at top
+        setShowNavbar(true);
+      } else if (currentScrollY > lastScrollY) {
+        // Scrolling down - hide navbar
+        setShowNavbar(false);
+      } else {
+        // Scrolling up - show navbar
+        setShowNavbar(true);
+      }
+
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [lastScrollY]);
 
   // Find the current vault from the vaults array
   const vault = vaults.find(v => v.id === id) || null;
@@ -339,7 +364,7 @@ const VaultDetails: React.FC = () => {
         title={vault.name}
         description={vault.description || `Browse links in the ${vault.name} container on Blink.`}
       />
-      <header className="header">
+      <header className={`header ${showNavbar ? 'navbar-visible' : 'navbar-hidden'}`}>
         <div className="container">
           <div className="header-content">
             <div className="header-left">
