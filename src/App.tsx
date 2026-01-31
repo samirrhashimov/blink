@@ -19,6 +19,7 @@ import Settings from './pages/Settings';
 import Tags from './pages/Tags';
 import ProtectedRoute from './components/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary';
+import BottomNavigation from './components/BottomNavigation';
 import Legal from './pages/Legal';
 import TermsAndConditions from './pages/TermsAndConditions';
 import PrivacyPolicy from './pages/PrivacyPolicy';
@@ -111,6 +112,7 @@ const AppRoutes: React.FC = () => {
           }
         />
       </Routes>
+      <BottomNavigation />
     </Router>
   );
 };

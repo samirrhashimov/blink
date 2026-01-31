@@ -144,15 +144,15 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
       onClick={onClose}
       style={{ '--primary': vaultColor } as React.CSSProperties}
     >
-      <div className="modal-content max-h-[80vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
+      <div className="modal-content collaborators-modal max-h-[80vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+        <div className="collaborators-modal-header">
           <h2>Collaborators</h2>
-          <button onClick={onClose} className="modal-close">
-            <X className="h-6 w-6" />
+          <button onClick={onClose} className="collaborators-modal-close">
+            <X className="h-5 w-5" />
           </button>
         </div>
 
-        <div className="modal-body overflow-y-auto flex-grow">
+        <div className="collaborators-modal-body overflow-y-auto flex-grow">
           {error && <div className="error-message mb-4">{error}</div>}
 
           {loading ? (
@@ -160,11 +160,11 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
               <LoadingSkeleton variant="card" count={2} />
             </div>
           ) : collaborators.length === 0 ? (
-            <div className="text-center py-8">
-              <p className="text-gray-600 dark:text-gray-400">No collaborators yet</p>
+            <div className="text-center py-12">
+              <p className="text-gray-500 dark:text-gray-500">No collaborators yet</p>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="collaborators-list-modern">
               {collaborators.map((collab) => {
                 const isOwner = collab.userId === ownerId;
                 const isCurrentUser = collab.userId === currentUserId;
@@ -172,48 +172,56 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
                 const isPending = collab.isPending || false;
 
                 return (
-                  <div key={collab.userId} className="collaborator-item">
-                    <div className="flex items-center gap-3 flex-grow min-w-0">
-                      <div className="collaborator-avatar">
-                        {isOwner ? <Crown className="h-5 w-5 text-amber-500" /> : collab.displayName.charAt(0).toUpperCase()}
+                  <div key={collab.userId} className="collaborator-card">
+                    <div className="collaborator-card-main">
+                      <div className="collaborator-avatar-modern">
+                        {isOwner ? (
+                          <Crown className="h-5 w-5" />
+                        ) : (
+                          <span>{collab.displayName.charAt(0).toUpperCase()}</span>
+                        )}
                       </div>
-                      <div className="flex-grow min-w-0">
-                        <div className="flex items-center gap-2">
-                          <p className="collaborator-name">{collab.displayName}</p>
-                          {isOwner && <span className="status-badge status-badge-owner">Owner</span>}
-                          {isCurrentUser && !isOwner && <span className="status-badge status-badge-you">You</span>}
-                          {isPending && <span className="status-badge status-badge-pending">Pending</span>}
+                      <div className="collaborator-info">
+                        <div className="collaborator-name-row">
+                          <p className="collaborator-name-modern">{collab.displayName}</p>
+                          <div className="collaborator-badges">
+                            {isOwner && <span className="badge-modern badge-owner">Owner</span>}
+                            {isCurrentUser && !isOwner && <span className="badge-modern badge-you">You</span>}
+                            {isPending && <span className="badge-modern badge-pending">Pending</span>}
+                          </div>
                         </div>
-                        <p className="collaborator-email">{collab.email}</p>
-                        <div className="mt-2">
-                          {canManageThisUser && !isPending ? (
-                            <select
-                              value={collab.permission}
-                              onChange={(e) => handlePermissionChange(collab.userId, e.target.value as 'view' | 'edit')}
-                              className="permission-select"
-                            >
-                              <option value="view">View</option>
-                              <option value="edit">Edit</option>
-                            </select>
-                          ) : (
-                            <span className={`permission-badge permission-badge-${collab.permission}`}>
-                              {collab.permission === 'view' && <Eye className="h-3 w-3" />}
-                              {collab.permission === 'edit' && <Edit3 className="h-3 w-3" />}
-                              <span className="capitalize">{collab.permission === 'view' ? 'Can view' : 'Can edit'}</span>
-                            </span>
-                          )}
-                        </div>
+                        <p className="collaborator-email-modern">{collab.email}</p>
                       </div>
                     </div>
-                    {canManageThisUser && (
-                      <button
-                        onClick={() => handleRemoveCollaborator(collab.userId, isPending)}
-                        className="collaborator-remove-btn"
-                        title={isPending ? 'Cancel invitation' : 'Remove collaborator'}
-                      >
-                        <UserMinus className="h-4 w-4" />
-                      </button>
-                    )}
+
+                    <div className="collaborator-card-actions">
+                      {canManageThisUser && !isPending ? (
+                        <select
+                          value={collab.permission}
+                          onChange={(e) => handlePermissionChange(collab.userId, e.target.value as 'view' | 'edit')}
+                          className="permission-select-modern"
+                        >
+                          <option value="view">Can view</option>
+                          <option value="edit">Can edit</option>
+                        </select>
+                      ) : (
+                        <div className="permission-display">
+                          {collab.permission === 'view' && <Eye className="h-4 w-4" />}
+                          {collab.permission === 'edit' && <Edit3 className="h-4 w-4" />}
+                          <span>{collab.permission === 'view' ? 'Can view' : 'Can edit'}</span>
+                        </div>
+                      )}
+
+                      {canManageThisUser && (
+                        <button
+                          onClick={() => handleRemoveCollaborator(collab.userId, isPending)}
+                          className="remove-btn-modern"
+                          title={isPending ? 'Cancel invitation' : 'Remove collaborator'}
+                        >
+                          <UserMinus className="h-4 w-4" />
+                        </button>
+                      )}
+                    </div>
                   </div>
                 );
               })}
@@ -221,8 +229,8 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
           )}
         </div>
 
-        <div className="modal-footer">
-          <button onClick={onClose} className="btn-cancel w-full">Close</button>
+        <div className="collaborators-modal-footer">
+          <button onClick={onClose} className="close-btn-modern">Close</button>
         </div>
       </div>
     </div>

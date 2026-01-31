@@ -43,6 +43,13 @@ const Dashboard: React.FC = () => {
     }
   }, [currentUser]);
 
+  useEffect(() => {
+    (window as any).dispatchSetShowCreateModal = setShowCreateModal;
+    return () => {
+      delete (window as any).dispatchSetShowCreateModal;
+    };
+  }, []);
+
   const loadUnreadCount = async () => {
     if (!currentUser) return;
     try {
@@ -109,7 +116,7 @@ const Dashboard: React.FC = () => {
               </div> */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="mobile-menu-toggle"
+                className="mobile-menu-toggle mediaforbuttons"
                 aria-label="Toggle mobile menu"
               >
                 {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -139,7 +146,7 @@ const Dashboard: React.FC = () => {
               <button onClick={toggleTheme} className="theme-toggle mediaforbuttons" title="Switch Theme">
                 {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
               </button>
-              <Link to="/settings" className="theme-toggle" title="Settings">
+              <Link to="/settings" className="theme-toggle mediaforbuttons" title="Settings">
                 <Settings className="h-5 w-5" />
               </Link>
               <div className="user-avatar">
@@ -208,7 +215,7 @@ const Dashboard: React.FC = () => {
             <h2>My Library</h2>
             <button
               onClick={() => setShowCreateModal(true)}
-              className="add-link-button"
+              className="add-link-button mediaforbuttons"
             >
               <Plus className="h-5 w-5" />
               New Container

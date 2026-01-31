@@ -478,71 +478,65 @@ const Settings: React.FC = () => {
 
           </section>
 
-          <section className="settings-section" style={{ borderColor: 'rgba(255, 255, 255, 0.06)' }}>
-            <h3 style={{ color: '#ffffffff' }}>App Info</h3>
-            <div style={{ marginBottom: '1.5rem' }}>
-              <div className="flex items-center justify-between settings-action-row " style={{ padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(100, 116, 139, 0.3)', background: 'rgba(100, 116, 139, 0.05)', marginBottom: '1.5rem' }}>
-                <div className="settings-item-info">
-                  <h4>Open source</h4>
-                  <p>Explore the source code or give a star on GitHub.</p>
-                </div>
-                <button
-                  onClick={() => window.open('https://github.com/samirrhashimov/blink', '_blank', 'noopener,noreferrer')}
-                  className="btn-secondary"
-                >
-                  <Github className="h-4 w-4" />
-                  GitHub
-                </button>
+          <section className="settings-section">
+            <h3>App Info</h3>
+            <div className="settings-item settings-item-media">
+              <div className="settings-item-info">
+                <h4>Open source</h4>
+                <p>Explore the source code or give a star on GitHub.</p>
               </div>
+              <button
+                onClick={() => window.open('https://github.com/samirrhashimov/blink', '_blank', 'noopener,noreferrer')}
+                className="btn-secondary"
+              >
+                <Github className="h-4 w-4" />
+                GitHub
+              </button>
+            </div>
 
-              <div className="flex items-center justify-between settings-action-row" style={{ padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(100, 116, 139, 0.3)', background: 'rgba(100, 116, 139, 0.05)', marginBottom: '1.5rem' }}>
-                <div className="settings-item-info" >
-                  <h4>Legal</h4>
-                  <p>Privacy Policy and Terms of Service.</p>
-                </div>
-                <button
-                  onClick={() => navigate('/legal')}
-                  className="btn-secondary"
-                >
-                  <Scale className="h-4 w-4" />
-                  Legal
-                </button>
+            <div className="settings-item settings-item-media">
+              <div className="settings-item-info">
+                <h4>Legal</h4>
+                <p>Privacy Policy and Terms of Service.</p>
               </div>
+              <button
+                onClick={() => navigate('/legal')}
+                className="btn-secondary"
+              >
+                <Scale className="h-4 w-4" />
+                Legal
+              </button>
             </div>
           </section>
 
           {/* Danger Zone */}
-          <section className="settings-section" style={{ borderColor: 'rgba(239, 68, 68, 0.3)' }}>
+          <section className="settings-section">
             <h3 style={{ color: '#ef4444' }}>Danger Zone</h3>
-            <div style={{ padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(100, 116, 139, 0.3)', background: 'rgba(100, 116, 139, 0.05)', marginBottom: '1.5rem' }}>
-              <div className="flex items-center justify-between settings-action-row">
-                <div className="settings-item-info">
-                  <h4>Logout</h4>
-                  <p>Sign out of your account on this device.</p>
-                </div>
-                <button
-                  onClick={handleLogout}
-                  className="btn-secondary"
-                >
-                  <LogOut className="h-4 w-4" />
-                  Logout
-                </button>
+            <div className="settings-item settings-item-media">
+              <div className="settings-item-info">
+                <h4>Logout</h4>
+                <p>Sign out of your account on this device.</p>
               </div>
+              <button
+                onClick={handleLogout}
+                className="btn-secondary"
+              >
+                <LogOut className="h-4 w-4" />
+                Logout
+              </button>
             </div>
 
-            <div style={{ padding: '1.5rem', borderRadius: '16px', border: '1px solid rgba(239, 68, 68, 0.3)', background: 'rgba(239, 68, 68, 0.1)' }}>
-              <div className="flex items-center justify-between settings-action-row">
-                <div className="settings-item-info">
-                  <h4 style={{ color: '#ef4444' }}>Delete Account</h4>
-                  <p>Permanently delete your account and all of your data.</p>
-                </div>
-                <button
-                  onClick={handleDeleteAccount}
-                  className="btn-danger"
-                >
-                  Delete Account
-                </button>
+            <div className="settings-item settings-item-media">
+              <div className="settings-item-info">
+                <h4 style={{ color: '#ef4444' }}>Delete Account</h4>
+                <p>Permanently delete your account and all of your data.</p>
               </div>
+              <button
+                onClick={handleDeleteAccount}
+                className="btn-danger"
+              >
+                Delete Account
+              </button>
             </div>
           </section>
 
