@@ -11,7 +11,7 @@ interface AddLinkModalProps {
 }
 
 const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, vaultColor }) => {
-  const { addLinkToVault } = useVault();
+  const { addLinkToVault, updateLinkInVault } = useVault();
   const [formData, setFormData] = useState({
     title: '',
     url: '',
@@ -26,6 +26,18 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
   const [tagInput, setTagInput] = useState('');
   const [fetchTimeout, setFetchTimeout] = useState<any>(null);
 
+  // Helper to normalize URL
+  const normalizeUrl = (url: string) => {
+    const trimmed = url.trim();
+    if (!trimmed) return '';
+
+    // Check if it starts with http:// or https://
+    if (!/^https?:\/\//i.test(trimmed)) {
+      return `https://${trimmed}`;
+    }
+    return trimmed;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -34,9 +46,11 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
       return;
     }
 
-    // Basic URL validation
+    const normalizedUrl = normalizeUrl(formData.url);
+
+    // Basic URL validation with normalized URL
     try {
-      new URL(formData.url);
+      new URL(normalizedUrl);
     } catch {
       setError('Please enter a valid URL');
       return;
@@ -46,29 +60,37 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
       setError('');
       setLoading(true);
 
-      // Get favicon (non-blocking)
-      let favicon: string | undefined;
-      try {
-        const preview = await LinkPreviewService.fetchLinkPreview(formData.url.trim());
-        favicon = preview.favicon;
-      } catch {
-        favicon = undefined;
-      }
-
-      await addLinkToVault(vaultId, {
+      // 1. Add link immediately without waiting for favicon
+      // This makes the UI feel much faster
+      const linkId = await addLinkToVault(vaultId, {
         title: formData.title.trim(),
-        url: formData.url.trim(),
+        url: normalizedUrl,
         description: formData.description.trim(),
-        favicon,
+        favicon: undefined, // Will be updated in background
         tags
       });
+
+      // 2. Close modal and reset form immediately
       setFormData({ title: '', url: '', description: '' });
       setIsTitleAutoFilled(false);
       setIsDescAutoFilled(false);
+      setLoading(false);
       onClose();
+
+      // 3. Fetch favicon in background (Fire & Forget)
+      LinkPreviewService.fetchLinkPreview(normalizedUrl)
+        .then(preview => {
+          if (preview.favicon) {
+            updateLinkInVault(vaultId, linkId, { favicon: preview.favicon })
+              .catch(err => console.error('Background favicon update failed:', err));
+          }
+        })
+        .catch(() => {
+          // Silent failure for favicon is acceptable
+        });
+
     } catch (err: any) {
       setError(err.message || 'Failed to add link');
-    } finally {
       setLoading(false);
     }
   };
@@ -80,8 +102,10 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
       return;
     }
 
+    const normalizedUrl = normalizeUrl(trimmedUrl);
+
     try {
-      new URL(trimmedUrl);
+      new URL(normalizedUrl);
     } catch {
       return;
     }
@@ -91,7 +115,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
     const timeout = setTimeout(async () => {
       try {
         setIsAutoFetching(true);
-        const preview = await LinkPreviewService.fetchLinkPreview(trimmedUrl);
+        const preview = await LinkPreviewService.fetchLinkPreview(normalizedUrl);
 
         setFormData(prev => {
           const newData = { ...prev };
@@ -170,6 +194,8 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
       setIsTitleAutoFilled(false);
       setIsDescAutoFilled(false);
       setIsAutoFetching(false);
+      setLoading(false);
+      setError('');
       if (fetchTimeout) clearTimeout(fetchTimeout);
     }
   }, [isOpen]);
@@ -215,7 +241,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
               <input
                 id="url"
                 name="url"
-                type="url"
+                type="text"
                 required
                 value={formData.url}
                 onChange={handleChange}

@@ -54,6 +54,14 @@ const VaultDetails: React.FC = () => {
   const toast = useToast();
   const [showAddLinkModal, setShowAddLinkModal] = useState(false);
   const [showEditLinkModal, setShowEditLinkModal] = useState(false);
+
+  // Expose setShowAddLinkModal to window for mobile navigation
+  useEffect(() => {
+    (window as any).dispatchSetShowAddLinkModal = setShowAddLinkModal;
+    return () => {
+      delete (window as any).dispatchSetShowAddLinkModal;
+    };
+  }, []);
   const [showEditVaultModal, setShowEditVaultModal] = useState(false);
   const [showDeleteLinkModal, setShowDeleteLinkModal] = useState(false);
   const [showDeleteVaultModal, setShowDeleteVaultModal] = useState(false);

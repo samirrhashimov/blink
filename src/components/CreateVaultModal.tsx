@@ -85,7 +85,7 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
 
           <div className="form-group">
             <label htmlFor="name" className="form-label">
-              Vault Name *
+              Container Name *
               <span className="char-counter">
                 {formData.name.length}/{MAX_NAME_LENGTH}
               </span>
@@ -99,7 +99,7 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
               value={formData.name}
               onChange={handleChange}
               className="form-input"
-              placeholder="Enter vault name"
+              placeholder="Enter container name"
               disabled={loading}
             />
           </div>
@@ -119,13 +119,13 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
               onChange={handleChange}
               className="form-input resize-none"
               rows={3}
-              placeholder="Enter vault description (optional)"
+              placeholder="Enter container description"
               disabled={loading}
             />
           </div>
 
           <div className="form-group">
-            <label className="form-label">Vault Color</label>
+            <label className="form-label">Container Color</label>
             <div className="color-picker-grid">
               {VAULT_COLORS.map(color => (
                 <button
@@ -164,7 +164,7 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
             ) : (
               <>
                 <Plus className="h-4 w-4" />
-                Create Vault
+                Create Container
               </>
             )}
           </button>

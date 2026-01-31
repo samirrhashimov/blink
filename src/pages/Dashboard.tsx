@@ -19,7 +19,6 @@ import {
   UserPlus
 } from 'lucide-react';
 import blinkLogo from '../assets/blinklogo2.png';
-import CreateVaultModal from '../components/CreateVaultModal';
 import NotificationsPanel from '../components/NotificationsPanel';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import SEO from '../components/SEO';
@@ -29,7 +28,6 @@ const Dashboard: React.FC = () => {
   const { theme, toggleTheme } = useTheme();
   const { vaults, loading, error } = useVault();
   const [searchQuery, setSearchQuery] = useState('');
-  const [showCreateModal, setShowCreateModal] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -42,13 +40,6 @@ const Dashboard: React.FC = () => {
       return () => clearInterval(interval);
     }
   }, [currentUser]);
-
-  useEffect(() => {
-    (window as any).dispatchSetShowCreateModal = setShowCreateModal;
-    return () => {
-      delete (window as any).dispatchSetShowCreateModal;
-    };
-  }, []);
 
   const loadUnreadCount = async () => {
     if (!currentUser) return;
@@ -214,7 +205,7 @@ const Dashboard: React.FC = () => {
           <div className="flex items-center justify-between mb-6">
             <h2>My Library</h2>
             <button
-              onClick={() => setShowCreateModal(true)}
+              onClick={() => (window as any).dispatchSetShowCreateModal?.(true)}
               className="add-link-button mediaforbuttons"
             >
               <Plus className="h-5 w-5" />
@@ -252,7 +243,7 @@ const Dashboard: React.FC = () => {
               </p>
               {!searchQuery && (
                 <button
-                  onClick={() => setShowCreateModal(true)}
+                  onClick={() => (window as any).dispatchSetShowCreateModal?.(true)}
                   className="empty-state-button"
                 >
                   <Plus className="h-5 w-5" />
@@ -355,12 +346,6 @@ const Dashboard: React.FC = () => {
           </div>
         )}
       </main>
-
-      {/* Create Vault Modal */}
-      <CreateVaultModal
-        isOpen={showCreateModal}
-        onClose={() => setShowCreateModal(false)}
-      />
 
       {/* Notifications Panel */}
       {currentUser && (

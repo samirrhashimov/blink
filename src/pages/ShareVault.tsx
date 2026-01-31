@@ -181,7 +181,7 @@ const ShareVault: React.FC = () => {
               <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="form-group">
                   <label className="form-label" htmlFor="invite-input">
-                    Invite by email or username
+                    Invite by email
                   </label>
                   <div className="relative">
                     <div

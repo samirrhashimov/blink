@@ -132,7 +132,7 @@ export class VaultService {
   }
 
   // Add a link to a vault
-  static async addLinkToVault(vaultId: string, link: Omit<Link, 'id' | 'createdAt' | 'updatedAt'>): Promise<void> {
+  static async addLinkToVault(vaultId: string, link: Omit<Link, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
     try {
       const vaultRef = doc(db, VAULTS_COLLECTION, vaultId);
       const vaultSnap = await getDoc(vaultRef);
@@ -141,9 +141,16 @@ export class VaultService {
         const vaultData = vaultSnap.data();
         const currentLinks = vaultData.links || [];
 
+        const linkId = `link_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
+        // Clean link data to remove undefined values (Firebase doesn't allow undefined)
+        // We use JSON parse/stringify as a safe way to remove undefined fields from the input object
+        // The input 'link' only contains strings, arrays, and possibly undefined, so this is safe.
+        const cleanLinkData = JSON.parse(JSON.stringify(link));
+
         const newLink: Link = {
-          id: `link_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-          ...link,
+          id: linkId,
+          ...cleanLinkData,
           createdAt: new Date(),
           updatedAt: new Date()
         };
@@ -152,7 +159,10 @@ export class VaultService {
           links: [...currentLinks, newLink],
           updatedAt: serverTimestamp()
         });
+
+        return linkId;
       }
+      throw new Error('Vault not found');
     } catch (error) {
       console.error('Error adding link to vault:', error);
       throw new Error('Failed to add link to vault');

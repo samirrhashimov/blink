@@ -2,11 +2,27 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Home, Tag, UserPlus, Settings, Plus } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useLocation } from 'react-router-dom';
 
 const BottomNavigation: React.FC = () => {
     const { currentUser } = useAuth();
+    const location = useLocation();
 
     if (!currentUser) return null;
+
+    const handlePlusClick = () => {
+        const isVaultDetails = location.pathname.startsWith('/vault/');
+
+        if (isVaultDetails) {
+            if ((window as any).dispatchSetShowAddLinkModal) {
+                (window as any).dispatchSetShowAddLinkModal(true);
+            }
+        } else {
+            if ((window as any).dispatchSetShowCreateModal) {
+                (window as any).dispatchSetShowCreateModal(true);
+            }
+        }
+    };
 
     return (
         <nav className="bottom-nav">
@@ -18,7 +34,7 @@ const BottomNavigation: React.FC = () => {
                 <Tag size={24} />
                 <span>Tags</span>
             </NavLink>
-            <div className="bottom-nav-item center-item" onClick={() => (window as any).dispatchSetShowCreateModal?.(true)}>
+            <div className="bottom-nav-item center-item" onClick={handlePlusClick}>
                 <div className="center-item-inner">
                     <Plus size={32} />
                 </div>

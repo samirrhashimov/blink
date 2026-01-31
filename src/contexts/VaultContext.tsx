@@ -10,7 +10,7 @@ interface VaultContextType {
   createVault: (name: string, description?: string, color?: string) => Promise<void>;
   updateVault: (vaultId: string, updates: Partial<Vault>) => Promise<void>;
   deleteVault: (vaultId: string) => Promise<void>;
-  addLinkToVault: (vaultId: string, link: Omit<Link, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>) => Promise<void>;
+  addLinkToVault: (vaultId: string, link: Omit<Link, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>) => Promise<string>;
   updateLinkInVault: (vaultId: string, linkId: string, updates: Partial<Link>) => Promise<void>;
   deleteLinkFromVault: (vaultId: string, linkId: string) => Promise<void>;
   shareVault: (vaultId: string, userId: string, permission: 'view' | 'comment' | 'edit') => Promise<void>;
@@ -124,11 +124,12 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         createdBy: currentUser.uid
       };
 
-      await VaultService.addLinkToVault(vaultId, linkData);
+      // Get the generated link ID from the service
+      const linkId = await VaultService.addLinkToVault(vaultId, linkData);
 
       // Update local state
       const newLink: Link = {
-        id: `link_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        id: linkId,
         ...linkData,
         createdAt: new Date(),
         updatedAt: new Date()
@@ -145,6 +146,8 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
             : vault
         )
       );
+
+      return linkId;
     } catch (err: any) {
       setError(err.message || 'Failed to add link');
       throw err;
