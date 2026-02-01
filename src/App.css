@@ -1640,7 +1640,6 @@ main.container {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 2rem 1.5rem;
 }
 
 .auth-container {
@@ -1651,6 +1650,8 @@ main.container {
   border-radius: 10px;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
   border: 1px solid rgba(0, 0, 0, 0.04);
+  transform: scale(0.9);
+  transform-origin: center center;
 }
 
 .dark .auth-container {
@@ -1661,7 +1662,7 @@ main.container {
 
 .auth-header {
   text-align: center;
-  margin-bottom: 2.5rem;
+  margin-bottom: 0.5rem;
 }
 
 .auth-logo {
@@ -1712,6 +1713,30 @@ main.container {
   flex-direction: column;
   gap: 1.5rem;
 }
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.875rem;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.auth-divider:not(:empty)::before {
+  margin-right: .75em;
+}
+
+.auth-divider:not(:empty)::after {
+  margin-left: .75em;
+}
+
 
 .form-group {
   display: flex;

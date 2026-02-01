@@ -110,6 +110,27 @@ const SignupPage: React.FC = () => {
             </div>
           )}
 
+          <button
+            type="button"
+            className="submit-button google-btn"
+            onClick={loginWithGoogle}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '12px',
+              backgroundColor: '#fff',
+              color: '#3c4043',
+              border: '1px solid #dadce0',
+              fontWeight: '500'
+            }}
+          >
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style={{ width: '20px', height: '20px' }} />
+            Sign up with Google
+          </button>
+
+          <div className="auth-divider">OR</div>
+
           <div className="form-group">
             <label className="form-label" htmlFor="displayName">Full Name</label>
             <input
@@ -201,15 +222,6 @@ const SignupPage: React.FC = () => {
             className="submit-button"
           >
             {loading ? 'Creating account...' : 'Sign up'}
-          </button>
-
-          <button
-            type="button"
-            className="submit-button google-btn desktop-only"
-            onClick={loginWithGoogle}
-          >
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style={{ width: '20px', height: '20px' }} />
-            Continue with Google
           </button>
 
           <div className="auth-footer">
