@@ -24,6 +24,7 @@ import GlobalModals from './components/GlobalModals';
 import Legal from './pages/Legal';
 import TermsAndConditions from './pages/TermsAndConditions';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import SupportPage from './pages/SupportPage';
 
 const AppRoutes: React.FC = () => {
   const { currentUser } = useAuth();
@@ -34,6 +35,10 @@ const AppRoutes: React.FC = () => {
         <Route
           path="/"
           element={currentUser ? <Navigate to="/dashboard" /> : <LandingPage />}
+        />
+        <Route
+          path="/support"
+          element={<SupportPage />}
         />
         <Route
           path="/login"

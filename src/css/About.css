@@ -114,11 +114,20 @@
 }
 
 .about-feature-card {
-  background: rgba(30, 41, 59, 0.5);
-  border: 1px solid #475569;
-  border-radius: 10px;
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
   padding: 2rem;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+}
+
+.dark .about-feature-card {
+  background: #1e293b !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2) !important;
 }
 
 .about-feature-card:hover {
@@ -257,7 +266,7 @@
 .about-cta {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 5rem 1.5rem;
+  padding: 1rem 1rem;
   text-align: center;
 }
 
@@ -399,19 +408,17 @@ body,
 .about-usecase-card {
   background: #ffffff;
   color: #111827;
-  box-shadow: 0 2px 12px rgba(2, 6, 23, 0.06);
-  transition: background-color 0.3s, color 0.3s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
 }
 
 .dark .about-features .about-feature-card,
 .dark .about-tech-badge,
 .dark .about-usecase-card {
-  background: #1f2937 !important;
-  /* gray-800 */
+  background: #1e293b !important;
   color: #f9fafb !important;
-  /* gray-50 */
-  border-color: #374151;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
 }
 
 .about-tech-name,
@@ -620,22 +627,71 @@ body,
     grid-template-columns: 1fr;
     gap: 3rem;
     text-align: center;
+    padding-top: 2rem;
+  }
+
+  .hero-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .about-hero-title {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .about-hero-subtitle {
+    margin: 0 auto 2.5rem;
+  }
+
+  .hero-buttons {
+    justify-content: center;
+    width: 100%;
   }
 
   .hero-image-wrapper {
     transform: none;
-    max-width: 800px;
+    max-width: 100%;
     margin: 0 auto;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
   }
 
   .feature-row {
-    flex-direction: column;
-    gap: 3rem;
+    flex-direction: column !important;
+    gap: 2.5rem;
     text-align: center;
+    margin-bottom: 5rem;
   }
 
-  .feature-row:nth-child(even) {
+  .feature-text {
+    display: flex;
     flex-direction: column;
+    align-items: center;
+  }
+
+  .feature-section-title {
+    font-size: 1.75rem;
+  }
+
+  .feature-image-container {
+    width: 100%;
+    order: 2;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-hero-title {
+    font-size: 2.5rem;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+  }
+
+  .about-btn {
+    width: 100%;
   }
 }
 
@@ -677,11 +733,66 @@ body,
   color: #60a5fa;
 }
 
+.nav-github-link,
+.nav-support-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 50%;
+  color: #0f172a;
+  transition: all 0.3s ease;
+  margin-right: 0.5rem;
+}
+
+.nav-github-link:hover,
+.nav-support-link:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #3b82f6;
+}
+
+.dark .nav-github-link,
+.dark .nav-support-link {
+  color: #f9fafb;
+}
+
+.dark .nav-github-link:hover,
+.dark .nav-support-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #60a5fa;
+}
+
 @media (max-width: 768px) {
-  .theme-toggle-btn {
+
+  .theme-toggle-btn,
+  .nav-github-link,
+  .nav-support-link,
+  .nav-login-btn {
     display: none;
   }
 }
+
+@media (max-width: 768px) {
+
+  .theme-toggle-btn,
+  .nav-github-link,
+  .nav-support-link,
+  .nav-login-btn {
+    display: none !important;
+  }
+}
+
+.landing-auth-btn:hover {
+  background-color: transparent !important;
+  color: #13a4ec !important;
+  border-color: #13a4ec !important;
+}
+
+.nav-login-btn:hover {
+  border-color: #ffffff !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
 
 /* Color Demo Palette */
 .color-demo-palette {
@@ -798,65 +909,119 @@ body,
   }
 }
 
-/* Firefox Extension Button */
+/* Firefox Extension Section - Desktop Only Refinement */
+.feature-row-firefox {
+  display: flex !important;
+  justify-content: center;
+  margin-top: 4rem;
+  margin-bottom: 8rem;
+}
+
+@media (max-width: 1023px) {
+  .feature-row-firefox {
+    display: none !important;
+    /* Hide on mobile and small tablets */
+  }
+}
+
+.feature-text-firefox {
+  max-width: 900px;
+  width: 100%;
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center;
+  gap: 3rem;
+  background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
+  padding: 3rem;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.dark .feature-text-firefox {
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.firefox-content-wrapper {
+  flex: 1;
+}
+
+.firefox-image-wrapper {
+  flex: 0 0 150px;
+}
+
+.firefox-image-wrapper img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  transform: rotate(-2deg);
+  transition: transform 0.3s ease;
+}
+
+.feature-text-firefox:hover .firefox-image-wrapper img {
+  transform: rotate(0deg) scale(1.05);
+}
+
 .firefox-download-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background-color: #0060df;
-  color: #ffffff;
-  padding: 14px 24px;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: linear-gradient(to right, #ff7139, #ff3750);
+  color: #ffffff !important;
+  padding: 12px 28px;
   font-size: 16px;
-  font-weight: 700;
-  border-radius: 4px;
+  font-weight: 600;
+  border-radius: 99px;
   text-decoration: none;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   border: none;
-  line-height: 1.5;
   margin-top: 1.5rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 8px 15px rgba(255, 55, 80, 0.2);
 }
 
 .firefox-download-btn:hover {
-  background-color: #003eaa;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-  color: #ffffff;
-}
-
-.firefox-download-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 20px rgba(255, 55, 80, 0.3);
+  filter: brightness(1.1);
 }
 
 .firefox-icon {
-  width: 24px;
-  height: 24px;
-  margin-right: 12px;
-  fill: currentColor;
-}
-
-.feature-text-firefox {
-  max-width: 600px;
-  display: flex;
-  align-self: center;
-  flex-direction: column;
-  background-color: #ffffff;
-  padding: 25px;
-  border-radius: 10px;
-  margin-top: 100px;
-}
-
-.feature-row-firefox {
-  align-items: center !important;
-  flex-direction: column !important;
+  width: 22px;
+  height: 22px;
+  margin-right: 10px;
 }
 
 .firefox-title {
-  color: #0e0e0e !important;
+  font-size: 2.25rem !important;
+  margin-bottom: 1rem;
+  background-color: #ffffff;
+  font-weight: 700;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .firefox-desc {
-  color: #1a1a1a !important;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  opacity: 0.8;
+}
+
+.dark .firefox-desc {
+  color: #cbd5e1 !important;
+}
+
+/* Fix for Grid Features on Mobile */
+@media (max-width: 640px) {
+  .about-features-grid {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem;
+  }
+
+  .about-feature-card {
+    padding: 1.5rem;
+  }
 }
