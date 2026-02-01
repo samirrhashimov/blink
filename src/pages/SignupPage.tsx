@@ -112,7 +112,7 @@ const SignupPage: React.FC = () => {
 
           <button
             type="button"
-            className="google-btn"
+            className="google-btn desktop-only"
             onClick={loginWithGoogle}
             style={{
               display: 'flex',
@@ -129,7 +129,7 @@ const SignupPage: React.FC = () => {
             Sign up with Google
           </button>
 
-          <div className="auth-divider">OR</div>
+          <div className="auth-divider desktop-only">OR</div>
 
           <div className="form-group">
             <label className="form-label" htmlFor="displayName">Full Name</label>
