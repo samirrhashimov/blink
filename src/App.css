@@ -1673,6 +1673,15 @@ main.container {
   margin-bottom: 1.5rem;
 }
 
+.auth-logo img {
+  filter: brightness(0);
+  transition: filter 0.3s ease;
+}
+
+.dark .auth-logo img {
+  filter: brightness(0) invert(1);
+}
+
 .auth-logo svg {
   width: 3rem;
   height: 3rem;
@@ -3066,9 +3075,16 @@ tr:hover {
   justify-content: center;
   gap: 10px;
   background-color: #fff !important;
-  color: #333 !important;
+  color: #333;
   border: 1px solid #ddd !important;
   transition: all 0.3s ease;
+
+  width: 100%;
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 .google-btn:hover {
@@ -3082,7 +3098,8 @@ tr:hover {
 }
 
 .dark .google-btn:hover {
-  background-color: #334155 !important;
+  background-color: #222b38 !important;
+  border: 1px solid #7a7a7a !important;
 }
 
 

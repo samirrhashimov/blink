@@ -112,7 +112,7 @@ const SignupPage: React.FC = () => {
 
           <button
             type="button"
-            className="submit-button google-btn"
+            className="google-btn"
             onClick={loginWithGoogle}
             style={{
               display: 'flex',
