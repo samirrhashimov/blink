@@ -349,8 +349,16 @@ textarea {
   top: -0.25rem;
 }
 
+.-top-2 {
+  top: -0.5rem;
+}
+
 .-right-1 {
   right: -0.25rem;
+}
+
+.-right-2 {
+  right: -0.5rem;
 }
 
 .bg-red-500 {
@@ -383,6 +391,30 @@ textarea {
 
 .font-bold {
   font-weight: 700;
+}
+
+.notification-bubble {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background-color: #ef4444;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border-radius: 9999px;
+  width: 1.25rem;
+  height: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #f8f9fa;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.dark .notification-bubble {
+  border-color: #162032;
 }
 
 @media (max-width: 767.98px) {
@@ -4979,7 +5011,7 @@ tr:hover {
   color: #64748b;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .dark .theme-toggle,
