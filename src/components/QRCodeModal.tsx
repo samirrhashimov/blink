@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Download, QrCode } from 'lucide-react';
+import { X, Download } from 'lucide-react';
 import type { Link } from '../types';
 
 interface QRCodeModalProps {
