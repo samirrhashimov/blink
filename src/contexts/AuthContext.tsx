@@ -11,13 +11,14 @@ import {
   deleteUser,
   sendEmailVerification,
   reload,
-  sendPasswordResetEmail
+  sendPasswordResetEmail,
+  verifyBeforeUpdateEmail
 } from 'firebase/auth';
-import { 
-  doc, 
-  setDoc, 
-  getDoc, 
-  updateDoc, 
+import {
+  doc,
+  setDoc,
+  getDoc,
+  updateDoc,
   deleteDoc,
   collection,
   query,
@@ -40,6 +41,7 @@ interface AuthContextType {
   resendEmailVerification: () => Promise<void>;
   checkEmailVerification: () => Promise<boolean>;
   sendPasswordReset: (email: string) => Promise<void>;
+  updateUserEmail: (newEmail: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -141,6 +143,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await sendPasswordResetEmail(auth, email);
   };
 
+  const updateUserEmail = async (newEmail: string) => {
+    const user = auth.currentUser;
+    if (!user) throw new Error('No user is currently signed in');
+
+    try {
+      // 1. Update in Firebase Auth (sends verification email to new address)
+      await verifyBeforeUpdateEmail(user, newEmail);
+
+      // 2. Update in Firestore
+      const userRef = doc(db, 'users', user.uid);
+      await updateDoc(userRef, {
+        email: newEmail.toLowerCase()
+      });
+
+      // 3. Update local state
+      if (currentUser) {
+        setCurrentUser({ ...currentUser, email: newEmail });
+      }
+    } catch (error: any) {
+      console.error('Error updating email:', error);
+      throw error;
+    }
+  };
+
   const logout = async () => {
     await signOut(auth);
   };
@@ -160,7 +186,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         where('ownerId', '==', userId)
       );
       const ownedVaultsSnapshot = await getDocs(ownedVaultsQuery);
-      const deleteVaultPromises = ownedVaultsSnapshot.docs.map(docSnapshot => 
+      const deleteVaultPromises = ownedVaultsSnapshot.docs.map(docSnapshot =>
         deleteDoc(doc(db, 'vaults', docSnapshot.id))
       );
       await Promise.all(deleteVaultPromises);
@@ -171,7 +197,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         where('authorizedUsers', 'array-contains', userId)
       );
       const sharedVaultsSnapshot = await getDocs(sharedVaultsQuery);
-      const updateVaultPromises = sharedVaultsSnapshot.docs.map(docSnapshot => 
+      const updateVaultPromises = sharedVaultsSnapshot.docs.map(docSnapshot =>
         updateDoc(doc(db, 'vaults', docSnapshot.id), {
           authorizedUsers: arrayRemove(userId)
         })
@@ -184,7 +210,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         where('userId', '==', userId)
       );
       const notificationsSnapshot = await getDocs(notificationsQuery);
-      const deleteNotificationPromises = notificationsSnapshot.docs.map(docSnapshot => 
+      const deleteNotificationPromises = notificationsSnapshot.docs.map(docSnapshot =>
         deleteDoc(doc(db, 'notifications', docSnapshot.id))
       );
       await Promise.all(deleteNotificationPromises);
@@ -195,7 +221,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         where('invitedBy', '==', userId)
       );
       const sentInvitesSnapshot = await getDocs(sentInvitesQuery);
-      const deleteSentInvitePromises = sentInvitesSnapshot.docs.map(docSnapshot => 
+      const deleteSentInvitePromises = sentInvitesSnapshot.docs.map(docSnapshot =>
         deleteDoc(doc(db, 'shareInvites', docSnapshot.id))
       );
 
@@ -219,7 +245,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         where('userId', '==', userId)
       );
       const permissionsSnapshot = await getDocs(permissionsQuery);
-      const deletePermissionPromises = permissionsSnapshot.docs.map(docSnapshot => 
+      const deletePermissionPromises = permissionsSnapshot.docs.map(docSnapshot =>
         deleteDoc(doc(db, 'vaultPermissions', docSnapshot.id))
       );
       await Promise.all(deletePermissionPromises);
@@ -230,7 +256,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         where('createdBy', '==', userId)
       );
       const shareLinksSnapshot = await getDocs(shareLinksQuery);
-      const deleteShareLinkPromises = shareLinksSnapshot.docs.map(docSnapshot => 
+      const deleteShareLinkPromises = shareLinksSnapshot.docs.map(docSnapshot =>
         deleteDoc(doc(db, 'shareLinks', docSnapshot.id))
       );
       await Promise.all(deleteShareLinkPromises);
@@ -272,7 +298,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     sendEmailVerification: sendEmailVerificationLink,
     resendEmailVerification: resendEmailVerificationLink,
     checkEmailVerification,
-    sendPasswordReset
+    sendPasswordReset,
+    updateUserEmail
   };
 
   return (

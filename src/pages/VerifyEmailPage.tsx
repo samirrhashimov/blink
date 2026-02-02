@@ -5,11 +5,14 @@ import { Mail, CheckCircle, AlertCircle, RefreshCw } from 'lucide-react';
 import blinkLogo from '../assets/blinklogo2.png';
 
 const VerifyEmailPage: React.FC = () => {
-  const { currentUser, resendEmailVerification, checkEmailVerification } = useAuth();
+  const { currentUser, resendEmailVerification, checkEmailVerification, updateUserEmail, logout } = useAuth();
   const navigate = useNavigate();
   const [isVerified, setIsVerified] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
   const [isResending, setIsResending] = useState(false);
+  const [isUpdatingEmail, setIsUpdatingEmail] = useState(false);
+  const [isEditingEmail, setIsEditingEmail] = useState(false);
+  const [newEmail, setNewEmail] = useState(currentUser?.email || '');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
@@ -18,14 +21,14 @@ const VerifyEmailPage: React.FC = () => {
       navigate('/login');
       return;
     }
-
+    setNewEmail(currentUser.email);
     // Check if email is already verified
     checkVerificationStatus();
   }, [currentUser, navigate]);
 
   const checkVerificationStatus = async () => {
     if (!currentUser) return;
-    
+
     setIsChecking(true);
     try {
       const verified = await checkEmailVerification();
@@ -48,7 +51,7 @@ const VerifyEmailPage: React.FC = () => {
     setIsResending(true);
     setError('');
     setMessage('');
-    
+
     try {
       await resendEmailVerification();
       setMessage('Verification email has been resent! Please check your inbox.');
@@ -61,6 +64,37 @@ const VerifyEmailPage: React.FC = () => {
       }
     } finally {
       setIsResending(false);
+    }
+  };
+
+  const handleUpdateEmail = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newEmail || newEmail === currentUser?.email) {
+      setIsEditingEmail(false);
+      return;
+    }
+
+    setIsUpdatingEmail(true);
+    setError('');
+    setMessage('');
+
+    try {
+      await updateUserEmail(newEmail);
+      setMessage('Email updated and new verification link sent!');
+      setIsEditingEmail(false);
+    } catch (err: any) {
+      setError(err.message || 'Failed to update email. Please try again.');
+    } finally {
+      setIsUpdatingEmail(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/signup');
+    } catch (err: any) {
+      setError('Failed to sign out.');
     }
   };
 
@@ -90,18 +124,64 @@ const VerifyEmailPage: React.FC = () => {
           ) : (
             <>
               <div>
-                <p style={{ color: '#64748b', marginBottom: '1.5rem', lineHeight: '1.6' }}>
-                  We've sent a verification email to <strong>{currentUser.email}</strong>.
-                  Please check your inbox and click on the verification link.
-                </p>
-                <div style={{ 
-                  background: '#f1f5f9', 
-                  padding: '1rem', 
-                  borderRadius: '8px', 
-                  marginTop: '1.5rem',
-                  textAlign: 'left'
-                }}>
-                </div>
+                {isEditingEmail ? (
+                  <form onSubmit={handleUpdateEmail} style={{ marginBottom: '1.5rem', textAlign: 'left' }}>
+                    <label className="form-label" style={{ marginBottom: '0.5rem', display: 'block' }}>Update Your Email</label>
+                    <input
+                      type="email"
+                      className="form-input"
+                      value={newEmail}
+                      onChange={(e) => setNewEmail(e.target.value)}
+                      placeholder="Enter correct email"
+                      required
+                      style={{ marginBottom: '1rem' }}
+                    />
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <button
+                        type="submit"
+                        disabled={isUpdatingEmail}
+                        className="submit-button"
+                        style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}
+                      >
+                        {isUpdatingEmail ? 'Updating...' : 'Update Email'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setIsEditingEmail(false)}
+                        className="submit-button"
+                        style={{
+                          padding: '0.5rem 1rem',
+                          fontSize: '0.9rem',
+                          background: 'transparent',
+                          border: '1px solid #cbd5e1',
+                          color: '#64748b'
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <p style={{ color: '#64748b', marginBottom: '1.5rem', lineHeight: '1.6' }}>
+                    We've sent a verification email to <strong>{currentUser.email}</strong>.
+                    <br />
+                    <button
+                      onClick={() => setIsEditingEmail(true)}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: '#3b82f6',
+                        padding: 0,
+                        fontSize: '0.85rem',
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                        marginTop: '0.25rem'
+                      }}
+                    >
+                      Wrong email? Change it
+                    </button>
+                  </p>
+                )}
               </div>
 
               {message && (
@@ -117,21 +197,21 @@ const VerifyEmailPage: React.FC = () => {
                 </div>
               )}
 
-              <div style={{ 
-                display: 'flex', 
-                flexDirection: 'column', 
-                gap: '1.5rem',
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1rem',
                 alignItems: 'stretch',
                 width: '100%'
               }}>
                 <button
                   type="button"
                   onClick={handleResendEmail}
-                  disabled={isResending || isChecking}
+                  disabled={isResending || isChecking || isEditingEmail}
                   className="submit-button"
-                  style={{ 
-                    opacity: (isResending || isChecking) ? 0.6 : 1,
-                    cursor: (isResending || isChecking) ? 'not-allowed' : 'pointer',
+                  style={{
+                    opacity: (isResending || isChecking || isEditingEmail) ? 0.6 : 1,
+                    cursor: (isResending || isChecking || isEditingEmail) ? 'not-allowed' : 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -154,14 +234,14 @@ const VerifyEmailPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={checkVerificationStatus}
-                  disabled={isChecking || isResending}
+                  disabled={isChecking || isResending || isEditingEmail}
                   className="submit-button"
-                  style={{ 
+                  style={{
                     background: 'transparent',
                     border: '1px solid #cbd5e1',
                     color: '#64748b',
-                    opacity: (isChecking || isResending) ? 0.6 : 1,
-                    cursor: (isChecking || isResending) ? 'not-allowed' : 'pointer',
+                    opacity: (isChecking || isResending || isEditingEmail) ? 0.6 : 1,
+                    cursor: (isChecking || isResending || isEditingEmail) ? 'not-allowed' : 'pointer',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -179,6 +259,22 @@ const VerifyEmailPage: React.FC = () => {
                       <span>Check Status</span>
                     </>
                   )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    color: '#94a3b8',
+                    fontSize: '0.85rem',
+                    textDecoration: 'underline',
+                    cursor: 'pointer',
+                    marginTop: '0.5rem'
+                  }}
+                >
+                  Sign in with a different account
                 </button>
               </div>
             </>
