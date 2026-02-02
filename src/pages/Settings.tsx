@@ -569,6 +569,7 @@ const Settings: React.FC = () => {
             title="Delete Account"
             message="Are you sure you want to permanently delete your account? This action cannot be undone and all your data will be lost."
             confirmText="Delete Account"
+            confirmWord="delete"
             variant="danger"
             icon={<LogOut className="h-4 w-4" />}
           />

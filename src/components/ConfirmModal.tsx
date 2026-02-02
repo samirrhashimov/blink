@@ -11,6 +11,7 @@ interface ConfirmModalProps {
     cancelText?: string;
     variant?: 'danger' | 'primary';
     icon?: React.ReactNode;
+    confirmWord?: string;
 }
 
 const ConfirmModal: React.FC<ConfirmModalProps> = ({
@@ -22,12 +23,15 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
     confirmText = 'Confirm',
     cancelText = 'Cancel',
     variant = 'primary',
-    icon
+    icon,
+    confirmWord
 }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [confirmationInput, setConfirmationInput] = useState('');
 
     const handleConfirm = async () => {
+        if (confirmWord && confirmationInput !== confirmWord) return;
         try {
             setError('');
             setLoading(true);
@@ -40,14 +44,19 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
         }
     };
 
+    const handleClose = () => {
+        setConfirmationInput('');
+        onClose();
+    };
+
     if (!isOpen) return null;
 
     return (
-        <div className="modal-overlay" onClick={onClose}>
+        <div className="modal-overlay" onClick={handleClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                 <div className="modal-header">
                     <h2>{title}</h2>
-                    <button onClick={onClose} className="modal-close">
+                    <button onClick={handleClose} className="modal-close">
                         <X className="h-6 w-6" />
                     </button>
                 </div>
@@ -62,12 +71,28 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
                     <p className="text-gray-700 dark:text-gray-300">
                         {message}
                     </p>
+
+                    {confirmWord && (
+                        <div style={{ marginTop: '1.5rem' }}>
+                            <p className="text-sm font-medium mb-2" style={{ color: '#64748b' }}>
+                                Please type <strong>{confirmWord}</strong> to confirm:
+                            </p>
+                            <input
+                                type="text"
+                                className="form-input"
+                                value={confirmationInput}
+                                onChange={(e) => setConfirmationInput(e.target.value)}
+                                placeholder={`Type '${confirmWord}'`}
+                                style={{ width: '100%' }}
+                            />
+                        </div>
+                    )}
                 </div>
 
                 <div className="modal-footer">
                     <button
                         type="button"
-                        onClick={onClose}
+                        onClick={handleClose}
                         disabled={loading}
                         className="btn-cancel"
                     >
@@ -75,9 +100,15 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
                     </button>
                     <button
                         onClick={handleConfirm}
-                        disabled={loading}
+                        disabled={loading || (!!confirmWord && confirmationInput !== confirmWord)}
                         className={variant === 'danger' ? 'btn-danger' : 'btn-primary'}
-                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            opacity: (loading || (!!confirmWord && confirmationInput !== confirmWord)) ? 0.6 : 1,
+                            cursor: (loading || (!!confirmWord && confirmationInput !== confirmWord)) ? 'not-allowed' : 'pointer'
+                        }}
                     >
                         {loading ? (
                             <>
