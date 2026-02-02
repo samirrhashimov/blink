@@ -28,6 +28,7 @@ import LoadingSkeleton from '../components/LoadingSkeleton';
 import SortableLinkItem from '../components/SortableLinkItem';
 import MoveLinkModal from '../components/MoveLinkModal';
 import LinkStatsModal from '../components/LinkStatsModal';
+import QRCodeModal from '../components/QRCodeModal';
 import SEO from '../components/SEO';
 import {
   DndContext,
@@ -70,6 +71,7 @@ const VaultDetails: React.FC = () => {
   const [showShareLinkModal, setShowShareLinkModal] = useState(false);
   const [showMoveLinkModal, setShowMoveLinkModal] = useState(false);
   const [showStatsModal, setShowStatsModal] = useState(false);
+  const [showQRCodeModal, setShowQRCodeModal] = useState(false);
   const [selectedLink, setSelectedLink] = useState<LinkType | null>(null);
   const [copiedLinkId, setCopiedLinkId] = useState<string | null>(null);
   const [linkSearchQuery, setLinkSearchQuery] = useState('');
@@ -284,6 +286,11 @@ const VaultDetails: React.FC = () => {
     setShowStatsModal(true);
   };
 
+  const handleShowQRCode = (link: LinkType) => {
+    setSelectedLink(link);
+    setShowQRCodeModal(true);
+  };
+
   const confirmDeleteLink = async () => {
     if (!selectedLink || !vault) return;
     try {
@@ -463,6 +470,7 @@ const VaultDetails: React.FC = () => {
                           onMove={handleMoveLink}
                           onTogglePin={handleTogglePin}
                           onStats={handleShowStats}
+                          onQRCode={handleShowQRCode}
                           onTrackClick={handleTrackClick}
                         />
                       ))}
@@ -700,6 +708,19 @@ const VaultDetails: React.FC = () => {
           isOpen={showStatsModal}
           onClose={() => {
             setShowStatsModal(false);
+            setSelectedLink(null);
+          }}
+          link={selectedLink}
+          vaultColor={vaultColor}
+        />
+      )}
+
+      {/* QR Code Modal */}
+      {vault && selectedLink && (
+        <QRCodeModal
+          isOpen={showQRCodeModal}
+          onClose={() => {
+            setShowQRCodeModal(false);
             setSelectedLink(null);
           }}
           link={selectedLink}

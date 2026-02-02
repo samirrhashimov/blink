@@ -12,7 +12,8 @@ import {
     Pin,
     BarChart2,
     MoreVertical,
-    Check
+    Check,
+    QrCode
 } from 'lucide-react';
 import type { Link as LinkType } from '../types';
 import LinkPreviewService from '../services/linkPreviewService';
@@ -27,6 +28,7 @@ interface SortableLinkItemProps {
     onMove: (link: LinkType) => void;
     onTogglePin?: (link: LinkType) => void;
     onStats?: (link: LinkType) => void;
+    onQRCode?: (link: LinkType) => void;
     onTrackClick?: (id: string) => void;
     disabled?: boolean;
 }
@@ -41,6 +43,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
     onMove,
     onTogglePin,
     onStats,
+    onQRCode,
     onTrackClick,
     disabled
 }) => {
@@ -161,6 +164,11 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                             <button className="menu-item" onClick={(e) => handleAction(e, () => onStats?.(link))}>
                                 <BarChart2 size={16} />
                                 <span>Statistics</span>
+                            </button>
+
+                            <button className="menu-item" onClick={(e) => handleAction(e, () => onQRCode?.(link))}>
+                                <QrCode size={16} />
+                                <span>QR Code</span>
                             </button>
 
                             {canEdit && (
