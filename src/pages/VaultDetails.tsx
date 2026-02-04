@@ -18,12 +18,13 @@ import {
   LogOut,
   Search,
   CheckSquare,
-  XCircle
+  XCircle,
+  ArrowRightLeft
 } from 'lucide-react';
 import AddLinkModal from '../components/AddLinkModal';
 import EditLinkModal from '../components/EditLinkModal';
 import EditVaultModal from '../components/EditVaultModal';
-import DeleteConfirmModal from '../components/DeleteConfirmModal';
+import ConfirmModal from '../components/ConfirmModal';
 import CollaboratorsModal from '../components/CollaboratorsModal';
 import ShareLinkModal from '../components/ShareLinkModal';
 import LoadingSkeleton from '../components/LoadingSkeleton';
@@ -52,7 +53,17 @@ import {
 const VaultDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { currentUser } = useAuth();
-  const { vaults, loading, error, deleteLinkFromVault, deleteVault, reorderLinks, updateLinkInVault, trackClick } = useVault();
+  const {
+    vaults,
+    loading,
+    error,
+    deleteLinkFromVault,
+    deleteLinksFromVault,
+    deleteVault,
+    reorderLinks,
+    updateLinkInVault,
+    trackClick
+  } = useVault();
   const navigate = useNavigate();
   const toast = useToast();
   const [showAddLinkModal, setShowAddLinkModal] = useState(false);
@@ -71,7 +82,9 @@ const VaultDetails: React.FC = () => {
   const [showLeaveVaultModal, setShowLeaveVaultModal] = useState(false);
   const [showCollaboratorsModal, setShowCollaboratorsModal] = useState(false);
   const [showShareLinkModal, setShowShareLinkModal] = useState(false);
+  const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
   const [showMoveLinkModal, setShowMoveLinkModal] = useState(false);
+  const [showBulkMoveModal, setShowBulkMoveModal] = useState(false);
   const [showStatsModal, setShowStatsModal] = useState(false);
   const [showQRCodeModal, setShowQRCodeModal] = useState(false);
   const [selectedLink, setSelectedLink] = useState<LinkType | null>(null);
@@ -109,25 +122,31 @@ const VaultDetails: React.FC = () => {
     }
   };
 
-  const handleBulkDelete = async () => {
+  const handleBulkDelete = () => {
     if (selectedLinkIds.size === 0) return;
-    // Use existing delete modal or creating a new bulk one?
-    // For now, let's just use window.confirm for MVP or reuse the modal?
-    // We will implement a better UX in next step using the modal.
-    if (window.confirm(`Are you sure you want to delete ${selectedLinkIds.size} links? This action cannot be undone.`)) {
-      try {
-        // We can do parallel delete
-        await Promise.all(Array.from(selectedLinkIds).map(id => deleteLinkFromVault(vault!.id, id)));
-        toast.success(`Deleted ${selectedLinkIds.size} links`);
-        setSelectionMode(false);
-        setSelectedLinkIds(new Set());
-      } catch (e) {
-        toast.error('Failed to delete some links');
-      }
+    setShowDeleteConfirmModal(true);
+  };
+
+  const confirmBulkDelete = async () => {
+    try {
+      if (!vault) return;
+      await deleteLinksFromVault(vault.id, Array.from(selectedLinkIds));
+      toast.success(`Deleted ${selectedLinkIds.size} links`);
+      setSelectionMode(false);
+      setSelectedLinkIds(new Set());
+    } catch (err: any) {
+      console.error('Bulk delete error:', err);
+      toast.error(err.message || 'Failed to delete links');
+      throw err;
     }
   };
 
 
+
+  const handleBulkMove = () => {
+    if (selectedLinkIds.size === 0) return;
+    setShowBulkMoveModal(true);
+  };
 
   // Navbar scroll behavior - hide on scroll down, show on scroll up
   useEffect(() => {
@@ -525,6 +544,24 @@ const VaultDetails: React.FC = () => {
                 </div>
                 <div className="flex gap-2">
                   <button
+                    onClick={handleBulkMove}
+                    disabled={selectedLinkIds.size === 0}
+                    className="btn-secondary rounded-lg disabled:opacity-50"
+                    title="Move Selected"
+                    style={{
+                      padding: '6px 10px',
+                      height: '36px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backgroundColor: 'var(--bg-secondary)',
+                      color: 'var(--text-primary)',
+                      border: '1px solid var(--border-color)'
+                    }}
+                  >
+                    <ArrowRightLeft size={18} />
+                  </button>
+                  <button
                     onClick={handleBulkDelete}
                     disabled={selectedLinkIds.size === 0}
                     className="btn-danger rounded-lg disabled:opacity-50"
@@ -726,7 +763,7 @@ const VaultDetails: React.FC = () => {
 
       {/* Delete Link Confirmation */}
       {selectedLink && (
-        <DeleteConfirmModal
+        <ConfirmModal
           isOpen={showDeleteLinkModal}
           onClose={() => {
             setShowDeleteLinkModal(false);
@@ -734,35 +771,39 @@ const VaultDetails: React.FC = () => {
           }}
           onConfirm={confirmDeleteLink}
           title="Delete Link"
-          message="Are you sure you want to delete this link?"
-          itemName={selectedLink.title}
-          vaultColor={vaultColor}
+          message={`Are you sure you want to delete "${selectedLink.title}"? This action cannot be undone.`}
+          confirmText="Delete"
+          variant="danger"
+          icon={<Trash2 size={18} />}
         />
       )}
 
       {/* Delete Vault Confirmation */}
       {vault && (
-        <DeleteConfirmModal
+        <ConfirmModal
           isOpen={showDeleteVaultModal}
           onClose={() => setShowDeleteVaultModal(false)}
           onConfirm={confirmDeleteVault}
           title="Delete Vault"
-          message="Are you sure you want to delete this vault? All links will be permanently deleted."
-          itemName={vault.name}
-          vaultColor={vaultColor}
+          message={`Are you sure you want to delete "${vault.name}"? All links will be permanently deleted.`}
+          confirmText="Delete Vault"
+          variant="danger"
+          icon={<Trash2 size={18} />}
+          confirmWord={vault.name}
         />
       )}
 
       {/* Leave Vault Confirmation */}
       {vault && (
-        <DeleteConfirmModal
+        <ConfirmModal
           isOpen={showLeaveVaultModal}
           onClose={() => setShowLeaveVaultModal(false)}
           onConfirm={confirmLeaveVault}
           title="Leave Vault"
-          message="Are you sure you want to leave this vault? You will lose access to all its contents."
-          itemName={vault.name}
-          vaultColor={vaultColor}
+          message={`Are you sure you want to leave "${vault.name}"? You will lose access to all its contents.`}
+          confirmText="Leave Vault"
+          variant="danger"
+          confirmWord="LEAVE"
         />
       )}
 
@@ -791,7 +832,7 @@ const VaultDetails: React.FC = () => {
         />
       )}
 
-      {/* Move Link Modal */}
+      {/* Move Link Modal (Single) */}
       {vault && selectedLink && (
         <MoveLinkModal
           isOpen={showMoveLinkModal}
@@ -802,6 +843,35 @@ const VaultDetails: React.FC = () => {
           link={selectedLink}
           currentVaultId={vault.id}
           vaultColor={vaultColor}
+        />
+      )}
+
+      {/* Move Link Modal (Bulk) */}
+      {vault && showBulkMoveModal && (
+        <MoveLinkModal
+          isOpen={showBulkMoveModal}
+          onClose={() => {
+            setShowBulkMoveModal(false);
+            setSelectionMode(false);
+            setSelectedLinkIds(new Set());
+          }}
+          linkIds={Array.from(selectedLinkIds)}
+          currentVaultId={vault.id}
+          vaultColor={vaultColor}
+        />
+      )}
+
+      {/* Bulk Delete Confirm Modal */}
+      {vault && showDeleteConfirmModal && (
+        <ConfirmModal
+          isOpen={showDeleteConfirmModal}
+          onClose={() => setShowDeleteConfirmModal(false)}
+          onConfirm={confirmBulkDelete}
+          title="Delete Selected Links"
+          message={`Are you sure you want to delete these ${selectedLinkIds.size} selected links? This action cannot be undone.`}
+          confirmText={`Delete ${selectedLinkIds.size} Links`}
+          variant="danger"
+          icon={<Trash2 size={18} />}
         />
       )}
 

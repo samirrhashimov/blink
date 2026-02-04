@@ -331,6 +331,71 @@ export class VaultService {
       throw new Error('Failed to move link');
     }
   }
+  // Move multiple links from one vault to another
+  static async moveLinksToVault(sourceVaultId: string, targetVaultId: string, linkIds: string[]): Promise<void> {
+    try {
+      const sourceRef = doc(db, VAULTS_COLLECTION, sourceVaultId);
+      const targetRef = doc(db, VAULTS_COLLECTION, targetVaultId);
+
+      const [sourceSnap, targetSnap] = await Promise.all([
+        getDoc(sourceRef),
+        getDoc(targetRef)
+      ]);
+
+      if (sourceSnap.exists() && targetSnap.exists()) {
+        const sourceLinks = sourceSnap.data().links || [];
+        const targetLinks = targetSnap.data().links || [];
+
+        const linksToMove = sourceLinks.filter((l: Link) => linkIds.includes(l.id));
+        if (linksToMove.length === 0) throw new Error('No valid links found to move');
+
+        const updatedSourceLinks = sourceLinks.filter((l: Link) => !linkIds.includes(l.id));
+        const updatedTargetLinks = [...targetLinks, ...linksToMove.map((l: Link) => ({ ...l, updatedAt: new Date() }))];
+
+        await updateDoc(sourceRef, {
+          links: updatedSourceLinks,
+          updatedAt: serverTimestamp()
+        });
+        await updateDoc(targetRef, {
+          links: updatedTargetLinks,
+          updatedAt: serverTimestamp()
+        });
+      }
+    } catch (error) {
+      console.error('Error moving links between vaults:', error);
+      throw new Error('Failed to move links');
+    }
+  }
+
+  // Delete multiple links from a vault
+  static async deleteLinksFromVault(vaultId: string, linkIds: string[]): Promise<void> {
+    try {
+      const vaultRef = doc(db, VAULTS_COLLECTION, vaultId);
+      const vaultSnap = await getDoc(vaultRef);
+
+      if (vaultSnap.exists()) {
+        const vaultData = vaultSnap.data();
+        const links = vaultData.links || [];
+
+        const initialCount = links.length;
+        const updatedLinks = links.filter((link: Link) => !linkIds.includes(link.id));
+
+        if (updatedLinks.length === initialCount) {
+          console.warn('No links were removed. Check if link IDs are correct.');
+        }
+
+        await updateDoc(vaultRef, {
+          links: updatedLinks,
+          updatedAt: serverTimestamp()
+        });
+      } else {
+        throw new Error('Vault not found');
+      }
+    } catch (error) {
+      console.error('Error deleting links from vault:', error);
+      throw error;
+    }
+  }
 
   // Real-time listener for vault changes
   static subscribeToVault(vaultId: string, callback: (vault: Vault | null) => void): () => void {

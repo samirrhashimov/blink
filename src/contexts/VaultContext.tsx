@@ -13,9 +13,11 @@ interface VaultContextType {
   addLinkToVault: (vaultId: string, link: Omit<Link, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>) => Promise<string>;
   updateLinkInVault: (vaultId: string, linkId: string, updates: Partial<Link>) => Promise<void>;
   deleteLinkFromVault: (vaultId: string, linkId: string) => Promise<void>;
+  deleteLinksFromVault: (vaultId: string, linkIds: string[]) => Promise<void>;
   shareVault: (vaultId: string, userId: string, permission: 'view' | 'comment' | 'edit') => Promise<void>;
   reorderLinks: (vaultId: string, links: Link[]) => Promise<void>;
   moveLinkToVault: (sourceVaultId: string, targetVaultId: string, linkId: string) => Promise<void>;
+  moveLinksToVault: (sourceVaultId: string, targetVaultId: string, linkIds: string[]) => Promise<void>;
   trackClick: (vaultId: string, linkId: string) => Promise<void>;
   refreshVaults: () => Promise<void>;
 }
@@ -50,7 +52,6 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       setVaults(userVaults);
     } catch (err: any) {
       setError(err.message || 'Failed to fetch vaults');
-      console.error('Error fetching vaults:', err);
     } finally {
       setLoading(false);
     }
@@ -204,6 +205,29 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     }
   };
 
+  const deleteLinksFromVault = async (vaultId: string, linkIds: string[]) => {
+    try {
+      setError(null);
+      await VaultService.deleteLinksFromVault(vaultId, linkIds);
+
+      // Update local state
+      setVaults(prevVaults =>
+        prevVaults.map(vault =>
+          vault.id === vaultId
+            ? {
+              ...vault,
+              links: vault.links.filter(link => !linkIds.includes(link.id)),
+              updatedAt: new Date()
+            }
+            : vault
+        )
+      );
+    } catch (err: any) {
+      setError(err.message || 'Failed to delete links');
+      throw err;
+    }
+  };
+
   const reorderLinks = async (vaultId: string, sortedLinks: Link[]) => {
     try {
       setError(null);
@@ -231,6 +255,17 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       await fetchVaults(); // Refresh to update both vaults
     } catch (err: any) {
       setError(err.message || 'Failed to move link');
+      throw err;
+    }
+  };
+
+  const moveLinksToVault = async (sourceVaultId: string, targetVaultId: string, linkIds: string[]) => {
+    try {
+      setError(null);
+      await VaultService.moveLinksToVault(sourceVaultId, targetVaultId, linkIds);
+      await fetchVaults(); // Refresh to update both vaults
+    } catch (err: any) {
+      setError(err.message || 'Failed to move links');
       throw err;
     }
   };
@@ -299,9 +334,11 @@ export const VaultProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     addLinkToVault,
     updateLinkInVault,
     deleteLinkFromVault,
+    deleteLinksFromVault,
     shareVault,
     reorderLinks,
     moveLinkToVault,
+    moveLinksToVault,
     trackClick,
     refreshVaults
   };

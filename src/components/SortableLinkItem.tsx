@@ -108,27 +108,25 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
             }}
         >
             <div className="link-item-content">
-                {selectionMode && (
-                    <div className="link-checkbox-container" style={{ marginRight: '12px' }}>
+                <div className="link-icon">
+                    {selectionMode ? (
                         <input
                             type="checkbox"
                             checked={isSelected}
                             onChange={() => {
-                                // Handled by parent div click or specific handling
                                 if (onSelect) onSelect(link);
                             }}
                             className="link-checkbox"
                             style={{
-                                width: '20px',
-                                height: '20px',
+                                width: '22px',
+                                height: '22px',
                                 cursor: 'pointer',
-                                accentColor: 'var(--primary)'
+                                accentColor: 'var(--primary)',
+                                margin: 0
                             }}
+                            onClick={(e) => e.stopPropagation()}
                         />
-                    </div>
-                )}
-                <div className="link-icon">
-                    {faviconUrl ? (
+                    ) : faviconUrl ? (
                         <img
                             src={faviconUrl}
                             alt={`${link.title} favicon`}

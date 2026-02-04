@@ -6,7 +6,8 @@ import type { Link } from '../types';
 interface MoveLinkModalProps {
     isOpen: boolean;
     onClose: () => void;
-    link: Link;
+    link?: Link;
+    linkIds?: string[];
     currentVaultId: string;
     vaultColor?: string;
 }
@@ -15,10 +16,11 @@ const MoveLinkModal: React.FC<MoveLinkModalProps> = ({
     isOpen,
     onClose,
     link,
+    linkIds,
     currentVaultId,
     vaultColor
 }) => {
-    const { vaults, moveLinkToVault } = useVault();
+    const { vaults, moveLinkToVault, moveLinksToVault } = useVault();
     const [targetVaultId, setTargetVaultId] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
@@ -36,10 +38,18 @@ const MoveLinkModal: React.FC<MoveLinkModalProps> = ({
         try {
             setLoading(true);
             setError('');
-            await moveLinkToVault(currentVaultId, targetVaultId, link.id);
+
+            if (linkIds && linkIds.length > 0) {
+                // Bulk move
+                await moveLinksToVault(currentVaultId, targetVaultId, linkIds);
+            } else if (link) {
+                // Single move
+                await moveLinkToVault(currentVaultId, targetVaultId, link.id);
+            }
+
             onClose();
         } catch (err: any) {
-            setError(err.message || 'Failed to move link');
+            setError(err.message || 'Failed to move link(s)');
         } finally {
             setLoading(false);
         }
@@ -66,7 +76,10 @@ const MoveLinkModal: React.FC<MoveLinkModalProps> = ({
 
                     <div className="mb-4">
                         <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                            Move <strong>"{link.title}"</strong> to another container:
+                            {linkIds && linkIds.length > 0
+                                ? `Move ${linkIds.length} links to another container:`
+                                : `Move "${link?.title}" to another container:`
+                            }
                         </p>
                         <div className="grid grid-cols-1 gap-2 max-h-60 overflow-y-auto pr-2">
                             {availableVaults.length === 0 ? (
@@ -123,7 +136,7 @@ const MoveLinkModal: React.FC<MoveLinkModalProps> = ({
                         ) : (
                             <>
                                 <ArrowRightLeft size={18} />
-                                Move Link
+                                {linkIds && linkIds.length > 0 ? 'Move Links' : 'Move Link'}
                             </>
                         )}
                     </button>
