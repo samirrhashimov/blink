@@ -61,11 +61,11 @@ const AppRoutes: React.FC = () => {
           element={<Legal />}
         />
         <Route
-          path="legal/terms-and-conditions"
+          path="/legal/terms-and-conditions"
           element={<TermsAndConditions />}
         />
         <Route
-          path="legal/privacy-policy"
+          path="/legal/privacy-policy"
           element={<PrivacyPolicy />}
         />
 

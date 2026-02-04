@@ -10,20 +10,26 @@ const SignupPage: React.FC = () => {
     displayName: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    acceptedTerms: false
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showVerificationMessage, setShowVerificationMessage] = useState(false);
+  const [showCheckboxError, setShowCheckboxError] = useState(false);
   const { signup, loginWithGoogle } = useAuth();
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
+    if (name === 'acceptedTerms' && checked) {
+      setShowCheckboxError(false);
+    }
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value
+      [name]: type === 'checkbox' ? checked : value
     }));
   };
 
@@ -32,6 +38,14 @@ const SignupPage: React.FC = () => {
 
     if (!formData.displayName || !formData.email || !formData.password || !formData.confirmPassword) {
       setError('Please fill in all fields');
+      return;
+    }
+
+    if (!formData.acceptedTerms) {
+      setError('You must accept the Terms and Conditions and Privacy Policy');
+      // Briefly disable then enable to re-trigger animation if already showing
+      setShowCheckboxError(false);
+      setTimeout(() => setShowCheckboxError(true), 10);
       return;
     }
 
@@ -86,7 +100,7 @@ const SignupPage: React.FC = () => {
           <p>Join us to organize your links</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="auth-form">
+        <form onSubmit={handleSubmit} className="auth-form" noValidate>
           {error && (
             <div className="error-alert">
               {error}
@@ -214,6 +228,20 @@ const SignupPage: React.FC = () => {
                 )}
               </button>
             </div>
+          </div>
+
+          <div className={`form-group checkbox-group ${showCheckboxError ? 'error' : ''}`}>
+            <input
+              id="acceptedTerms"
+              name="acceptedTerms"
+              type="checkbox"
+              checked={formData.acceptedTerms}
+              onChange={handleChange}
+              style={{ width: '18px', height: '18px', marginTop: '3px', cursor: 'pointer', flexShrink: 0 }}
+            />
+            <label htmlFor="acceptedTerms" style={{ fontSize: '0.875rem', color: 'inherit', cursor: 'pointer', lineHeight: '1.4' }}>
+              I agree to the <Link to="/legal/terms-and-conditions" target="_blank" style={{ color: 'var(--primary)', fontWeight: '600' }}>Terms and Conditions</Link> and <Link to="/legal/privacy-policy" target="_blank" style={{ color: 'var(--primary)', fontWeight: '600' }}>Privacy Policy</Link>
+            </label>
           </div>
 
           <button
