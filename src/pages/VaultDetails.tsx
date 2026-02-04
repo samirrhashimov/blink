@@ -16,7 +16,9 @@ import {
   Settings,
   Users,
   LogOut,
-  Search
+  Search,
+  CheckSquare,
+  XCircle
 } from 'lucide-react';
 import AddLinkModal from '../components/AddLinkModal';
 import EditLinkModal from '../components/EditLinkModal';
@@ -79,6 +81,53 @@ const VaultDetails: React.FC = () => {
   const [collaboratorNames, setCollaboratorNames] = useState<Record<string, string>>({});
   const [showNavbar, setShowNavbar] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+
+  // Bulk Selection State
+  const [selectionMode, setSelectionMode] = useState(false);
+  const [selectedLinkIds, setSelectedLinkIds] = useState<Set<string>>(new Set());
+
+  const toggleSelectionMode = () => {
+    setSelectionMode(!selectionMode);
+    setSelectedLinkIds(new Set());
+  };
+
+  const handleSelectLink = (link: LinkType) => {
+    const newSelected = new Set(selectedLinkIds);
+    if (newSelected.has(link.id)) {
+      newSelected.delete(link.id);
+    } else {
+      newSelected.add(link.id);
+    }
+    setSelectedLinkIds(newSelected);
+  };
+
+  const handleSelectAll = () => {
+    if (selectedLinkIds.size === filteredLinks.length) {
+      setSelectedLinkIds(new Set());
+    } else {
+      setSelectedLinkIds(new Set(filteredLinks.map(l => l.id)));
+    }
+  };
+
+  const handleBulkDelete = async () => {
+    if (selectedLinkIds.size === 0) return;
+    // Use existing delete modal or creating a new bulk one?
+    // For now, let's just use window.confirm for MVP or reuse the modal?
+    // We will implement a better UX in next step using the modal.
+    if (window.confirm(`Are you sure you want to delete ${selectedLinkIds.size} links? This action cannot be undone.`)) {
+      try {
+        // We can do parallel delete
+        await Promise.all(Array.from(selectedLinkIds).map(id => deleteLinkFromVault(vault!.id, id)));
+        toast.success(`Deleted ${selectedLinkIds.size} links`);
+        setSelectionMode(false);
+        setSelectedLinkIds(new Set());
+      } catch (e) {
+        toast.error('Failed to delete some links');
+      }
+    }
+  };
+
+
 
   // Navbar scroll behavior - hide on scroll down, show on scroll up
   useEffect(() => {
@@ -410,21 +459,45 @@ const VaultDetails: React.FC = () => {
 
         <div className="vault-content">
           <div className="links-section">
-            <div className="links-header">
+            <div className="links-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
               <h3>Links ({vault.links.length})</h3>
-              {canEdit && (
+              <div style={{ display: 'flex', gap: '8px' }}>
                 <button
-                  onClick={() => setShowAddLinkModal(true)}
-                  className="add-link-button"
+                  onClick={toggleSelectionMode}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    padding: '8px 12px',
+                    fontSize: '0.875rem',
+                    fontWeight: '500',
+                    borderRadius: '8px',
+                    border: selectionMode ? '1px solid var(--primary)' : '1px solid var(--border-color)',
+                    backgroundColor: selectionMode ? 'rgba(var(--primary-rgb), 0.1)' : 'transparent',
+                    color: selectionMode ? 'var(--primary)' : 'var(--text-secondary)',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    outline: 'none'
+                  }}
+                  title={selectionMode ? 'Cancel Selection' : 'Select Multiple'}
                 >
-                  <Plus size={18} />
-                  Add Link
+                  {selectionMode ? <XCircle size={16} /> : <CheckSquare size={16} />}
+                  <span className="hidden sm:inline">{selectionMode ? 'Cancel' : 'Select'}</span>
                 </button>
-              )}
+                {canEdit && (
+                  <button
+                    onClick={() => setShowAddLinkModal(true)}
+                    className="add-link-button"
+                  >
+                    <Plus size={18} />
+                    Add Link
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* Search Input */}
-            {vault.links.length > 0 && (
+            {vault.links.length > 0 && !selectionMode && (
               <div className="modern-search-bar search-links-wrapper">
                 <Search className="modern-search-icon" size={18} />
                 <input
@@ -434,6 +507,33 @@ const VaultDetails: React.FC = () => {
                   onChange={(e) => setLinkSearchQuery(e.target.value)}
                   className="modern-search-input"
                 />
+              </div>
+            )}
+
+            {/* Bulk Selection Header */}
+            {selectionMode && (
+              <div className="card mb-4 flex items-center justify-between" style={{ padding: '1rem' }}>
+                <div className="flex items-center gap-3">
+                  <input
+                    type="checkbox"
+                    checked={filteredLinks.length > 0 && selectedLinkIds.size === filteredLinks.length}
+                    onChange={handleSelectAll}
+                    className="w-5 h-5 cursor-pointer"
+                    style={{ accentColor: 'var(--primary)' }}
+                  />
+                  <span className="font-medium">{selectedLinkIds.size} selected</span>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={handleBulkDelete}
+                    disabled={selectedLinkIds.size === 0}
+                    className="btn-danger rounded-lg disabled:opacity-50"
+                    title="Delete Selected"
+                    style={{ padding: '6px 10px', height: '36px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    <Trash2 size={18} />
+                  </button>
+                </div>
               </div>
             )}
 
@@ -462,7 +562,7 @@ const VaultDetails: React.FC = () => {
                           key={link.id}
                           link={link}
                           canEdit={canEdit}
-                          disabled={linkSearchQuery.trim().length > 0 || link.isPinned} // Disable drag if searching OR if pinned (since pinning manual sorting might clash with auto-top sorting)
+                          disabled={linkSearchQuery.trim().length > 0 || link.isPinned || selectionMode} // Disable drag if searching OR if pinned OR selecting
                           copiedLinkId={copiedLinkId}
                           onCopy={copyToClipboard}
                           onEdit={handleEditLink}
@@ -472,6 +572,9 @@ const VaultDetails: React.FC = () => {
                           onStats={handleShowStats}
                           onQRCode={handleShowQRCode}
                           onTrackClick={handleTrackClick}
+                          selectionMode={selectionMode}
+                          isSelected={selectedLinkIds.has(link.id)}
+                          onSelect={handleSelectLink}
                         />
                       ))}
                     </div>

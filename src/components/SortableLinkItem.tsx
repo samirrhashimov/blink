@@ -31,6 +31,9 @@ interface SortableLinkItemProps {
     onQRCode?: (link: LinkType) => void;
     onTrackClick?: (id: string) => void;
     disabled?: boolean;
+    selectionMode?: boolean;
+    isSelected?: boolean;
+    onSelect?: (link: LinkType) => void;
 }
 
 const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
@@ -45,7 +48,10 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
     onStats,
     onQRCode,
     onTrackClick,
-    disabled
+    disabled,
+    selectionMode = false,
+    isSelected = false,
+    onSelect
 }) => {
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
@@ -93,9 +99,34 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
         <div
             ref={setNodeRef}
             style={style}
-            className={`link-item ${isDragging ? 'dragging' : ''} ${link.isPinned ? 'pinned-link' : ''} ${menuOpen ? 'menu-active' : ''}`}
+            className={`link-item ${isDragging ? 'dragging' : ''} ${link.isPinned ? 'pinned-link' : ''} ${menuOpen ? 'menu-active' : ''} ${isSelected ? 'selected' : ''}`}
+            onClick={(e) => {
+                if (selectionMode && onSelect) {
+                    e.preventDefault();
+                    onSelect(link);
+                }
+            }}
         >
             <div className="link-item-content">
+                {selectionMode && (
+                    <div className="link-checkbox-container" style={{ marginRight: '12px' }}>
+                        <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={(e) => {
+                                // Handled by parent div click or specific handling
+                                if (onSelect) onSelect(link);
+                            }}
+                            className="link-checkbox"
+                            style={{
+                                width: '20px',
+                                height: '20px',
+                                cursor: 'pointer',
+                                accentColor: 'var(--primary)'
+                            }}
+                        />
+                    </div>
+                )}
                 <div className="link-icon">
                     {faviconUrl ? (
                         <img
