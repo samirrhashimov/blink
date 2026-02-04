@@ -113,7 +113,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                         <input
                             type="checkbox"
                             checked={isSelected}
-                            onChange={(e) => {
+                            onChange={() => {
                                 // Handled by parent div click or specific handling
                                 if (onSelect) onSelect(link);
                             }}
