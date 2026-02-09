@@ -6,7 +6,8 @@ const Legal = () => {
 
     const legalItems = [
         { title: 'Privacy Policy', path: '/legal/privacy-policy', description: 'How we collect and use your data' },
-        { title: 'Terms and Conditions', path: '/legal/terms-and-conditions', description: 'Rules for using our service' }
+        { title: 'Terms and Conditions', path: '/legal/terms-and-conditions', description: 'Rules for using our service' },
+        { title: 'Account Deletion', path: '/legal/delete-account', description: 'How to request account deletion' }
     ];
 
     return (

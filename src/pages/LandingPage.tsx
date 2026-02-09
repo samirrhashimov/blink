@@ -422,13 +422,18 @@ const LandingPage: React.FC = () => {
             <a href="#"
               onClick={(e) => {
                 e.preventDefault();
-                navigate('legal/privacy-policy');
+                navigate('/legal/privacy-policy');
               }} className="hover:text-blue-500 transition-colors">Privacy</a>
             <a href="#"
               onClick={(e) => {
                 e.preventDefault();
-                navigate('legal/terms-and-conditions');
+                navigate('/legal/terms-and-conditions');
               }} className="hover:text-blue-500 transition-colors">Terms</a>
+            <a href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('/legal/delete-account');
+              }} className="hover:text-blue-500 transition-colors">Account Deletion</a>
             <a href="https://github.com/samirrhashimov/blink.git" className="hover:text-blue-500 transition-colors">GitHub</a>
           </div>
         </div>

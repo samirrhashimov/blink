@@ -24,6 +24,7 @@ import GlobalModals from './components/GlobalModals';
 import Legal from './pages/Legal';
 import TermsAndConditions from './pages/TermsAndConditions';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import DeleteAccount from './pages/DeleteAccount';
 import SupportPage from './pages/SupportPage';
 
 const AppRoutes: React.FC = () => {
@@ -67,6 +68,10 @@ const AppRoutes: React.FC = () => {
         <Route
           path="/legal/privacy-policy"
           element={<PrivacyPolicy />}
+        />
+        <Route
+          path="/legal/delete-account"
+          element={<DeleteAccount />}
         />
 
         <Route
