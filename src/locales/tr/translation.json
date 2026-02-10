@@ -23,7 +23,123 @@
             "invitations": {
                 "title": "Gelen Davetler",
                 "desc": "Diğer çalışma alanlarına katılma isteklerini yönetin. Paylaşılan konteynerlerde işbirliği yapmak ve yönetmeye yardımcı olmak için gelen davetleri inceleyin, kabul edin veya reddedin."
+            },
+            "tagging": {
+                "title": "Smart Tagging System",
+                "desc": "Organize your links with powerful tags. Create custom tags, filter by categories, and find exactly what you need in seconds. Perfect for managing large collections."
+            },
+            "themes": {
+                "title": "Customizable Themes",
+                "desc": "Personalize your workspace with custom container colors. Choose from our curated color palette to make each container uniquely yours. Try it out below!",
+                "demoTitle": "My Container",
+                "demoDesc": "Custom colored workspace"
+            },
+            "firefox": {
+                "title": "Blink for Firefox",
+                "desc": "Save any webpage directly to your Blink containers with a single click. Our extension allows you to save your links directly to the desired container without leaving the browser tab.",
+                "button": "Add to Firefox"
+            },
+            "everything": {
+                "title": "Everything you need",
+                "subtitle": "Powerful features designed to make link management effortless and secure.",
+                "security": {
+                    "title": "Top-tier Security",
+                    "desc": "Enterprise-grade encryption aim to keep your data private and protected."
+                },
+                "sync": {
+                    "title": "Real-time Sync",
+                    "desc": "Changes happen instantly across all devices. Just smooth, real-time updates."
+                },
+                "anywhere": {
+                    "title": "Accessible Anywhere",
+                    "desc": "Access your links from any device, anywhere in the world. Your personal cloud for the web."
+                },
+                "search": {
+                    "title": "Smart Search",
+                    "desc": "Instant search across titles, URLs, and descriptions helps you find what you need in milliseconds."
+                },
+                "darkmode": {
+                    "title": "Dark Mode",
+                    "desc": "Native dark mode support that respects your system preferences and saves your eyes at night."
+                },
+                "permissions": {
+                    "title": "Permission Control",
+                    "desc": "Control who can view, edit, or manage your links."
+                }
+            },
+            "cta": {
+                "button": "Get Started for Free"
+            },
+            "footer": {
+                "privacy": "Privacy",
+                "terms": "Terms",
+                "deletion": "Account Deletion"
             }
+        }
+    },
+    "tags": {
+        "title": "Explore by Tags",
+        "description": "Find your links across all containers using tags",
+        "placeholder": "Search tags...",
+        "sidebar": {
+            "title": "All Tags ({{count}})",
+            "empty": "No tags found"
+        },
+        "content": {
+            "taggedWith": "Links tagged with",
+            "items": "{{count}} items",
+            "openContainer": "Open Container"
+        },
+        "empty": {
+            "noTags": {
+                "title": "No tags found yet",
+                "desc": "Start adding tags to your links in your containers to enable cross-searching."
+            },
+            "noSelection": {
+                "title": "Select a tag to see links",
+                "desc": "Choose a tag from the sidebar to view all associated links across your library."
+            },
+            "button": "Go to Dashboard"
+        }
+    },
+    "notifications": {
+        "title": "Notifications",
+        "empty": "No notifications",
+        "markAllRead": "Mark all as read",
+        "markRead": "Mark as read",
+        "delete": "Delete",
+        "time": {
+            "justNow": "Just now",
+            "minutes": "{{count}}m ago",
+            "hours": "{{count}}h ago",
+            "days": "{{count}}d ago"
+        }
+    },
+    "share": {
+        "title": "Share \"{{name}}\"",
+        "subtitle": "Invite collaborators to your link container",
+        "form": {
+            "label": "Invite by email",
+            "placeholder": "Enter email",
+            "permissions": "Permissions",
+            "submit": "Share",
+            "submitting": "Sharing...",
+            "view": "Can view",
+            "viewDesc": "Read-only access to links.",
+            "edit": "Can edit",
+            "editDesc": "Full access to add, edit, and delete links."
+        },
+        "pending": {
+            "title": "Pending Invitations",
+            "cancel": "Cancel invitation"
+        },
+        "messages": {
+            "enterEmail": "Please enter an email address",
+            "inviteSelf": "You cannot invite yourself",
+            "success": "Invitation sent successfully!",
+            "error": "Failed to send invitation",
+            "cancelSuccess": "Invitation cancelled",
+            "cancelError": "Failed to cancel invitation"
         }
     },
     "settings": {
@@ -32,25 +148,82 @@
         "account": "Hesap",
         "preferences": "Tercihler",
         "theme": "Tema",
-        "themeDesc": "Açık veya koyu tema arasında seçim yapın.",
+        "themeDesc": "Switch between light and dark modes.",
         "language": "Dil",
-        "languageDesc": "Uygulama için tercih ettiğiniz dili ayarlayın.",
+        "languageDesc": "Select your preferred application language.",
         "dataManagement": "Veri Yönetimi",
         "import": "Yer İmlerini İçe Aktar",
-        "importDesc": "Tarayıcınızdan veya diğer hizmetlerden yer imlerini içe aktarın (HTML dosyası).",
+        "importDesc": "Import bookmarks from an HTML file exported from your browser.",
         "export": "Yer İmlerini Dışa Aktar",
-        "exportDesc": "Tüm konteynerlerinizi ve linklerinizi bir HTML dosyasına dışa aktarın (Netscape formatı).",
+        "exportDesc": "Download all your containers and links as an HTML file.",
+        "appInfo": "App Info",
+        "openSource": "Open source",
+        "openSourceDesc": "Explore the source code or give a star on GitHub.",
+        "legal": "Legal",
+        "legalDesc": "Privacy Policy and Terms of Service.",
         "dangerZone": "Tehlikeli Bölge",
         "logout": "Çıkış Yap",
-        "deleteAccount": "Hesabı Sil"
+        "logoutDesc": "Sign out of your account on this device.",
+        "deleteAccount": "Hesabı Sil",
+        "deleteAccountDesc": "Permanently delete your account and all of your data.",
+        "placeholders": {
+            "name": "Full name",
+            "email": "Email address"
+        },
+        "labels": {
+            "name": "Name",
+            "email": "Email"
+        },
+        "messages": {
+            "emailDisabled": "Email cannot be changed",
+            "updateSuccess": "Account updated successfully!",
+            "updateFailed": "Failed to update account. Please try again.",
+            "noUser": "No user is currently signed in.",
+            "importHelp": {
+                "title": "How to import:",
+                "step1": "Open Bookmarks Manager in browser.",
+                "step2": "Choose Export Bookmarks (HTML).",
+                "step3": "Save the file to your computer.",
+                "step4": "Click Import HTML button."
+            },
+            "importing": "Importing...",
+            "importSuccess": "Successfully imported {{links}} bookmarks into {{vaults}} containers.",
+            "importConfirm": {
+                "title": "Confirm Import",
+                "message": "This will create {{vaults}} new containers and import {{links}} links. Do you want to proceed?"
+            },
+            "exporting": "Exporting...",
+            "exportSuccess": "Bookmarks exported successfully!",
+            "exportFailed": "Failed to export bookmarks.",
+            "noExport": "No containers to export."
+        },
+        "buttons": {
+            "update": "Update Account",
+            "updating": "Updating...",
+            "importHtml": "Import HTML",
+            "exportHtml": "Export HTML"
+        }
     },
     "dashboard": {
         "title": "Panel",
         "library": "Kütüphanem",
-        "newContainer": "Yeni Konteyner",
-        "searchPlaceholder": "Konteynerleri, linkleri veya açıklamaları arayın...",
+        "newContainer": "New Workspace",
+        "searchPlaceholder": "Search containers...",
         "personal": "Kişisel",
-        "shared": "Paylaşılan",
+        "shared": "Shared Spaces",
+        "nav": {
+            "home": "Home",
+            "tags": "Tags",
+            "invitations": "Invitations",
+            "settings": "Settings"
+        },
+        "tooltips": {
+            "tags": "Tags",
+            "invitations": "Invitations",
+            "notifications": "Notifications",
+            "switchTheme": "Switch Theme",
+            "settings": "Settings"
+        },
         "emptyPersonal": {
             "title": "Henüz kişisel konteyner yok",
             "searchTitle": "Konteyner bulunamadı",
@@ -119,6 +292,28 @@
             "redirecting": "E-posta doğrulama sayfasına yönlendiriliyor..."
         }
     },
+    "invitations": {
+        "title": "Invitations",
+        "subtitle": "Accept or decline invitations to collaborate on containers",
+        "empty": {
+            "title": "No pending invitations",
+            "desc": "When someone invites you to collaborate on a vault, it will appear here.",
+            "button": "Go to Dashboard"
+        },
+        "item": {
+            "title": "{{name}} Invitation",
+            "from": "From: {{name}}",
+            "buttons": {
+                "accept": "Accept",
+                "decline": "Decline"
+            }
+        },
+        "errors": {
+            "loadFailed": "Failed to load invitations",
+            "acceptFailed": "Failed to accept invitation",
+            "declineFailed": "Failed to decline invitation"
+        }
+    },
     "vault": {
         "notFound": {
             "title": "Kasa bulunamadı",
@@ -172,19 +367,192 @@
                 "title": "Kasayı Sil",
                 "message": "\"{{name}}\" kasasını silmek istediğinizden emin misiniz? Tüm linkler kalıcı olarak silinecektir.",
                 "confirm": "Kasayı Sil"
+            },
+            "addLink": {
+                "title": "Add New Link",
+                "url": "URL",
+                "linkTitle": "Link Title",
+                "description": "Description",
+                "tags": "Tags",
+                "autoFilled": "Auto-filled",
+                "placeholders": {
+                    "url": "https://example.com",
+                    "title": "Enter link title",
+                    "description": "Enter link description (optional)",
+                    "tags": "Add a tag..."
+                },
+                "buttons": {
+                    "add": "Add Link",
+                    "adding": "Adding...",
+                    "cancel": "Cancel"
+                },
+                "tooltips": {
+                    "clearUrl": "Clear URL",
+                    "clearTitle": "Clear title",
+                    "clearDescription": "Clear description",
+                    "addTag": "Add tag"
+                },
+                "errors": {
+                    "required": "Title and URL are required",
+                    "invalidUrl": "Please enter a valid URL",
+                    "failed": "Failed to add link"
+                }
+            },
+            "editLink": {
+                "title": "Edit Link",
+                "buttons": {
+                    "save": "Save Changes",
+                    "saving": "Saving..."
+                },
+                "errors": {
+                    "failed": "Failed to update link"
+                }
+            },
+            "createVault": {
+                "title": "Create New Vault",
+                "name": "Container Name",
+                "description": "Description",
+                "color": "Container Color",
+                "placeholders": {
+                    "name": "Enter container name",
+                    "description": "Enter container description"
+                },
+                "buttons": {
+                    "create": "Create Container",
+                    "creating": "Creating..."
+                },
+                "errors": {
+                    "nameRequired": "Vault name is required",
+                    "nameLength": "Vault name must be {{max}} characters or less",
+                    "descLength": "Description must be {{max}} characters or less",
+                    "failed": "Failed to create vault"
+                }
+            },
+            "editVault": {
+                "title": "Edit Vault",
+                "name": "Vault Name",
+                "description": "Description",
+                "color": "Vault Color",
+                "placeholders": {
+                    "name": "Enter vault name",
+                    "description": "Enter vault description (optional)"
+                },
+                "buttons": {
+                    "save": "Save Changes",
+                    "saving": "Saving..."
+                },
+                "errors": {
+                    "failed": "Failed to update vault"
+                }
+            },
+            "linkStats": {
+                "title": "Link Analytics",
+                "analytics": "Link Analytics",
+                "lifetime": "Lifetime Clicks",
+                "today": "Today",
+                "history": "Click history"
+            },
+            "qrCode": {
+                "title": "QR Code",
+                "alt": "QR Code for {{url}}"
+            },
+            "shareLink": {
+                "title": "Share Links",
+                "createBtn": "Create New Share Link",
+                "empty": "No share links created yet",
+                "expires": "Expires",
+                "never": "Never",
+                "uses": "Uses",
+                "copied": "Copied!",
+                "copy": "Copy link",
+                "deactivate": "Deactivate link",
+                "form": {
+                    "title": "New Share Link",
+                    "permission": "Permission",
+                    "permissions": {
+                        "view": "Can view",
+                        "comment": "Can comment",
+                        "edit": "Can edit"
+                    },
+                    "expiresIn": "Expires in (days, 0 = never)",
+                    "maxUses": "Max uses (0 = unlimited)",
+                    "create": "Create Link",
+                    "creating": "Creating..."
+                },
+                "errors": {
+                    "loadFailed": "Failed to load share links",
+                    "createFailed": "Failed to create share link",
+                    "deactivateFailed": "Failed to deactivate link"
+                }
+            },
+            "collaborators": {
+                "title": "Collaborators",
+                "owner": "Owner",
+                "you": "You",
+                "invited": "Invited",
+                "pending": "Pending",
+                "empty": "No collaborators yet",
+                "canView": "Can view",
+                "canEdit": "Can edit",
+                "cancelInvite": "Cancel invitation",
+                "remove": "Remove collaborator",
+                "unknown": "Unknown",
+                "errorLoading": "User (Error loading)",
+                "errors": {
+                    "loadFailed": "Failed to load collaborators",
+                    "removeFailed": "Failed to remove collaborator",
+                    "updateFailed": "Failed to update permission"
+                }
+            },
+            "moveLink": {
+                "title": "Move Link",
+                "bulkTitle": "Move {{count}} links to another container:",
+                "singleTitle": "Move \"{{title}}\" to another container:",
+                "noVaults": "No other containers available.",
+                "buttons": {
+                    "moving": "Moving...",
+                    "moveLinks": "Move Links",
+                    "moveLink": "Move Link"
+                },
+                "errors": {
+                    "selectVault": "Please select a target container",
+                    "failed": "Failed to move link(s)"
+                }
             }
         }
     },
     "common": {
+        "locale": "en-US",
         "confirm": "Onayla",
         "confirmation": {
             "typeToConfirm": "Onaylamak için lütfen \"{{word}}\" yazın",
-            "placeholder": "\"{{word}}\" yazın"
+            "placeholder": "\"{{word}}\" yazın",
+            "logout": {
+                "title": "Logout",
+                "message": "Are you sure you want to logout of your account?"
+            },
+            "deleteAccount": {
+                "title": "Delete Account",
+                "message": "Are you sure you want to permanently delete your account? This action cannot be undone and all your data will be lost."
+            }
         },
         "processing": "İşleniyor...",
         "errors": {
             "operationFailed": "İşlem başarısız oldu"
         },
-        "loading": "Yükleniyor..."
+        "loading": "Yükleniyor...",
+        "buttons": {
+            "save": "Save",
+            "cancel": "Cancel",
+            "confirm": "Confirm",
+            "delete": "Delete",
+            "deleting": "Deleting...",
+            "download": "Download",
+            "close": "Close"
+        },
+        "messages": {
+            "cannotUndone": "This action cannot be undone.",
+            "failedToDelete": "Failed to delete"
+        }
     }
 }
