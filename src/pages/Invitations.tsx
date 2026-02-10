@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { useVault } from '../contexts/VaultContext';
 import { SharingService } from '../services/sharingService';
@@ -8,6 +9,7 @@ import { UserService } from '../services/userService';
 import type { ShareInvite } from '../types';
 import blinkLogo from '../assets/blinklogo2.png';
 import LoadingSkeleton from '../components/LoadingSkeleton';
+import SEO from '../components/SEO';
 import {
   ArrowLeft,
   Check,
@@ -21,6 +23,7 @@ import {
 } from 'lucide-react';
 
 const Invitations: React.FC = () => {
+  const { t } = useTranslation();
   const { currentUser } = useAuth();
   const { refreshVaults } = useVault();
   const navigate = useNavigate();
@@ -45,7 +48,7 @@ const Invitations: React.FC = () => {
       const invites = await SharingService.getUserInvitations(currentUser.email);
       setInvitations(invites);
     } catch (err: any) {
-      setError(err.message || 'Failed to load invitations');
+      setError(err.message || t('invitations.errors.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -83,7 +86,7 @@ const Invitations: React.FC = () => {
       // Navigate to the vault
       navigate(`/vault/${invite.vaultId}`);
     } catch (err: any) {
-      setError(err.message || 'Failed to accept invitation');
+      setError(err.message || t('invitations.errors.acceptFailed'));
     } finally {
       setProcessingId(null);
     }
@@ -97,14 +100,14 @@ const Invitations: React.FC = () => {
       await SharingService.declineInvitation(inviteId);
       setInvitations(prev => prev.filter(inv => inv.id !== inviteId));
     } catch (err: any) {
-      setError(err.message || 'Failed to decline invitation');
+      setError(err.message || t('invitations.errors.declineFailed'));
     } finally {
       setProcessingId(null);
     }
   };
 
   const formatDate = (date: Date) => {
-    return new Date(date).toLocaleDateString('en-US', {
+    return new Date(date).toLocaleDateString(t('common.locale', { defaultValue: 'en-US' }), {
       year: 'numeric',
       month: 'short',
       day: 'numeric'
@@ -112,7 +115,8 @@ const Invitations: React.FC = () => {
   };
 
   return (
-    <div className="vault-details-page">
+    <div className="dashboard-page overflow-hidden">
+      <SEO title={t('landing.features.invitations.title')} description={t('landing.features.invitations.desc')} />
       {/* Header */}
       <header className="header">
         <div className="container">
@@ -124,8 +128,8 @@ const Invitations: React.FC = () => {
               <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
             </div>
             <div className="header-right">
-              <Link to="/settings" className="settings-link" title="Settings">
-                <Settings size={20} />
+              <Link to="/settings" className="theme-toggle" title={t('dashboard.tooltips.settings')}>
+                <Settings className="h-5 w-5" />
               </Link>
               <div className="user-avatar">
                 {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}
@@ -138,8 +142,8 @@ const Invitations: React.FC = () => {
       {/* Main Content */}
       <main className="container">
         <div className="vault-header">
-          <h2>Invitations</h2>
-          <p>Accept or decline invitations to collaborate on containers</p>
+          <h2>{t('invitations.title')}</h2>
+          <p>{t('invitations.subtitle')}</p>
         </div>
 
         <div className="vault-content">
@@ -160,16 +164,16 @@ const Invitations: React.FC = () => {
                 <div className="collaborators-widget" style={{ maxWidth: '500px', margin: '0 auto' }}>
                   <UserPlus className="h-16 w-16 text-gray-400 dark:text-gray-600 mx-auto mb-4" />
                   <h3 className="text-xl font-semibold mb-2">
-                    No pending invitations
+                    {t('invitations.empty.title')}
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-                    When someone invites you to collaborate on a vault, it will appear here.
+                    {t('invitations.empty.desc')}
                   </p>
                   <Link
                     to="/dashboard"
                     className="btn-primary inline-block"
                   >
-                    Go to Dashboard
+                    {t('invitations.empty.button')}
                   </Link>
                 </div>
               </div>
@@ -186,11 +190,11 @@ const Invitations: React.FC = () => {
                       </div>
                       <div className="link-info">
                         <h4 className="font-semibold text-gray-900 dark:text-white">
-                          {invite.vaultName || 'Vault'} Invitation
+                          {t('invitations.item.title', { name: invite.vaultName || 'Vault' })}
                         </h4>
                         {invite.inviterName && (
                           <p className="text-sm text-gray-600 dark:text-gray-400">
-                            From: <span className="font-medium">{invite.inviterName}</span>
+                            {t('invitations.item.from', { name: invite.inviterName })}
                           </p>
                         )}
                         <div className="flex items-center gap-2 mt-2 flex-wrap">
@@ -214,7 +218,7 @@ const Invitations: React.FC = () => {
                         className="invitation-btn invitation-btn-accept"
                       >
                         <Check />
-                        <span>Accept</span>
+                        <span>{t('invitations.item.buttons.accept')}</span>
                       </button>
                       <button
                         onClick={() => handleDecline(invite.id)}
@@ -222,7 +226,7 @@ const Invitations: React.FC = () => {
                         className="invitation-btn invitation-btn-decline"
                       >
                         <X />
-                        <span>Decline</span>
+                        <span>{t('invitations.item.buttons.decline')}</span>
                       </button>
                     </div>
                   </div>

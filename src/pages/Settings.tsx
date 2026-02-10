@@ -16,7 +16,6 @@ import {
   ArrowLeft,
   Github,
   Scale,
-  Settings as SettingsIcon,
   Download,
   Upload,
   HelpCircle
@@ -31,7 +30,7 @@ const Settings: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { currentUser, logout, deleteAccount } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const { refreshVaults, vaults } = useVault();
+  const { vaults } = useVault();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     displayName: currentUser?.displayName || '',
@@ -117,8 +116,7 @@ const Settings: React.FC = () => {
         });
       }
 
-      await refreshVaults();
-      setSuccess(`Successfully imported ${importSummary.links} bookmarks into ${importSummary.vaults} containers.`);
+      setSuccess(t('settings.messages.importSuccess', { links: importSummary.links, vaults: importSummary.vaults }));
       setImportSummary(null);
 
       // Redirect to dashboard after short delay
@@ -142,7 +140,7 @@ const Settings: React.FC = () => {
 
   const handleExport = async () => {
     if (vaults.length === 0) {
-      setError('No containers to export.');
+      setError(t('settings.messages.noExport'));
       return;
     }
 
@@ -152,11 +150,11 @@ const Settings: React.FC = () => {
 
     try {
       downloadBookmarks(vaults, `blink_backup_${new Date().toISOString().split('T')[0]}.html`);
-      setSuccess('Bookmarks exported successfully!');
+      setSuccess(t('settings.messages.exportSuccess'));
       setTimeout(() => setSuccess(''), 3000);
     } catch (err: any) {
       console.error(err);
-      setError('Failed to export bookmarks.');
+      setError(t('settings.messages.exportFailed'));
     } finally {
       setExporting(false);
     }
@@ -211,13 +209,13 @@ const Settings: React.FC = () => {
         updatedAt: new Date()
       });
 
-      setSuccess('Account updated successfully!');
+      setSuccess(t('settings.messages.updateSuccess'));
 
       // Clear success message after 3 seconds
       setTimeout(() => setSuccess(''), 3000);
     } catch (err: any) {
       console.error('Error updating account:', err);
-      setError(err.message || 'Failed to update account. Please try again.');
+      setError(err.message || t('settings.messages.updateFailed'));
     } finally {
       setLoading(false);
     }
@@ -242,7 +240,7 @@ const Settings: React.FC = () => {
 
   const performDeleteAccount = async () => {
     if (!currentUser || !auth.currentUser) {
-      setError('No user is currently signed in.');
+      setError(t('settings.messages.noUser'));
       return;
     }
 
@@ -274,9 +272,6 @@ const Settings: React.FC = () => {
               <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
             </div>
             <div className="header-right">
-              <Link to="/settings" className="theme-toggle" title="Settings">
-                <SettingsIcon size={20} />
-              </Link>
               <div className="user-avatar">
                 {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}
               </div>
@@ -312,31 +307,31 @@ const Settings: React.FC = () => {
 
             <form onSubmit={handleUpdateAccount} className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="form-group">
-                <label className="form-label" htmlFor="name">Name</label>
+                <label className="form-label" htmlFor="name">{t('settings.labels.name')}</label>
                 <input
                   id="name"
                   name="displayName"
                   type="text"
                   className="form-input"
-                  placeholder="Full name"
+                  placeholder={t('settings.placeholders.name')}
                   value={formData.displayName}
                   onChange={handleChange}
                 />
               </div>
               <div className="form-group">
-                <label className="form-label" htmlFor="email">Email</label>
+                <label className="form-label" htmlFor="email">{t('settings.labels.email')}</label>
                 <input
                   id="email"
                   name="email"
                   type="email"
                   className="form-input"
-                  placeholder="Email address"
+                  placeholder={t('settings.placeholders.email')}
                   value={formData.email}
                   disabled
                   style={{ opacity: 0.6, cursor: 'not-allowed' }}
-                  title="Email cannot be changed"
+                  title={t('settings.messages.emailDisabled')}
                 />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Email cannot be changed</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{t('settings.messages.emailDisabled')}</p>
               </div>
             </form>
             <button
@@ -346,7 +341,7 @@ const Settings: React.FC = () => {
               className="btn-primary update-account-btn"
               style={{ marginTop: '1.5rem', opacity: loading ? 0.6 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
             >
-              {loading ? 'Updating...' : 'Update Account'}
+              {loading ? t('settings.buttons.updating') : t('settings.buttons.update')}
             </button>
           </section>
 
@@ -439,12 +434,12 @@ const Settings: React.FC = () => {
                         fontSize: '14px',
                         textAlign: 'left'
                       }}>
-                        <h5 style={{ fontWeight: 600, marginBottom: '8px', color: theme === 'dark' ? '#93c5fd' : '#2563eb' }}>How to import:</h5>
+                        <h5 style={{ fontWeight: 600, marginBottom: '8px', color: theme === 'dark' ? '#93c5fd' : '#2563eb' }}>{t('settings.messages.importHelp.title')}</h5>
                         <ol style={{ paddingLeft: '20px', margin: 0, listStyleType: 'decimal' }}>
-                          <li style={{ marginBottom: '4px' }}>Open <strong>Bookmarks Manager</strong> in browser.</li>
-                          <li style={{ marginBottom: '4px' }}>Choose <strong>Export Bookmarks</strong> (HTML).</li>
-                          <li style={{ marginBottom: '4px' }}>Save the file to your computer.</li>
-                          <li>Click <strong>Import HTML</strong> button.</li>
+                          <li style={{ marginBottom: '4px' }}>{t('settings.messages.importHelp.step1')}</li>
+                          <li style={{ marginBottom: '4px' }}>{t('settings.messages.importHelp.step2')}</li>
+                          <li style={{ marginBottom: '4px' }}>{t('settings.messages.importHelp.step3')}</li>
+                          <li>{t('settings.messages.importHelp.step4')}</li>
                         </ol>
                       </div>
                     )}
@@ -466,7 +461,7 @@ const Settings: React.FC = () => {
                   className="btn-secondary flex items-center gap-2 data-management-button"
                 >
                   <Download size={16} />
-                  {importing ? 'Importing...' : 'Import HTML'}
+                  {importing ? t('settings.messages.importing') : t('settings.buttons.importHtml')}
                 </button>
               </div>
             </div>
@@ -483,7 +478,7 @@ const Settings: React.FC = () => {
                   className="btn-secondary flex items-center gap-2"
                 >
                   <Upload className={exporting ? 'animate-bounce' : ''} size={16} />
-                  {exporting ? 'Exporting...' : 'Export HTML'}
+                  {exporting ? t('settings.messages.exporting') : t('settings.buttons.exportHtml')}
                 </button>
               </div>
             </div>
@@ -492,11 +487,11 @@ const Settings: React.FC = () => {
           </section>
 
           <section className="settings-section">
-            <h3>App Info</h3>
+            <h3>{t('settings.appInfo')}</h3>
             <div className="settings-item settings-item-media">
               <div className="settings-item-info">
-                <h4>Open source</h4>
-                <p>Explore the source code or give a star on GitHub.</p>
+                <h4>{t('settings.openSource')}</h4>
+                <p>{t('settings.openSourceDesc')}</p>
               </div>
               <button
                 onClick={() => window.open('https://github.com/samirrhashimov/blink', '_blank', 'noopener,noreferrer')}
@@ -509,15 +504,15 @@ const Settings: React.FC = () => {
 
             <div className="settings-item settings-item-media">
               <div className="settings-item-info">
-                <h4>Legal</h4>
-                <p>Privacy Policy and Terms of Service.</p>
+                <h4>{t('settings.legal')}</h4>
+                <p>{t('settings.legalDesc')}</p>
               </div>
               <button
                 onClick={() => navigate('/legal')}
                 className="btn-secondary"
               >
                 <Scale className="h-4 w-4" />
-                Legal
+                {t('settings.legal')}
               </button>
             </div>
           </section>
@@ -528,27 +523,27 @@ const Settings: React.FC = () => {
             <div className="settings-item settings-item-media">
               <div className="settings-item-info">
                 <h4>{t('settings.logout')}</h4>
-                <p>Sign out of your account on this device.</p>
+                <p>{t('settings.logoutDesc')}</p>
               </div>
               <button
                 onClick={handleLogout}
                 className="btn-secondary"
               >
                 <LogOut className="h-4 w-4" />
-                Logout
+                {t('settings.logout')}
               </button>
             </div>
 
             <div className="settings-item settings-item-media">
               <div className="settings-item-info">
                 <h4 style={{ color: '#ef4444' }}>{t('settings.deleteAccount')}</h4>
-                <p>Permanently delete your account and all of your data.</p>
+                <p>{t('settings.deleteAccountDesc')}</p>
               </div>
               <button
                 onClick={handleDeleteAccount}
                 className="btn-danger"
               >
-                Delete Account
+                {t('settings.deleteAccount')}
               </button>
             </div>
           </section>
@@ -559,9 +554,9 @@ const Settings: React.FC = () => {
             isOpen={!!importSummary}
             onClose={cancelImport}
             onConfirm={confirmImport}
-            title="Confirm Import"
-            message={`This will create ${importSummary?.vaults} new containers and import ${importSummary?.links} links. Do you want to proceed?`}
-            confirmText={importing ? "Importing..." : "Confirm Import"}
+            title={t('settings.messages.importConfirm.title')}
+            message={t('settings.messages.importConfirm.message', { vaults: importSummary?.vaults, links: importSummary?.links })}
+            confirmText={importing ? t('settings.messages.importing') : t('settings.messages.importConfirm.title')}
             variant="primary"
             icon={<Download className="h-4 w-4" />}
           />
@@ -569,9 +564,9 @@ const Settings: React.FC = () => {
             isOpen={showLogoutModal}
             onClose={() => setShowLogoutModal(false)}
             onConfirm={performLogout}
-            title="Logout"
-            message="Are you sure you want to logout of your account?"
-            confirmText="Logout"
+            title={t('settings.logout')}
+            message={t('common.confirmation.logout.message')}
+            confirmText={t('settings.logout')}
             variant="danger"
             icon={<LogOut className="h-4 w-4" />}
           />
@@ -579,9 +574,9 @@ const Settings: React.FC = () => {
             isOpen={showDeleteModal}
             onClose={() => setShowDeleteModal(false)}
             onConfirm={performDeleteAccount}
-            title="Delete Account"
-            message="Are you sure you want to permanently delete your account? This action cannot be undone and all your data will be lost."
-            confirmText="Delete Account"
+            title={t('settings.deleteAccount')}
+            message={t('settings.deleteAccountDesc')}
+            confirmText={t('settings.deleteAccount')}
             confirmWord="delete"
             variant="danger"
             icon={<LogOut className="h-4 w-4" />}

@@ -461,8 +461,8 @@ const VaultDetails: React.FC = () => {
               <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
             </div>
             <div className="header-right">
-              <Link to="/settings" className="theme-toggle" title="Settings">
-                <Settings className="h-5 w-5" />
+              <Link to="/settings" className="settings-link" title={t('dashboard.tooltips.settings')}>
+                <Settings size={20} />
               </Link>
               <div className="user-avatar">
                 {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}

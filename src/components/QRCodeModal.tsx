@@ -1,5 +1,6 @@
 import React from 'react';
 import { X, Download } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { Link } from '../types';
 
 interface QRCodeModalProps {
@@ -15,6 +16,8 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
     link,
     vaultColor = '#6366f1'
 }) => {
+    const { t } = useTranslation();
+
     if (!isOpen || !link) return null;
 
     const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(link.url)}`;
@@ -43,7 +46,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
 
                         <div>
-                            <h2 style={{ fontSize: '1.25rem' }}>QR Code</h2>
+                            <h2 style={{ fontSize: '1.25rem' }}>{t('vault.modals.qrCode.title')}</h2>
 
                         </div>
                     </div>
@@ -72,7 +75,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
                     }}>
                         <img
                             src={qrCodeUrl}
-                            alt={`QR Code for ${link.url}`}
+                            alt={t('vault.modals.qrCode.alt', { url: link.url })}
                             style={{
                                 width: '200px',
                                 height: '200px',
@@ -96,7 +99,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
                         }}
                     >
                         <Download size={18} />
-                        Download
+                        {t('common.buttons.download')}
                     </button>
                 </div>
             </div>

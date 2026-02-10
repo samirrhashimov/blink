@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { useVault } from '../contexts/VaultContext';
 import {
@@ -17,6 +18,7 @@ import LoadingSkeleton from '../components/LoadingSkeleton';
 import SEO from '../components/SEO';
 
 const Tags: React.FC = () => {
+    const { t } = useTranslation();
     const { currentUser } = useAuth();
     const { vaults, loading } = useVault();
     const [searchQuery, setSearchQuery] = useState('');
@@ -57,7 +59,7 @@ const Tags: React.FC = () => {
 
     return (
         <div className="dashboard-page">
-            <SEO title="Explore Tags" description="Browse and search all your saved links across different containers using tags." />
+            <SEO title={t('tags.title')} description={t('tags.description')} />
             <header className="header">
                 <div className="container">
                     <div className="header-content">
@@ -68,7 +70,7 @@ const Tags: React.FC = () => {
                             <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
                         </div>
                         <div className="header-right">
-                            <Link to="/settings" className="theme-toggle" title="Settings">
+                            <Link to="/settings" className="theme-toggle" title={t('dashboard.tooltips.settings')}>
                                 <Settings className="h-5 w-5" />
                             </Link>
                             <div className="user-avatar">
@@ -81,14 +83,14 @@ const Tags: React.FC = () => {
 
             <main className="container">
                 <div className="vault-header">
-                    <h2 className="vault-name-title">Explore by Tags</h2>
-                    <p className="vault-description-text">Find your links across all containers using tags</p>
+                    <h2 className="vault-name-title">{t('tags.title')}</h2>
+                    <p className="vault-description-text">{t('tags.description')}</p>
 
                     <div className="modern-search-bar search-tags-wrapper">
                         <Search className="modern-search-icon" size={18} />
                         <input
                             type="text"
-                            placeholder="Search tags..."
+                            placeholder={t('tags.placeholder')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className="modern-search-input"
@@ -101,12 +103,12 @@ const Tags: React.FC = () => {
                     <aside className="tags-sidebar">
                         <div className="sidebar-header">
                             <Tag size={18} />
-                            <h3>All Tags ({uniqueTags.length})</h3>
+                            <h3>{t('tags.sidebar.title', { count: uniqueTags.length })}</h3>
                         </div>
                         <div className="sidebar-tags-list">
                             {filteredTags.length === 0 ? (
                                 <div className="p-4 text-center text-gray-500">
-                                    <p>No tags found</p>
+                                    <p>{t('tags.sidebar.empty')}</p>
                                 </div>
                             ) : (
                                 filteredTags.map(tag => (
@@ -129,8 +131,8 @@ const Tags: React.FC = () => {
                         {selectedTag ? (
                             <>
                                 <div className="content-header">
-                                    <h3>Links tagged with <span className="text-primary">#{selectedTag}</span></h3>
-                                    <span className="links-count">{displayedLinks.length} items</span>
+                                    <h3>{t('tags.content.taggedWith')} <span className="text-primary">#{selectedTag}</span></h3>
+                                    <span className="links-count">{t('tags.content.items', { count: displayedLinks.length })}</span>
                                 </div>
                                 <div className="tags-links-grid">
                                     {displayedLinks.map(link => (
@@ -162,9 +164,9 @@ const Tags: React.FC = () => {
                                                 <Link
                                                     to={`/vault/${link.vaultId}`}
                                                     className="view-vault-link"
-                                                    title="Go to container"
+                                                    title={t('tags.content.openContainer')}
                                                 >
-                                                    Open Container
+                                                    {t('tags.content.openContainer')}
                                                 </Link>
                                             </div>
                                         </div>
@@ -174,15 +176,15 @@ const Tags: React.FC = () => {
                         ) : uniqueTags.length === 0 ? (
                             <div className="empty-selection-state">
                                 <SearchX size={48} className="empty-state-icon" />
-                                <h3>No tags found yet</h3>
-                                <p>Start adding tags to your links in your containers to enable cross-searching.</p>
-                                <Link to="/dashboard" className="btn-primary go-to-dashboard-btn">Go to Dashboard</Link>
+                                <h3>{t('tags.empty.noTags.title')}</h3>
+                                <p>{t('tags.empty.noTags.desc')}</p>
+                                <Link to="/dashboard" className="btn-primary go-to-dashboard-btn">{t('tags.empty.button')}</Link>
                             </div>
                         ) : (
                             <div className="empty-selection-state">
                                 <Tag size={48} className="empty-state-icon" />
-                                <h3>Select a tag to see links</h3>
-                                <p>Choose a tag from the sidebar to view all associated links across your library.</p>
+                                <h3>{t('tags.empty.noSelection.title')}</h3>
+                                <p>{t('tags.empty.noSelection.desc')}</p>
                             </div>
                         )}
                     </section>

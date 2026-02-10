@@ -23,7 +23,123 @@
             "invitations": {
                 "title": "Gelen Davetler",
                 "desc": "Diğer çalışma alanlarına katılma isteklerini yönetin. Paylaşılan konteynerlerde işbirliği yapmak ve yönetmeye yardımcı olmak için gelen davetleri inceleyin, kabul edin veya reddedin."
+            },
+            "tagging": {
+                "title": "Akıllı Etiketleme Sistemi",
+                "desc": "Linklerinizi güçlü etiketlerle düzenleyin. Özel etiketler oluşturun, kategorilere göre filtreleyin ve saniyeler içinde tam olarak ihtiyacınız olanı bulun. Büyük koleksiyonları yönetmek için mükemmeldir."
+            },
+            "themes": {
+                "title": "Özelleştirilebilir Temalar",
+                "desc": "Çalışma alanınızı özel konteyner renkleriyle kişiselleştirin. Her konteyneri size özel kılmak için seçilmiş renk paletimizden seçim yapın. Aşağıda deneyin!",
+                "demoTitle": "Benim Konteynerim",
+                "demoDesc": "Özel renkli çalışma alanı"
+            },
+            "firefox": {
+                "title": "Firefox için Blink",
+                "desc": "Herhangi bir web sayfasını tek bir tıklama ile doğrudan Blink konteynerlerinize kaydedin. Uzantımız, tarayıcı sekmesinden ayrılmadan linklerinizi istediğiniz konteynere kaydetmenizi sağlar.",
+                "button": "Firefox'a Ekle"
+            },
+            "everything": {
+                "title": "İhtiyacınız olan her şey",
+                "subtitle": "Link yönetimini zahmetsiz ve güvenli hale getirmek için tasarlanmış güçlü özellikler.",
+                "security": {
+                    "title": "Üst Düzey Güvenlik",
+                    "desc": "Kurumsal düzeyde şifreleme, verilerinizi gizli ve korumalı tutmayı amaçlar."
+                },
+                "sync": {
+                    "title": "Gerçek Zamanlı Senkronizasyon",
+                    "desc": "Değişiklikler tüm cihazlarda anında gerçekleşir. Sadece sorunsuz, gerçek zamanlı güncellemeler."
+                },
+                "anywhere": {
+                    "title": "Her Yerden Erişilebilir",
+                    "desc": "Linklerinize dünyanın her yerinden, her cihazdan erişin. Web için kişisel bulutunuz."
+                },
+                "search": {
+                    "title": "Akıllı Arama",
+                    "desc": "Başlıklar, URL'ler ve açıklamalar arasında anında arama, ihtiyacınız olanı milisaniyeler içinde bulmanıza yardımcı olur."
+                },
+                "darkmode": {
+                    "title": "Karanlık Mod",
+                    "desc": "Sistem tercihlerinize saygı duyan ve geceleri gözlerinizi yormayan yerel karanlık mod desteği."
+                },
+                "permissions": {
+                    "title": "İzin Kontrolü",
+                    "desc": "Linklerinizi kimlerin görüntüleyebileceğini, düzenleyebileceğini veya yönetebileceğini kontrol edin."
+                }
+            },
+            "cta": {
+                "button": "Ücretsiz Başlayın"
+            },
+            "footer": {
+                "privacy": "Gizlilik",
+                "terms": "Şartlar",
+                "deletion": "Hesap Silme"
             }
+        }
+    },
+    "tags": {
+        "title": "Etiketlere Göre Keşfet",
+        "description": "Etiketleri kullanarak tüm konteynerlerinizdeki linkleri bulun",
+        "placeholder": "Etiketlerde ara...",
+        "sidebar": {
+            "title": "Tüm Etiketler ({{count}})",
+            "empty": "Etiket bulunamadı"
+        },
+        "content": {
+            "taggedWith": "Etiketlenen linkler:",
+            "items": "{{count}} öge",
+            "openContainer": "Konteyneri Aç"
+        },
+        "empty": {
+            "noTags": {
+                "title": "Henüz etiket bulunamadı",
+                "desc": "Konteynerlerinizdeki linklere etiket eklemeye başlayarak çapraz aramayı etkinleştirin."
+            },
+            "noSelection": {
+                "title": "Linkleri görmek için bir etiket seçin",
+                "desc": "Kütüphanenizdeki tüm ilişkili linkleri görüntülemek için kenar çubuğundan bir etiket seçin."
+            },
+            "button": "Panale Git"
+        }
+    },
+    "notifications": {
+        "title": "Bildirimler",
+        "empty": "Bildirim yok",
+        "markAllRead": "Tümünü okundu işaretle",
+        "markRead": "Okundu işaretle",
+        "delete": "Sil",
+        "time": {
+            "justNow": "Az önce",
+            "minutes": "{{count}}dk önce",
+            "hours": "{{count}}sa önce",
+            "days": "{{count}}g önce"
+        }
+    },
+    "share": {
+        "title": "\"{{name}}\" Paylaş",
+        "subtitle": "Kapsayıcınıza iş ortakları davet edin",
+        "form": {
+            "label": "E-posta ile davet et",
+            "placeholder": "E-posta girin",
+            "permissions": "İzinler",
+            "submit": "Paylaş",
+            "submitting": "Paylaşılıyor...",
+            "view": "Görüntüleyebilir",
+            "viewDesc": "Linklere salt okunur erişim.",
+            "edit": "Düzenleyebilir",
+            "editDesc": "Link ekleme, düzenleme ve silme için tam erişim."
+        },
+        "pending": {
+            "title": "Bekleyen Davetler",
+            "cancel": "Daveti iptal et"
+        },
+        "messages": {
+            "enterEmail": "Lütfen bir e-posta adresi girin",
+            "inviteSelf": "Kendinizi davet edemezsiniz",
+            "success": "Davet başarıyla gönderildi!",
+            "error": "Davet gönderilemedi",
+            "cancelSuccess": "Davet iptal edildi",
+            "cancelError": "Davet iptal edilemedi"
         }
     },
     "settings": {
@@ -32,25 +148,82 @@
         "account": "Hesap",
         "preferences": "Tercihler",
         "theme": "Tema",
-        "themeDesc": "Açık veya koyu tema arasında seçim yapın.",
+        "themeDesc": "Açık ve karanlık modlar arasında geçiş yapın.",
         "language": "Dil",
-        "languageDesc": "Uygulama için tercih ettiğiniz dili ayarlayın.",
+        "languageDesc": "Tercih ettiğiniz uygulama dilini seçin.",
         "dataManagement": "Veri Yönetimi",
         "import": "Yer İmlerini İçe Aktar",
-        "importDesc": "Tarayıcınızdan veya diğer hizmetlerden yer imlerini içe aktarın (HTML dosyası).",
+        "importDesc": "Tarayıcınızdan dışa aktarılan bir HTML dosyasından yer imlerini içe aktarın.",
         "export": "Yer İmlerini Dışa Aktar",
-        "exportDesc": "Tüm konteynerlerinizi ve linklerinizi bir HTML dosyasına dışa aktarın (Netscape formatı).",
+        "exportDesc": "Tüm kapsayıcılarınızı ve linklerinizi bir HTML dosyası olarak indirin.",
+        "appInfo": "Uygulama Bilgisi",
+        "openSource": "Açık kaynak",
+        "openSourceDesc": "Kaynak kodunu keşfedin veya GitHub'da yıldız verin.",
+        "legal": "Yasal",
+        "legalDesc": "Gizlilik Politikası ve Hizmet Şartları.",
         "dangerZone": "Tehlikeli Bölge",
         "logout": "Çıkış Yap",
-        "deleteAccount": "Hesabı Sil"
+        "logoutDesc": "Bu cihazdaki hesabınızdan çıkış yapın.",
+        "deleteAccount": "Hesabı Sil",
+        "deleteAccountDesc": "Hesabınızı ve tüm verilerinizi kalıcı olarak silin.",
+        "placeholders": {
+            "name": "Tam ad",
+            "email": "E-posta adresi"
+        },
+        "labels": {
+            "name": "Ad",
+            "email": "E-posta"
+        },
+        "messages": {
+            "emailDisabled": "E-posta değiştirilemez",
+            "updateSuccess": "Hesap başarıyla güncellendi!",
+            "updateFailed": "Hesap güncellenemedi. Lütfen tekrar deneyin.",
+            "noUser": "Şu anda oturum açmış kullanıcı yok.",
+            "importHelp": {
+                "title": "Nasıl içe aktarılır:",
+                "step1": "Tarayıcıda Yer İmleri Yöneticisi'ni açın.",
+                "step2": "Yer İmlerini Dışa Aktar (HTML) seçeneğini seçin.",
+                "step3": "Dosyayı bilgisayarınıza kaydedin.",
+                "step4": "HTML İçe Aktar butonuna tıklayın."
+            },
+            "importing": "İçe aktarılıyor...",
+            "importSuccess": "{{links}} yer imi {{vaults}} kapsayıcıya başarıyla içe aktarıldı.",
+            "importConfirm": {
+                "title": "İçe Aktarmayı Onayla",
+                "message": "Bu işlem {{vaults}} yeni kapsayıcı oluşturacak ve {{links}} link içe aktaracaktır. Devam etmek istiyor musunuz?"
+            },
+            "exporting": "Dışa aktarılıyor...",
+            "exportSuccess": "Yer imleri başarıyla dışa aktarıldı!",
+            "exportFailed": "Yer imleri dışa aktarılamadı.",
+            "noExport": "Dışa aktarılacak kapsayıcı yok."
+        },
+        "buttons": {
+            "update": "Hesabı Güncelle",
+            "updating": "Güncelleniyor...",
+            "importHtml": "HTML İçe Aktar",
+            "exportHtml": "HTML Dışa Aktar"
+        }
     },
     "dashboard": {
         "title": "Panel",
         "library": "Kütüphanem",
-        "newContainer": "Yeni Konteyner",
-        "searchPlaceholder": "Konteynerleri, linkleri veya açıklamaları arayın...",
+        "newContainer": "Yeni Çalışma Alanı",
+        "searchPlaceholder": "Kapsayıcı ara...",
         "personal": "Kişisel",
-        "shared": "Paylaşılan",
+        "shared": "Paylaşılan Alanlar",
+        "nav": {
+            "home": "Ana Sayfa",
+            "tags": "Etiketler",
+            "invitations": "Davetler",
+            "settings": "Ayarlar"
+        },
+        "tooltips": {
+            "tags": "Etiketler",
+            "invitations": "Davetler",
+            "notifications": "Bildirimler",
+            "switchTheme": "Temayı Değiştir",
+            "settings": "Ayarlar"
+        },
         "emptyPersonal": {
             "title": "Henüz kişisel konteyner yok",
             "searchTitle": "Konteyner bulunamadı",
@@ -119,6 +292,28 @@
             "redirecting": "E-posta doğrulama sayfasına yönlendiriliyor..."
         }
     },
+    "invitations": {
+        "title": "Davetler",
+        "subtitle": "Kapsayıcılar üzerinde iş birliği yapmak için davetleri kabul edin veya reddedin",
+        "empty": {
+            "title": "Bekleyen davet yok",
+            "desc": "Birisi sizi bir kasa üzerinde iş birliği yapmaya davet ettiğinde burada görünecektir.",
+            "button": "Panale Git"
+        },
+        "item": {
+            "title": "{{name}} Daveti",
+            "from": "Gönderen: {{name}}",
+            "buttons": {
+                "accept": "Kabul Et",
+                "decline": "Reddet"
+            }
+        },
+        "errors": {
+            "loadFailed": "Davetler yüklenemedi",
+            "acceptFailed": "Davet kabul edilemedi",
+            "declineFailed": "Davet reddedilemedi"
+        }
+    },
     "vault": {
         "notFound": {
             "title": "Kasa bulunamadı",
@@ -172,18 +367,191 @@
                 "title": "Kasayı Sil",
                 "message": "\"{{name}}\" kasasını silmek istediğinizden emin misiniz? Tüm linkler kalıcı olarak silinecektir.",
                 "confirm": "Kasayı Sil"
+            },
+            "addLink": {
+                "title": "Yeni Link Ekle",
+                "url": "URL",
+                "linkTitle": "Link Başlığı",
+                "description": "Açıklama",
+                "tags": "Etiketler",
+                "autoFilled": "Otomatik dolduruldu",
+                "placeholders": {
+                    "url": "https://ornek.com",
+                    "title": "Link başlığını girin",
+                    "description": "Link açıklaması girin (isteğe bağlı)",
+                    "tags": "Etiket ekle..."
+                },
+                "buttons": {
+                    "add": "Link Ekle",
+                    "adding": "Ekleniyor...",
+                    "cancel": "İptal"
+                },
+                "tooltips": {
+                    "clearUrl": "URL'yi temizle",
+                    "clearTitle": "Başlığı temizle",
+                    "clearDescription": "Açıklamayı temizle",
+                    "addTag": "Etiket ekle"
+                },
+                "errors": {
+                    "required": "Başlık ve URL gereklidir",
+                    "invalidUrl": "Lütfen geçerli bir URL girin",
+                    "failed": "Link eklenemedi"
+                }
+            },
+            "editLink": {
+                "title": "Linki Düzenle",
+                "buttons": {
+                    "save": "Değişiklikleri Kaydet",
+                    "saving": "Kaydediliyor..."
+                },
+                "errors": {
+                    "failed": "Link güncellenemedi"
+                }
+            },
+            "createVault": {
+                "title": "Yeni Kasa Oluştur",
+                "name": "Konteyner Adı",
+                "description": "Açıklama",
+                "color": "Konteyner Rengi",
+                "placeholders": {
+                    "name": "Konteyner adını girin",
+                    "description": "Konteyner açıklamasını girin"
+                },
+                "buttons": {
+                    "create": "Konteyner Oluştur",
+                    "creating": "Oluşturuluyor..."
+                },
+                "errors": {
+                    "nameRequired": "Kasa adı gereklidir",
+                    "nameLength": "Kasa adı en fazla {{max}} karakter olmalıdır",
+                    "descLength": "Açıklama en fazla {{max}} karakter olmalıdır",
+                    "failed": "Kasa oluşturulamadı"
+                }
+            },
+            "editVault": {
+                "title": "Kasayı Düzenle",
+                "name": "Kasa Adı",
+                "description": "Açıklama",
+                "color": "Kasa Rengi",
+                "placeholders": {
+                    "name": "Kasa adını girin",
+                    "description": "Kasa açıklaması girin (isteğe bağlı)"
+                },
+                "buttons": {
+                    "save": "Değişiklikleri Kaydet",
+                    "saving": "Kaydediliyor..."
+                },
+                "errors": {
+                    "failed": "Kasa güncellenemedi"
+                }
+            },
+            "linkStats": {
+                "title": "Link Analizi",
+                "analytics": "Link Analizi",
+                "lifetime": "Toplam Tıklama",
+                "today": "Bugün",
+                "history": "Tıklama geçmişi"
+            },
+            "qrCode": {
+                "title": "QR Kodu",
+                "alt": "{{url}} için QR Kodu"
+            },
+            "shareLink": {
+                "title": "Paylaşım Linkleri",
+                "createBtn": "Yeni Paylaşım Linki Oluştur",
+                "empty": "Henüz paylaşım linki oluşturulmadı",
+                "expires": "Süre Sonu",
+                "never": "Asla",
+                "uses": "Kullanım",
+                "copied": "Kopyalandı!",
+                "copy": "Linki kopyala",
+                "deactivate": "Linki devre dışı bırak",
+                "form": {
+                    "title": "Yeni Paylaşım Linki",
+                    "permission": "İzin",
+                    "permissions": {
+                        "view": "Görüntüleyebilir",
+                        "comment": "Yorum yapabilir",
+                        "edit": "Düzenleyebilir"
+                    },
+                    "expiresIn": "Süre (gün, 0 = süresiz)",
+                    "maxUses": "Maksimum kullanım (0 = sınırsız)",
+                    "create": "Link Oluştur",
+                    "creating": "Oluşturuluyor..."
+                },
+                "errors": {
+                    "loadFailed": "Paylaşım linkleri yüklenemedi",
+                    "createFailed": "Paylaşım linki oluşturulamadı",
+                    "deactivateFailed": "Link devre dışı bırakılamadı"
+                }
+            },
+            "collaborators": {
+                "title": "Katılımcılar",
+                "owner": "Sahip",
+                "you": "Siz",
+                "invited": "Davet Edildi",
+                "pending": "Beklemede",
+                "empty": "Henüz katılımcı yok",
+                "canView": "Görüntüleyebilir",
+                "canEdit": "Düzenleyebilir",
+                "cancelInvite": "Daveti iptal et",
+                "remove": "Katılımcıyı çıkar",
+                "unknown": "Bilinmeyen",
+                "errorLoading": "Kullanıcı (Yükleme hatası)",
+                "errors": {
+                    "loadFailed": "Katılımcılar yüklenemedi",
+                    "removeFailed": "Katılımcı çıkarılamadı",
+                    "updateFailed": "İzin güncellenemedi"
+                }
+            },
+            "moveLink": {
+                "title": "Linki Taşı",
+                "bulkTitle": "{{count}} linki başka bir kapsayıcıya taşı:",
+                "singleTitle": "\"{{title}}\" linkini başka bir kapsayıcıya taşı:",
+                "noVaults": "Başka kapsayıcı mevcut değil.",
+                "buttons": {
+                    "moving": "Taşınıyor...",
+                    "moveLinks": "Linkleri Taşı",
+                    "moveLink": "Linki Taşı"
+                },
+                "errors": {
+                    "selectVault": "Lütfen bir hedef kapsayıcı seçin",
+                    "failed": "Link(ler) taşınamadı"
+                }
             }
         }
     },
     "common": {
+        "locale": "tr-TR",
         "confirm": "Onayla",
         "confirmation": {
             "typeToConfirm": "Onaylamak için lütfen \"{{word}}\" yazın",
-            "placeholder": "\"{{word}}\" yazın"
+            "placeholder": "\"{{word}}\" yazın",
+            "logout": {
+                "title": "Çıkış Yap",
+                "message": "Hesabınızdan çıkış yapmak istediğinizden emin misiniz?"
+            },
+            "deleteAccount": {
+                "title": "Hesabı Sil",
+                "message": "Hesabınızı kalıcı olarak silmek istediğinizden emin misiniz? Bu işlem geri alınamaz ve tüm verileriniz kaybolacaktır."
+            }
         },
         "cancel": "İptal",
         "save": "Kaydet",
         "loading": "Yükleniyor...",
+        "buttons": {
+            "save": "Kaydet",
+            "cancel": "İptal",
+            "confirm": "Onayla",
+            "delete": "Sil",
+            "deleting": "Siliniyor...",
+            "download": "İndir",
+            "close": "Kapat"
+        },
+        "messages": {
+            "cannotUndone": "Bu işlem geri alınamaz.",
+            "failedToDelete": "Silme başarısız"
+        },
         "processing": "İşleniyor...",
         "errors": {
             "operationFailed": "İşlem başarısız oldu"

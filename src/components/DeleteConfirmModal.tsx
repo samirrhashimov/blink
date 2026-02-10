@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, Trash2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface DeleteConfirmModalProps {
   isOpen: boolean;
@@ -20,6 +21,8 @@ const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
   itemName,
   vaultColor
 }) => {
+  const { t } = useTranslation();
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -30,7 +33,7 @@ const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
       await onConfirm();
       onClose();
     } catch (err: any) {
-      setError(err.message || 'Failed to delete');
+      setError(err.message || t('common.messages.failedToDelete'));
     } finally {
       setLoading(false);
     }
@@ -68,7 +71,7 @@ const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
           </p>
 
           <p className="text-sm text-gray-600 dark:text-gray-400">
-            This action cannot be undone.
+            {t('common.messages.cannotUndone')}
           </p>
         </div>
 
@@ -80,7 +83,7 @@ const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
             className="btn-cancel"
             style={{ '--primary': vaultColor } as React.CSSProperties}
           >
-            Cancel
+            {t('common.buttons.cancel')}
           </button>
           <button
             onClick={handleConfirm}
@@ -90,12 +93,12 @@ const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
             {loading ? (
               <>
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                Deleting...
+                {t('common.buttons.deleting')}
               </>
             ) : (
               <>
                 <Trash2 className="h-4 w-4" />
-                Delete
+                {t('common.buttons.delete')}
               </>
             )}
           </button>

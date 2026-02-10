@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { useVault } from '../contexts/VaultContext';
 import { useToast } from '../contexts/ToastContext';
@@ -21,6 +22,7 @@ import {
 } from 'lucide-react';
 
 const ShareVault: React.FC = () => {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { currentUser } = useAuth();
   const { vaults } = useVault();
@@ -111,7 +113,7 @@ const ShareVault: React.FC = () => {
         console.log('Could not send notification:', err);
       }
 
-      toast.success('Invitation sent successfully!');
+      toast.success(t('share.messages.success'));
       setEmail('');
       setPermission('view');
 
@@ -121,7 +123,7 @@ const ShareVault: React.FC = () => {
         navigate(`/vault/${id}`);
       }, 1500);
     } catch (err: any) {
-      toast.error(err.message || 'Failed to send invitation');
+      toast.error(err.message || t('share.messages.error'));
     } finally {
       setLoading(false);
     }
@@ -131,9 +133,9 @@ const ShareVault: React.FC = () => {
     try {
       await SharingService.cancelInvitation(inviteId);
       await loadPendingInvites();
-      toast.success('Invitation cancelled');
+      toast.success(t('share.messages.cancelSuccess'));
     } catch (err: any) {
-      toast.error('Failed to cancel invitation');
+      toast.error(t('share.messages.cancelError'));
     }
   };
 
@@ -157,7 +159,7 @@ const ShareVault: React.FC = () => {
               <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
             </div>
             <div className="header-right">
-              <Link to="/settings" className="settings-link" title="Settings">
+              <Link to="/settings" className="settings-link" title={t('dashboard.tooltips.settings')}>
                 <Settings size={20} />
               </Link>
               <div className="user-avatar">
@@ -171,8 +173,8 @@ const ShareVault: React.FC = () => {
       {/* Main Content */}
       <main className="container">
         <div className="vault-header">
-          <h2>Share "{vault?.name || 'Vault'}"</h2>
-          <p>Invite collaborators to your link container</p>
+          <h2>{t('share.title', { name: vault?.name || 'Vault' })}</h2>
+          <p>{t('share.subtitle')}</p>
         </div>
 
         <div className="vault-content">
@@ -181,7 +183,7 @@ const ShareVault: React.FC = () => {
               <form onSubmit={handleSubmit} className="space-y-8">
                 <div className="form-group">
                   <label className="form-label" htmlFor="invite-input">
-                    Invite by email
+                    {t('share.form.label')}
                   </label>
                   <div className="relative">
                     <div
@@ -192,7 +194,7 @@ const ShareVault: React.FC = () => {
                     <input
                       id="invite-input"
                       type="email"
-                      placeholder="Enter email"
+                      placeholder={t('share.form.placeholder')}
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -203,7 +205,7 @@ const ShareVault: React.FC = () => {
 
                 <div>
                   <div className="flex items-center gap-2 mb-2 mt-6">
-                    <h3 className="text-base font-semibold text-gray-900 dark:text-white">Permissions</h3>
+                    <h3 className="text-base font-semibold text-gray-900 dark:text-white">{t('share.form.permissions')}</h3>
                   </div>
                   <div className="permissions-container" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                     <label className="permission-card group cursor-pointer">
@@ -220,8 +222,8 @@ const ShareVault: React.FC = () => {
                           <Eye className="permission-icon" />
                         </div>
                         <div className="flex-grow">
-                          <p className="permission-title">Can view</p>
-                          <p className="permission-description">Read-only access to links.</p>
+                          <p className="permission-title">{t('share.form.view')}</p>
+                          <p className="permission-description">{t('share.form.viewDesc')}</p>
                         </div>
                         <div className="permission-radio">
                           <div className="permission-radio-outer">
@@ -245,8 +247,8 @@ const ShareVault: React.FC = () => {
                           <Edit3 className="permission-icon" />
                         </div>
                         <div className="flex-grow">
-                          <p className="permission-title">Can edit</p>
-                          <p className="permission-description">Full access to add, edit, and delete links.</p>
+                          <p className="permission-title">{t('share.form.edit')}</p>
+                          <p className="permission-description">{t('share.form.editDesc')}</p>
                         </div>
                         <div className="permission-radio">
                           <div className="permission-radio-outer">
@@ -263,14 +265,14 @@ const ShareVault: React.FC = () => {
                     to={`/vault/${id}`}
                     className="btn-cancel"
                   >
-                    Cancel
+                    {t('common.buttons.cancel')}
                   </Link>
                   <button
                     type="submit"
                     disabled={loading}
                     className="btn-primary"
                   >
-                    {loading ? 'Sharing...' : 'Share'}
+                    {loading ? t('share.form.submitting') : t('share.form.submit')}
                   </button>
                 </div>
               </form>
@@ -280,7 +282,7 @@ const ShareVault: React.FC = () => {
                 <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
                   <div className="sharingcollabtitle flex items-center gap-2 mb-4">
                     <UserPlus className="h-5 w-5 text-amber-600 dark:text-amber-400" />
-                    <h3 className="text-base font-semibold text-gray-900 dark:text-white">Pending Invitations</h3>
+                    <h3 className="text-base font-semibold text-gray-900 dark:text-white">{t('share.pending.title')}</h3>
                     <span className="invitation-badge">{pendingInvites.length}</span>
                   </div>
                   <div className="space-y-3">
@@ -297,7 +299,7 @@ const ShareVault: React.FC = () => {
                                 {invite.permission === 'view' && <Eye className="h-3 w-3" />}
                                 {invite.permission === 'comment' && <MessageCircle className="h-3 w-3" />}
                                 {invite.permission === 'edit' && <Edit3 className="h-3 w-3" />}
-                                <span className="capitalize">{invite.permission}</span>
+                                <span className="capitalize">{invite.permission === 'view' ? t('share.form.view') : t('share.form.edit')}</span>
                               </span>
                             </div>
                           </div>

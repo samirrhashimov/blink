@@ -116,18 +116,18 @@ const Dashboard: React.FC = () => {
                 {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
               </button>
 
-              <Link to="/tags" className="theme-toggle mediaforbuttons" title="Tags">
+              <Link to="/tags" className="theme-toggle mediaforbuttons" title={t('dashboard.tooltips.tags')}>
                 <Tag className="h-5 w-5" />
               </Link>
-              <Link to="/invitations" className="theme-toggle mediaforbuttons" title="Invitations">
+              <Link to="/invitations" className="theme-toggle mediaforbuttons" title={t('dashboard.tooltips.invitations')}>
                 <UserPlus className="h-5 w-5" />
               </Link>
               <button
                 type="button"
                 onClick={() => setShowNotifications(prev => !prev)}
                 className="theme-toggle relative"
-                aria-label="Notifications"
-                title="Notifications"
+                aria-label={t('dashboard.tooltips.notifications')}
+                title={t('dashboard.tooltips.notifications')}
                 aria-expanded={showNotifications}
               >
                 <Bell className="h-5 w-5" />
@@ -137,10 +137,10 @@ const Dashboard: React.FC = () => {
                   </span>
                 )}
               </button>
-              <button onClick={toggleTheme} className="theme-toggle mediaforbuttons" title="Switch Theme">
+              <button onClick={toggleTheme} className="theme-toggle mediaforbuttons" title={t('dashboard.tooltips.switchTheme')}>
                 {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
               </button>
-              <Link to="/settings" className="theme-toggle mediaforbuttons" title="Settings">
+              <Link to="/settings" className="theme-toggle mediaforbuttons" title={t('dashboard.tooltips.settings')}>
                 <Settings className="h-5 w-5" />
               </Link>
               <div className="user-avatar">
@@ -152,55 +152,57 @@ const Dashboard: React.FC = () => {
       </header>
 
       {/* Mobile Navigation Menu */}
-      {mobileMenuOpen && (
-        <div className="mobile-nav-overlay" onClick={() => setMobileMenuOpen(false)}>
-          <div className="mobile-nav-menu" onClick={(e) => e.stopPropagation()}>
-            <div className="mobile-nav-header">
-              <img src={blinkLogo} alt="Blink" className="mobile-logo" />
-              <button
-                onClick={() => setMobileMenuOpen(false)}
-                className="mobile-nav-close"
-                aria-label="Close mobile menu"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-            <nav className="mobile-nav-links">
-              <Link
-                to="/dashboard"
-                className="mobile-nav-link active"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Home
-              </Link>
-              <Link
-                to="/tags"
-                className="mobile-nav-link"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Tags
-              </Link>
-              <Link
-                to="/invitations"
-                className="mobile-nav-link"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Invitations
-              </Link>
-              <Link
-                to="/settings"
-                className="mobile-nav-link"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                Settings
-              </Link>
-            </nav>
-            <div className="mobile-nav-actions">
-              {/* add mobile actions here */}
+      {
+        mobileMenuOpen && (
+          <div className="mobile-nav-overlay" onClick={() => setMobileMenuOpen(false)}>
+            <div className="mobile-nav-menu" onClick={(e) => e.stopPropagation()}>
+              <div className="mobile-nav-header">
+                <img src={blinkLogo} alt="Blink" className="mobile-logo" />
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="mobile-nav-close"
+                  aria-label="Close mobile menu"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+              <nav className="mobile-nav-links">
+                <Link
+                  to="/dashboard"
+                  className="mobile-nav-link active"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {t('dashboard.nav.home')}
+                </Link>
+                <Link
+                  to="/tags"
+                  className="mobile-nav-link"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {t('dashboard.nav.tags')}
+                </Link>
+                <Link
+                  to="/invitations"
+                  className="mobile-nav-link"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {t('dashboard.nav.invitations')}
+                </Link>
+                <Link
+                  to="/settings"
+                  className="mobile-nav-link"
+                  onClick={() => setMobileMenuOpen(false)}
+                >
+                  {t('dashboard.nav.settings')}
+                </Link>
+              </nav>
+              <div className="mobile-nav-actions">
+                {/* add mobile actions here */}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )
+      }
 
       {/* Main Content */}
       <main className="container">
@@ -351,17 +353,19 @@ const Dashboard: React.FC = () => {
       </main>
 
       {/* Notifications Panel */}
-      {currentUser && (
-        <NotificationsPanel
-          isOpen={showNotifications}
-          onClose={() => {
-            setShowNotifications(false);
-            loadUnreadCount(); // Refresh count when closing
-          }}
-          userId={currentUser.uid}
-        />
-      )}
-    </div>
+      {
+        currentUser && (
+          <NotificationsPanel
+            isOpen={showNotifications}
+            onClose={() => {
+              setShowNotifications(false);
+              loadUnreadCount(); // Refresh count when closing
+            }}
+            userId={currentUser.uid}
+          />
+        )
+      }
+    </div >
   );
 };
 

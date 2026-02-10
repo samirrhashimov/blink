@@ -10,7 +10,11 @@ interface AddLinkModalProps {
   vaultColor?: string;
 }
 
+import { useTranslation } from 'react-i18next';
+
 const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, vaultColor }) => {
+  const { t } = useTranslation();
+
   const { addLinkToVault, updateLinkInVault } = useVault();
   const [formData, setFormData] = useState({
     title: '',
@@ -42,7 +46,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
     e.preventDefault();
 
     if (!formData.title.trim() || !formData.url.trim()) {
-      setError('Title and URL are required');
+      setError(t('vault.modals.addLink.errors.required'));
       return;
     }
 
@@ -52,7 +56,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
     try {
       new URL(normalizedUrl);
     } catch {
-      setError('Please enter a valid URL');
+      setError(t('vault.modals.addLink.errors.invalidUrl'));
       return;
     }
 
@@ -90,7 +94,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
         });
 
     } catch (err: any) {
-      setError(err.message || 'Failed to add link');
+      setError(err.message || t('vault.modals.addLink.errors.failed'));
       setLoading(false);
     }
   };
@@ -220,7 +224,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
     >
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>Add New Link</h2>
+          <h2>{t('vault.modals.addLink.title')}</h2>
           <button onClick={onClose} className="modal-close">
             <X className="h-6 w-6" />
           </button>
@@ -235,7 +239,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
 
           <div className="form-group">
             <label htmlFor="url" className="form-label">
-              URL *
+              {t('vault.modals.addLink.url')} *
             </label>
             <div className={`url-input-wrapper ${formData.url ? 'input-with-clear' : ''}`}>
               <input
@@ -246,7 +250,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
                 value={formData.url}
                 onChange={handleChange}
                 className={`form-input ${isAutoFetching ? 'border-primary' : ''}`}
-                placeholder="https://example.com"
+                placeholder={t('vault.modals.addLink.placeholders.url')}
                 disabled={loading}
               />
               {isAutoFetching && (
@@ -255,7 +259,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
                 </div>
               )}
               {formData.url && !loading && (
-                <button type="button" onClick={() => clearField('url')} className="input-clear-btn" title="Clear URL">
+                <button type="button" onClick={() => clearField('url')} className="input-clear-btn" title={t('vault.modals.addLink.tooltips.clearUrl')}>
                   <X size={12} />
                 </button>
               )}
@@ -264,10 +268,10 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
 
           <div className="form-group">
             <label htmlFor="title" className="form-label">
-              Link Title *
+              {t('vault.modals.addLink.linkTitle')} *
               {isTitleAutoFilled && (
                 <span className="auto-filled-hint">
-                  <Sparkles size={10} /> Auto-filled
+                  <Sparkles size={10} /> {t('vault.modals.addLink.autoFilled')}
                 </span>
               )}
             </label>
@@ -281,11 +285,11 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
                 value={formData.title}
                 onChange={handleChange}
                 className="form-input"
-                placeholder="Enter link title"
+                placeholder={t('vault.modals.addLink.placeholders.title')}
                 disabled={loading}
               />
               {formData.title && !loading && (
-                <button type="button" onClick={() => clearField('title')} className="input-clear-btn" title="Clear title">
+                <button type="button" onClick={() => clearField('title')} className="input-clear-btn" title={t('vault.modals.addLink.tooltips.clearTitle')}>
                   <X size={12} />
                 </button>
               )}
@@ -294,10 +298,10 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
 
           <div className="form-group">
             <label htmlFor="description" className="form-label">
-              Description
+              {t('vault.modals.addLink.description')}
               {isDescAutoFilled && (
                 <span className="auto-filled-hint">
-                  <Sparkles size={10} /> Auto-filled
+                  <Sparkles size={10} /> {t('vault.modals.addLink.autoFilled')}
                 </span>
               )}
             </label>
@@ -310,11 +314,11 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
                 onChange={handleChange}
                 className="form-input resize-none"
                 rows={3}
-                placeholder="Enter link description (optional)"
+                placeholder={t('vault.modals.addLink.placeholders.description')}
                 disabled={loading}
               />
               {formData.description && !loading && (
-                <button type="button" onClick={() => clearField('description')} className="input-clear-btn" title="Clear description">
+                <button type="button" onClick={() => clearField('description')} className="input-clear-btn" title={t('vault.modals.addLink.tooltips.clearDescription')}>
                   <X size={12} />
                 </button>
               )}
@@ -323,7 +327,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
 
           <div className="form-group">
             <label htmlFor="tags" className="form-label">
-              Tags
+              {t('vault.modals.addLink.tags')}
             </label>
             <div className="tags-input-wrapper">
               <div className="tags-list">
@@ -351,13 +355,13 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
                     }
                   }}
                   className="form-input tag-input-padding"
-                  placeholder="Add a tag..."
+                  placeholder={t('vault.modals.addLink.placeholders.tags')}
                 />
                 <button
                   type="button"
                   onClick={handleAddTag}
                   className="tag-add-btn"
-                  title="Add tag"
+                  title={t('vault.modals.addLink.tooltips.addTag')}
                 >
                   <Plus size={16} />
                 </button>
@@ -373,7 +377,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
             disabled={loading}
             className="btn-cancel"
           >
-            Cancel
+            {t('vault.modals.addLink.buttons.cancel')}
           </button>
           <button
             type="submit"
@@ -384,12 +388,12 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, vaultId, v
             {loading ? (
               <>
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                Adding...
+                {t('vault.modals.addLink.buttons.adding')}
               </>
             ) : (
               <>
                 <LinkIcon className="h-4 w-4" />
-                Add Link
+                {t('vault.modals.addLink.buttons.add')}
               </>
             )}
           </button>

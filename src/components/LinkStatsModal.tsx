@@ -1,5 +1,6 @@
 import React from 'react';
 import { X, TrendingUp, Clock, MousePointer2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import {
     XAxis,
     YAxis,
@@ -24,6 +25,8 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
     link,
     vaultColor = '#6366f1'
 }) => {
+    const { t } = useTranslation();
+
     if (!isOpen) return null;
 
     // Prepare data for the chart
@@ -89,7 +92,7 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
                         </div>
                         <div className="header-titles">
                             <h2>{link.title}</h2>
-                            <span>Link Analytics</span>
+                            <span>{t('vault.modals.linkStats.analytics')}</span>
                         </div>
                     </div>
                     <button onClick={onClose} className="header-close-btn" aria-label="Close modal">
@@ -103,7 +106,7 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
                             <MousePointer2 size={24} />
                         </div>
                         <div className="stat-card-data">
-                            <span className="stat-card-label">Lifetime Clicks</span>
+                            <span className="stat-card-label">{t('vault.modals.linkStats.lifetime')}</span>
                             <span className="stat-card-number">{link.clicks || 0}</span>
                         </div>
                     </div>
@@ -112,14 +115,14 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
                             <Clock size={24} />
                         </div>
                         <div className="stat-card-data">
-                            <span className="stat-card-label">Today</span>
+                            <span className="stat-card-label">{t('vault.modals.linkStats.today')}</span>
                             <span className="stat-card-number">{clicksToday}</span>
                         </div>
                     </div>
                 </div>
 
                 <div className="premium-chart-area">
-                    <h3 className="chart-section-title">Click history</h3>
+                    <h3 className="chart-section-title">{t('vault.modals.linkStats.history')}</h3>
                     <div className="chart-wrapper-inner">
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>

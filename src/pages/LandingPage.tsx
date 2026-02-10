@@ -13,17 +13,13 @@ import tagsImg from '../assets/Screenshots/tags.png';
 import firefoxExtImg from '../assets/og-img.png';
 import '../css/About.css';
 import SEO from '../components/SEO';
+import LanguageToggle from '../components/LanguageToggle';
 
 const LandingPage: React.FC = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const { theme, toggleTheme } = useTheme();
   const [demoColor, setDemoColor] = useState('#6366f1');
   const navigate = useNavigate();
-
-  const toggleLanguage = () => {
-    const newLang = i18n.language === 'en' ? 'tr' : 'en';
-    i18n.changeLanguage(newLang);
-  };
 
   return (
     <div className="landing-page bg-white dark:bg-gray-900 text-black dark:text-white overflow-hidden">
@@ -47,13 +43,7 @@ const LandingPage: React.FC = () => {
               >
                 {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
               </button>
-              <button
-                onClick={toggleLanguage}
-                className="theme-toggle-btn uppercase font-bold text-xs"
-                title="Switch Language"
-              >
-                {i18n.language === 'en' ? 'TR' : 'EN'}
-              </button>
+              <LanguageToggle className="theme-toggle-btn uppercase font-bold text-xs" />
               <a
                 href="https://github.com/samirrhashimov/blink"
                 target="_blank"
@@ -201,9 +191,9 @@ const LandingPage: React.FC = () => {
             <div className="inline-flex items-center justify-center p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg mb-4 text-orange-600 dark:text-orange-400">
               <Tag className="w-6 h-6" />
             </div>
-            <h2 className="feature-section-title">Smart Tagging System</h2>
+            <h2 className="feature-section-title">{t('landing.features.tagging.title')}</h2>
             <p className="feature-section-desc">
-              Organize your links with powerful tags. Create custom tags, filter by categories, and find exactly what you need in seconds. Perfect for managing large collections.
+              {t('landing.features.tagging.desc')}
             </p>
           </div>
           <div className="feature-image-container">
@@ -217,9 +207,9 @@ const LandingPage: React.FC = () => {
             <div className="inline-flex items-center justify-center p-2 bg-pink-100 dark:bg-pink-900/30 rounded-lg mb-4 text-pink-600 dark:text-pink-400">
               <Palette className="w-6 h-6" />
             </div>
-            <h2 className="feature-section-title">Customizable Themes</h2>
+            <h2 className="feature-section-title">{t('landing.features.themes.title')}</h2>
             <p className="feature-section-desc">
-              Personalize your workspace with custom container colors. Choose from our curated color palette to make each container uniquely yours. Try it out below!
+              {t('landing.features.themes.desc')}
             </p>
             <div className="color-demo-palette" style={{ marginTop: '1.5rem' }}>
               {['#6366f1', '#8b5cf6', '#ec4899', '#f43f5e', '#f97316', '#eab308', '#22c55e', '#14b8a6', '#06b6d4'].map((color) => (
@@ -241,8 +231,8 @@ const LandingPage: React.FC = () => {
             <div className="demo-container-card" style={{ backgroundColor: demoColor }}>
               <div className="demo-container-overlay" style={{ backgroundColor: demoColor }}></div>
               <div className="demo-container-content">
-                <h3 className="demo-container-title">My Container</h3>
-                <p className="demo-container-description">Custom colored workspace</p>
+                <h3 className="demo-container-title">{t('landing.features.themes.demoTitle')}</h3>
+                <p className="demo-container-description">{t('landing.features.themes.demoDesc')}</p>
               </div>
             </div>
           </div>
@@ -255,9 +245,9 @@ const LandingPage: React.FC = () => {
               <img src={firefoxExtImg} alt="Firefox Extension" />
             </div>
             <div className="firefox-content-wrapper">
-              <h2 className="feature-section-title firefox-title">Blink for Firefox</h2>
+              <h2 className="feature-section-title firefox-title">{t('landing.features.firefox.title')}</h2>
               <p className="feature-section-desc firefox-desc">
-                Save any webpage directly to your Blink containers with a single click. Our extension allows you to save your links directly to the desired container without leaving the browser tab.
+                {t('landing.features.firefox.desc')}
               </p>
               <a
                 href="https://addons.mozilla.org/en-US/firefox/addon/blinklinknet/"
@@ -344,7 +334,7 @@ const LandingPage: React.FC = () => {
                   <path d="M148.439 277.443s11.093-41.335 79.432-41.335c7.388 0 28.509-20.615 28.9-26.593s-43.7 18.352-90.233-3.541c-50.239-23.638-88.358 3.541-88.358 3.541s14.477 35.809 56.934 35.809c-4.453 39.286 16.319 85.1 66.6 109.124 1.124.537 2.18 1.124 3.334 1.639-29.348-15.169-53.582-43.834-56.609-78.644z" fill="url(#k)" />
                   <path d="M478.711 166.353c-10.445-25.124-31.6-52.248-48.212-60.821 13.52 26.505 21.345 53.093 24.335 72.936 0 .039.015.136.047.4C427.706 111.135 381.627 83.823 344 24.355c-1.9-3.007-3.805-6.022-5.661-9.2a73.716 73.716 0 01-2.646-4.972A43.7 43.7 0 01332.1.677a.626.626 0 00-.546-.644.818.818 0 00-.451 0c-.034.012-.084.051-.12.065-.053.021-.12.069-.176.1.027-.036.083-.117.1-.136-60.37 35.356-80.85 100.761-82.732 133.484 2.8-.194 5.592-.429 8.442-.429 45.053 0 84.291 24.77 105.3 61.484-12.832-9.014-35.81-17.917-57.947-14.067 86.441 43.214 63.235 192.026-56.545 186.408a106.743 106.743 0 01-31.271-6.031 134.51 134.51 0 01-7.059-2.886c-1.356-.618-2.711-1.243-4.05-1.935.048.033.114.07.163.1a144.108 144.108 0 01-3.5-1.743c1.124.537 2.18 1.124 3.334 1.639-29.35-15.168-53.584-43.833-56.611-78.643 0 0 11.093-41.335 79.432-41.335 7.388 0 28.509-20.615 28.9-26.593-.089-1.952-41.917-18.59-58.223-34.656-8.713-8.584-12.85-12.723-16.514-15.828a71.355 71.355 0 00-6.225-4.7 111.338 111.338 0 01-.674-58.732c-24.688 11.241-43.89 29.01-57.85 44.7h-.111c-9.527-12.067-8.855-51.873-8.312-60.184-.114-.515-7.107 3.63-8.023 4.255a175.073 175.073 0 00-23.486 20.12 210.478 210.478 0 00-22.435 26.916c0 .012-.007.026-.011.038 0-.013.007-.026.011-.038a202.838 202.838 0 00-32.247 72.805c-.115.521-.212 1.061-.324 1.586-.452 2.116-2.486 12.853-2.77 15.156-.022.177.021-.176 0 0a279.565 279.565 0 00-3.544 33.53c0 .41-.025.816-.025 1.227C16 388.418 123.6 496 256.324 496c118.865 0 217.56-86.288 236.882-199.63.407-3.076.733-6.168 1.092-9.271 4.777-41.21-.53-84.525-15.587-120.746zm-23.841 12.341c.012.085.027.174.04.259l-.008-.026-.032-.233z" fill="url(#l)" />
                 </svg>
-                Add to Firefox
+                {t('landing.features.firefox.button')}
               </a>
             </div>
           </div>
@@ -356,8 +346,8 @@ const LandingPage: React.FC = () => {
       <section className="about-features bg-gray-50 dark:bg-gray-800/50 py-20 rounded-3xl mx-4 md:mx-auto max-w-7xl">
         <div className="about-features-container">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Everything you need</h2>
-            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto" style={{ marginBottom: '2rem' }}>Powerful features designed to make link management effortless and secure.</p>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">{t('landing.features.everything.title')}</h2>
+            <p className="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto" style={{ marginBottom: '2rem' }}>{t('landing.features.everything.subtitle')}</p>
           </div>
 
           <div className="about-features-grid">
@@ -365,48 +355,48 @@ const LandingPage: React.FC = () => {
               <div className="about-feature-icon about-icon-blue group-hover:scale-110 transition-transform">
                 <Shield className="about-icon-svg" />
               </div>
-              <h3 className="about-feature-title">Top-tier Security</h3>
-              <p className="about-feature-text">Enterprise-grade encryption aim to keep your data private and protected.</p>
+              <h3 className="about-feature-title">{t('landing.features.everything.security.title')}</h3>
+              <p className="about-feature-text">{t('landing.features.everything.security.desc')}</p>
             </div>
 
             <div className="about-feature-card group hover:-translate-y-2 transition-transform">
               <div className="about-feature-icon about-icon-purple group-hover:scale-110 transition-transform">
                 <Zap className="about-icon-svg" />
               </div>
-              <h3 className="about-feature-title">Real-time Sync</h3>
-              <p className="about-feature-text">Changes happen instantly across all devices. Just smooth, real-time updates.</p>
+              <h3 className="about-feature-title">{t('landing.features.everything.sync.title')}</h3>
+              <p className="about-feature-text">{t('landing.features.everything.sync.desc')}</p>
             </div>
 
             <div className="about-feature-card group hover:-translate-y-2 transition-transform">
               <div className="about-feature-icon about-icon-pink group-hover:scale-110 transition-transform">
                 <Globe className="about-icon-svg" />
               </div>
-              <h3 className="about-feature-title">Accessible Anywhere</h3>
-              <p className="about-feature-text">Access your links from any device, anywhere in the world. Your personal cloud for the web.</p>
+              <h3 className="about-feature-title">{t('landing.features.everything.anywhere.title')}</h3>
+              <p className="about-feature-text">{t('landing.features.everything.anywhere.desc')}</p>
             </div>
 
             <div className="about-feature-card group hover:-translate-y-2 transition-transform">
               <div className="about-feature-icon about-icon-yellow group-hover:scale-110 transition-transform">
                 <Search className="about-icon-svg" />
               </div>
-              <h3 className="about-feature-title">Smart Search</h3>
-              <p className="about-feature-text">Instant search across titles, URLs, and descriptions helps you find what you need in milliseconds.</p>
+              <h3 className="about-feature-title">{t('landing.features.everything.search.title')}</h3>
+              <p className="about-feature-text">{t('landing.features.everything.search.desc')}</p>
             </div>
 
             <div className="about-feature-card group hover:-translate-y-2 transition-transform">
               <div className="about-feature-icon about-icon-cyan group-hover:scale-110 transition-transform">
                 <Moon className="about-icon-svg" />
               </div>
-              <h3 className="about-feature-title">Dark Mode</h3>
-              <p className="about-feature-text">Native dark mode support that respects your system preferences and saves your eyes at night.</p>
+              <h3 className="about-feature-title">{t('landing.features.everything.darkmode.title')}</h3>
+              <p className="about-feature-text">{t('landing.features.everything.darkmode.desc')}</p>
             </div>
 
             <div className="about-feature-card group hover:-translate-y-2 transition-transform">
               <div className="about-feature-icon about-icon-green group-hover:scale-110 transition-transform">
                 <Lock className="about-icon-svg" />
               </div>
-              <h3 className="about-feature-title">Permission Control</h3>
-              <p className="about-feature-text">Control who can view, edit, or manage your links.</p>
+              <h3 className="about-feature-title">{t('landing.features.everything.permissions.title')}</h3>
+              <p className="about-feature-text">{t('landing.features.everything.permissions.desc')}</p>
             </div>
           </div>
         </div>
@@ -420,7 +410,7 @@ const LandingPage: React.FC = () => {
           <div className="relative z-10 flex flex-col items-center text-center">
             <div className="flex gap-4 flex-col sm:flex-row">
               <Link to="/login" className="header-getstarted-footer">
-                Get Started for Free
+                {t('landing.features.cta.button')}
               </Link>
             </div>
           </div>
@@ -438,21 +428,21 @@ const LandingPage: React.FC = () => {
               onClick={(e) => {
                 e.preventDefault();
                 navigate('/legal/privacy-policy');
-              }} className="hover:text-blue-500 transition-colors">Privacy</a>
+              }} className="hover:text-blue-500 transition-colors">{t('landing.features.footer.privacy')}</a>
             <a href="#"
               onClick={(e) => {
                 e.preventDefault();
                 navigate('/legal/terms-and-conditions');
-              }} className="hover:text-blue-500 transition-colors">Terms</a>
+              }} className="hover:text-blue-500 transition-colors">{t('landing.features.footer.terms')}</a>
             <a href="#"
               onClick={(e) => {
                 e.preventDefault();
                 navigate('/legal/delete-account');
-              }} className="hover:text-blue-500 transition-colors">Account Deletion</a>
+              }} className="hover:text-blue-500 transition-colors">{t('landing.features.footer.deletion')}</a>
             <a href="https://github.com/samirrhashimov/blink.git" className="hover:text-blue-500 transition-colors">GitHub</a>
           </div>
         </div>
-      </footer >
+      </footer>
     </div >
   );
 };

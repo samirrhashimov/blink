@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, UserMinus, Eye, Edit3, Crown } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { SharingService } from '../services/sharingService';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
@@ -32,6 +33,8 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
   currentUserId,
   vaultColor
 }) => {
+  const { t } = useTranslation();
+
   const [collaborators, setCollaborators] = useState<CollaboratorInfo[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -54,16 +57,16 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
         const ownerData = ownerDoc.exists() ? ownerDoc.data() : {};
         collabInfos.push({
           userId: ownerId,
-          email: ownerData?.email || 'Unknown',
-          displayName: ownerData?.displayName || ownerData?.email || 'Owner',
+          email: ownerData?.email || t('vault.modals.collaborators.unknown'),
+          displayName: ownerData?.displayName || ownerData?.email || t('vault.modals.collaborators.owner'),
           permission: 'edit',
           isPending: false
         });
       } catch {
         collabInfos.push({
           userId: ownerId,
-          email: 'Unknown',
-          displayName: 'Owner',
+          email: t('vault.modals.collaborators.unknown'),
+          displayName: t('vault.modals.collaborators.owner'),
           permission: 'edit',
           isPending: false
         });
@@ -77,7 +80,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
           const userData = userDoc.exists() ? userDoc.data() : {};
           collabInfos.push({
             userId,
-            email: userData?.email || 'Unknown',
+            email: userData?.email || t('vault.modals.collaborators.unknown'),
             displayName: userData?.displayName || userData?.email || 'User',
             permission: (userPermission?.permission === 'edit' ? 'edit' : 'view'),
             isPending: false
@@ -86,8 +89,8 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
           const userPermission = permissions.find(p => p.userId === userId);
           collabInfos.push({
             userId,
-            email: 'Unknown',
-            displayName: 'User (Error loading)',
+            email: t('vault.modals.collaborators.unknown'),
+            displayName: t('vault.modals.collaborators.errorLoading'),
             permission: (userPermission?.permission === 'edit' ? 'edit' : 'view'),
             isPending: false
           });
@@ -100,7 +103,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
           collabInfos.push({
             userId: invite.id,
             email: invite.email,
-            displayName: `${invite.email} (Invited)`,
+            displayName: `${invite.email} (${t('vault.modals.collaborators.invited')})`,
             permission: (invite.permission === 'edit' ? 'edit' : 'view'),
             isPending: true
           });
@@ -109,7 +112,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
 
       setCollaborators(collabInfos);
     } catch (err: any) {
-      setError(err.message || 'Failed to load collaborators');
+      setError(err.message || t('vault.modals.collaborators.errors.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -122,7 +125,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
       else await SharingService.removeUserFromVault(vaultId, userId);
       await loadCollaborators();
     } catch (err: any) {
-      setError(err.message || 'Failed to remove collaborator');
+      setError(err.message || t('vault.modals.collaborators.errors.removeFailed'));
     }
   };
 
@@ -132,7 +135,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
       await SharingService.setUserPermission(vaultId, userId, newPermission, currentUserId);
       await loadCollaborators();
     } catch (err: any) {
-      setError(err.message || 'Failed to update permission');
+      setError(err.message || t('vault.modals.collaborators.errors.updateFailed'));
     }
   };
 
@@ -146,7 +149,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
     >
       <div className="modal-content collaborators-modal max-h-[80vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
         <div className="collaborators-modal-header">
-          <h2>Collaborators</h2>
+          <h2>{t('vault.modals.collaborators.title')}</h2>
           <button onClick={onClose} className="collaborators-modal-close">
             <X className="h-5 w-5" />
           </button>
@@ -161,7 +164,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
             </div>
           ) : collaborators.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-500 dark:text-gray-500">No collaborators yet</p>
+              <p className="text-gray-500 dark:text-gray-500">{t('vault.modals.collaborators.empty')}</p>
             </div>
           ) : (
             <div className="collaborators-list-modern">
@@ -185,9 +188,9 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
                         <div className="collaborator-name-row">
                           <p className="collaborator-name-modern">{collab.displayName}</p>
                           <div className="collaborator-badges">
-                            {isOwner && <span className="badge-modern badge-owner">Owner</span>}
-                            {isCurrentUser && !isOwner && <span className="badge-modern badge-you">You</span>}
-                            {isPending && <span className="badge-modern badge-pending">Pending</span>}
+                            {isOwner && <span className="badge-modern badge-owner">{t('vault.modals.collaborators.owner')}</span>}
+                            {isCurrentUser && !isOwner && <span className="badge-modern badge-you">{t('vault.modals.collaborators.you')}</span>}
+                            {isPending && <span className="badge-modern badge-pending">{t('vault.modals.collaborators.pending')}</span>}
                           </div>
                         </div>
                         <p className="collaborator-email-modern">{collab.email}</p>
@@ -201,14 +204,14 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
                           onChange={(e) => handlePermissionChange(collab.userId, e.target.value as 'view' | 'edit')}
                           className="permission-select-modern"
                         >
-                          <option value="view">Can view</option>
-                          <option value="edit">Can edit</option>
+                          <option value="view">{t('vault.modals.collaborators.canView')}</option>
+                          <option value="edit">{t('vault.modals.collaborators.canEdit')}</option>
                         </select>
                       ) : (
                         <div className="permission-display">
                           {collab.permission === 'view' && <Eye className="h-4 w-4" />}
                           {collab.permission === 'edit' && <Edit3 className="h-4 w-4" />}
-                          <span>{collab.permission === 'view' ? 'Can view' : 'Can edit'}</span>
+                          <span>{collab.permission === 'view' ? t('vault.modals.collaborators.canView') : t('vault.modals.collaborators.canEdit')}</span>
                         </div>
                       )}
 
@@ -216,7 +219,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
                         <button
                           onClick={() => handleRemoveCollaborator(collab.userId, isPending)}
                           className="remove-btn-modern"
-                          title={isPending ? 'Cancel invitation' : 'Remove collaborator'}
+                          title={isPending ? t('vault.modals.collaborators.cancelInvite') : t('vault.modals.collaborators.remove')}
                         >
                           <UserMinus className="h-4 w-4" />
                         </button>
@@ -230,7 +233,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
         </div>
 
         <div className="collaborators-modal-footer">
-          <button onClick={onClose} className="close-btn-modern">Close</button>
+          <button onClick={onClose} className="close-btn-modern">{t('common.buttons.close')}</button>
         </div>
       </div>
     </div>

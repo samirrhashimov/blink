@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Link as LinkIcon, Copy, Trash2, Plus } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { ShareLinkService, type ShareLink } from '../services/shareLinkService';
 
 interface ShareLinkModalProps {
@@ -19,6 +20,8 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
   currentUserId,
   vaultColor
 }) => {
+  const { t } = useTranslation();
+
   const [shareLinks, setShareLinks] = useState<ShareLink[]>([]);
   const [loading, setLoading] = useState(false);
   const [creating, setCreating] = useState(false);
@@ -44,7 +47,7 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
       const links = await ShareLinkService.getVaultShareLinks(vaultId);
       setShareLinks(links);
     } catch (err: any) {
-      setError(err.message || 'Failed to load share links');
+      setError(err.message || t('vault.modals.shareLink.errors.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -65,7 +68,7 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
       setShowCreateForm(false);
       setNewLinkConfig({ permission: 'view', expiresInDays: 7, maxUses: 0 });
     } catch (err: any) {
-      setError(err.message || 'Failed to create share link');
+      setError(err.message || t('vault.modals.shareLink.errors.createFailed'));
     } finally {
       setCreating(false);
     }
@@ -83,12 +86,12 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
       await ShareLinkService.deactivateShareLink(linkId);
       await loadShareLinks();
     } catch (err: any) {
-      setError(err.message || 'Failed to deactivate link');
+      setError(err.message || t('vault.modals.shareLink.errors.deactivateFailed'));
     }
   };
 
   const formatDate = (date?: Date) => {
-    if (!date) return 'Never';
+    if (!date) return t('vault.modals.shareLink.never');
     return new Date(date).toLocaleDateString();
   };
 
@@ -103,7 +106,7 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
       <div className="modal-content max-w-2xl max-h-[80vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div>
-            <h2>Share Links</h2>
+            <h2>{t('vault.modals.shareLink.title')}</h2>
             <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{vaultName}</p>
           </div>
           <button onClick={onClose} className="modal-close">
@@ -124,33 +127,33 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
               className="btn-primary w-full mb-4"
             >
               <Plus className="h-5 w-5" />
-              Create New Share Link
+              {t('vault.modals.shareLink.createBtn')}
             </button>
           )}
 
           {showCreateForm && (
             <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
-              <h3 className="font-medium text-gray-900 dark:text-white mb-3">New Share Link</h3>
+              <h3 className="font-medium text-gray-900 dark:text-white mb-3">{t('vault.modals.shareLink.form.title')}</h3>
 
               <div className="space-y-3">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Permission
+                    {t('vault.modals.shareLink.form.permission')}
                   </label>
                   <select
                     value={newLinkConfig.permission}
                     onChange={(e) => setNewLinkConfig({ ...newLinkConfig, permission: e.target.value as any })}
                     className="w-full px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                   >
-                    <option value="view">Can view</option>
-                    <option value="comment">Can comment</option>
-                    <option value="edit">Can edit</option>
+                    <option value="view">{t('vault.modals.shareLink.form.permissions.view')}</option>
+                    <option value="comment">{t('vault.modals.shareLink.form.permissions.comment')}</option>
+                    <option value="edit">{t('vault.modals.shareLink.form.permissions.edit')}</option>
                   </select>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Expires in (days, 0 = never)
+                    {t('vault.modals.shareLink.form.expiresIn')}
                   </label>
                   <input
                     type="number"
@@ -163,7 +166,7 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    Max uses (0 = unlimited)
+                    {t('vault.modals.shareLink.form.maxUses')}
                   </label>
                   <input
                     type="number"
@@ -179,14 +182,14 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
                     onClick={() => setShowCreateForm(false)}
                     className="flex-1 px-4 py-2 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors"
                   >
-                    Cancel
+                    {t('common.buttons.cancel')}
                   </button>
                   <button
                     onClick={handleCreateLink}
                     disabled={creating}
                     className="btn-primary flex-1"
                   >
-                    {creating ? 'Creating...' : 'Create Link'}
+                    {creating ? t('vault.modals.shareLink.form.creating') : t('vault.modals.shareLink.form.create')}
                   </button>
                 </div>
               </div>
@@ -200,7 +203,7 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
           ) : shareLinks.length === 0 ? (
             <div className="text-center py-8 text-gray-500 dark:text-gray-400">
               <LinkIcon className="h-12 w-12 mx-auto mb-2 opacity-50" />
-              <p>No share links created yet</p>
+              <p>{t('vault.modals.shareLink.empty')}</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -213,11 +216,11 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
                           {link.permission}
                         </span>
                         <span className="text-xs text-gray-600 dark:text-gray-400">
-                          Uses: {link.currentUses}{link.maxUses ? `/${link.maxUses}` : ''}
+                          {t('vault.modals.shareLink.uses')}: {link.currentUses}{link.maxUses ? `/${link.maxUses}` : ''}
                         </span>
                       </div>
                       <div className="text-xs text-gray-600 dark:text-gray-400 mb-2">
-                        Expires: {formatDate(link.expiresAt)}
+                        {t('vault.modals.shareLink.expires')}: {formatDate(link.expiresAt)}
                       </div>
                       <div className="flex items-center gap-2">
                         <code className="text-xs bg-gray-200 dark:bg-gray-800 px-2 py-1 rounded flex-grow overflow-hidden text-ellipsis">
@@ -229,14 +232,14 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
                       <button
                         onClick={() => handleCopyLink(link.token, link.id)}
                         className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-400"
-                        title={copiedLinkId === link.id ? 'Copied!' : 'Copy link'}
+                        title={copiedLinkId === link.id ? t('vault.modals.shareLink.copied') : t('vault.modals.shareLink.copy')}
                       >
                         {copiedLinkId === link.id ? '✓' : <Copy className="h-4 w-4" />}
                       </button>
                       <button
                         onClick={() => handleDeactivateLink(link.id)}
                         className="p-2 rounded hover:bg-red-100 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400"
-                        title="Deactivate link"
+                        title={t('vault.modals.shareLink.deactivate')}
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>
@@ -253,7 +256,7 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
             onClick={onClose}
             className="btn-cancel w-full"
           >
-            Close
+            {t('common.buttons.close')}
           </button>
         </div>
       </div>

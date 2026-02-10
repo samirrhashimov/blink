@@ -7,7 +7,11 @@ interface CreateVaultModalProps {
   onClose: () => void;
 }
 
+import { useTranslation } from 'react-i18next';
+
 const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) => {
+  const { t } = useTranslation();
+
   const { createVault } = useVault();
   const [formData, setFormData] = useState({
     name: '',
@@ -24,17 +28,17 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
     e.preventDefault();
 
     if (!formData.name.trim()) {
-      setError('Vault name is required');
+      setError(t('vault.modals.createVault.errors.nameRequired'));
       return;
     }
 
     if (formData.name.trim().length > MAX_NAME_LENGTH) {
-      setError(`Vault name must be ${MAX_NAME_LENGTH} characters or less`);
+      setError(t('vault.modals.createVault.errors.nameLength', { max: MAX_NAME_LENGTH }));
       return;
     }
 
     if (formData.description.trim().length > MAX_DESCRIPTION_LENGTH) {
-      setError(`Description must be ${MAX_DESCRIPTION_LENGTH} characters or less`);
+      setError(t('vault.modals.createVault.errors.descLength', { max: MAX_DESCRIPTION_LENGTH }));
       return;
     }
 
@@ -45,7 +49,7 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
       setFormData({ name: '', description: '', color: '#6366f1' });
       onClose();
     } catch (err: any) {
-      setError(err.message || 'Failed to create vault');
+      setError(err.message || t('vault.modals.createVault.errors.failed'));
     } finally {
       setLoading(false);
     }
@@ -70,7 +74,7 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>Create New Vault</h2>
+          <h2>{t('vault.modals.createVault.title')}</h2>
           <button onClick={onClose} className="modal-close">
             <X className="h-6 w-6" />
           </button>
@@ -85,7 +89,7 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
 
           <div className="form-group">
             <label htmlFor="name" className="form-label">
-              Container Name *
+              {t('vault.modals.createVault.name')} *
               <span className="char-counter">
                 {formData.name.length}/{MAX_NAME_LENGTH}
               </span>
@@ -99,14 +103,14 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
               value={formData.name}
               onChange={handleChange}
               className="form-input"
-              placeholder="Enter container name"
+              placeholder={t('vault.modals.createVault.placeholders.name')}
               disabled={loading}
             />
           </div>
 
           <div className="form-group">
             <label htmlFor="description" className="form-label">
-              Description
+              {t('vault.modals.createVault.description')}
               <span className="char-counter">
                 {formData.description.length}/{MAX_DESCRIPTION_LENGTH}
               </span>
@@ -119,13 +123,13 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
               onChange={handleChange}
               className="form-input resize-none"
               rows={3}
-              placeholder="Enter container description"
+              placeholder={t('vault.modals.createVault.placeholders.description')}
               disabled={loading}
             />
           </div>
 
           <div className="form-group">
-            <label className="form-label">Container Color</label>
+            <label className="form-label">{t('vault.modals.createVault.color')}</label>
             <div className="color-picker-grid">
               {VAULT_COLORS.map(color => (
                 <button
@@ -148,7 +152,7 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
             disabled={loading}
             className="btn-cancel"
           >
-            Cancel
+            {t('vault.modals.addLink.buttons.cancel')}
           </button>
           <button
             type="submit"
@@ -159,12 +163,12 @@ const CreateVaultModal: React.FC<CreateVaultModalProps> = ({ isOpen, onClose }) 
             {loading ? (
               <>
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                Creating...
+                {t('vault.modals.createVault.buttons.creating')}
               </>
             ) : (
               <>
                 <Plus className="h-4 w-4" />
-                Create Container
+                {t('vault.modals.createVault.buttons.create')}
               </>
             )}
           </button>

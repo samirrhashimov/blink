@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { X, Check, Trash2, CheckCheck } from 'lucide-react';
 import { NotificationService } from '../services/notificationService';
 import type { Notification } from '../types/notification';
@@ -12,6 +13,7 @@ interface NotificationsPanelProps {
 }
 
 const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onClose, userId }) => {
+  const { t } = useTranslation();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -113,12 +115,12 @@ const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onClose
     const diff = now.getTime() - date.getTime();
     const minutes = Math.floor(diff / 60000);
     const hours = Math.floor(diff / 3600000);
-    const days = Math.floor(diff / 86400000);
+    const days = Math.floor(diff / 84600000);
 
-    if (minutes < 1) return 'Just now';
-    if (minutes < 60) return `${minutes}m ago`;
-    if (hours < 24) return `${hours}h ago`;
-    if (days < 7) return `${days}d ago`;
+    if (minutes < 1) return t('notifications.time.justNow');
+    if (minutes < 60) return t('notifications.time.minutes', { count: minutes });
+    if (hours < 24) return t('notifications.time.hours', { count: hours });
+    if (days < 7) return t('notifications.time.days', { count: days });
     return date.toLocaleDateString();
   };
 
@@ -134,13 +136,13 @@ const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onClose
 
         {/* Header */}
         <div className="notification-header">
-          <h2 className="text-lg font-semibold text-gray-900">Notifications</h2>
+          <h2 className="text-lg font-semibold text-gray-900">{t('notifications.title')}</h2>
           <div className="flex items-center gap-2">
             {notifications.some(n => !n.read) && (
               <button
                 onClick={handleMarkAllAsRead}
                 className="notification-header-btn"
-                title="Mark all as read"
+                title={t('notifications.markAllRead')}
               >
                 <CheckCheck className="h-5 w-5" />
               </button>
@@ -162,7 +164,7 @@ const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onClose
             </div>
           ) : notifications.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full text-gray-500 py-8">
-              <p>No notifications</p>
+              <p>{t('notifications.empty')}</p>
             </div>
           ) : (
             <div className="flex flex-col gap-1">
@@ -201,7 +203,7 @@ const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onClose
                           handleMarkAsRead(notification.id);
                         }}
                         className="p-1 rounded hover:bg-gray-200 text-gray-600"
-                        title="Mark as read"
+                        title={t('notifications.markRead')}
                       >
                         <Check className="h-4 w-4" />
                       </button>
@@ -212,7 +214,7 @@ const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onClose
                         handleDelete(notification.id);
                       }}
                       className="p-1 rounded hover:bg-red-100 text-red-600"
-                      title="Delete"
+                      title={t('notifications.delete')}
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>

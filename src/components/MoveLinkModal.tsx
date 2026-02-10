@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { X, ArrowRightLeft } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useVault } from '../contexts/VaultContext';
 import type { Link } from '../types';
 
@@ -20,6 +21,8 @@ const MoveLinkModal: React.FC<MoveLinkModalProps> = ({
     currentVaultId,
     vaultColor
 }) => {
+    const { t } = useTranslation();
+
     const { vaults, moveLinkToVault, moveLinksToVault } = useVault();
     const [targetVaultId, setTargetVaultId] = useState('');
     const [loading, setLoading] = useState(false);
@@ -31,7 +34,7 @@ const MoveLinkModal: React.FC<MoveLinkModalProps> = ({
 
     const handleMove = async () => {
         if (!targetVaultId) {
-            setError('Please select a target container');
+            setError(t('vault.modals.moveLink.errors.selectVault'));
             return;
         }
 
@@ -49,7 +52,7 @@ const MoveLinkModal: React.FC<MoveLinkModalProps> = ({
 
             onClose();
         } catch (err: any) {
-            setError(err.message || 'Failed to move link(s)');
+            setError(err.message || t('vault.modals.moveLink.errors.failed'));
         } finally {
             setLoading(false);
         }
@@ -65,7 +68,7 @@ const MoveLinkModal: React.FC<MoveLinkModalProps> = ({
                 style={{ '--primary': vaultColor } as React.CSSProperties}
             >
                 <div className="modal-header">
-                    <h2>Move Link</h2>
+                    <h2>{t('vault.modals.moveLink.title')}</h2>
                     <button onClick={onClose} className="modal-close">
                         <X className="h-6 w-6" />
                     </button>
@@ -77,13 +80,13 @@ const MoveLinkModal: React.FC<MoveLinkModalProps> = ({
                     <div className="mb-4">
                         <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                             {linkIds && linkIds.length > 0
-                                ? `Move ${linkIds.length} links to another container:`
-                                : `Move "${link?.title}" to another container:`
+                                ? t('vault.modals.moveLink.bulkTitle', { count: linkIds.length })
+                                : t('vault.modals.moveLink.singleTitle', { title: link?.title })
                             }
                         </p>
                         <div className="grid grid-cols-1 gap-2 max-h-60 overflow-y-auto pr-2">
                             {availableVaults.length === 0 ? (
-                                <p className="text-center py-4 text-gray-500">No other containers available.</p>
+                                <p className="text-center py-4 text-gray-500">{t('vault.modals.moveLink.noVaults')}</p>
                             ) : (
                                 availableVaults.map((vault) => (
                                     <label
@@ -120,7 +123,7 @@ const MoveLinkModal: React.FC<MoveLinkModalProps> = ({
                         disabled={loading}
                         className="btn-cancel"
                     >
-                        Cancel
+                        {t('common.buttons.cancel')}
                     </button>
                     <button
                         onClick={handleMove}
@@ -131,12 +134,15 @@ const MoveLinkModal: React.FC<MoveLinkModalProps> = ({
                         {loading ? (
                             <>
                                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                                Moving...
+                                {t('vault.modals.moveLink.buttons.moving')}
                             </>
                         ) : (
                             <>
                                 <ArrowRightLeft size={18} />
-                                {linkIds && linkIds.length > 0 ? 'Move Links' : 'Move Link'}
+                                {linkIds && linkIds.length > 0
+                                    ? t('vault.modals.moveLink.buttons.moveLinks')
+                                    : t('vault.modals.moveLink.buttons.moveLink')
+                                }
                             </>
                         )}
                     </button>
