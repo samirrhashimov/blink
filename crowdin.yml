@@ -1,0 +1,8 @@
+project_id: 'BLINK_PROJECT_ID' # Replace with your actual project ID from Crowdin
+api_token_env: CROWDIN_PERSONAL_TOKEN # Environment variable for API token
+
+preserve_hierarchy: true
+
+files:
+  - source: /src/locales/en/translation.json
+    translation: /src/locales/%two_letters_code%/translation.json

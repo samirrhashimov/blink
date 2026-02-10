@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
@@ -23,8 +25,10 @@ import ConfirmModal from '../components/ConfirmModal';
 import { parseNetscapeBookmarks } from '../utils/bookmarkParser';
 import { downloadBookmarks } from '../utils/bookmarkExporter';
 import { VaultService } from '../services/vaultService';
+import '../css/Settings.css';
 
 const Settings: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const { currentUser, logout, deleteAccount } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { refreshVaults, vaults } = useVault();
@@ -43,6 +47,10 @@ const Settings: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // const language = 'English';
+
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  };
 
   const [importing, setImporting] = useState(false);
 
@@ -280,15 +288,15 @@ const Settings: React.FC = () => {
       {/* Main Content */}
       <main className="container">
         <div className="vault-header">
-          <h2>Settings</h2>
-          <p>Manage your account preferences and settings</p>
+          <h2>{t('settings.title')}</h2>
+          <p>{t('settings.subtitle')}</p>
         </div>
 
         <div className="settings-content">
 
           {/* Account Section */}
           <section className="settings-section">
-            <h3>Account</h3>
+            <h3>{t('settings.account')}</h3>
 
             {success && (
               <div className="mb-4 p-4 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200">
@@ -344,12 +352,12 @@ const Settings: React.FC = () => {
 
           {/* Preferences Section */}
           <section className="settings-section">
-            <h3>Preferences</h3>
+            <h3>{t('settings.preferences')}</h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div className="settings-item">
                 <div className="settings-item-info">
-                  <h4>Theme</h4>
-                  <p>Choose between a light or dark theme.</p>
+                  <h4>{t('settings.theme')}</h4>
+                  <p>{t('settings.themeDesc')}</p>
                 </div>
                 <div
                   className={`toggle-switch ${theme === 'dark' ? 'checked' : ''}`}
@@ -373,28 +381,33 @@ const Settings: React.FC = () => {
                   </div>
                 </div>
               </div>
-              {/* <div className="settings-item">
+              <div className="settings-item">
                 <div className="settings-item-info">
-                  <h4>Language</h4>
-                  <p>Set your preferred language for the app.</p>
+                  <h4>{t('settings.language')}</h4>
+                  <p>{t('settings.languageDesc')}</p>
                 </div>
-                <button className="flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-all">
-                  {language}
-                  <svg fill="currentColor" height="16" viewBox="0 0 256 256" width="16" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M213.66,101.66l-80,80a8,8,0,0,1-11.32,0l-80-80A8,8,0,0,1,48,88H208a8,8,0,0,1,5.66,13.66Z"></path>
-                  </svg>
-                </button>
-              </div> */}
+                <div className="language-dropdown-container" style={{ width: '180px' }}>
+                  <select
+                    className="language-select"
+                    value={i18n.language}
+                    onChange={(e) => changeLanguage(e.target.value)}
+                    aria-label={t('settings.language')}
+                  >
+                    <option value="en">English (US)</option>
+                    <option value="tr">Türkçe (TR)</option>
+                  </select>
+                </div>
+              </div>
             </div>
           </section>
 
           {/* Import / Export Section */}
           <section className="settings-section">
-            <h3>Data Management</h3>
+            <h3>{t('settings.dataManagement')}</h3>
             <div className="settings-item settings-item-media">
               <div className="settings-item-info">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <h4>Import Bookmarks</h4>
+                  <h4>{t('settings.import')}</h4>
                   <div
                     style={{ position: 'relative', display: 'flex', alignItems: 'center' }}
                     ref={helpRef}
@@ -437,7 +450,7 @@ const Settings: React.FC = () => {
                     )}
                   </div>
                 </div>
-                <p>Import bookmarks from your browser or other services (HTML file).</p>
+                <p>{t('settings.importDesc')}</p>
               </div>
               <div className='data-management-buttons'>
                 <input
@@ -460,8 +473,8 @@ const Settings: React.FC = () => {
 
             <div className="settings-item settings-item-media settings-item-non-mobile">
               <div className="settings-item-info">
-                <h4>Export Bookmarks</h4>
-                <p>Export all your containers and links to an HTML file (Netscape format).</p>
+                <h4>{t('settings.export')}</h4>
+                <p>{t('settings.exportDesc')}</p>
               </div>
               <div className='data-management-buttons'>
                 <button
@@ -511,10 +524,10 @@ const Settings: React.FC = () => {
 
           {/* Danger Zone */}
           <section className="settings-section">
-            <h3 style={{ color: '#ef4444' }}>Danger Zone</h3>
+            <h3 style={{ color: '#ef4444' }}>{t('settings.dangerZone')}</h3>
             <div className="settings-item settings-item-media">
               <div className="settings-item-info">
-                <h4>Logout</h4>
+                <h4>{t('settings.logout')}</h4>
                 <p>Sign out of your account on this device.</p>
               </div>
               <button
@@ -528,7 +541,7 @@ const Settings: React.FC = () => {
 
             <div className="settings-item settings-item-media">
               <div className="settings-item-info">
-                <h4 style={{ color: '#ef4444' }}>Delete Account</h4>
+                <h4 style={{ color: '#ef4444' }}>{t('settings.deleteAccount')}</h4>
                 <p>Permanently delete your account and all of your data.</p>
               </div>
               <button

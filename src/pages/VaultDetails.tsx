@@ -50,7 +50,11 @@ import {
   verticalListSortingStrategy
 } from '@dnd-kit/sortable';
 
+import { useTranslation } from 'react-i18next';
+
 const VaultDetails: React.FC = () => {
+  const { t } = useTranslation();
+
   const { id } = useParams<{ id: string }>();
   const { currentUser } = useAuth();
   const {
@@ -131,12 +135,12 @@ const VaultDetails: React.FC = () => {
     try {
       if (!vault) return;
       await deleteLinksFromVault(vault.id, Array.from(selectedLinkIds));
-      toast.success(`Deleted ${selectedLinkIds.size} links`);
+      toast.success(t('vault.messages.deleted', { count: selectedLinkIds.size }));
       setSelectionMode(false);
       setSelectedLinkIds(new Set());
     } catch (err: any) {
       console.error('Bulk delete error:', err);
-      toast.error(err.message || 'Failed to delete links');
+      toast.error(err.message || t('vault.messages.deleteError'));
       throw err;
     }
   };
@@ -289,9 +293,9 @@ const VaultDetails: React.FC = () => {
 
       try {
         await reorderLinks(vault.id, newLinks);
-        toast.success('Order updated');
+        toast.success(t('vault.messages.orderUpdated'));
       } catch (err: any) {
-        toast.error('Failed to update order');
+        toast.error(t('vault.messages.updateOrderError'));
       }
     }
   };
@@ -338,9 +342,9 @@ const VaultDetails: React.FC = () => {
     if (!vault) return;
     try {
       await updateLinkInVault(vault.id, link.id, { isPinned: !link.isPinned });
-      toast.success(link.isPinned ? 'Link unpinned' : 'Link pinned to top');
+      toast.success(link.isPinned ? t('vault.messages.unpinned') : t('vault.messages.pinned'));
     } catch (err: any) {
-      toast.error('Failed to update pin status');
+      toast.error(t('vault.messages.pinError'));
     }
   };
 
@@ -365,10 +369,10 @@ const VaultDetails: React.FC = () => {
       await deleteLinkFromVault(vault.id, selectedLink.id);
       setShowDeleteLinkModal(false);
       setSelectedLink(null);
-      toast.success('Link deleted successfully');
+      toast.success(t('vault.messages.linkDeleted'));
     } catch (err: any) {
       console.error('Error deleting link:', err);
-      toast.error(err.message || 'Failed to delete link');
+      toast.error(err.message || t('vault.messages.linkDeleteError'));
     }
   };
 
@@ -377,11 +381,11 @@ const VaultDetails: React.FC = () => {
     try {
       await deleteVault(vault.id);
       setShowDeleteVaultModal(false);
-      toast.success('Vault deleted successfully');
+      toast.success(t('vault.messages.vaultDeleted'));
       navigate('/dashboard');
     } catch (err: any) {
       console.error('Error deleting vault:', err);
-      toast.error(err.message || 'Failed to delete vault');
+      toast.error(err.message || t('vault.messages.vaultDeleteError'));
       setShowDeleteVaultModal(false);
     }
   };
@@ -391,11 +395,11 @@ const VaultDetails: React.FC = () => {
     try {
       await SharingService.removeUserFromVault(vault.id, currentUser.uid);
       setShowLeaveVaultModal(false);
-      toast.success('Left vault successfully');
+      toast.success(t('vault.messages.leftVault'));
       navigate('/dashboard');
     } catch (err: any) {
       console.error('Error leaving vault:', err);
-      toast.error(err.message || 'Failed to leave vault');
+      toast.error(err.message || t('vault.messages.leaveError'));
       setShowLeaveVaultModal(false);
     }
   };
@@ -414,9 +418,9 @@ const VaultDetails: React.FC = () => {
     return (
       <div className="min-h-screen bg-background-light dark:bg-background-dark flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Vault not found</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('vault.notFound.title')}</h1>
           <Link to="/dashboard" className="text-primary hover:text-primary/80">
-            Return to Dashboard
+            {t('vault.notFound.return')}
           </Link>
         </div>
       </div>
@@ -445,7 +449,7 @@ const VaultDetails: React.FC = () => {
     >
       <SEO
         title={vault.name}
-        description={vault.description || `Browse links in the ${vault.name} container on Blink.`}
+        description={vault.description || t('vault.description', { name: vault.name })}
       />
       <header className={`header ${showNavbar ? 'navbar-visible' : 'navbar-hidden'}`}>
         <div className="container">
@@ -479,7 +483,7 @@ const VaultDetails: React.FC = () => {
         <div className="vault-content">
           <div className="links-section">
             <div className="links-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-              <h3>Links ({vault.links.length})</h3>
+              <h3>{t('vault.links')} ({vault.links.length})</h3>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <button
                   onClick={toggleSelectionMode}
@@ -501,7 +505,7 @@ const VaultDetails: React.FC = () => {
                   title={selectionMode ? 'Cancel Selection' : 'Select Multiple'}
                 >
                   {selectionMode ? <XCircle size={16} /> : <CheckSquare size={16} />}
-                  <span className="hidden sm:inline">{selectionMode ? 'Cancel' : 'Select'}</span>
+                  <span className="hidden sm:inline">{selectionMode ? t('vault.cancel') : t('vault.select')}</span>
                 </button>
                 {canEdit && (
                   <button
@@ -509,7 +513,7 @@ const VaultDetails: React.FC = () => {
                     className="add-link-button"
                   >
                     <Plus size={18} />
-                    Add Link
+                    {t('vault.addLink')}
                   </button>
                 )}
               </div>
@@ -521,7 +525,7 @@ const VaultDetails: React.FC = () => {
                 <Search className="modern-search-icon" size={18} />
                 <input
                   type="text"
-                  placeholder="Search links..."
+                  placeholder={t('vault.searchLinks')}
                   value={linkSearchQuery}
                   onChange={(e) => setLinkSearchQuery(e.target.value)}
                   className="modern-search-input"
@@ -540,7 +544,7 @@ const VaultDetails: React.FC = () => {
                     className="w-5 h-5 cursor-pointer"
                     style={{ accentColor: 'var(--primary)' }}
                   />
-                  <span className="font-medium">{selectedLinkIds.size} selected</span>
+                  <span className="font-medium">{selectedLinkIds.size} {t('vault.selected')}</span>
                 </div>
                 <div className="flex gap-2">
                   <button
@@ -577,11 +581,11 @@ const VaultDetails: React.FC = () => {
             <div className="links-list">
               {vault.links.length === 0 ? (
                 <div className="empty-links-state">
-                  <p>No links yet. Click "Add Link" to get started.</p>
+                  <p>{t('vault.empty')}</p>
                 </div>
               ) : filteredLinks.length === 0 ? (
                 <div className="empty-search-state">
-                  <p>No links match your search.</p>
+                  <p>{t('vault.emptySearch')}</p>
                 </div>
               ) : (
                 <DndContext
@@ -623,10 +627,10 @@ const VaultDetails: React.FC = () => {
 
           <aside className="sidebar">
             <div className="collaborators-widget">
-              <h3>Collaborators</h3>
+              <h3>{t('vault.collaborators.title')}</h3>
               <div className="collaborators-list">
                 {/* Current User */}
-                <div className="avatar" title={currentUser?.displayName || 'You (Owner)'}>
+                <div className="avatar" title={currentUser?.displayName || t('vault.collaborators.you')}>
                   {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}
                 </div>
 
@@ -635,7 +639,7 @@ const VaultDetails: React.FC = () => {
                   <div
                     key={vault.ownerId}
                     className="avatar"
-                    title={`${collaboratorNames[vault.ownerId] || 'Owner'} (Owner)`}
+                    title={`${collaboratorNames[vault.ownerId] || t('vault.collaborators.owner')} (${t('vault.collaborators.owner')})`}
                   >
                     {(collaboratorNames[vault.ownerId] || 'O').charAt(0).toUpperCase()}
                   </div>
@@ -661,7 +665,7 @@ const VaultDetails: React.FC = () => {
                   );
                   const remainingCount = otherUsers.length - 2;
                   return remainingCount > 0 && (
-                    <div className="avatar" title={`+${remainingCount} more`}>
+                    <div className="avatar" title={t('vault.collaborators.more', { count: remainingCount })}>
                       +{remainingCount}
                     </div>
                   );
@@ -674,7 +678,7 @@ const VaultDetails: React.FC = () => {
                     className="manage-collaborators-button"
                   >
                     <Share2 size={18} />
-                    Invite
+                    {t('vault.collaborators.invite')}
                   </Link>
                 )}
                 <button
@@ -682,13 +686,13 @@ const VaultDetails: React.FC = () => {
                   className="manage-collaborators-button"
                 >
                   <Users size={18} />
-                  Manage
+                  {t('vault.collaborators.manage')}
                 </button>
               </div>
             </div>
 
             <div className="actions-widget">
-              <h3>Actions</h3>
+              <h3>{t('vault.actions.title')}</h3>
               <div className="actions-list">
                 {isOwner && (
                   <button
@@ -696,7 +700,7 @@ const VaultDetails: React.FC = () => {
                     className="action-button"
                   >
                     <Edit />
-                    <span>Edit Container</span>
+                    <span>{t('vault.actions.editContainer')}</span>
                   </button>
                 )}
                 {isOwner ? (
@@ -705,7 +709,7 @@ const VaultDetails: React.FC = () => {
                     className="action-button delete-button"
                   >
                     <Trash2 />
-                    <span>Delete Container</span>
+                    <span>{t('vault.actions.deleteContainer')}</span>
                   </button>
                 ) : (
                   <button
@@ -713,7 +717,7 @@ const VaultDetails: React.FC = () => {
                     className="action-button delete-button"
                   >
                     <LogOut />
-                    <span>Leave Container</span>
+                    <span>{t('vault.actions.leaveContainer')}</span>
                   </button>
                 )}
               </div>
@@ -770,9 +774,9 @@ const VaultDetails: React.FC = () => {
             setSelectedLink(null);
           }}
           onConfirm={confirmDeleteLink}
-          title="Delete Link"
-          message={`Are you sure you want to delete "${selectedLink.title}"? This action cannot be undone.`}
-          confirmText="Delete"
+          title={t('vault.modals.deleteLink.title')}
+          message={t('vault.modals.deleteLink.message', { title: selectedLink.title })}
+          confirmText={t('vault.modals.deleteLink.confirm')}
           variant="danger"
           icon={<Trash2 size={18} />}
         />
@@ -784,9 +788,9 @@ const VaultDetails: React.FC = () => {
           isOpen={showDeleteVaultModal}
           onClose={() => setShowDeleteVaultModal(false)}
           onConfirm={confirmDeleteVault}
-          title="Delete Vault"
-          message={`Are you sure you want to delete "${vault.name}"? All links will be permanently deleted.`}
-          confirmText="Delete Vault"
+          title={t('vault.modals.deleteVault.title')}
+          message={t('vault.modals.deleteVault.message', { name: vault.name })}
+          confirmText={t('vault.modals.deleteVault.confirm')}
           variant="danger"
           icon={<Trash2 size={18} />}
           confirmWord={vault.name}

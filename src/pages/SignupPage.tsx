@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import blinkLogo from '../assets/blinklogo2.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -6,6 +8,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import SEO from '../components/SEO';
 
 const SignupPage: React.FC = () => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     displayName: '',
     email: '',
@@ -37,12 +40,12 @@ const SignupPage: React.FC = () => {
     e.preventDefault();
 
     if (!formData.displayName || !formData.email || !formData.password || !formData.confirmPassword) {
-      setError('Please fill in all fields');
+      setError(t('auth.errors.fillAll'));
       return;
     }
 
     if (!formData.acceptedTerms) {
-      setError('You must accept the Terms and Conditions and Privacy Policy');
+      setError(t('auth.errors.acceptTerms'));
       // Briefly disable then enable to re-trigger animation if already showing
       setShowCheckboxError(false);
       setTimeout(() => setShowCheckboxError(true), 10);
@@ -50,12 +53,12 @@ const SignupPage: React.FC = () => {
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError(t('auth.errors.passwordsNoMatch'));
       return;
     }
 
     if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters');
+      setError(t('auth.errors.passwordLength'));
       return;
     }
 
@@ -73,15 +76,15 @@ const SignupPage: React.FC = () => {
 
       // Provide more specific error messages
       if (error.code === 'auth/email-already-in-use') {
-        setError('This email is already registered. Please try logging in instead.');
+        setError(t('auth.errors.emailInUse'));
       } else if (error.code === 'auth/weak-password') {
-        setError('Password should be at least 6 characters long.');
+        setError(t('auth.errors.weakPassword'));
       } else if (error.code === 'auth/invalid-email') {
-        setError('Please enter a valid email address.');
+        setError(t('auth.errors.invalidEmail'));
       } else if (error.code === 'auth/operation-not-allowed') {
-        setError('Email/password accounts are not enabled. Please contact support.');
+        setError(t('auth.errors.operationNotAllowed'));
       } else {
-        setError(`Failed to create account: ${error.message}`);
+        setError(t('auth.errors.createFailed', { message: error.message }));
       }
     } finally {
       setLoading(false);
@@ -90,14 +93,14 @@ const SignupPage: React.FC = () => {
 
   return (
     <div className="auth-page">
-      <SEO title="Create Account" description="Join Blink to organize and share your links with ease." />
+      <SEO title={t('auth.signup.title')} description={t('auth.signup.subtitle')} />
       <div className="auth-container">
         <div className="auth-header">
           <div className="auth-logo">
             <img src={blinkLogo} alt="Blink" style={{ height: '60px', width: 'auto' }} />
           </div>
-          <h2>Create your account</h2>
-          <p>Join us to organize your links</p>
+          <h2>{t('auth.signup.header')}</h2>
+          <p>{t('auth.signup.subheader')}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form" noValidate>
@@ -116,11 +119,11 @@ const SignupPage: React.FC = () => {
               borderRadius: '8px',
               marginBottom: '1rem'
             }}>
-              <strong>Account created!</strong>
+              <strong>{t('auth.verification.title')}</strong>
               <br />
-              A verification email has been sent. Please check your inbox.
+              {t('auth.verification.message')}
               <br />
-              <small style={{ fontSize: '0.85rem' }}>Redirecting to email verification page...</small>
+              <small style={{ fontSize: '0.85rem' }}>{t('auth.verification.redirecting')}</small>
             </div>
           )}
 
@@ -140,13 +143,13 @@ const SignupPage: React.FC = () => {
             }}
           >
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style={{ width: '20px', height: '20px' }} />
-            Sign up with Google
+            {t('auth.signup.google')}
           </button>
 
           <div className="auth-divider desktop-only">OR</div>
 
           <div className="form-group">
-            <label className="form-label" htmlFor="displayName">Full Name</label>
+            <label className="form-label" htmlFor="displayName">{t('auth.signup.fullName')}</label>
             <input
               id="displayName"
               name="displayName"
@@ -154,13 +157,13 @@ const SignupPage: React.FC = () => {
               autoComplete="name"
               required
               className="form-input"
-              placeholder="Full name"
+              placeholder={t('auth.signup.fullName')}
               value={formData.displayName}
               onChange={handleChange}
             />
           </div>
           <div className="form-group">
-            <label className="form-label" htmlFor="email">Email address</label>
+            <label className="form-label" htmlFor="email">{t('auth.signup.email')}</label>
             <input
               id="email"
               name="email"
@@ -168,13 +171,13 @@ const SignupPage: React.FC = () => {
               autoComplete="email"
               required
               className="form-input"
-              placeholder="Email address"
+              placeholder={t('auth.signup.email')}
               value={formData.email}
               onChange={handleChange}
             />
           </div>
           <div className="form-group">
-            <label className="form-label" htmlFor="password">Password</label>
+            <label className="form-label" htmlFor="password">{t('auth.signup.password')}</label>
             <div className="relative">
               <input
                 id="password"
@@ -183,7 +186,7 @@ const SignupPage: React.FC = () => {
                 autoComplete="new-password"
                 required
                 className="form-input pr-10"
-                placeholder="Password"
+                placeholder={t('auth.signup.password')}
                 value={formData.password}
                 onChange={handleChange}
               />
@@ -202,7 +205,7 @@ const SignupPage: React.FC = () => {
             </div>
           </div>
           <div className="form-group">
-            <label className="form-label" htmlFor="confirmPassword">Confirm Password</label>
+            <label className="form-label" htmlFor="confirmPassword">{t('auth.signup.confirmPassword')}</label>
             <div className="relative">
               <input
                 id="confirmPassword"
@@ -211,7 +214,7 @@ const SignupPage: React.FC = () => {
                 autoComplete="new-password"
                 required
                 className="form-input pr-10"
-                placeholder="Confirm password"
+                placeholder={t('auth.signup.confirmPassword')}
                 value={formData.confirmPassword}
                 onChange={handleChange}
               />
@@ -240,7 +243,7 @@ const SignupPage: React.FC = () => {
               style={{ width: '18px', height: '18px', marginTop: '3px', cursor: 'pointer', flexShrink: 0 }}
             />
             <label htmlFor="acceptedTerms" style={{ fontSize: '0.875rem', color: 'inherit', cursor: 'pointer', lineHeight: '1.4' }}>
-              I agree to the <Link to="/legal/terms-and-conditions" target="_blank" style={{ color: 'var(--primary)', fontWeight: '600' }}>Terms and Conditions</Link> and <Link to="/legal/privacy-policy" target="_blank" style={{ color: 'var(--primary)', fontWeight: '600' }}>Privacy Policy</Link>
+              {t('auth.signup.terms.agree')} <Link to="/legal/terms-and-conditions" target="_blank" style={{ color: 'var(--primary)', fontWeight: '600' }}>{t('auth.signup.terms.conditions')}</Link> {t('auth.signup.terms.and')} <Link to="/legal/privacy-policy" target="_blank" style={{ color: 'var(--primary)', fontWeight: '600' }}>{t('auth.signup.terms.privacy')}</Link>
             </label>
           </div>
 
@@ -249,13 +252,13 @@ const SignupPage: React.FC = () => {
             disabled={loading}
             className="submit-button"
           >
-            {loading ? 'Creating account...' : 'Sign up'}
+            {loading ? t('auth.signup.submitting') : t('auth.signup.submit')}
           </button>
 
           <div className="auth-footer">
             <p>
-              Already have an account?{' '}
-              <Link to="/login">Sign in</Link>
+              {t('auth.signup.hasAccount')}{' '}
+              <Link to="/login">{t('auth.signup.signIn')}</Link>
             </p>
           </div>
         </form>

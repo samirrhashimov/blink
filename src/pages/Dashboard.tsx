@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
@@ -24,6 +26,7 @@ import LoadingSkeleton from '../components/LoadingSkeleton';
 import SEO from '../components/SEO';
 
 const Dashboard: React.FC = () => {
+  const { t } = useTranslation();
   const { currentUser } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const { vaults, loading, error } = useVault();
@@ -85,7 +88,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="dashboard-page">
-      <SEO title="Dashboard" description="Manage your link containers and workspaces in Blink." />
+      <SEO title={t('dashboard.title')} description="Manage your link containers and workspaces in Blink." />
       {/* Header */}
       <header className="header">
         <div className="container">
@@ -203,13 +206,13 @@ const Dashboard: React.FC = () => {
       <main className="container">
         <div className="vault-header">
           <div className="flex items-center justify-between mb-6">
-            <h2>My Library</h2>
+            <h2>{t('dashboard.library')}</h2>
             <button
               onClick={() => (window as any).dispatchSetShowCreateModal?.(true)}
               className="add-link-button mediaforbuttons"
             >
               <Plus className="h-5 w-5" />
-              New Container
+              {t('dashboard.newContainer')}
             </button>
           </div>
 
@@ -219,7 +222,7 @@ const Dashboard: React.FC = () => {
             <Search className="modern-search-icon" size={18} />
             <input
               type="text"
-              placeholder="Search containers, links, or descriptions..."
+              placeholder={t('dashboard.searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="modern-search-input"
@@ -229,17 +232,17 @@ const Dashboard: React.FC = () => {
 
         {/* Personal Vaults */}
         <section>
-          <h2 className="section-title">Personal</h2>
+          <h2 className="section-title">{t('dashboard.personal')}</h2>
           {filteredPersonalVaults.length === 0 ? (
             <div className="empty-state">
               <FolderOpen className="empty-state-icon" size={64} />
               <h3 className="empty-state-title">
-                {searchQuery ? 'No containers found' : 'No personal containers yet'}
+                {searchQuery ? t('dashboard.emptyPersonal.searchTitle') : t('dashboard.emptyPersonal.title')}
               </h3>
               <p className="empty-state-description">
                 {searchQuery
-                  ? 'Try adjusting your search terms or create a new container.'
-                  : 'Create your first container to start organizing your links and resources.'}
+                  ? t('dashboard.emptyPersonal.searchDesc')
+                  : t('dashboard.emptyPersonal.desc')}
               </p>
               {!searchQuery && (
                 <button
@@ -247,7 +250,7 @@ const Dashboard: React.FC = () => {
                   className="empty-state-button"
                 >
                   <Plus className="h-5 w-5" />
-                  Create Container
+                  {t('dashboard.emptyPersonal.button')}
                 </button>
               )}
             </div>
@@ -290,17 +293,17 @@ const Dashboard: React.FC = () => {
 
         {/* Shared Vaults */}
         <section style={{ marginTop: '3rem' }}>
-          <h2 className="section-title">Shared</h2>
+          <h2 className="section-title">{t('dashboard.shared')}</h2>
           {filteredSharedVaults.length === 0 ? (
             <div className="empty-state">
               <FolderPlus className="empty-state-icon" size={64} />
               <h3 className="empty-state-title">
-                {searchQuery ? 'No shared containers found' : 'No shared containers yet'}
+                {searchQuery ? t('dashboard.emptyShared.searchTitle') : t('dashboard.emptyShared.title')}
               </h3>
               <p className="empty-state-description">
                 {searchQuery
-                  ? 'Try adjusting your search terms.'
-                  : 'Containers shared with you will appear here.'}
+                  ? t('dashboard.emptyShared.searchDesc')
+                  : t('dashboard.emptyShared.desc')}
               </p>
             </div>
           ) : (

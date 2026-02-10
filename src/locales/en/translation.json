@@ -1,0 +1,190 @@
+{
+    "landing": {
+        "title": "Your links, organized",
+        "description": "Blink is the ultimate workspace to store, manage, and collaborate on links with your team. Secure, fast, and beautifully designed.",
+        "getStarted": "Get Started",
+        "login": "Log in",
+        "hero": {
+            "title": "Your Links,",
+            "highlight": "Organized",
+            "subtitle": "The ultimate workspace to store, manage, and collaborate on links with your team. Secure, fast, and beautifully designed.",
+            "startFree": "Start for free",
+            "viewGithub": "View on GitHub"
+        },
+        "features": {
+            "containers": {
+                "title": "Centralized Containers",
+                "desc": "Create dedicated workspaces called \"Containers\" for different projects, teams, or personal interests. Keep your links customized and organized in one secure place."
+            },
+            "sharing": {
+                "title": "Easy Sharing",
+                "desc": "Share your collections with the world or specific people. Manage permissions, elevate or revoke them when necessary."
+            },
+            "invitations": {
+                "title": "Incoming Invitations",
+                "desc": "Manage requests to join other workspaces. Review, accept, or decline incoming invitations to collaborate on and help manage shared containers."
+            }
+        }
+    },
+    "settings": {
+        "title": "Settings",
+        "subtitle": "Manage your account preferences and settings",
+        "account": "Account",
+        "preferences": "Preferences",
+        "theme": "Theme",
+        "themeDesc": "Choose between a light or dark theme.",
+        "language": "Language",
+        "languageDesc": "Set your preferred language for the app.",
+        "dataManagement": "Data Management",
+        "import": "Import Bookmarks",
+        "importDesc": "Import bookmarks from your browser or other services (HTML file).",
+        "export": "Export Bookmarks",
+        "exportDesc": "Export all your containers and links to an HTML file (Netscape format).",
+        "dangerZone": "Danger Zone",
+        "logout": "Logout",
+        "deleteAccount": "Delete Account"
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "library": "My Library",
+        "newContainer": "New Container",
+        "searchPlaceholder": "Search containers, links, or descriptions...",
+        "personal": "Personal",
+        "shared": "Shared",
+        "emptyPersonal": {
+            "title": "No personal containers yet",
+            "searchTitle": "No containers found",
+            "desc": "Create your first container to start organizing your links and resources.",
+            "searchDesc": "Try adjusting your search terms or create a new container.",
+            "button": "Create Container"
+        },
+        "emptyShared": {
+            "title": "No shared containers yet",
+            "searchTitle": "No shared containers found",
+            "desc": "Containers shared with you will appear here.",
+            "searchDesc": "Try adjusting your search terms."
+        }
+    },
+    "auth": {
+        "login": {
+            "title": "Log In",
+            "subtitle": "Log in to your Blink account to access your links.",
+            "welcome": "Welcome back",
+            "signInToContinue": "Sign in to continue",
+            "google": "Sign in with Google",
+            "email": "Email address",
+            "password": "Password",
+            "forgotPassword": "Forgot password?",
+            "submit": "Log in",
+            "submitting": "Signing in...",
+            "noAccount": "Don't have an account?",
+            "signUp": "Sign up"
+        },
+        "signup": {
+            "title": "Create Account",
+            "subtitle": "Join Blink to organize and share your links with ease.",
+            "header": "Create your account",
+            "subheader": "Join us to organize your links",
+            "google": "Sign up with Google",
+            "fullName": "Full Name",
+            "email": "Email address",
+            "password": "Password",
+            "confirmPassword": "Confirm Password",
+            "submit": "Sign up",
+            "submitting": "Creating account...",
+            "hasAccount": "Already have an account?",
+            "signIn": "Sign in",
+            "terms": {
+                "agree": "I agree to the",
+                "conditions": "Terms and Conditions",
+                "and": "and",
+                "privacy": "Privacy Policy"
+            }
+        },
+        "errors": {
+            "fillAll": "Please fill in all fields",
+            "loginFailed": "Failed to log in. Please check your credentials.",
+            "acceptTerms": "You must accept the Terms and Conditions and Privacy Policy",
+            "passwordsNoMatch": "Passwords do not match",
+            "passwordLength": "Password must be at least 6 characters",
+            "emailInUse": "This email is already registered. Please try logging in instead.",
+            "weakPassword": "Password should be at least 6 characters long.",
+            "invalidEmail": "Please enter a valid email address.",
+            "operationNotAllowed": "Email/password accounts are not enabled. Please contact support.",
+            "createFailed": "Failed to create account: {{message}}"
+        },
+        "verification": {
+            "title": "Account created!",
+            "message": "A verification email has been sent. Please check your inbox.",
+            "redirecting": "Redirecting to email verification page..."
+        }
+    },
+    "vault": {
+        "notFound": {
+            "title": "Vault not found",
+            "return": "Return to Dashboard"
+        },
+        "description": "Browse links in the {{name}} container on Blink.",
+        "links": "Links",
+        "select": "Select",
+        "cancel": "Cancel",
+        "selected": "selected",
+        "addLink": "Add Link",
+        "searchLinks": "Search links...",
+        "empty": "No links yet. Click \"Add Link\" to get started.",
+        "emptySearch": "No links match your search.",
+        "collaborators": {
+            "title": "Collaborators",
+            "owner": "Owner",
+            "you": "You (Owner)",
+            "invite": "Invite",
+            "manage": "Manage",
+            "more": "+{{count}} more"
+        },
+        "actions": {
+            "title": "Actions",
+            "editContainer": "Edit Container",
+            "deleteContainer": "Delete Container",
+            "leaveContainer": "Leave Container"
+        },
+        "messages": {
+            "deleted": "Deleted {{count}} links",
+            "deleteError": "Failed to delete links",
+            "orderUpdated": "Order updated",
+            "updateOrderError": "Failed to update order",
+            "unpinned": "Link unpinned",
+            "pinned": "Link pinned to top",
+            "pinError": "Failed to update pin status",
+            "linkDeleted": "Link deleted successfully",
+            "linkDeleteError": "Failed to delete link",
+            "vaultDeleted": "Vault deleted successfully",
+            "vaultDeleteError": "Failed to delete vault",
+            "leftVault": "Left vault successfully",
+            "leaveError": "Failed to leave vault"
+        },
+        "modals": {
+            "deleteLink": {
+                "title": "Delete Link",
+                "message": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone.",
+                "confirm": "Delete"
+            },
+            "deleteVault": {
+                "title": "Delete Vault",
+                "message": "Are you sure you want to delete \"{{name}}\"? All links will be permanently deleted.",
+                "confirm": "Delete Vault"
+            }
+        }
+    },
+    "common": {
+        "confirm": "Confirm",
+        "confirmation": {
+            "typeToConfirm": "Please type \"{{word}}\" to confirm",
+            "placeholder": "Type \"{{word}}\""
+        },
+        "processing": "Processing...",
+        "errors": {
+            "operationFailed": "Operation failed"
+        },
+        "loading": "Loading..."
+    }
+}

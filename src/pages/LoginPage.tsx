@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import blinkLogo from '../assets/blinklogo2.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
@@ -6,6 +8,7 @@ import { Eye, EyeOff } from 'lucide-react';
 import SEO from '../components/SEO';
 
 const LoginPage: React.FC = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -18,7 +21,7 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
 
     if (!email || !password) {
-      setError('Please fill in all fields');
+      setError(t('auth.errors.fillAll'));
       return;
     }
 
@@ -28,7 +31,7 @@ const LoginPage: React.FC = () => {
       await login(email, password);
       navigate('/dashboard');
     } catch (error: any) {
-      setError('Failed to log in. Please check your credentials.');
+      setError(t('auth.errors.loginFailed'));
       console.error('Login error:', error);
     } finally {
       setLoading(false);
@@ -37,14 +40,14 @@ const LoginPage: React.FC = () => {
 
   return (
     <div className="auth-page">
-      <SEO title="Log In" description="Log in to your Blink account to access your links." />
+      <SEO title={t('auth.login.title')} description={t('auth.login.subtitle')} />
       <div className="auth-container">
         <div className="auth-header">
           <div className="auth-logo">
             <img src={blinkLogo} alt="Blink" style={{ height: '60px', width: 'auto' }} />
           </div>
-          <h2>Welcome back</h2>
-          <p>Sign in to continue</p>
+          <h2>{t('auth.login.welcome')}</h2>
+          <p>{t('auth.login.signInToContinue')}</p>
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
@@ -70,13 +73,13 @@ const LoginPage: React.FC = () => {
             }}
           >
             <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style={{ width: '20px', height: '20px' }} />
-            Sign in with Google
+            {t('auth.login.google')}
           </button>
 
           <div className="auth-divider desktop-only">OR</div>
 
           <div className="form-group">
-            <label className="form-label" htmlFor="email">Email address</label>
+            <label className="form-label" htmlFor="email">{t('auth.login.email')}</label>
             <input
               id="email"
               name="email"
@@ -84,14 +87,14 @@ const LoginPage: React.FC = () => {
               autoComplete="email"
               required
               className="form-input"
-              placeholder="Email address"
+              placeholder={t('auth.login.email')}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="form-group">
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-              <label className="form-label" htmlFor="password">Password</label>
+              <label className="form-label" htmlFor="password">{t('auth.login.password')}</label>
               <Link
                 to="/forgot-password"
                 style={{
@@ -101,7 +104,7 @@ const LoginPage: React.FC = () => {
                   fontWeight: 500
                 }}
               >
-                Forgot password?
+                {t('auth.login.forgotPassword')}
               </Link>
             </div>
             <div className="relative">
@@ -112,7 +115,7 @@ const LoginPage: React.FC = () => {
                 autoComplete="current-password"
                 required
                 className="form-input pr-10"
-                placeholder="Password"
+                placeholder={t('auth.login.password')}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -136,13 +139,13 @@ const LoginPage: React.FC = () => {
             disabled={loading}
             className="submit-button"
           >
-            {loading ? 'Signing in...' : 'Log in'}
+            {loading ? t('auth.login.submitting') : t('auth.login.submit')}
           </button>
 
           <div className="auth-footer">
             <p>
-              Don't have an account?{' '}
-              <Link to="/signup">Sign up</Link>
+              {t('auth.login.noAccount')}{' '}
+              <Link to="/signup">{t('auth.login.signUp')}</Link>
             </p>
           </div>
         </form>

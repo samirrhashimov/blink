@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
 import { Lock, Share2, Zap, Users, Search, Moon, Sun, Shield, Layout, Globe, Tag, Palette, Github, HelpCircle } from 'lucide-react';
@@ -13,15 +15,21 @@ import '../css/About.css';
 import SEO from '../components/SEO';
 
 const LandingPage: React.FC = () => {
+  const { t, i18n } = useTranslation();
   const { theme, toggleTheme } = useTheme();
   const [demoColor, setDemoColor] = useState('#6366f1');
   const navigate = useNavigate();
 
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'en' ? 'tr' : 'en';
+    i18n.changeLanguage(newLang);
+  };
+
   return (
     <div className="landing-page bg-white dark:bg-gray-900 text-black dark:text-white overflow-hidden">
       <SEO
-        title="Your links, organized"
-        description="Blink is the ultimate workspace to store, manage, and collaborate on links with your team. Secure, fast, and beautifully designed."
+        title={t('landing.title')}
+        description={t('landing.description')}
       />
       {/* Header */}
       <header className="landing-header">
@@ -38,6 +46,13 @@ const LandingPage: React.FC = () => {
                 title="Switch Theme"
               >
                 {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+              <button
+                onClick={toggleLanguage}
+                className="theme-toggle-btn uppercase font-bold text-xs"
+                title="Switch Language"
+              >
+                {i18n.language === 'en' ? 'TR' : 'EN'}
               </button>
               <a
                 href="https://github.com/samirrhashimov/blink"
@@ -74,7 +89,7 @@ const LandingPage: React.FC = () => {
                   boxSizing: 'border-box'
                 }}
               >
-                Log in
+                {t('landing.login')}
               </Link>
               <Link
                 to="/signup"
@@ -96,7 +111,7 @@ const LandingPage: React.FC = () => {
                   border: '1px solid #13a4ec'
                 }}
               >
-                Get Started
+                {t('landing.getStarted')}
               </Link>
             </div>
           </div>
@@ -108,17 +123,17 @@ const LandingPage: React.FC = () => {
         <div className="hero-grid">
           <div className="hero-content text-left">
             <h1 className="about-hero-title text-5xl md:text-6xl font-extrabold tracking-tight mb-6">
-              Your Links, <span className="about-hero-highlight block mt-2">Organized</span>
+              {t('landing.hero.title')} <span className="about-hero-highlight block mt-2">{t('landing.hero.highlight')}</span>
             </h1>
             <p className="about-hero-subtitle text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-lg">
-              The ultimate workspace to store, manage, and collaborate on links with your team. Secure, fast, and beautifully designed.
+              {t('landing.hero.subtitle')}
             </p>
             <div className="hero-buttons flex gap-4">
               <Link to="/signup" className="btn-primary about-btn-primary px-8 py-3 text-lg rounded-full shadow-lg hover:shadow-xl transition-all">
-                Start for free
+                {t('landing.hero.startFree')}
               </Link>
               <Link to="https://github.com/samirrhashimov/blink.git" className="btn-secondary about-btn-secondary px-8 py-3 text-lg rounded-full">
-                View on GitHub
+                {t('landing.hero.viewGithub')}
               </Link>
             </div>
           </div>
@@ -138,9 +153,9 @@ const LandingPage: React.FC = () => {
             <div className="inline-flex items-center justify-center p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg mb-4 text-blue-600 dark:text-blue-400">
               <Layout className="w-6 h-6" />
             </div>
-            <h2 className="feature-section-title">Centralized Containers</h2>
+            <h2 className="feature-section-title">{t('landing.features.containers.title')}</h2>
             <p className="feature-section-desc">
-              Create dedicated workspaces called "Containers" for different projects, teams, or personal interests. Keep your links customized and organized in one secure place.
+              {t('landing.features.containers.desc')}
             </p>
           </div>
           <div className="feature-image-container">
@@ -154,9 +169,9 @@ const LandingPage: React.FC = () => {
             <div className="inline-flex items-center justify-center p-2 bg-green-100 dark:bg-green-900/30 rounded-lg mb-4 text-green-600 dark:text-green-400">
               <Share2 className="w-6 h-6" />
             </div>
-            <h2 className="feature-section-title">Easy Sharing</h2>
+            <h2 className="feature-section-title">{t('landing.features.sharing.title')}</h2>
             <p className="feature-section-desc">
-              Share your collections with the world or specific people. Manage permissions, elevate or revoke them when necessary.
+              {t('landing.features.sharing.desc')}
             </p>
           </div>
           <div className="feature-image-container">
@@ -170,9 +185,9 @@ const LandingPage: React.FC = () => {
             <div className="inline-flex items-center justify-center p-2 bg-purple-100 dark:bg-purple-900/30 rounded-lg mb-4 text-purple-600 dark:text-purple-400">
               <Users className="w-6 h-6" />
             </div>
-            <h2 className="feature-section-title">Incoming Invitations</h2>
+            <h2 className="feature-section-title">{t('landing.features.invitations.title')}</h2>
             <p className="feature-section-desc">
-              Manage requests to join other workspaces. Review, accept, or decline incoming invitations to collaborate on and help manage shared containers.
+              {t('landing.features.invitations.desc')}
             </p>
           </div>
           <div className="feature-image-container">

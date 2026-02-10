@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
 import { X } from 'lucide-react';
 
 interface ConfirmModalProps {
@@ -26,6 +28,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
     icon,
     confirmWord
 }) => {
+    const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [confirmationInput, setConfirmationInput] = useState('');
@@ -38,7 +41,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
             await onConfirm();
             onClose();
         } catch (err: any) {
-            setError(err.message || 'Operation failed');
+            setError(err.message || t('common.errors.operationFailed'));
         } finally {
             setLoading(false);
         }
@@ -75,14 +78,14 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
                     {confirmWord && (
                         <div style={{ marginTop: '1.5rem' }}>
                             <p className="text-sm font-medium mb-2" style={{ color: '#64748b' }}>
-                                Please type <strong>{confirmWord}</strong> to confirm:
+                                {t('common.confirmation.typeToConfirm', { word: confirmWord })}:
                             </p>
                             <input
                                 type="text"
                                 className="form-input"
                                 value={confirmationInput}
                                 onChange={(e) => setConfirmationInput(e.target.value)}
-                                placeholder={`Type '${confirmWord}'`}
+                                placeholder={t('common.confirmation.placeholder', { word: confirmWord })}
                                 style={{ width: '100%' }}
                             />
                         </div>
@@ -113,7 +116,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
                         {loading ? (
                             <>
                                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                                Processing...
+                                {t('common.processing')}
                             </>
                         ) : (
                             <>

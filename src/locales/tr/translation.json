@@ -1,0 +1,192 @@
+{
+    "landing": {
+        "title": "Linkleriniz, düzenli",
+        "description": "Blink, ekibinizle linkleri depolamak, yönetmek ve işbirliği yapmak için nihai çalışma alanıdır. Güvenli, hızlı ve güzel tasarlanmış.",
+        "getStarted": "Başlayın",
+        "login": "Giriş Yap",
+        "hero": {
+            "title": "Linkleriniz,",
+            "highlight": "Düzenli",
+            "subtitle": "Ekibinizle linkleri depolamak, yönetmek ve işbirliği yapmak için nihai çalışma alanı. Güvenli, hızlı ve güzel tasarlanmış.",
+            "startFree": "Ücretsiz başlayın",
+            "viewGithub": "GitHub'da görüntüle"
+        },
+        "features": {
+            "containers": {
+                "title": "Merkezi Konteynerler",
+                "desc": "Farklı projeler, ekipler veya kişisel ilgi alanları için \"Konteynerler\" adı verilen özel çalışma alanları oluşturun. Linklerinizi tek bir güvenli yerde özelleştirilmiş ve düzenli tutun."
+            },
+            "sharing": {
+                "title": "Kolay Paylaşım",
+                "desc": "Koleksiyonlarınızı dünyayla veya belirli kişilerle paylaşın. İzinleri yönetin, gerektiğinde yükseltin veya geri alın."
+            },
+            "invitations": {
+                "title": "Gelen Davetler",
+                "desc": "Diğer çalışma alanlarına katılma isteklerini yönetin. Paylaşılan konteynerlerde işbirliği yapmak ve yönetmeye yardımcı olmak için gelen davetleri inceleyin, kabul edin veya reddedin."
+            }
+        }
+    },
+    "settings": {
+        "title": "Ayarlar",
+        "subtitle": "Hesap tercihlerinizi ve ayarlarınızı yönetin",
+        "account": "Hesap",
+        "preferences": "Tercihler",
+        "theme": "Tema",
+        "themeDesc": "Açık veya koyu tema arasında seçim yapın.",
+        "language": "Dil",
+        "languageDesc": "Uygulama için tercih ettiğiniz dili ayarlayın.",
+        "dataManagement": "Veri Yönetimi",
+        "import": "Yer İmlerini İçe Aktar",
+        "importDesc": "Tarayıcınızdan veya diğer hizmetlerden yer imlerini içe aktarın (HTML dosyası).",
+        "export": "Yer İmlerini Dışa Aktar",
+        "exportDesc": "Tüm konteynerlerinizi ve linklerinizi bir HTML dosyasına dışa aktarın (Netscape formatı).",
+        "dangerZone": "Tehlikeli Bölge",
+        "logout": "Çıkış Yap",
+        "deleteAccount": "Hesabı Sil"
+    },
+    "dashboard": {
+        "title": "Panel",
+        "library": "Kütüphanem",
+        "newContainer": "Yeni Konteyner",
+        "searchPlaceholder": "Konteynerleri, linkleri veya açıklamaları arayın...",
+        "personal": "Kişisel",
+        "shared": "Paylaşılan",
+        "emptyPersonal": {
+            "title": "Henüz kişisel konteyner yok",
+            "searchTitle": "Konteyner bulunamadı",
+            "desc": "Linklerinizi ve kaynaklarınızı düzenlemeye başlamak için ilk konteynerinizi oluşturun.",
+            "searchDesc": "Arama terimlerinizi ayarlamayı veya yeni bir konteyner oluşturmayı deneyin.",
+            "button": "Konteyner Oluştur"
+        },
+        "emptyShared": {
+            "title": "Henüz paylaşılan konteyner yok",
+            "searchTitle": "Paylaşılan konteyner bulunamadı",
+            "desc": "Sizinle paylaşılan konteynerler burada görünecektir.",
+            "searchDesc": "Arama terimlerinizi ayarlamayı deneyin."
+        }
+    },
+    "auth": {
+        "login": {
+            "title": "Giriş Yap",
+            "subtitle": "Linklerinize erişmek için Blink hesabınıza giriş yapın.",
+            "welcome": "Tekrar hoş geldiniz",
+            "signInToContinue": "Devam etmek için giriş yapın",
+            "google": "Google ile giriş yap",
+            "email": "E-posta adresi",
+            "password": "Şifre",
+            "forgotPassword": "Şifrenizi mi unuttunuz?",
+            "submit": "Giriş yap",
+            "submitting": "Giriş yapılıyor...",
+            "noAccount": "Hesabınız yok mu?",
+            "signUp": "Kaydolun"
+        },
+        "signup": {
+            "title": "Hesap Oluştur",
+            "subtitle": "Linklerinizi kolayca düzenlemek ve paylaşmak için Blink'e katılın.",
+            "header": "Hesabınızı oluşturun",
+            "subheader": "Linklerinizi düzenlemek için bize katılın",
+            "google": "Google ile kaydolun",
+            "fullName": "Ad Soyad",
+            "email": "E-posta adresi",
+            "password": "Şifre",
+            "confirmPassword": "Şifreyi Onayla",
+            "submit": "Kaydol",
+            "submitting": "Hesap oluşturuluyor...",
+            "hasAccount": "Zaten bir hesabınız var mı?",
+            "signIn": "Giriş yapın",
+            "terms": {
+                "agree": "Kabul ediyorum:",
+                "conditions": "Şartlar ve Koşullar",
+                "and": "ve",
+                "privacy": "Gizlilik Politikası"
+            }
+        },
+        "errors": {
+            "fillAll": "Lütfen tüm alanları doldurun",
+            "loginFailed": "Giriş yapılamadı. Lütfen bilgilerinizi kontrol edin.",
+            "acceptTerms": "Şartlar ve Koşullar ile Gizlilik Politikasını kabul etmelisiniz",
+            "passwordsNoMatch": "Şifreler eşleşmiyor",
+            "passwordLength": "Şifre en az 6 karakter olmalıdır",
+            "emailInUse": "Bu e-posta zaten kayıtlı. Lütfen giriş yapmayı deneyin.",
+            "weakPassword": "Şifre en az 6 karakter uzunluğunda olmalıdır.",
+            "invalidEmail": "Lütfen geçerli bir e-posta adresi girin.",
+            "operationNotAllowed": "E-posta/şifre hesapları etkin değil. Lütfen destek ile iletişime geçin.",
+            "createFailed": "Hesap oluşturulamadı: {{message}}"
+        },
+        "verification": {
+            "title": "Hesap oluşturuldu!",
+            "message": "Bir doğrulama e-postası gönderildi. Lütfen gelen kutunuzu kontrol edin.",
+            "redirecting": "E-posta doğrulama sayfasına yönlendiriliyor..."
+        }
+    },
+    "vault": {
+        "notFound": {
+            "title": "Kasa bulunamadı",
+            "return": "Kontrol Paneline Dön"
+        },
+        "description": "Blink üzerindeki {{name}} konteynerindeki linklere göz atın.",
+        "links": "Linkler",
+        "select": "Seç",
+        "cancel": "İptal",
+        "selected": "seçili",
+        "addLink": "Link Ekle",
+        "searchLinks": "Linklerde ara...",
+        "empty": "Henüz link yok. Başlamak için \"Link Ekle\"ye tıklayın.",
+        "emptySearch": "Aramanızla eşleşen link yok.",
+        "collaborators": {
+            "title": "Katılımcılar",
+            "owner": "Sahip",
+            "you": "Siz (Sahip)",
+            "invite": "Davet Et",
+            "manage": "Yönet",
+            "more": "+{{count}} diğer"
+        },
+        "actions": {
+            "title": "İşlemler",
+            "editContainer": "Konteyneri Düzenle",
+            "deleteContainer": "Konteyneri Sil",
+            "leaveContainer": "Konteynerden Ayrıl"
+        },
+        "messages": {
+            "deleted": "{{count}} link silindi",
+            "deleteError": "Linkler silinemedi",
+            "orderUpdated": "Sıralama güncellendi",
+            "updateOrderError": "Sıralama güncellenemedi",
+            "unpinned": "Link sabitlemesi kaldırıldı",
+            "pinned": "Link üste sabitlendi",
+            "pinError": "Sabitleme durumu güncellenemedi",
+            "linkDeleted": "Link başarıyla silindi",
+            "linkDeleteError": "Link silinemedi",
+            "vaultDeleted": "Kasa başarıyla silindi",
+            "vaultDeleteError": "Kasa silinemedi",
+            "leftVault": "Kasadann başarıyla ayrıldınız",
+            "leaveError": "Kasadan ayrılamadınız"
+        },
+        "modals": {
+            "deleteLink": {
+                "title": "Linki Sil",
+                "message": "\"{{title}}\" linkini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
+                "confirm": "Sil"
+            },
+            "deleteVault": {
+                "title": "Kasayı Sil",
+                "message": "\"{{name}}\" kasasını silmek istediğinizden emin misiniz? Tüm linkler kalıcı olarak silinecektir.",
+                "confirm": "Kasayı Sil"
+            }
+        }
+    },
+    "common": {
+        "confirm": "Onayla",
+        "confirmation": {
+            "typeToConfirm": "Onaylamak için lütfen \"{{word}}\" yazın",
+            "placeholder": "\"{{word}}\" yazın"
+        },
+        "cancel": "İptal",
+        "save": "Kaydet",
+        "loading": "Yükleniyor...",
+        "processing": "İşleniyor...",
+        "errors": {
+            "operationFailed": "İşlem başarısız oldu"
+        }
+    }
+}
