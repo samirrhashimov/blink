@@ -354,7 +354,7 @@
             "linkDeleteError": "Link silinemedi",
             "vaultDeleted": "Kasa başarıyla silindi",
             "vaultDeleteError": "Kasa silinemedi",
-            "leftVault": "Kasadann başarıyla ayrıldınız",
+            "leftVault": "Kasadan başarıyla ayrıldınız",
             "leaveError": "Kasadan ayrılamadınız"
         },
         "modals": {
