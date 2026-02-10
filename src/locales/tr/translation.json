@@ -181,12 +181,10 @@
             "typeToConfirm": "Onaylamak için lütfen \"{{word}}\" yazın",
             "placeholder": "\"{{word}}\" yazın"
         },
-        "cancel": "İptal",
-        "save": "Kaydet",
-        "loading": "Yükleniyor...",
         "processing": "İşleniyor...",
         "errors": {
             "operationFailed": "İşlem başarısız oldu"
-        }
+        },
+        "loading": "Yükleniyor..."
     }
 }
