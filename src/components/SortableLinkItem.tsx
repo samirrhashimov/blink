@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import {
@@ -53,6 +54,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
     isSelected = false,
     onSelect
 }) => {
+    const { t } = useTranslation();
     const [menuOpen, setMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
@@ -174,7 +176,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                 <button
                     onClick={(e) => { e.stopPropagation(); onCopy(link.url, link.id); }}
                     className="action-pill copy-pill"
-                    title={copiedLinkId === link.id ? 'Copied!' : 'Copy URL'}
+                    title={copiedLinkId === link.id ? t('container.menu.copied') : t('container.menu.copy')}
                 >
                     {copiedLinkId === link.id ? <Check size={16} /> : <Copy size={16} />}
                 </button>
@@ -183,7 +185,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                     <button
                         onClick={(e) => { e.stopPropagation(); setMenuOpen(!menuOpen); }}
                         className={`action-pill more-pill ${menuOpen ? 'active' : ''}`}
-                        title="More actions"
+                        title={t('container.menu.more')}
                     >
                         <MoreVertical size={18} />
                     </button>
@@ -192,12 +194,12 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                         <div className="link-menu-dropdown" onClick={(e) => e.stopPropagation()}>
                             <button className="menu-item" onClick={(e) => handleAction(e, () => onStats?.(link))}>
                                 <BarChart2 size={16} />
-                                <span>Statistics</span>
+                                <span>{t('container.menu.stats')}</span>
                             </button>
 
                             <button className="menu-item" onClick={(e) => handleAction(e, () => onQRCode?.(link))}>
                                 <QrCode size={16} />
-                                <span>QR Code</span>
+                                <span>{t('container.menu.qrCode')}</span>
                             </button>
 
                             {canEdit && (
@@ -208,21 +210,21 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                                             onClick={(e) => handleAction(e, () => onTogglePin(link))}
                                         >
                                             <Pin size={16} fill={link.isPinned ? 'currentColor' : 'none'} />
-                                            <span>{link.isPinned ? 'Unpin Link' : 'Pin to Top'}</span>
+                                            <span>{link.isPinned ? t('container.menu.unpin') : t('container.menu.pin')}</span>
                                         </button>
                                     )}
                                     <button className="menu-item" onClick={(e) => handleAction(e, () => onMove(link))}>
                                         <ArrowRightLeft size={16} />
-                                        <span>Move Link</span>
+                                        <span>{t('container.menu.move')}</span>
                                     </button>
                                     <button className="menu-item" onClick={(e) => handleAction(e, () => onEdit(link))}>
                                         <Edit size={16} />
-                                        <span>Edit Details</span>
+                                        <span>{t('container.menu.edit')}</span>
                                     </button>
                                     <div className="menu-divider"></div>
                                     <button className="menu-item delete-item" onClick={(e) => handleAction(e, () => onDelete(link))}>
                                         <Trash2 size={16} />
-                                        <span>Delete Link</span>
+                                        <span>{t('container.menu.delete')}</span>
                                     </button>
                                 </>
                             )}

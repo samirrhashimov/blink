@@ -342,6 +342,18 @@
             "deleteContainer": "Delete Container",
             "leaveContainer": "Leave Container"
         },
+        "menu": {
+            "stats": "Statistics",
+            "qrCode": "QR Code",
+            "pin": "Pin to Top",
+            "unpin": "Unpin Link",
+            "move": "Move Link",
+            "edit": "Edit Details",
+            "delete": "Delete Link",
+            "more": "More actions",
+            "copy": "Copy URL",
+            "copied": "Copied!"
+        },
         "messages": {
             "deleted": "Deleted {{count}} links",
             "deleteError": "Failed to delete links",

@@ -342,6 +342,18 @@
             "deleteContainer": "Konteyneri Sil",
             "leaveContainer": "Konteynerden Ayrıl"
         },
+        "menu": {
+            "stats": "İstatistikler",
+            "qrCode": "QR Kodu",
+            "pin": "Başa Sabitle",
+            "unpin": "Sabitlemeyi Kaldır",
+            "move": "Linki Taşı",
+            "edit": "Detayları Düzenle",
+            "delete": "Linki Sil",
+            "more": "Daha fazla işlem",
+            "copy": "URL'yi Kopyala",
+            "copied": "Kopyalandı!"
+        },
         "messages": {
             "deleted": "{{count}} link silindi",
             "deleteError": "Linkler silinemedi",
