@@ -14,7 +14,7 @@
         "features": {
             "containers": {
                 "title": "Merkezi Konteynerler",
-                "desc": "Farklı projeler, ekipler veya kişisel ilgi alanları için \"Konteynerler\" adı verilen özel çalışma alanları oluşturun. Linklerinizi tek bir güvenli yerde özelleştirilmiş ve düzenli tutun."
+                "desc": "Create dedicated containers for different projects, teams, or personal interests. Keep your links customized and organized in one secure place."
             },
             "sharing": {
                 "title": "Kolay Paylaşım",
@@ -22,7 +22,7 @@
             },
             "invitations": {
                 "title": "Gelen Davetler",
-                "desc": "Diğer çalışma alanlarına katılma isteklerini yönetin. Paylaşılan konteynerlerde işbirliği yapmak ve yönetmeye yardımcı olmak için gelen davetleri inceleyin, kabul edin veya reddedin."
+                "desc": "Manage requests to join other containers. Review, accept, or decline incoming invitations to collaborate on and help manage shared containers."
             },
             "tagging": {
                 "title": "Smart Tagging System",
@@ -32,7 +32,7 @@
                 "title": "Customizable Themes",
                 "desc": "Personalize your workspace with custom container colors. Choose from our curated color palette to make each container uniquely yours. Try it out below!",
                 "demoTitle": "My Container",
-                "demoDesc": "Custom colored workspace"
+                "demoDesc": "Custom colored container"
             },
             "firefox": {
                 "title": "Blink for Firefox",
@@ -187,10 +187,10 @@
                 "step4": "Click Import HTML button."
             },
             "importing": "Importing...",
-            "importSuccess": "Successfully imported {{links}} bookmarks into {{vaults}} containers.",
+            "importSuccess": "Successfully imported {{links}} bookmarks into {{containers}} containers.",
             "importConfirm": {
                 "title": "Confirm Import",
-                "message": "This will create {{vaults}} new containers and import {{links}} links. Do you want to proceed?"
+                "message": "This will create {{containers}} new containers and import {{links}} links. Do you want to proceed?"
             },
             "exporting": "Exporting...",
             "exportSuccess": "Bookmarks exported successfully!",
@@ -207,7 +207,7 @@
     "dashboard": {
         "title": "Panel",
         "library": "Kütüphanem",
-        "newContainer": "New Workspace",
+        "newContainer": "New Container",
         "searchPlaceholder": "Search containers...",
         "personal": "Kişisel",
         "shared": "Shared Spaces",
@@ -297,7 +297,7 @@
         "subtitle": "Accept or decline invitations to collaborate on containers",
         "empty": {
             "title": "No pending invitations",
-            "desc": "When someone invites you to collaborate on a vault, it will appear here.",
+            "desc": "When someone invites you to collaborate on a container, it will appear here.",
             "button": "Go to Dashboard"
         },
         "item": {
@@ -314,59 +314,71 @@
             "declineFailed": "Failed to decline invitation"
         }
     },
-    "vault": {
+    "container": {
         "notFound": {
-            "title": "Kasa bulunamadı",
-            "return": "Kontrol Paneline Dön"
+            "title": "Container not found",
+            "return": "Return to Dashboard"
         },
-        "description": "Blink üzerindeki {{name}} konteynerindeki linklere göz atın.",
-        "links": "Linkler",
-        "select": "Seç",
-        "cancel": "İptal",
-        "selected": "seçili",
-        "addLink": "Link Ekle",
-        "searchLinks": "Linklerde ara...",
-        "empty": "Henüz link yok. Başlamak için \"Link Ekle\"ye tıklayın.",
-        "emptySearch": "Aramanızla eşleşen link yok.",
+        "description": "Browse links in the {{name}} container on Blink.",
+        "links": "Links",
+        "select": "Select",
+        "cancel": "Cancel",
+        "selected": "selected",
+        "addLink": "Add Link",
+        "searchLinks": "Search links...",
+        "empty": "No links yet. Click \"Add Link\" to get started.",
+        "emptySearch": "No links match your search.",
         "collaborators": {
-            "title": "Katılımcılar",
-            "owner": "Sahip",
-            "you": "Siz (Sahip)",
-            "invite": "Davet Et",
-            "manage": "Yönet",
-            "more": "+{{count}} diğer"
+            "title": "Collaborators",
+            "owner": "Owner",
+            "you": "You (Owner)",
+            "invite": "Invite",
+            "manage": "Manage",
+            "more": "+{{count}} more"
         },
         "actions": {
-            "title": "İşlemler",
-            "editContainer": "Konteyneri Düzenle",
-            "deleteContainer": "Konteyneri Sil",
-            "leaveContainer": "Konteynerden Ayrıl"
+            "title": "Actions",
+            "editContainer": "Edit Container",
+            "deleteContainer": "Delete Container",
+            "leaveContainer": "Leave Container"
+        },
+        "menu": {
+            "stats": "Statistics",
+            "qrCode": "QR Code",
+            "pin": "Pin to Top",
+            "unpin": "Unpin Link",
+            "move": "Move Link",
+            "edit": "Edit Details",
+            "delete": "Delete Link",
+            "more": "More actions",
+            "copy": "Copy URL",
+            "copied": "Copied!"
         },
         "messages": {
-            "deleted": "{{count}} link silindi",
-            "deleteError": "Linkler silinemedi",
-            "orderUpdated": "Sıralama güncellendi",
-            "updateOrderError": "Sıralama güncellenemedi",
-            "unpinned": "Link sabitlemesi kaldırıldı",
-            "pinned": "Link üste sabitlendi",
-            "pinError": "Sabitleme durumu güncellenemedi",
-            "linkDeleted": "Link başarıyla silindi",
-            "linkDeleteError": "Link silinemedi",
-            "vaultDeleted": "Kasa başarıyla silindi",
-            "vaultDeleteError": "Kasa silinemedi",
-            "leftVault": "Kasadan başarıyla ayrıldınız",
-            "leaveError": "Kasadan ayrılamadınız"
+            "deleted": "Deleted {{count}} links",
+            "deleteError": "Failed to delete links",
+            "orderUpdated": "Order updated",
+            "updateOrderError": "Failed to update order",
+            "unpinned": "Link unpinned",
+            "pinned": "Link pinned to top",
+            "pinError": "Failed to update pin status",
+            "linkDeleted": "Link deleted successfully",
+            "linkDeleteError": "Failed to delete link",
+            "containerDeleted": "Container deleted successfully",
+            "containerDeleteError": "Failed to delete container",
+            "leftContainer": "Left container successfully",
+            "leaveError": "Failed to leave container"
         },
         "modals": {
             "deleteLink": {
-                "title": "Linki Sil",
-                "message": "\"{{title}}\" linkini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
-                "confirm": "Sil"
+                "title": "Delete Link",
+                "message": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone.",
+                "confirm": "Delete"
             },
-            "deleteVault": {
-                "title": "Kasayı Sil",
-                "message": "\"{{name}}\" kasasını silmek istediğinizden emin misiniz? Tüm linkler kalıcı olarak silinecektir.",
-                "confirm": "Kasayı Sil"
+            "deleteContainer": {
+                "title": "Delete Container",
+                "message": "Are you sure you want to delete \"{{name}}\"? All links will be permanently deleted.",
+                "confirm": "Delete Container"
             },
             "addLink": {
                 "title": "Add New Link",
@@ -408,8 +420,8 @@
                     "failed": "Failed to update link"
                 }
             },
-            "createVault": {
-                "title": "Create New Vault",
+            "createContainer": {
+                "title": "Create New Container",
                 "name": "Container Name",
                 "description": "Description",
                 "color": "Container Color",
@@ -422,27 +434,27 @@
                     "creating": "Creating..."
                 },
                 "errors": {
-                    "nameRequired": "Vault name is required",
-                    "nameLength": "Vault name must be {{max}} characters or less",
+                    "nameRequired": "Container name is required",
+                    "nameLength": "Container name must be {{max}} characters or less",
                     "descLength": "Description must be {{max}} characters or less",
-                    "failed": "Failed to create vault"
+                    "failed": "Failed to create container"
                 }
             },
-            "editVault": {
-                "title": "Edit Vault",
-                "name": "Vault Name",
+            "editContainer": {
+                "title": "Edit Container",
+                "name": "Container Name",
                 "description": "Description",
-                "color": "Vault Color",
+                "color": "Container Color",
                 "placeholders": {
-                    "name": "Enter vault name",
-                    "description": "Enter vault description (optional)"
+                    "name": "Enter container name",
+                    "description": "Enter container description (optional)"
                 },
                 "buttons": {
                     "save": "Save Changes",
                     "saving": "Saving..."
                 },
                 "errors": {
-                    "failed": "Failed to update vault"
+                    "failed": "Failed to update container"
                 }
             },
             "linkStats": {
@@ -508,14 +520,14 @@
                 "title": "Move Link",
                 "bulkTitle": "Move {{count}} links to another container:",
                 "singleTitle": "Move \"{{title}}\" to another container:",
-                "noVaults": "No other containers available.",
+                "noContainers": "No other containers available.",
                 "buttons": {
                     "moving": "Moving...",
                     "moveLinks": "Move Links",
                     "moveLink": "Move Link"
                 },
                 "errors": {
-                    "selectVault": "Please select a target container",
+                    "selectContainer": "Please select a target container",
                     "failed": "Failed to move link(s)"
                 }
             }
