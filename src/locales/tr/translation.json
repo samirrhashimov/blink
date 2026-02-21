@@ -14,7 +14,7 @@
         "features": {
             "containers": {
                 "title": "Merkezi Konteynerler",
-                "desc": "Farklı projeler, ekipler veya kişisel ilgi alanları için \"Konteynerler\" adı verilen özel çalışma alanları oluşturun. Linklerinizi tek bir güvenli yerde özelleştirilmiş ve düzenli tutun."
+                "desc": "Farklı projeler, ekipler veya kişisel ilgi alanları için özel konteynerler oluşturun. Linklerinizi tek bir güvenli yerde özelleştirilmiş ve düzenli tutun."
             },
             "sharing": {
                 "title": "Kolay Paylaşım",
@@ -22,7 +22,7 @@
             },
             "invitations": {
                 "title": "Gelen Davetler",
-                "desc": "Diğer çalışma alanlarına katılma isteklerini yönetin. Paylaşılan konteynerlerde işbirliği yapmak ve yönetmeye yardımcı olmak için gelen davetleri inceleyin, kabul edin veya reddedin."
+                "desc": "Diğer konteynerlere katılma isteklerini yönetin. Paylaşılan konteynerlerde işbirliği yapmak ve yönetmeye yardımcı olmak için gelen davetleri inceleyin, kabul edin veya reddedin."
             },
             "tagging": {
                 "title": "Akıllı Etiketleme Sistemi",
@@ -32,7 +32,7 @@
                 "title": "Özelleştirilebilir Temalar",
                 "desc": "Çalışma alanınızı özel konteyner renkleriyle kişiselleştirin. Her konteyneri size özel kılmak için seçilmiş renk paletimizden seçim yapın. Aşağıda deneyin!",
                 "demoTitle": "Benim Konteynerim",
-                "demoDesc": "Özel renkli çalışma alanı"
+                "demoDesc": "Özel renkli konteyner"
             },
             "firefox": {
                 "title": "Firefox için Blink",
@@ -117,7 +117,7 @@
     },
     "share": {
         "title": "\"{{name}}\" Paylaş",
-        "subtitle": "Kapsayıcınıza iş ortakları davet edin",
+        "subtitle": "Konteynerinize iş ortakları davet edin",
         "form": {
             "label": "E-posta ile davet et",
             "placeholder": "E-posta girin",
@@ -155,7 +155,7 @@
         "import": "Yer İmlerini İçe Aktar",
         "importDesc": "Tarayıcınızdan dışa aktarılan bir HTML dosyasından yer imlerini içe aktarın.",
         "export": "Yer İmlerini Dışa Aktar",
-        "exportDesc": "Tüm kapsayıcılarınızı ve linklerinizi bir HTML dosyası olarak indirin.",
+        "exportDesc": "Tüm konteynerlerinizi ve linklerinizi bir HTML dosyası olarak indirin.",
         "appInfo": "Uygulama Bilgisi",
         "openSource": "Açık kaynak",
         "openSourceDesc": "Kaynak kodunu keşfedin veya GitHub'da yıldız verin.",
@@ -187,15 +187,15 @@
                 "step4": "HTML İçe Aktar butonuna tıklayın."
             },
             "importing": "İçe aktarılıyor...",
-            "importSuccess": "{{links}} yer imi {{vaults}} kapsayıcıya başarıyla içe aktarıldı.",
+            "importSuccess": "{{links}} yer imi {{containers}} konteynerine başarıyla içe aktarıldı.",
             "importConfirm": {
                 "title": "İçe Aktarmayı Onayla",
-                "message": "Bu işlem {{vaults}} yeni kapsayıcı oluşturacak ve {{links}} link içe aktaracaktır. Devam etmek istiyor musunuz?"
+                "message": "Bu işlem {{containers}} yeni konteyner oluşturacak ve {{links}} link içe aktaracaktır. Devam etmek istiyor musunuz?"
             },
             "exporting": "Dışa aktarılıyor...",
             "exportSuccess": "Yer imleri başarıyla dışa aktarıldı!",
             "exportFailed": "Yer imleri dışa aktarılamadı.",
-            "noExport": "Dışa aktarılacak kapsayıcı yok."
+            "noExport": "Dışa aktarılacak konteyner yok."
         },
         "buttons": {
             "update": "Hesabı Güncelle",
@@ -207,8 +207,8 @@
     "dashboard": {
         "title": "Panel",
         "library": "Kütüphanem",
-        "newContainer": "Yeni Çalışma Alanı",
-        "searchPlaceholder": "Kapsayıcı ara...",
+        "newContainer": "Yeni Konteyner",
+        "searchPlaceholder": "Konteyner ara...",
         "personal": "Kişisel",
         "shared": "Paylaşılan Alanlar",
         "nav": {
@@ -294,10 +294,10 @@
     },
     "invitations": {
         "title": "Davetler",
-        "subtitle": "Kapsayıcılar üzerinde iş birliği yapmak için davetleri kabul edin veya reddedin",
+        "subtitle": "Konteynerler üzerinde iş birliği yapmak için davetleri kabul edin veya reddedin",
         "empty": {
             "title": "Bekleyen davet yok",
-            "desc": "Birisi sizi bir kasa üzerinde iş birliği yapmaya davet ettiğinde burada görünecektir.",
+            "desc": "Birisi sizi bir konteyner üzerinde iş birliği yapmaya davet ettiğinde burada görünecektir.",
             "button": "Panale Git"
         },
         "item": {
@@ -314,9 +314,9 @@
             "declineFailed": "Davet reddedilemedi"
         }
     },
-    "vault": {
+    "container": {
         "notFound": {
-            "title": "Kasa bulunamadı",
+            "title": "Konteyner bulunamadı",
             "return": "Kontrol Paneline Dön"
         },
         "description": "Blink üzerindeki {{name}} konteynerindeki linklere göz atın.",
@@ -352,10 +352,10 @@
             "pinError": "Sabitleme durumu güncellenemedi",
             "linkDeleted": "Link başarıyla silindi",
             "linkDeleteError": "Link silinemedi",
-            "vaultDeleted": "Kasa başarıyla silindi",
-            "vaultDeleteError": "Kasa silinemedi",
-            "leftVault": "Kasadann başarıyla ayrıldınız",
-            "leaveError": "Kasadan ayrılamadınız"
+            "containerDeleted": "Konteyner başarıyla silindi",
+            "containerDeleteError": "Konteyner silinemedi",
+            "leftContainer": "Konteynerden başarıyla ayrıldınız",
+            "leaveError": "Konteynerden ayrılamadınız"
         },
         "modals": {
             "deleteLink": {
@@ -363,10 +363,10 @@
                 "message": "\"{{title}}\" linkini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",
                 "confirm": "Sil"
             },
-            "deleteVault": {
-                "title": "Kasayı Sil",
-                "message": "\"{{name}}\" kasasını silmek istediğinizden emin misiniz? Tüm linkler kalıcı olarak silinecektir.",
-                "confirm": "Kasayı Sil"
+            "deleteContainer": {
+                "title": "Konteyneri Sil",
+                "message": "\"{{name}}\" konteynerini silmek istediğinizden emin misiniz? Tüm linkler kalıcı olarak silinecektir.",
+                "confirm": "Konteyneri Sil"
             },
             "addLink": {
                 "title": "Yeni Link Ekle",
@@ -408,8 +408,8 @@
                     "failed": "Link güncellenemedi"
                 }
             },
-            "createVault": {
-                "title": "Yeni Kasa Oluştur",
+            "createContainer": {
+                "title": "Yeni Konteyner Oluştur",
                 "name": "Konteyner Adı",
                 "description": "Açıklama",
                 "color": "Konteyner Rengi",
@@ -422,27 +422,27 @@
                     "creating": "Oluşturuluyor..."
                 },
                 "errors": {
-                    "nameRequired": "Kasa adı gereklidir",
-                    "nameLength": "Kasa adı en fazla {{max}} karakter olmalıdır",
+                    "nameRequired": "Konteyner adı gereklidir",
+                    "nameLength": "Konteyner adı en fazla {{max}} karakter olmalıdır",
                     "descLength": "Açıklama en fazla {{max}} karakter olmalıdır",
-                    "failed": "Kasa oluşturulamadı"
+                    "failed": "Konteyner oluşturulamadı"
                 }
             },
-            "editVault": {
-                "title": "Kasayı Düzenle",
-                "name": "Kasa Adı",
+            "editContainer": {
+                "title": "Konteyneri Düzenle",
+                "name": "Konteyner Adı",
                 "description": "Açıklama",
-                "color": "Kasa Rengi",
+                "color": "Konteyner Rengi",
                 "placeholders": {
-                    "name": "Kasa adını girin",
-                    "description": "Kasa açıklaması girin (isteğe bağlı)"
+                    "name": "Konteyner adını girin",
+                    "description": "Konteyner açıklaması girin (isteğe bağlı)"
                 },
                 "buttons": {
                     "save": "Değişiklikleri Kaydet",
                     "saving": "Kaydediliyor..."
                 },
                 "errors": {
-                    "failed": "Kasa güncellenemedi"
+                    "failed": "Konteyner güncellenemedi"
                 }
             },
             "linkStats": {
@@ -506,16 +506,16 @@
             },
             "moveLink": {
                 "title": "Linki Taşı",
-                "bulkTitle": "{{count}} linki başka bir kapsayıcıya taşı:",
-                "singleTitle": "\"{{title}}\" linkini başka bir kapsayıcıya taşı:",
-                "noVaults": "Başka kapsayıcı mevcut değil.",
+                "bulkTitle": "{{count}} linki başka bir konteynere taşı:",
+                "singleTitle": "\"{{title}}\" linkini başka bir konteynere taşı:",
+                "noContainers": "Başka konteyner mevcut değil.",
                 "buttons": {
                     "moving": "Taşınıyor...",
                     "moveLinks": "Linkleri Taşı",
                     "moveLink": "Linki Taşı"
                 },
                 "errors": {
-                    "selectVault": "Lütfen bir hedef kapsayıcı seçin",
+                    "selectContainer": "Lütfen bir hedef konteyner seçin",
                     "failed": "Link(ler) taşınamadı"
                 }
             }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { useVault } from '../contexts/VaultContext';
+import { useContainer } from '../contexts/ContainerContext';
 import { useToast } from '../contexts/ToastContext';
 import { SharingService } from '../services/sharingService';
 import { UserService } from '../services/userService';
@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import AddLinkModal from '../components/AddLinkModal';
 import EditLinkModal from '../components/EditLinkModal';
-import EditVaultModal from '../components/EditVaultModal';
+import EditContainerModal from '../components/EditContainerModal';
 import ConfirmModal from '../components/ConfirmModal';
 import CollaboratorsModal from '../components/CollaboratorsModal';
 import ShareLinkModal from '../components/ShareLinkModal';
@@ -52,22 +52,22 @@ import {
 
 import { useTranslation } from 'react-i18next';
 
-const VaultDetails: React.FC = () => {
+const ContainerDetails: React.FC = () => {
   const { t } = useTranslation();
 
   const { id } = useParams<{ id: string }>();
   const { currentUser } = useAuth();
   const {
-    vaults,
+    containers,
     loading,
     error,
-    deleteLinkFromVault,
-    deleteLinksFromVault,
-    deleteVault,
+    deleteLinkFromContainer,
+    deleteLinksFromContainer,
+    deleteContainer,
     reorderLinks,
-    updateLinkInVault,
+    updateLinkInContainer,
     trackClick
-  } = useVault();
+  } = useContainer();
   const navigate = useNavigate();
   const toast = useToast();
   const [showAddLinkModal, setShowAddLinkModal] = useState(false);
@@ -80,10 +80,10 @@ const VaultDetails: React.FC = () => {
       delete (window as any).dispatchSetShowAddLinkModal;
     };
   }, []);
-  const [showEditVaultModal, setShowEditVaultModal] = useState(false);
+  const [showEditContainerModal, setShowEditContainerModal] = useState(false);
   const [showDeleteLinkModal, setShowDeleteLinkModal] = useState(false);
-  const [showDeleteVaultModal, setShowDeleteVaultModal] = useState(false);
-  const [showLeaveVaultModal, setShowLeaveVaultModal] = useState(false);
+  const [showDeleteContainerModal, setShowDeleteContainerModal] = useState(false);
+  const [showLeaveContainerModal, setShowLeaveContainerModal] = useState(false);
   const [showCollaboratorsModal, setShowCollaboratorsModal] = useState(false);
   const [showShareLinkModal, setShowShareLinkModal] = useState(false);
   const [showDeleteConfirmModal, setShowDeleteConfirmModal] = useState(false);
@@ -133,14 +133,14 @@ const VaultDetails: React.FC = () => {
 
   const confirmBulkDelete = async () => {
     try {
-      if (!vault) return;
-      await deleteLinksFromVault(vault.id, Array.from(selectedLinkIds));
-      toast.success(t('vault.messages.deleted', { count: selectedLinkIds.size }));
+      if (!container) return;
+      await deleteLinksFromContainer(container.id, Array.from(selectedLinkIds));
+      toast.success(t('container.messages.deleted', { count: selectedLinkIds.size }));
       setSelectionMode(false);
       setSelectedLinkIds(new Set());
     } catch (err: any) {
       console.error('Bulk delete error:', err);
-      toast.error(err.message || t('vault.messages.deleteError'));
+      toast.error(err.message || t('container.messages.deleteError'));
       throw err;
     }
   };
@@ -175,46 +175,46 @@ const VaultDetails: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
-  // Find the current vault from the vaults array
-  const vault = vaults.find(v => v.id === id) || null;
+  // Find the current container from the containers array
+  const container = containers.find(v => v.id === id) || null;
 
-  // Debug vault data
+  // Debug container data
   useEffect(() => {
-    if (vault) {
-      console.log('Current vault data:', {
-        id: vault.id,
-        name: vault.name,
-        ownerId: vault.ownerId,
-        authorizedUsers: vault.authorizedUsers,
+    if (container) {
+      console.log('Current container data:', {
+        id: container.id,
+        name: container.name,
+        ownerId: container.ownerId,
+        authorizedUsers: container.authorizedUsers,
         currentUserId: currentUser?.uid
       });
     }
-  }, [vault, currentUser]);
+  }, [container, currentUser]);
 
   // Load collaborator names (including owner if not current user)
   useEffect(() => {
     const loadCollaboratorNames = async () => {
-      if (!vault) {
-        console.log('No vault to load');
+      if (!container) {
+        console.log('No container to load');
         return;
       }
 
       console.log('Loading collaborator names...');
-      console.log('Vault owner:', vault.ownerId);
-      console.log('Authorized users:', vault.authorizedUsers);
+      console.log('Container owner:', container.ownerId);
+      console.log('Authorized users:', container.authorizedUsers);
       console.log('Current user:', currentUser?.uid);
 
       const names: Record<string, string> = {};
       const userIdsToFetch = new Set<string>();
 
       // Add owner if not current user
-      if (vault.ownerId && vault.ownerId !== currentUser?.uid) {
-        userIdsToFetch.add(vault.ownerId);
+      if (container.ownerId && container.ownerId !== currentUser?.uid) {
+        userIdsToFetch.add(container.ownerId);
       }
 
       // Add all authorized users who are not current user
-      if (vault.authorizedUsers && vault.authorizedUsers.length > 0) {
-        vault.authorizedUsers.forEach(userId => {
+      if (container.authorizedUsers && container.authorizedUsers.length > 0) {
+        container.authorizedUsers.forEach(userId => {
           if (userId !== currentUser?.uid) {
             userIdsToFetch.add(userId);
           }
@@ -243,26 +243,26 @@ const VaultDetails: React.FC = () => {
     };
 
     loadCollaboratorNames();
-  }, [vault?.ownerId, vault?.authorizedUsers, currentUser?.uid]);
+  }, [container?.ownerId, container?.authorizedUsers, currentUser?.uid]);
 
-  // Load user permission for this vault
+  // Load user permission for this container
   useEffect(() => {
     const loadUserPermission = async () => {
-      if (!vault || !currentUser) return;
+      if (!container || !currentUser) return;
 
       // Owner has full permissions
-      if (vault.ownerId === currentUser.uid) {
+      if (container.ownerId === currentUser.uid) {
         setUserPermission('edit');
         return;
       }
 
       // Check permission for shared users
-      const permission = await SharingService.getUserPermission(vault.id, currentUser.uid);
+      const permission = await SharingService.getUserPermission(container.id, currentUser.uid);
       setUserPermission(permission?.permission || null);
     };
 
     loadUserPermission();
-  }, [vault?.id, currentUser]);
+  }, [container?.id, currentUser]);
 
   // Handle Drag and Drop Sensors
   const sensors = useSensors(
@@ -285,17 +285,17 @@ const VaultDetails: React.FC = () => {
   const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
 
-    if (over && active.id !== over.id && vault) {
-      const oldIndex = vault.links.findIndex((l) => l.id === active.id);
-      const newIndex = vault.links.findIndex((l) => l.id === over.id);
+    if (over && active.id !== over.id && container) {
+      const oldIndex = container.links.findIndex((l) => l.id === active.id);
+      const newIndex = container.links.findIndex((l) => l.id === over.id);
 
-      const newLinks = arrayMove(vault.links, oldIndex, newIndex);
+      const newLinks = arrayMove(container.links, oldIndex, newIndex);
 
       try {
-        await reorderLinks(vault.id, newLinks);
-        toast.success(t('vault.messages.orderUpdated'));
+        await reorderLinks(container.id, newLinks);
+        toast.success(t('container.messages.orderUpdated'));
       } catch (err: any) {
-        toast.error(t('vault.messages.updateOrderError'));
+        toast.error(t('container.messages.updateOrderError'));
       }
     }
   };
@@ -306,7 +306,7 @@ const VaultDetails: React.FC = () => {
   };
 
   // Filter links based on search query
-  const filteredLinks = vault?.links.filter(link => {
+  const filteredLinks = container?.links.filter(link => {
     const query = linkSearchQuery.toLowerCase();
     return (
       link.title.toLowerCase().includes(query) ||
@@ -339,18 +339,18 @@ const VaultDetails: React.FC = () => {
   };
 
   const handleTogglePin = async (link: LinkType) => {
-    if (!vault) return;
+    if (!container) return;
     try {
-      await updateLinkInVault(vault.id, link.id, { isPinned: !link.isPinned });
-      toast.success(link.isPinned ? t('vault.messages.unpinned') : t('vault.messages.pinned'));
+      await updateLinkInContainer(container.id, link.id, { isPinned: !link.isPinned });
+      toast.success(link.isPinned ? t('container.messages.unpinned') : t('container.messages.pinned'));
     } catch (err: any) {
-      toast.error(t('vault.messages.pinError'));
+      toast.error(t('container.messages.pinError'));
     }
   };
 
   const handleTrackClick = (linkId: string) => {
-    if (!vault) return;
-    trackClick(vault.id, linkId);
+    if (!container) return;
+    trackClick(container.id, linkId);
   };
 
   const handleShowStats = (link: LinkType) => {
@@ -364,48 +364,48 @@ const VaultDetails: React.FC = () => {
   };
 
   const confirmDeleteLink = async () => {
-    if (!selectedLink || !vault) return;
+    if (!selectedLink || !container) return;
     try {
-      await deleteLinkFromVault(vault.id, selectedLink.id);
+      await deleteLinkFromContainer(container.id, selectedLink.id);
       setShowDeleteLinkModal(false);
       setSelectedLink(null);
-      toast.success(t('vault.messages.linkDeleted'));
+      toast.success(t('container.messages.linkDeleted'));
     } catch (err: any) {
       console.error('Error deleting link:', err);
-      toast.error(err.message || t('vault.messages.linkDeleteError'));
+      toast.error(err.message || t('container.messages.linkDeleteError'));
     }
   };
 
-  const confirmDeleteVault = async () => {
-    if (!vault) return;
+  const confirmDeleteContainer = async () => {
+    if (!container) return;
     try {
-      await deleteVault(vault.id);
-      setShowDeleteVaultModal(false);
-      toast.success(t('vault.messages.vaultDeleted'));
+      await deleteContainer(container.id);
+      setShowDeleteContainerModal(false);
+      toast.success(t('container.messages.containerDeleted'));
       navigate('/dashboard');
     } catch (err: any) {
-      console.error('Error deleting vault:', err);
-      toast.error(err.message || t('vault.messages.vaultDeleteError'));
-      setShowDeleteVaultModal(false);
+      console.error('Error deleting container:', err);
+      toast.error(err.message || t('container.messages.containerDeleteError'));
+      setShowDeleteContainerModal(false);
     }
   };
 
-  const confirmLeaveVault = async () => {
-    if (!vault || !currentUser) return;
+  const confirmLeaveContainer = async () => {
+    if (!container || !currentUser) return;
     try {
-      await SharingService.removeUserFromVault(vault.id, currentUser.uid);
-      setShowLeaveVaultModal(false);
-      toast.success(t('vault.messages.leftVault'));
+      await SharingService.removeUserFromContainer(container.id, currentUser.uid);
+      setShowLeaveContainerModal(false);
+      toast.success(t('container.messages.leftContainer'));
       navigate('/dashboard');
     } catch (err: any) {
-      console.error('Error leaving vault:', err);
-      toast.error(err.message || t('vault.messages.leaveError'));
-      setShowLeaveVaultModal(false);
+      console.error('Error leaving container:', err);
+      toast.error(err.message || t('container.messages.leaveError'));
+      setShowLeaveContainerModal(false);
     }
   };
 
   // Check if current user is the owner
-  const isOwner = vault?.ownerId === currentUser?.uid;
+  const isOwner = container?.ownerId === currentUser?.uid;
 
   // Check if user can edit (owner or has edit permission)
   const canEdit = isOwner || userPermission === 'edit';
@@ -414,13 +414,13 @@ const VaultDetails: React.FC = () => {
     return <LoadingSkeleton variant="fullscreen" />;
   }
 
-  if (!vault) {
+  if (!container) {
     return (
       <div className="min-h-screen bg-background-light dark:bg-background-dark flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('vault.notFound.title')}</h1>
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('container.notFound.title')}</h1>
           <Link to="/dashboard" className="text-primary hover:text-primary/80">
-            {t('vault.notFound.return')}
+            {t('container.notFound.return')}
           </Link>
         </div>
       </div>
@@ -428,7 +428,7 @@ const VaultDetails: React.FC = () => {
   }
 
   const colors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
-  const vaultColor = vault.color || colors[vault.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length];
+  const containerColor = container.color || colors[container.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length];
 
   // Helper to get RGB from hex
   const hexToRgb = (hex: string) => {
@@ -440,16 +440,16 @@ const VaultDetails: React.FC = () => {
 
   return (
     <div
-      className="vault-details-page"
+      className="container-details-page"
       style={{
-        '--accent-color': vaultColor,
-        '--primary': vaultColor,
-        '--primary-rgb': hexToRgb(vaultColor)
+        '--accent-color': containerColor,
+        '--primary': containerColor,
+        '--primary-rgb': hexToRgb(containerColor)
       } as React.CSSProperties}
     >
       <SEO
-        title={vault.name}
-        description={vault.description || t('vault.description', { name: vault.name })}
+        title={container.name}
+        description={container.description || t('container.description', { name: container.name })}
       />
       <header className={`header ${showNavbar ? 'navbar-visible' : 'navbar-hidden'}`}>
         <div className="container">
@@ -473,17 +473,17 @@ const VaultDetails: React.FC = () => {
       </header>
 
       <main className="container">
-        <div className="vault-header">
-          <div className="vault-header-info">
-            <h2 className="vault-name-title">{vault.name}</h2>
-            {vault.description && <p className="vault-description-text">{vault.description}</p>}
+        <div className="container-header">
+          <div className="container-header-info">
+            <h2 className="container-name-title">{container.name}</h2>
+            {container.description && <p className="container-description-text">{container.description}</p>}
           </div>
         </div>
 
-        <div className="vault-content">
+        <div className="container-content">
           <div className="links-section">
             <div className="links-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
-              <h3>{t('vault.links')} ({vault.links.length})</h3>
+              <h3>{t('container.links')} ({container.links.length})</h3>
               <div style={{ display: 'flex', gap: '8px' }}>
                 <button
                   onClick={toggleSelectionMode}
@@ -505,7 +505,7 @@ const VaultDetails: React.FC = () => {
                   title={selectionMode ? 'Cancel Selection' : 'Select Multiple'}
                 >
                   {selectionMode ? <XCircle size={16} /> : <CheckSquare size={16} />}
-                  <span className="hidden sm:inline">{selectionMode ? t('vault.cancel') : t('vault.select')}</span>
+                  <span className="hidden sm:inline">{selectionMode ? t('container.cancel') : t('container.select')}</span>
                 </button>
                 {canEdit && (
                   <button
@@ -513,19 +513,19 @@ const VaultDetails: React.FC = () => {
                     className="add-link-button"
                   >
                     <Plus size={18} />
-                    {t('vault.addLink')}
+                    {t('container.addLink')}
                   </button>
                 )}
               </div>
             </div>
 
             {/* Search Input */}
-            {vault.links.length > 0 && !selectionMode && (
+            {container.links.length > 0 && !selectionMode && (
               <div className="modern-search-bar search-links-wrapper">
                 <Search className="modern-search-icon" size={18} />
                 <input
                   type="text"
-                  placeholder={t('vault.searchLinks')}
+                  placeholder={t('container.searchLinks')}
                   value={linkSearchQuery}
                   onChange={(e) => setLinkSearchQuery(e.target.value)}
                   className="modern-search-input"
@@ -544,7 +544,7 @@ const VaultDetails: React.FC = () => {
                     className="w-5 h-5 cursor-pointer"
                     style={{ accentColor: 'var(--primary)' }}
                   />
-                  <span className="font-medium">{selectedLinkIds.size} {t('vault.selected')}</span>
+                  <span className="font-medium">{selectedLinkIds.size} {t('container.selected')}</span>
                 </div>
                 <div className="flex gap-2">
                   <button
@@ -579,13 +579,13 @@ const VaultDetails: React.FC = () => {
             )}
 
             <div className="links-list">
-              {vault.links.length === 0 ? (
+              {container.links.length === 0 ? (
                 <div className="empty-links-state">
-                  <p>{t('vault.empty')}</p>
+                  <p>{t('container.empty')}</p>
                 </div>
               ) : filteredLinks.length === 0 ? (
                 <div className="empty-search-state">
-                  <p>{t('vault.emptySearch')}</p>
+                  <p>{t('container.emptySearch')}</p>
                 </div>
               ) : (
                 <DndContext
@@ -627,27 +627,27 @@ const VaultDetails: React.FC = () => {
 
           <aside className="sidebar">
             <div className="collaborators-widget">
-              <h3>{t('vault.collaborators.title')}</h3>
+              <h3>{t('container.collaborators.title')}</h3>
               <div className="collaborators-list">
                 {/* Current User */}
-                <div className="avatar" title={currentUser?.displayName || t('vault.collaborators.you')}>
+                <div className="avatar" title={currentUser?.displayName || t('container.collaborators.you')}>
                   {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}
                 </div>
 
                 {/* Owner (if not current user) */}
-                {vault.ownerId !== currentUser?.uid && (
+                {container.ownerId !== currentUser?.uid && (
                   <div
-                    key={vault.ownerId}
+                    key={container.ownerId}
                     className="avatar"
-                    title={`${collaboratorNames[vault.ownerId] || t('vault.collaborators.owner')} (${t('vault.collaborators.owner')})`}
+                    title={`${collaboratorNames[container.ownerId] || t('container.collaborators.owner')} (${t('container.collaborators.owner')})`}
                   >
-                    {(collaboratorNames[vault.ownerId] || 'O').charAt(0).toUpperCase()}
+                    {(collaboratorNames[container.ownerId] || 'O').charAt(0).toUpperCase()}
                   </div>
                 )}
 
                 {/* Other Authorized Users (excluding owner and current user) */}
-                {vault.authorizedUsers
-                  .filter(userId => userId !== currentUser?.uid && userId !== vault.ownerId)
+                {container.authorizedUsers
+                  .filter(userId => userId !== currentUser?.uid && userId !== container.ownerId)
                   .slice(0, 2)
                   .map((userId) => {
                     const userName = collaboratorNames[userId] || 'Loading...';
@@ -660,12 +660,12 @@ const VaultDetails: React.FC = () => {
 
                 {/* Show +N more if there are additional collaborators */}
                 {(() => {
-                  const otherUsers = vault.authorizedUsers.filter(
-                    userId => userId !== currentUser?.uid && userId !== vault.ownerId
+                  const otherUsers = container.authorizedUsers.filter(
+                    userId => userId !== currentUser?.uid && userId !== container.ownerId
                   );
                   const remainingCount = otherUsers.length - 2;
                   return remainingCount > 0 && (
-                    <div className="avatar" title={t('vault.collaborators.more', { count: remainingCount })}>
+                    <div className="avatar" title={t('container.collaborators.more', { count: remainingCount })}>
                       +{remainingCount}
                     </div>
                   );
@@ -674,11 +674,11 @@ const VaultDetails: React.FC = () => {
               <div className="collaborators-actions">
                 {canEdit && (
                   <Link
-                    to={`/vault/${vault.id}/share`}
+                    to={`/container/${container.id}/share`}
                     className="manage-collaborators-button"
                   >
                     <Share2 size={18} />
-                    {t('vault.collaborators.invite')}
+                    {t('container.collaborators.invite')}
                   </Link>
                 )}
                 <button
@@ -686,38 +686,38 @@ const VaultDetails: React.FC = () => {
                   className="manage-collaborators-button"
                 >
                   <Users size={18} />
-                  {t('vault.collaborators.manage')}
+                  {t('container.collaborators.manage')}
                 </button>
               </div>
             </div>
 
             <div className="actions-widget">
-              <h3>{t('vault.actions.title')}</h3>
+              <h3>{t('container.actions.title')}</h3>
               <div className="actions-list">
                 {isOwner && (
                   <button
-                    onClick={() => setShowEditVaultModal(true)}
+                    onClick={() => setShowEditContainerModal(true)}
                     className="action-button"
                   >
                     <Edit />
-                    <span>{t('vault.actions.editContainer')}</span>
+                    <span>{t('container.actions.editContainer')}</span>
                   </button>
                 )}
                 {isOwner ? (
                   <button
-                    onClick={() => setShowDeleteVaultModal(true)}
+                    onClick={() => setShowDeleteContainerModal(true)}
                     className="action-button delete-button"
                   >
                     <Trash2 />
-                    <span>{t('vault.actions.deleteContainer')}</span>
+                    <span>{t('container.actions.deleteContainer')}</span>
                   </button>
                 ) : (
                   <button
-                    onClick={() => setShowLeaveVaultModal(true)}
+                    onClick={() => setShowLeaveContainerModal(true)}
                     className="action-button delete-button"
                   >
                     <LogOut />
-                    <span>{t('vault.actions.leaveContainer')}</span>
+                    <span>{t('container.actions.leaveContainer')}</span>
                   </button>
                 )}
               </div>
@@ -733,35 +733,35 @@ const VaultDetails: React.FC = () => {
       </main>
 
       {/* Add Link Modal */}
-      {vault && canEdit && (
+      {container && canEdit && (
         <AddLinkModal
           isOpen={showAddLinkModal}
           onClose={() => setShowAddLinkModal(false)}
-          vaultId={vault.id}
-          vaultColor={vaultColor}
+          containerId={container.id}
+          containerColor={containerColor}
         />
       )}
 
       {/* Edit Link Modal */}
-      {vault && selectedLink && canEdit && (
+      {container && selectedLink && canEdit && (
         <EditLinkModal
           isOpen={showEditLinkModal}
           onClose={() => {
             setShowEditLinkModal(false);
             setSelectedLink(null);
           }}
-          vaultId={vault.id}
+          containerId={container.id}
           link={selectedLink}
-          vaultColor={vaultColor}
+          containerColor={containerColor}
         />
       )}
 
-      {/* Edit Vault Modal */}
-      {vault && isOwner && (
-        <EditVaultModal
-          isOpen={showEditVaultModal}
-          onClose={() => setShowEditVaultModal(false)}
-          vault={vault}
+      {/* Edit Container Modal */}
+      {container && isOwner && (
+        <EditContainerModal
+          isOpen={showEditContainerModal}
+          onClose={() => setShowEditContainerModal(false)}
+          container={container}
         />
       )}
 
@@ -774,70 +774,70 @@ const VaultDetails: React.FC = () => {
             setSelectedLink(null);
           }}
           onConfirm={confirmDeleteLink}
-          title={t('vault.modals.deleteLink.title')}
-          message={t('vault.modals.deleteLink.message', { title: selectedLink.title })}
-          confirmText={t('vault.modals.deleteLink.confirm')}
+          title={t('container.modals.deleteLink.title')}
+          message={t('container.modals.deleteLink.message', { title: selectedLink.title })}
+          confirmText={t('container.modals.deleteLink.confirm')}
           variant="danger"
           icon={<Trash2 size={18} />}
         />
       )}
 
-      {/* Delete Vault Confirmation */}
-      {vault && (
+      {/* Delete Container Confirmation */}
+      {container && (
         <ConfirmModal
-          isOpen={showDeleteVaultModal}
-          onClose={() => setShowDeleteVaultModal(false)}
-          onConfirm={confirmDeleteVault}
-          title={t('vault.modals.deleteVault.title')}
-          message={t('vault.modals.deleteVault.message', { name: vault.name })}
-          confirmText={t('vault.modals.deleteVault.confirm')}
+          isOpen={showDeleteContainerModal}
+          onClose={() => setShowDeleteContainerModal(false)}
+          onConfirm={confirmDeleteContainer}
+          title={t('container.modals.deleteContainer.title')}
+          message={t('container.modals.deleteContainer.message', { name: container.name })}
+          confirmText={t('container.modals.deleteContainer.confirm')}
           variant="danger"
           icon={<Trash2 size={18} />}
-          confirmWord={vault.name}
+          confirmWord={container.name}
         />
       )}
 
-      {/* Leave Vault Confirmation */}
-      {vault && (
+      {/* Leave Container Confirmation */}
+      {container && (
         <ConfirmModal
-          isOpen={showLeaveVaultModal}
-          onClose={() => setShowLeaveVaultModal(false)}
-          onConfirm={confirmLeaveVault}
-          title="Leave Vault"
-          message={`Are you sure you want to leave "${vault.name}"? You will lose access to all its contents.`}
-          confirmText="Leave Vault"
+          isOpen={showLeaveContainerModal}
+          onClose={() => setShowLeaveContainerModal(false)}
+          onConfirm={confirmLeaveContainer}
+          title="Leave Container"
+          message={`Are you sure you want to leave "${container.name}"? You will lose access to all its contents.`}
+          confirmText="Leave Container"
           variant="danger"
           confirmWord="LEAVE"
         />
       )}
 
       {/* Collaborators Modal */}
-      {vault && currentUser && (
+      {container && currentUser && (
         <CollaboratorsModal
           isOpen={showCollaboratorsModal}
           onClose={() => setShowCollaboratorsModal(false)}
-          vaultId={vault.id}
-          authorizedUsers={vault.authorizedUsers}
-          ownerId={vault.ownerId}
+          containerId={container.id}
+          authorizedUsers={container.authorizedUsers}
+          ownerId={container.ownerId}
           currentUserId={currentUser.uid}
-          vaultColor={vaultColor}
+          containerColor={containerColor}
         />
       )}
 
       {/* Share Link Modal */}
-      {vault && currentUser && (
+      {container && currentUser && (
         <ShareLinkModal
           isOpen={showShareLinkModal}
           onClose={() => setShowShareLinkModal(false)}
-          vaultId={vault.id}
-          vaultName={vault.name}
+          containerId={container.id}
+          containerName={container.name}
           currentUserId={currentUser.uid}
-          vaultColor={vaultColor}
+          containerColor={containerColor}
         />
       )}
 
       {/* Move Link Modal (Single) */}
-      {vault && selectedLink && (
+      {container && selectedLink && (
         <MoveLinkModal
           isOpen={showMoveLinkModal}
           onClose={() => {
@@ -845,13 +845,13 @@ const VaultDetails: React.FC = () => {
             setSelectedLink(null);
           }}
           link={selectedLink}
-          currentVaultId={vault.id}
-          vaultColor={vaultColor}
+          currentContainerId={container.id}
+          containerColor={containerColor}
         />
       )}
 
       {/* Move Link Modal (Bulk) */}
-      {vault && showBulkMoveModal && (
+      {container && showBulkMoveModal && (
         <MoveLinkModal
           isOpen={showBulkMoveModal}
           onClose={() => {
@@ -860,13 +860,13 @@ const VaultDetails: React.FC = () => {
             setSelectedLinkIds(new Set());
           }}
           linkIds={Array.from(selectedLinkIds)}
-          currentVaultId={vault.id}
-          vaultColor={vaultColor}
+          currentContainerId={container.id}
+          containerColor={containerColor}
         />
       )}
 
       {/* Bulk Delete Confirm Modal */}
-      {vault && showDeleteConfirmModal && (
+      {container && showDeleteConfirmModal && (
         <ConfirmModal
           isOpen={showDeleteConfirmModal}
           onClose={() => setShowDeleteConfirmModal(false)}
@@ -880,7 +880,7 @@ const VaultDetails: React.FC = () => {
       )}
 
       {/* Link Stats Modal */}
-      {vault && selectedLink && (
+      {container && selectedLink && (
         <LinkStatsModal
           isOpen={showStatsModal}
           onClose={() => {
@@ -888,12 +888,12 @@ const VaultDetails: React.FC = () => {
             setSelectedLink(null);
           }}
           link={selectedLink}
-          vaultColor={vaultColor}
+          containerColor={containerColor}
         />
       )}
 
       {/* QR Code Modal */}
-      {vault && selectedLink && (
+      {container && selectedLink && (
         <QRCodeModal
           isOpen={showQRCodeModal}
           onClose={() => {
@@ -901,11 +901,11 @@ const VaultDetails: React.FC = () => {
             setSelectedLink(null);
           }}
           link={selectedLink}
-          vaultColor={vaultColor}
+          containerColor={containerColor}
         />
       )}
     </div>
   );
 };
 
-export default VaultDetails;
+export default ContainerDetails;

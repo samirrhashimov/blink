@@ -14,7 +14,7 @@
         "features": {
             "containers": {
                 "title": "Centralized Containers",
-                "desc": "Create dedicated workspaces called \"Containers\" for different projects, teams, or personal interests. Keep your links customized and organized in one secure place."
+                "desc": "Create dedicated containers for different projects, teams, or personal interests. Keep your links customized and organized in one secure place."
             },
             "sharing": {
                 "title": "Easy Sharing",
@@ -22,7 +22,7 @@
             },
             "invitations": {
                 "title": "Incoming Invitations",
-                "desc": "Manage requests to join other workspaces. Review, accept, or decline incoming invitations to collaborate on and help manage shared containers."
+                "desc": "Manage requests to join other containers. Review, accept, or decline incoming invitations to collaborate on and help manage shared containers."
             },
             "tagging": {
                 "title": "Smart Tagging System",
@@ -32,7 +32,7 @@
                 "title": "Customizable Themes",
                 "desc": "Personalize your workspace with custom container colors. Choose from our curated color palette to make each container uniquely yours. Try it out below!",
                 "demoTitle": "My Container",
-                "demoDesc": "Custom colored workspace"
+                "demoDesc": "Custom colored container"
             },
             "firefox": {
                 "title": "Blink for Firefox",
@@ -187,10 +187,10 @@
                 "step4": "Click Import HTML button."
             },
             "importing": "Importing...",
-            "importSuccess": "Successfully imported {{links}} bookmarks into {{vaults}} containers.",
+            "importSuccess": "Successfully imported {{links}} bookmarks into {{containers}} containers.",
             "importConfirm": {
                 "title": "Confirm Import",
-                "message": "This will create {{vaults}} new containers and import {{links}} links. Do you want to proceed?"
+                "message": "This will create {{containers}} new containers and import {{links}} links. Do you want to proceed?"
             },
             "exporting": "Exporting...",
             "exportSuccess": "Bookmarks exported successfully!",
@@ -207,7 +207,7 @@
     "dashboard": {
         "title": "Dashboard",
         "library": "My Library",
-        "newContainer": "New Workspace",
+        "newContainer": "New Container",
         "searchPlaceholder": "Search containers...",
         "personal": "Personal",
         "shared": "Shared Spaces",
@@ -297,7 +297,7 @@
         "subtitle": "Accept or decline invitations to collaborate on containers",
         "empty": {
             "title": "No pending invitations",
-            "desc": "When someone invites you to collaborate on a vault, it will appear here.",
+            "desc": "When someone invites you to collaborate on a container, it will appear here.",
             "button": "Go to Dashboard"
         },
         "item": {
@@ -314,9 +314,9 @@
             "declineFailed": "Failed to decline invitation"
         }
     },
-    "vault": {
+    "container": {
         "notFound": {
-            "title": "Vault not found",
+            "title": "Container not found",
             "return": "Return to Dashboard"
         },
         "description": "Browse links in the {{name}} container on Blink.",
@@ -352,10 +352,10 @@
             "pinError": "Failed to update pin status",
             "linkDeleted": "Link deleted successfully",
             "linkDeleteError": "Failed to delete link",
-            "vaultDeleted": "Vault deleted successfully",
-            "vaultDeleteError": "Failed to delete vault",
-            "leftVault": "Left vault successfully",
-            "leaveError": "Failed to leave vault"
+            "containerDeleted": "Container deleted successfully",
+            "containerDeleteError": "Failed to delete container",
+            "leftContainer": "Left container successfully",
+            "leaveError": "Failed to leave container"
         },
         "modals": {
             "deleteLink": {
@@ -363,10 +363,10 @@
                 "message": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone.",
                 "confirm": "Delete"
             },
-            "deleteVault": {
-                "title": "Delete Vault",
+            "deleteContainer": {
+                "title": "Delete Container",
                 "message": "Are you sure you want to delete \"{{name}}\"? All links will be permanently deleted.",
-                "confirm": "Delete Vault"
+                "confirm": "Delete Container"
             },
             "addLink": {
                 "title": "Add New Link",
@@ -408,8 +408,8 @@
                     "failed": "Failed to update link"
                 }
             },
-            "createVault": {
-                "title": "Create New Vault",
+            "createContainer": {
+                "title": "Create New Container",
                 "name": "Container Name",
                 "description": "Description",
                 "color": "Container Color",
@@ -422,27 +422,27 @@
                     "creating": "Creating..."
                 },
                 "errors": {
-                    "nameRequired": "Vault name is required",
-                    "nameLength": "Vault name must be {{max}} characters or less",
+                    "nameRequired": "Container name is required",
+                    "nameLength": "Container name must be {{max}} characters or less",
                     "descLength": "Description must be {{max}} characters or less",
-                    "failed": "Failed to create vault"
+                    "failed": "Failed to create container"
                 }
             },
-            "editVault": {
-                "title": "Edit Vault",
-                "name": "Vault Name",
+            "editContainer": {
+                "title": "Edit Container",
+                "name": "Container Name",
                 "description": "Description",
-                "color": "Vault Color",
+                "color": "Container Color",
                 "placeholders": {
-                    "name": "Enter vault name",
-                    "description": "Enter vault description (optional)"
+                    "name": "Enter container name",
+                    "description": "Enter container description (optional)"
                 },
                 "buttons": {
                     "save": "Save Changes",
                     "saving": "Saving..."
                 },
                 "errors": {
-                    "failed": "Failed to update vault"
+                    "failed": "Failed to update container"
                 }
             },
             "linkStats": {
@@ -508,14 +508,14 @@
                 "title": "Move Link",
                 "bulkTitle": "Move {{count}} links to another container:",
                 "singleTitle": "Move \"{{title}}\" to another container:",
-                "noVaults": "No other containers available.",
+                "noContainers": "No other containers available.",
                 "buttons": {
                     "moving": "Moving...",
                     "moveLinks": "Move Links",
                     "moveLink": "Move Link"
                 },
                 "errors": {
-                    "selectVault": "Please select a target container",
+                    "selectContainer": "Please select a target container",
                     "failed": "Failed to move link(s)"
                 }
             }

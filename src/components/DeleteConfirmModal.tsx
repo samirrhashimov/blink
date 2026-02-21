@@ -9,7 +9,7 @@ interface DeleteConfirmModalProps {
   title: string;
   message: string;
   itemName: string;
-  vaultColor?: string;
+  containerColor?: string;
 }
 
 const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
@@ -19,7 +19,7 @@ const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
   title,
   message,
   itemName,
-  vaultColor
+  containerColor
 }) => {
   const { t } = useTranslation();
 
@@ -45,7 +45,7 @@ const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
     <div
       className="modal-overlay"
       onClick={onClose}
-      style={{ '--primary': vaultColor } as React.CSSProperties}
+      style={{ '--primary': containerColor } as React.CSSProperties}
     >
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
@@ -81,7 +81,7 @@ const DeleteConfirmModal: React.FC<DeleteConfirmModalProps> = ({
             onClick={onClose}
             disabled={loading}
             className="btn-cancel"
-            style={{ '--primary': vaultColor } as React.CSSProperties}
+            style={{ '--primary': containerColor } as React.CSSProperties}
           >
             {t('common.buttons.cancel')}
           </button>

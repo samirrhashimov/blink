@@ -6,19 +6,19 @@ import { ShareLinkService, type ShareLink } from '../services/shareLinkService';
 interface ShareLinkModalProps {
   isOpen: boolean;
   onClose: () => void;
-  vaultId: string;
-  vaultName: string;
+  containerId: string;
+  containerName: string;
   currentUserId: string;
-  vaultColor?: string;
+  containerColor?: string;
 }
 
 const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
   isOpen,
   onClose,
-  vaultId,
-  vaultName,
+  containerId,
+  containerName,
   currentUserId,
-  vaultColor
+  containerColor
 }) => {
   const { t } = useTranslation();
 
@@ -38,16 +38,16 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
     if (isOpen) {
       loadShareLinks();
     }
-  }, [isOpen, vaultId]);
+  }, [isOpen, containerId]);
 
   const loadShareLinks = async () => {
     setLoading(true);
     setError('');
     try {
-      const links = await ShareLinkService.getVaultShareLinks(vaultId);
+      const links = await ShareLinkService.getContainerShareLinks(containerId);
       setShareLinks(links);
     } catch (err: any) {
-      setError(err.message || t('vault.modals.shareLink.errors.loadFailed'));
+      setError(err.message || t('container.modals.shareLink.errors.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -58,7 +58,7 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
     setError('');
     try {
       await ShareLinkService.createShareLink(
-        vaultId,
+        containerId,
         currentUserId,
         newLinkConfig.permission,
         newLinkConfig.expiresInDays > 0 ? newLinkConfig.expiresInDays : undefined,
@@ -68,7 +68,7 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
       setShowCreateForm(false);
       setNewLinkConfig({ permission: 'view', expiresInDays: 7, maxUses: 0 });
     } catch (err: any) {
-      setError(err.message || t('vault.modals.shareLink.errors.createFailed'));
+      setError(err.message || t('container.modals.shareLink.errors.createFailed'));
     } finally {
       setCreating(false);
     }
@@ -86,12 +86,12 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
       await ShareLinkService.deactivateShareLink(linkId);
       await loadShareLinks();
     } catch (err: any) {
-      setError(err.message || t('vault.modals.shareLink.errors.deactivateFailed'));
+      setError(err.message || t('container.modals.shareLink.errors.deactivateFailed'));
     }
   };
 
   const formatDate = (date?: Date) => {
-    if (!date) return t('vault.modals.shareLink.never');
+    if (!date) return t('container.modals.shareLink.never');
     return new Date(date).toLocaleDateString();
   };
 
@@ -101,13 +101,13 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
     <div
       className="modal-overlay"
       onClick={onClose}
-      style={{ '--primary': vaultColor } as React.CSSProperties}
+      style={{ '--primary': containerColor } as React.CSSProperties}
     >
       <div className="modal-content max-w-2xl max-h-[80vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <div>
-            <h2>{t('vault.modals.shareLink.title')}</h2>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{vaultName}</p>
+            <h2>{t('container.modals.shareLink.title')}</h2>
+            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{containerName}</p>
           </div>
           <button onClick={onClose} className="modal-close">
             <X className="h-6 w-6" />
@@ -127,33 +127,33 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
               className="btn-primary w-full mb-4"
             >
               <Plus className="h-5 w-5" />
-              {t('vault.modals.shareLink.createBtn')}
+              {t('container.modals.shareLink.createBtn')}
             </button>
           )}
 
           {showCreateForm && (
             <div className="mb-6 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
-              <h3 className="font-medium text-gray-900 dark:text-white mb-3">{t('vault.modals.shareLink.form.title')}</h3>
+              <h3 className="font-medium text-gray-900 dark:text-white mb-3">{t('container.modals.shareLink.form.title')}</h3>
 
               <div className="space-y-3">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    {t('vault.modals.shareLink.form.permission')}
+                    {t('container.modals.shareLink.form.permission')}
                   </label>
                   <select
                     value={newLinkConfig.permission}
                     onChange={(e) => setNewLinkConfig({ ...newLinkConfig, permission: e.target.value as any })}
                     className="w-full px-3 py-2 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                   >
-                    <option value="view">{t('vault.modals.shareLink.form.permissions.view')}</option>
-                    <option value="comment">{t('vault.modals.shareLink.form.permissions.comment')}</option>
-                    <option value="edit">{t('vault.modals.shareLink.form.permissions.edit')}</option>
+                    <option value="view">{t('container.modals.shareLink.form.permissions.view')}</option>
+                    <option value="comment">{t('container.modals.shareLink.form.permissions.comment')}</option>
+                    <option value="edit">{t('container.modals.shareLink.form.permissions.edit')}</option>
                   </select>
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    {t('vault.modals.shareLink.form.expiresIn')}
+                    {t('container.modals.shareLink.form.expiresIn')}
                   </label>
                   <input
                     type="number"
@@ -166,7 +166,7 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                    {t('vault.modals.shareLink.form.maxUses')}
+                    {t('container.modals.shareLink.form.maxUses')}
                   </label>
                   <input
                     type="number"
@@ -189,7 +189,7 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
                     disabled={creating}
                     className="btn-primary flex-1"
                   >
-                    {creating ? t('vault.modals.shareLink.form.creating') : t('vault.modals.shareLink.form.create')}
+                    {creating ? t('container.modals.shareLink.form.creating') : t('container.modals.shareLink.form.create')}
                   </button>
                 </div>
               </div>
@@ -203,7 +203,7 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
           ) : shareLinks.length === 0 ? (
             <div className="text-center py-8 text-gray-500 dark:text-gray-400">
               <LinkIcon className="h-12 w-12 mx-auto mb-2 opacity-50" />
-              <p>{t('vault.modals.shareLink.empty')}</p>
+              <p>{t('container.modals.shareLink.empty')}</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -212,15 +212,15 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-grow min-w-0">
                       <div className="flex items-center gap-2 mb-2">
-                        <span className="text-xs px-2 py-1 rounded bg-primary/10 text-primary font-medium" style={{ backgroundColor: `${vaultColor}15`, color: vaultColor }}>
+                        <span className="text-xs px-2 py-1 rounded bg-primary/10 text-primary font-medium" style={{ backgroundColor: `${containerColor}15`, color: containerColor }}>
                           {link.permission}
                         </span>
                         <span className="text-xs text-gray-600 dark:text-gray-400">
-                          {t('vault.modals.shareLink.uses')}: {link.currentUses}{link.maxUses ? `/${link.maxUses}` : ''}
+                          {t('container.modals.shareLink.uses')}: {link.currentUses}{link.maxUses ? `/${link.maxUses}` : ''}
                         </span>
                       </div>
                       <div className="text-xs text-gray-600 dark:text-gray-400 mb-2">
-                        {t('vault.modals.shareLink.expires')}: {formatDate(link.expiresAt)}
+                        {t('container.modals.shareLink.expires')}: {formatDate(link.expiresAt)}
                       </div>
                       <div className="flex items-center gap-2">
                         <code className="text-xs bg-gray-200 dark:bg-gray-800 px-2 py-1 rounded flex-grow overflow-hidden text-ellipsis">
@@ -232,14 +232,14 @@ const ShareLinkModal: React.FC<ShareLinkModalProps> = ({
                       <button
                         onClick={() => handleCopyLink(link.token, link.id)}
                         className="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-600 dark:text-gray-400"
-                        title={copiedLinkId === link.id ? t('vault.modals.shareLink.copied') : t('vault.modals.shareLink.copy')}
+                        title={copiedLinkId === link.id ? t('container.modals.shareLink.copied') : t('container.modals.shareLink.copy')}
                       >
                         {copiedLinkId === link.id ? '✓' : <Copy className="h-4 w-4" />}
                       </button>
                       <button
                         onClick={() => handleDeactivateLink(link.id)}
                         className="p-2 rounded hover:bg-red-100 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400"
-                        title={t('vault.modals.shareLink.deactivate')}
+                        title={t('container.modals.shareLink.deactivate')}
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>

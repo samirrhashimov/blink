@@ -22,7 +22,7 @@ export interface Link {
   clickStats?: Record<string, number>; // Format: { "YYYY-MM-DD": count }
 }
 
-export interface Vault {
+export interface Container {
   id: string;
   name: string;
   description?: string;
@@ -36,7 +36,7 @@ export interface Vault {
   color?: string;
 }
 
-export interface VaultPermission {
+export interface ContainerPermission {
   userId: string;
   permission: 'view' | 'comment' | 'edit';
   grantedBy: string;
@@ -45,8 +45,8 @@ export interface VaultPermission {
 
 export interface ShareInvite {
   id: string;
-  vaultId: string;
-  vaultName?: string;
+  containerId: string;
+  containerName?: string;
   email: string;
   permission: 'view' | 'comment' | 'edit';
   invitedBy: string;

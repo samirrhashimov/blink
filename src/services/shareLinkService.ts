@@ -15,7 +15,7 @@ const SHARE_LINKS_COLLECTION = 'shareLinks';
 
 export interface ShareLink {
   id: string;
-  vaultId: string;
+  containerId: string;
   token: string;
   permission: 'view' | 'comment' | 'edit';
   createdBy: string;
@@ -35,7 +35,7 @@ export class ShareLinkService {
 
   // Create a share link
   static async createShareLink(
-    vaultId: string,
+    containerId: string,
     createdBy: string,
     permission: 'view' | 'comment' | 'edit',
     expiresInDays?: number,
@@ -51,7 +51,7 @@ export class ShareLinkService {
       }
 
       const shareLinkData = {
-        vaultId,
+        containerId,
         token,
         permission,
         createdBy,
@@ -136,12 +136,12 @@ export class ShareLinkService {
     }
   }
 
-  // Get all share links for a vault
-  static async getVaultShareLinks(vaultId: string): Promise<ShareLink[]> {
+  // Get all share links for a container
+  static async getContainerShareLinks(containerId: string): Promise<ShareLink[]> {
     try {
       const q = query(
         collection(db, SHARE_LINKS_COLLECTION),
-        where('vaultId', '==', vaultId),
+        where('containerId', '==', containerId),
         where('isActive', '==', true)
       );
       

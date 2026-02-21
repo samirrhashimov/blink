@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import CreateVaultModal from './CreateVaultModal';
+import CreateContainerModal from './CreateContainerModal';
 import { useAuth } from '../contexts/AuthContext';
 
 const GlobalModals: React.FC = () => {
@@ -22,7 +22,7 @@ const GlobalModals: React.FC = () => {
 
     return (
         <>
-            <CreateVaultModal
+            <CreateContainerModal
                 isOpen={showCreateModal}
                 onClose={() => setShowCreateModal(false)}
             />

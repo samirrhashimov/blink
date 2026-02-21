@@ -11,9 +11,9 @@ const BottomNavigation: React.FC = () => {
     if (!currentUser) return null;
 
     const handlePlusClick = () => {
-        const isVaultDetails = location.pathname.startsWith('/vault/');
+        const isContainerDetails = location.pathname.startsWith('/container/');
 
-        if (isVaultDetails) {
+        if (isContainerDetails) {
             if ((window as any).dispatchSetShowAddLinkModal) {
                 (window as any).dispatchSetShowAddLinkModal(true);
             }

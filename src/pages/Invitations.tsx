@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import { useVault } from '../contexts/VaultContext';
+import { useContainer } from '../contexts/ContainerContext';
 import { SharingService } from '../services/sharingService';
 import { NotificationService } from '../services/notificationService';
 import { UserService } from '../services/userService';
@@ -25,7 +25,7 @@ import {
 const Invitations: React.FC = () => {
   const { t } = useTranslation();
   const { currentUser } = useAuth();
-  const { refreshVaults } = useVault();
+  const { refreshContainers } = useContainer();
   const navigate = useNavigate();
   const [invitations, setInvitations] = useState<ShareInvite[]>([]);
   const [loading, setLoading] = useState(true);
@@ -63,28 +63,28 @@ const Invitations: React.FC = () => {
     try {
       await SharingService.acceptInvitation(invite.id, currentUser.uid);
 
-      // Send notification to vault owner
+      // Send notification to container owner
       try {
         const sharerName = UserService.formatUserName(currentUser.displayName, currentUser.email);
-        await NotificationService.notifyVaultShared(
+        await NotificationService.notifyContainerShared(
           invite.invitedBy,
-          invite.vaultId,
+          invite.containerId,
           sharerName,
-          invite.vaultId,
+          invite.containerId,
           currentUser.uid
         );
       } catch (err) {
         console.log('Could not send notification:', err);
       }
 
-      // Refresh vaults to include the newly shared vault
-      await refreshVaults();
+      // Refresh containers to include the newly shared container
+      await refreshContainers();
 
       // Remove from list
       setInvitations(prev => prev.filter(inv => inv.id !== invite.id));
 
-      // Navigate to the vault
-      navigate(`/vault/${invite.vaultId}`);
+      // Navigate to the container
+      navigate(`/container/${invite.containerId}`);
     } catch (err: any) {
       setError(err.message || t('invitations.errors.acceptFailed'));
     } finally {
@@ -141,12 +141,12 @@ const Invitations: React.FC = () => {
 
       {/* Main Content */}
       <main className="container">
-        <div className="vault-header">
+        <div className="container-header">
           <h2>{t('invitations.title')}</h2>
           <p>{t('invitations.subtitle')}</p>
         </div>
 
-        <div className="vault-content">
+        <div className="container-content">
           <div className="links-section">
 
             {error && (
@@ -190,7 +190,7 @@ const Invitations: React.FC = () => {
                       </div>
                       <div className="link-info">
                         <h4 className="font-semibold text-gray-900 dark:text-white">
-                          {t('invitations.item.title', { name: invite.vaultName || 'Vault' })}
+                          {t('invitations.item.title', { name: invite.containerName || 'Container' })}
                         </h4>
                         {invite.inviterName && (
                           <p className="text-sm text-gray-600 dark:text-gray-400">

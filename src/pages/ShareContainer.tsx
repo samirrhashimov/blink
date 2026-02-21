@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import { useVault } from '../contexts/VaultContext';
+import { useContainer } from '../contexts/ContainerContext';
 import { useToast } from '../contexts/ToastContext';
 import { SharingService } from '../services/sharingService';
 import { NotificationService } from '../services/notificationService';
@@ -21,11 +21,11 @@ import {
   UserPlus
 } from 'lucide-react';
 
-const ShareVault: React.FC = () => {
+const ShareContainer: React.FC = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { currentUser } = useAuth();
-  const { vaults } = useVault();
+  const { containers } = useContainer();
   const navigate = useNavigate();
   const toast = useToast();
   const [email, setEmail] = useState('');
@@ -33,9 +33,9 @@ const ShareVault: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [pendingInvites, setPendingInvites] = useState<ShareInvite[]>([]);
 
-  const vault = vaults.find(v => v.id === id);
+  const container = containers.find(v => v.id === id);
   const colors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
-  const vaultColor = vault?.color || (id ? colors[id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length] : colors[0]);
+  const containerColor = container?.color || (id ? colors[id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length] : colors[0]);
 
   // Helper to get RGB from hex
   const hexToRgb = (hex: string) => {
@@ -54,7 +54,7 @@ const ShareVault: React.FC = () => {
   const loadPendingInvites = async () => {
     if (!id) return;
     try {
-      const invites = await SharingService.getVaultInvitations(id);
+      const invites = await SharingService.getContainerInvitations(id);
       setPendingInvites(invites);
     } catch (err: any) {
       console.error('Error loading invites:', err);
@@ -87,7 +87,7 @@ const ShareVault: React.FC = () => {
         email.trim(),
         permission,
         currentUser.uid,
-        vault?.name,
+        container?.name,
         inviterName
       );
 
@@ -103,7 +103,7 @@ const ShareVault: React.FC = () => {
           const userData = usersSnapshot.docs[0].data();
           await NotificationService.notifyInvitation(
             userData.uid,
-            vault?.name || 'a vault',
+            container?.name || 'a container',
             inviterName,
             id,
             currentUser.uid
@@ -120,7 +120,7 @@ const ShareVault: React.FC = () => {
       await loadPendingInvites();
 
       setTimeout(() => {
-        navigate(`/vault/${id}`);
+        navigate(`/container/${id}`);
       }, 1500);
     } catch (err: any) {
       toast.error(err.message || t('share.messages.error'));
@@ -141,11 +141,11 @@ const ShareVault: React.FC = () => {
 
   return (
     <div
-      className="vault-details-page"
+      className="container-details-page"
       style={{
-        '--accent-color': vaultColor,
-        '--primary': vaultColor,
-        '--primary-rgb': hexToRgb(vaultColor)
+        '--accent-color': containerColor,
+        '--primary': containerColor,
+        '--primary-rgb': hexToRgb(containerColor)
       } as React.CSSProperties}
     >
       {/* Header */}
@@ -153,7 +153,7 @@ const ShareVault: React.FC = () => {
         <div className="container">
           <div className="header-content">
             <div className="header-left">
-              <Link to={`/vault/${id}`} className="back-link">
+              <Link to={`/container/${id}`} className="back-link">
                 <ArrowLeft />
               </Link>
               <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
@@ -172,12 +172,12 @@ const ShareVault: React.FC = () => {
 
       {/* Main Content */}
       <main className="container">
-        <div className="vault-header">
-          <h2>{t('share.title', { name: vault?.name || 'Vault' })}</h2>
+        <div className="container-header">
+          <h2>{t('share.title', { name: container?.name || 'Container' })}</h2>
           <p>{t('share.subtitle')}</p>
         </div>
 
-        <div className="vault-content">
+        <div className="container-content">
           <div className="links-section">
             <div className="collaborators-widget">
               <form onSubmit={handleSubmit} className="space-y-8">
@@ -262,7 +262,7 @@ const ShareVault: React.FC = () => {
 
                 <div className="flex justify-end gap-3 pt-6">
                   <Link
-                    to={`/vault/${id}`}
+                    to={`/container/${id}`}
                     className="btn-cancel"
                   >
                     {t('common.buttons.cancel')}
@@ -324,4 +324,4 @@ const ShareVault: React.FC = () => {
   );
 };
 
-export default ShareVault;
+export default ShareContainer;

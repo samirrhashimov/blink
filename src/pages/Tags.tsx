@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import { useVault } from '../contexts/VaultContext';
+import { useContainer } from '../contexts/ContainerContext';
 import {
     Settings,
     Search,
@@ -20,7 +20,7 @@ import SEO from '../components/SEO';
 const Tags: React.FC = () => {
     const { t } = useTranslation();
     const { currentUser } = useAuth();
-    const { vaults, loading } = useVault();
+    const { containers, loading } = useContainer();
     const [searchQuery, setSearchQuery] = useState('');
     const [selectedTag, setSelectedTag] = useState<string | null>(null);
 
@@ -29,8 +29,8 @@ const Tags: React.FC = () => {
     }
 
     // Extract all unique tags
-    const allLinks = vaults.flatMap(vault =>
-        vault.links.map(link => ({ ...link, vaultName: vault.name, vaultId: vault.id, vaultColor: vault.color }))
+    const allLinks = containers.flatMap(container =>
+        container.links.map(link => ({ ...link, containerName: container.name, containerId: container.id, containerColor: container.color }))
     );
 
     const tagsMap: Record<string, typeof allLinks> = {};
@@ -82,9 +82,9 @@ const Tags: React.FC = () => {
             </header>
 
             <main className="container">
-                <div className="vault-header">
-                    <h2 className="vault-name-title">{t('tags.title')}</h2>
-                    <p className="vault-description-text">{t('tags.description')}</p>
+                <div className="container-header">
+                    <h2 className="container-name-title">{t('tags.title')}</h2>
+                    <p className="container-description-text">{t('tags.description')}</p>
 
                     <div className="modern-search-bar search-tags-wrapper">
                         <Search className="modern-search-icon" size={18} />
@@ -136,10 +136,10 @@ const Tags: React.FC = () => {
                                 </div>
                                 <div className="tags-links-grid">
                                     {displayedLinks.map(link => (
-                                        <div key={link.id + link.vaultId} className="tag-link-card">
+                                        <div key={link.id + link.containerId} className="tag-link-card">
                                             <div className="card-top">
-                                                <div className="vault-indicator" style={{ backgroundColor: link.vaultColor || '#6366f1' }}>
-                                                    {link.vaultName}
+                                                <div className="container-indicator" style={{ backgroundColor: link.containerColor || '#6366f1' }}>
+                                                    {link.containerName}
                                                 </div>
                                                 <div className="tag-link-title-group">
                                                     <h4 className="tag-link-card-title">{link.title}</h4>
@@ -162,8 +162,8 @@ const Tags: React.FC = () => {
                                                     <ExternalLink size={14} />
                                                 </a>
                                                 <Link
-                                                    to={`/vault/${link.vaultId}`}
-                                                    className="view-vault-link"
+                                                    to={`/container/${link.containerId}`}
+                                                    className="view-container-link"
                                                     title={t('tags.content.openContainer')}
                                                 >
                                                     {t('tags.content.openContainer')}

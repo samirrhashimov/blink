@@ -1,22 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { useVault } from '../contexts/VaultContext';
+import { useContainer } from '../contexts/ContainerContext';
 import { X, Save, Tag, Plus } from 'lucide-react';
 import type { Link } from '../types';
 
 interface EditLinkModalProps {
   isOpen: boolean;
   onClose: () => void;
-  vaultId: string;
+  containerId: string;
   link: Link;
-  vaultColor?: string;
+  containerColor?: string;
 }
 
 import { useTranslation } from 'react-i18next';
 
-const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, vaultId, link, vaultColor }) => {
+const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, containerId, link, containerColor }) => {
   const { t } = useTranslation();
 
-  const { updateLinkInVault } = useVault();
+  const { updateLinkInContainer } = useContainer();
   const [formData, setFormData] = useState({
     title: link.title,
     url: link.url,
@@ -44,7 +44,7 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, vaultId,
     e.preventDefault();
 
     if (!formData.title.trim() || !formData.url.trim()) {
-      setError(t('vault.modals.addLink.errors.required'));
+      setError(t('container.modals.addLink.errors.required'));
       return;
     }
 
@@ -52,14 +52,14 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, vaultId,
     try {
       new URL(formData.url);
     } catch {
-      setError(t('vault.modals.addLink.errors.invalidUrl'));
+      setError(t('container.modals.addLink.errors.invalidUrl'));
       return;
     }
 
     try {
       setError('');
       setLoading(true);
-      await updateLinkInVault(vaultId, link.id, {
+      await updateLinkInContainer(containerId, link.id, {
         title: formData.title.trim(),
         url: formData.url.trim(),
         description: formData.description.trim(),
@@ -67,7 +67,7 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, vaultId,
       });
       onClose();
     } catch (err: any) {
-      setError(err.message || t('vault.modals.editLink.errors.failed'));
+      setError(err.message || t('container.modals.editLink.errors.failed'));
     } finally {
       setLoading(false);
     }
@@ -99,11 +99,11 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, vaultId,
     <div
       className="modal-overlay"
       onClick={onClose}
-      style={{ '--primary': vaultColor } as React.CSSProperties}
+      style={{ '--primary': containerColor } as React.CSSProperties}
     >
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>{t('vault.modals.editLink.title')}</h2>
+          <h2>{t('container.modals.editLink.title')}</h2>
           <button onClick={onClose} className="modal-close">
             <X className="h-6 w-6" />
           </button>
@@ -118,7 +118,7 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, vaultId,
 
           <div className="form-group">
             <label htmlFor="edit-title" className="form-label">
-              {t('vault.modals.addLink.linkTitle')} *
+              {t('container.modals.addLink.linkTitle')} *
             </label>
             <input
               id="edit-title"
@@ -128,14 +128,14 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, vaultId,
               value={formData.title}
               onChange={handleChange}
               className="form-input"
-              placeholder={t('vault.modals.addLink.placeholders.title')}
+              placeholder={t('container.modals.addLink.placeholders.title')}
               disabled={loading}
             />
           </div>
 
           <div className="form-group">
             <label htmlFor="edit-url" className="form-label">
-              {t('vault.modals.addLink.url')} *
+              {t('container.modals.addLink.url')} *
             </label>
             <input
               id="edit-url"
@@ -145,14 +145,14 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, vaultId,
               value={formData.url}
               onChange={handleChange}
               className="form-input"
-              placeholder={t('vault.modals.addLink.placeholders.url')}
+              placeholder={t('container.modals.addLink.placeholders.url')}
               disabled={loading}
             />
           </div>
 
           <div className="form-group">
             <label htmlFor="edit-description" className="form-label">
-              {t('vault.modals.addLink.description')}
+              {t('container.modals.addLink.description')}
             </label>
             <textarea
               id="edit-description"
@@ -161,14 +161,14 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, vaultId,
               onChange={handleChange}
               className="form-input resize-none"
               rows={3}
-              placeholder={t('vault.modals.addLink.placeholders.description')}
+              placeholder={t('container.modals.addLink.placeholders.description')}
               disabled={loading}
             />
           </div>
 
           <div className="form-group">
             <label htmlFor="edit-tags" className="form-label">
-              {t('vault.modals.addLink.tags')}
+              {t('container.modals.addLink.tags')}
             </label>
             <div className="tags-input-wrapper">
               <div className="tags-list">
@@ -197,13 +197,13 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, vaultId,
                     }
                   }}
                   className="form-input tag-input-padding"
-                  placeholder={t('vault.modals.addLink.placeholders.tags')}
+                  placeholder={t('container.modals.addLink.placeholders.tags')}
                 />
                 <button
                   type="button"
                   onClick={handleAddTag}
                   className="tag-add-btn"
-                  title={t('vault.modals.addLink.tooltips.addTag')}
+                  title={t('container.modals.addLink.tooltips.addTag')}
                 >
                   <Plus size={16} />
                 </button>
@@ -219,7 +219,7 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, vaultId,
             disabled={loading}
             className="btn-cancel"
           >
-            {t('vault.modals.addLink.buttons.cancel')}
+            {t('container.modals.addLink.buttons.cancel')}
           </button>
           <button
             type="submit"
@@ -230,12 +230,12 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, vaultId,
             {loading ? (
               <>
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                {t('vault.modals.editLink.buttons.saving')}
+                {t('container.modals.editLink.buttons.saving')}
               </>
             ) : (
               <>
                 <Save className="h-4 w-4" />
-                {t('vault.modals.editLink.buttons.save')}
+                {t('container.modals.editLink.buttons.save')}
               </>
             )}
           </button>

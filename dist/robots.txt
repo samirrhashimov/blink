@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /vault/
+Disallow: /settings
+Disallow: /invitations
+Disallow: /tags
+
+Sitemap: https://blinklinknet.netlify.app/sitemap.xml

@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { useVault } from '../contexts/VaultContext';
+import { useContainer } from '../contexts/ContainerContext';
 import { X, Save } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import type { Vault } from '../types';
+import type { Container } from '../types';
 
-interface EditVaultModalProps {
+interface EditContainerModalProps {
   isOpen: boolean;
   onClose: () => void;
-  vault: Vault;
+  container: Container;
 }
 
-const EditVaultModal: React.FC<EditVaultModalProps> = ({ isOpen, onClose, vault }) => {
+const EditContainerModal: React.FC<EditContainerModalProps> = ({ isOpen, onClose, container }) => {
   const { t } = useTranslation();
 
-  const { updateVault } = useVault();
+  const { updateContainer } = useContainer();
   const [formData, setFormData] = useState({
-    name: vault.name,
-    description: vault.description || '',
-    color: vault.color || '#6366f1'
+    name: container.name,
+    description: container.description || '',
+    color: container.color || '#6366f1'
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -28,43 +28,43 @@ const EditVaultModal: React.FC<EditVaultModalProps> = ({ isOpen, onClose, vault 
   useEffect(() => {
     if (isOpen) {
       setFormData({
-        name: vault.name,
-        description: vault.description || '',
-        color: vault.color || '#6366f1'
+        name: container.name,
+        description: container.description || '',
+        color: container.color || '#6366f1'
       });
       setError('');
     }
-  }, [isOpen, vault]);
+  }, [isOpen, container]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.name.trim()) {
-      setError(t('vault.modals.editVault.errors.nameRequired'));
+      setError(t('container.modals.editContainer.errors.nameRequired'));
       return;
     }
 
     if (formData.name.trim().length > MAX_NAME_LENGTH) {
-      setError(t('vault.modals.editVault.errors.nameLength', { max: MAX_NAME_LENGTH }));
+      setError(t('container.modals.editContainer.errors.nameLength', { max: MAX_NAME_LENGTH }));
       return;
     }
 
     if (formData.description.trim().length > MAX_DESCRIPTION_LENGTH) {
-      setError(t('vault.modals.editVault.errors.descLength', { max: MAX_DESCRIPTION_LENGTH }));
+      setError(t('container.modals.editContainer.errors.descLength', { max: MAX_DESCRIPTION_LENGTH }));
       return;
     }
 
     try {
       setError('');
       setLoading(true);
-      await updateVault(vault.id, {
+      await updateContainer(container.id, {
         name: formData.name.trim(),
         description: formData.description.trim(),
         color: formData.color
       });
       onClose();
     } catch (err: any) {
-      setError(err.message || t('vault.modals.editVault.errors.failed'));
+      setError(err.message || t('container.modals.editContainer.errors.failed'));
     } finally {
       setLoading(false);
     }
@@ -77,7 +77,7 @@ const EditVaultModal: React.FC<EditVaultModalProps> = ({ isOpen, onClose, vault 
     }));
   };
 
-  const VAULT_COLORS = [
+  const CONTAINER_COLORS = [
     '#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6',
     '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d',
     '#facc15', '#a3e635', '#22d3ee', '#fb7185', '#94a3b8'
@@ -93,13 +93,13 @@ const EditVaultModal: React.FC<EditVaultModalProps> = ({ isOpen, onClose, vault 
     >
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>{t('vault.modals.editVault.title')}</h2>
+          <h2>{t('container.modals.editContainer.title')}</h2>
           <button onClick={onClose} className="modal-close">
             <X className="h-6 w-6" />
           </button>
         </div>
 
-        <form id="edit-vault-form" onSubmit={handleSubmit} className="modal-body">
+        <form id="edit-container-form" onSubmit={handleSubmit} className="modal-body">
           {error && (
             <div className="error-message">
               {error}
@@ -107,14 +107,14 @@ const EditVaultModal: React.FC<EditVaultModalProps> = ({ isOpen, onClose, vault 
           )}
 
           <div className="form-group">
-            <label htmlFor="vault-name" className="form-label">
-              {t('vault.modals.editVault.name')} *
+            <label htmlFor="container-name" className="form-label">
+              {t('container.modals.editContainer.name')} *
               <span className="char-counter">
                 {formData.name.length}/{MAX_NAME_LENGTH}
               </span>
             </label>
             <input
-              id="vault-name"
+              id="container-name"
               name="name"
               type="text"
               required
@@ -122,35 +122,35 @@ const EditVaultModal: React.FC<EditVaultModalProps> = ({ isOpen, onClose, vault 
               value={formData.name}
               onChange={handleChange}
               className="form-input"
-              placeholder={t('vault.modals.editVault.placeholders.name')}
+              placeholder={t('container.modals.editContainer.placeholders.name')}
               disabled={loading}
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="vault-description" className="form-label">
-              {t('vault.modals.editVault.description')}
+            <label htmlFor="container-description" className="form-label">
+              {t('container.modals.editContainer.description')}
               <span className="char-counter">
                 {formData.description.length}/{MAX_DESCRIPTION_LENGTH}
               </span>
             </label>
             <textarea
-              id="vault-description"
+              id="container-description"
               name="description"
               maxLength={MAX_DESCRIPTION_LENGTH}
               value={formData.description}
               onChange={handleChange}
               className="form-input resize-none"
               rows={3}
-              placeholder={t('vault.modals.editVault.placeholders.description')}
+              placeholder={t('container.modals.editContainer.placeholders.description')}
               disabled={loading}
             />
           </div>
 
           <div className="form-group">
-            <label className="form-label">{t('vault.modals.editVault.color')}</label>
+            <label className="form-label">{t('container.modals.editContainer.color')}</label>
             <div className="color-picker-grid">
-              {VAULT_COLORS.map(color => (
+              {CONTAINER_COLORS.map(color => (
                 <button
                   key={color}
                   type="button"
@@ -175,19 +175,19 @@ const EditVaultModal: React.FC<EditVaultModalProps> = ({ isOpen, onClose, vault 
           </button>
           <button
             type="submit"
-            form="edit-vault-form"
+            form="edit-container-form"
             disabled={loading}
             className="btn-primary flex items-center gap-2"
           >
             {loading ? (
               <>
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                {t('vault.modals.editVault.buttons.saving')}
+                {t('container.modals.editContainer.buttons.saving')}
               </>
             ) : (
               <>
                 <Save className="h-4 w-4" />
-                {t('vault.modals.editVault.buttons.save')}
+                {t('container.modals.editContainer.buttons.save')}
               </>
             )}
           </button>
@@ -197,4 +197,4 @@ const EditVaultModal: React.FC<EditVaultModalProps> = ({ isOpen, onClose, vault 
   );
 };
 
-export default EditVaultModal;
+export default EditContainerModal;

@@ -4,7 +4,7 @@ export interface Notification {
   type: 'invite' | 'share' | 'comment' | 'mention' | 'update';
   title: string;
   message: string;
-  relatedId?: string; // vault ID, invite ID, etc.
+  relatedId?: string; // container ID, invite ID, etc.
   read: boolean;
   createdAt: Date;
   actionUrl?: string;

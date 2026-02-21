@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
-import { useVault } from '../contexts/VaultContext';
+import { useContainer } from '../contexts/ContainerContext';
 import { NotificationService } from '../services/notificationService';
 import {
   Bell,
@@ -29,7 +29,7 @@ const Dashboard: React.FC = () => {
   const { t } = useTranslation();
   const { currentUser } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const { vaults, loading, error } = useVault();
+  const { containers, loading, error } = useContainer();
   const [searchQuery, setSearchQuery] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -54,15 +54,15 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const personalVaults = vaults.filter(vault => !vault.isShared);
-  const sharedVaults = vaults.filter(vault => vault.isShared);
+  const personalContainers = containers.filter(container => !container.isShared);
+  const sharedContainers = containers.filter(container => container.isShared);
 
-  // Enhanced search: search in vault name, description, and link titles
-  const filteredPersonalVaults = personalVaults.filter(vault => {
+  // Enhanced search: search in container name, description, and link titles
+  const filteredPersonalContainers = personalContainers.filter(container => {
     const query = searchQuery.toLowerCase();
-    const nameMatch = vault.name.toLowerCase().includes(query);
-    const descMatch = vault.description?.toLowerCase().includes(query);
-    const linkMatch = vault.links.some(link =>
+    const nameMatch = container.name.toLowerCase().includes(query);
+    const descMatch = container.description?.toLowerCase().includes(query);
+    const linkMatch = container.links.some(link =>
       link.title.toLowerCase().includes(query) ||
       link.description?.toLowerCase().includes(query) ||
       link.url.toLowerCase().includes(query)
@@ -70,11 +70,11 @@ const Dashboard: React.FC = () => {
     return nameMatch || descMatch || linkMatch;
   });
 
-  const filteredSharedVaults = sharedVaults.filter(vault => {
+  const filteredSharedContainers = sharedContainers.filter(container => {
     const query = searchQuery.toLowerCase();
-    const nameMatch = vault.name.toLowerCase().includes(query);
-    const descMatch = vault.description?.toLowerCase().includes(query);
-    const linkMatch = vault.links.some(link =>
+    const nameMatch = container.name.toLowerCase().includes(query);
+    const descMatch = container.description?.toLowerCase().includes(query);
+    const linkMatch = container.links.some(link =>
       link.title.toLowerCase().includes(query) ||
       link.description?.toLowerCase().includes(query) ||
       link.url.toLowerCase().includes(query)
@@ -88,7 +88,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <div className="dashboard-page">
-      <SEO title={t('dashboard.title')} description="Manage your link containers and workspaces in Blink." />
+      <SEO title={t('dashboard.title')} description="Manage your link containers in Blink." />
       {/* Header */}
       <header className="header">
         <div className="container">
@@ -206,7 +206,7 @@ const Dashboard: React.FC = () => {
 
       {/* Main Content */}
       <main className="container">
-        <div className="vault-header">
+        <div className="container-header">
           <div className="flex items-center justify-between mb-6">
             <h2>{t('dashboard.library')}</h2>
             <button
@@ -232,10 +232,10 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Personal Vaults */}
+        {/* Personal Containers */}
         <section>
           <h2 className="section-title">{t('dashboard.personal')}</h2>
-          {filteredPersonalVaults.length === 0 ? (
+          {filteredPersonalContainers.length === 0 ? (
             <div className="empty-state">
               <FolderOpen className="empty-state-icon" size={64} />
               <h3 className="empty-state-title">
@@ -257,10 +257,10 @@ const Dashboard: React.FC = () => {
               )}
             </div>
           ) : (
-            <div className="vault-grid">
-              {filteredPersonalVaults.map((vault) => {
+            <div className="container-grid">
+              {filteredPersonalContainers.map((container) => {
                 const colors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
-                const vaultColor = vault.color || colors[vault.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length];
+                const containerColor = container.color || colors[container.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length];
 
                 // Helper to check if color is light
                 const isLightColor = (color: string) => {
@@ -274,16 +274,16 @@ const Dashboard: React.FC = () => {
 
                 return (
                   <Link
-                    key={vault.id}
-                    to={`/vault/${vault.id}`}
-                    className={`vault-card ${isLightColor(vaultColor) ? 'light-color' : ''}`}
-                    style={{ '--vault-color': vaultColor } as React.CSSProperties}
+                    key={container.id}
+                    to={`/container/${container.id}`}
+                    className={`container-card ${isLightColor(containerColor) ? 'light-color' : ''}`}
+                    style={{ '--container-color': containerColor } as React.CSSProperties}
                   >
-                    <div className="vault-card-overlay" style={{ backgroundColor: vaultColor }}></div>
-                    <div className="vault-card-content">
-                      <h3 className="vault-card-title">{vault.name}</h3>
-                      {vault.description && (
-                        <p className="vault-card-description">{vault.description}</p>
+                    <div className="container-card-overlay" style={{ backgroundColor: containerColor }}></div>
+                    <div className="container-card-content">
+                      <h3 className="container-card-title">{container.name}</h3>
+                      {container.description && (
+                        <p className="container-card-description">{container.description}</p>
                       )}
                     </div>
                   </Link>
@@ -293,10 +293,10 @@ const Dashboard: React.FC = () => {
           )}
         </section>
 
-        {/* Shared Vaults */}
+        {/* Shared Containers */}
         <section style={{ marginTop: '3rem' }}>
           <h2 className="section-title">{t('dashboard.shared')}</h2>
-          {filteredSharedVaults.length === 0 ? (
+          {filteredSharedContainers.length === 0 ? (
             <div className="empty-state">
               <FolderPlus className="empty-state-icon" size={64} />
               <h3 className="empty-state-title">
@@ -309,10 +309,10 @@ const Dashboard: React.FC = () => {
               </p>
             </div>
           ) : (
-            <div className="vault-grid">
-              {filteredSharedVaults.map((vault) => {
+            <div className="container-grid">
+              {filteredSharedContainers.map((container) => {
                 const colors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
-                const vaultColor = vault.color || colors[vault.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length];
+                const containerColor = container.color || colors[container.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length];
 
                 const isLightColor = (color: string) => {
                   const hex = color.replace('#', '');
@@ -325,16 +325,16 @@ const Dashboard: React.FC = () => {
 
                 return (
                   <Link
-                    key={vault.id}
-                    to={`/vault/${vault.id}`}
-                    className={`vault-card ${isLightColor(vaultColor) ? 'light-color' : ''}`}
-                    style={{ '--vault-color': vaultColor } as React.CSSProperties}
+                    key={container.id}
+                    to={`/container/${container.id}`}
+                    className={`container-card ${isLightColor(containerColor) ? 'light-color' : ''}`}
+                    style={{ '--container-color': containerColor } as React.CSSProperties}
                   >
-                    <div className="vault-card-overlay" style={{ backgroundColor: vaultColor }}></div>
-                    <div className="vault-card-content">
-                      <h3 className="vault-card-title">{vault.name}</h3>
-                      {vault.description && (
-                        <p className="vault-card-description">{vault.description}</p>
+                    <div className="container-card-overlay" style={{ backgroundColor: containerColor }}></div>
+                    <div className="container-card-content">
+                      <h3 className="container-card-title">{container.name}</h3>
+                      {container.description && (
+                        <p className="container-card-description">{container.description}</p>
                       )}
                     </div>
                   </Link>

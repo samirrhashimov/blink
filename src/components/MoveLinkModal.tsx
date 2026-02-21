@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { X, ArrowRightLeft } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
-import { useVault } from '../contexts/VaultContext';
+import { useContainer } from '../contexts/ContainerContext';
 import type { Link } from '../types';
 
 interface MoveLinkModalProps {
@@ -9,8 +9,8 @@ interface MoveLinkModalProps {
     onClose: () => void;
     link?: Link;
     linkIds?: string[];
-    currentVaultId: string;
-    vaultColor?: string;
+    currentContainerId: string;
+    containerColor?: string;
 }
 
 const MoveLinkModal: React.FC<MoveLinkModalProps> = ({
@@ -18,23 +18,23 @@ const MoveLinkModal: React.FC<MoveLinkModalProps> = ({
     onClose,
     link,
     linkIds,
-    currentVaultId,
-    vaultColor
+    currentContainerId,
+    containerColor
 }) => {
     const { t } = useTranslation();
 
-    const { vaults, moveLinkToVault, moveLinksToVault } = useVault();
-    const [targetVaultId, setTargetVaultId] = useState('');
+    const { containers, moveLinkToContainer, moveLinksToContainer } = useContainer();
+    const [targetContainerId, setTargetContainerId] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
 
-    // Filter out the current vault and only show vaults where user has edit permission
-    // For simplicity, we'll show all vaults where user is owner or authorized user
-    const availableVaults = vaults.filter(v => v.id !== currentVaultId);
+    // Filter out the current container and only show containers where user has edit permission
+    // For simplicity, we'll show all containers where user is owner or authorized user
+    const availableContainers = containers.filter(v => v.id !== currentContainerId);
 
     const handleMove = async () => {
-        if (!targetVaultId) {
-            setError(t('vault.modals.moveLink.errors.selectVault'));
+        if (!targetContainerId) {
+            setError(t('container.modals.moveLink.errors.selectContainer'));
             return;
         }
 
@@ -44,15 +44,15 @@ const MoveLinkModal: React.FC<MoveLinkModalProps> = ({
 
             if (linkIds && linkIds.length > 0) {
                 // Bulk move
-                await moveLinksToVault(currentVaultId, targetVaultId, linkIds);
+                await moveLinksToContainer(currentContainerId, targetContainerId, linkIds);
             } else if (link) {
                 // Single move
-                await moveLinkToVault(currentVaultId, targetVaultId, link.id);
+                await moveLinkToContainer(currentContainerId, targetContainerId, link.id);
             }
 
             onClose();
         } catch (err: any) {
-            setError(err.message || t('vault.modals.moveLink.errors.failed'));
+            setError(err.message || t('container.modals.moveLink.errors.failed'));
         } finally {
             setLoading(false);
         }
@@ -65,10 +65,10 @@ const MoveLinkModal: React.FC<MoveLinkModalProps> = ({
             <div
                 className="modal-content"
                 onClick={(e) => e.stopPropagation()}
-                style={{ '--primary': vaultColor } as React.CSSProperties}
+                style={{ '--primary': containerColor } as React.CSSProperties}
             >
                 <div className="modal-header">
-                    <h2>{t('vault.modals.moveLink.title')}</h2>
+                    <h2>{t('container.modals.moveLink.title')}</h2>
                     <button onClick={onClose} className="modal-close">
                         <X className="h-6 w-6" />
                     </button>
@@ -80,35 +80,35 @@ const MoveLinkModal: React.FC<MoveLinkModalProps> = ({
                     <div className="mb-4">
                         <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                             {linkIds && linkIds.length > 0
-                                ? t('vault.modals.moveLink.bulkTitle', { count: linkIds.length })
-                                : t('vault.modals.moveLink.singleTitle', { title: link?.title })
+                                ? t('container.modals.moveLink.bulkTitle', { count: linkIds.length })
+                                : t('container.modals.moveLink.singleTitle', { title: link?.title })
                             }
                         </p>
                         <div className="grid grid-cols-1 gap-2 max-h-60 overflow-y-auto pr-2">
-                            {availableVaults.length === 0 ? (
-                                <p className="text-center py-4 text-gray-500">{t('vault.modals.moveLink.noVaults')}</p>
+                            {availableContainers.length === 0 ? (
+                                <p className="text-center py-4 text-gray-500">{t('container.modals.moveLink.noContainers')}</p>
                             ) : (
-                                availableVaults.map((vault) => (
+                                availableContainers.map((container) => (
                                     <label
-                                        key={vault.id}
-                                        className={`flex items-center p-3 rounded-lg border cursor-pointer transition-all ${targetVaultId === vault.id
-                                            ? 'vault-select-item-selected'
+                                        key={container.id}
+                                        className={`flex items-center p-3 rounded-lg border cursor-pointer transition-all ${targetContainerId === container.id
+                                            ? 'container-select-item-selected'
                                             : 'border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800'
                                             }`}
                                     >
                                         <input
                                             type="radio"
-                                            name="targetVault"
-                                            value={vault.id}
-                                            checked={targetVaultId === vault.id}
-                                            onChange={(e) => setTargetVaultId(e.target.value)}
+                                            name="targetContainer"
+                                            value={container.id}
+                                            checked={targetContainerId === container.id}
+                                            onChange={(e) => setTargetContainerId(e.target.value)}
                                             className="hidden"
                                         />
                                         <div
                                             className="w-3 h-3 rounded-full mr-3"
-                                            style={{ backgroundColor: vault.color || 'var(--primary)' }}
+                                            style={{ backgroundColor: container.color || 'var(--primary)' }}
                                         />
-                                        <span className="font-medium text-gray-900 dark:text-white">{vault.name}</span>
+                                        <span className="font-medium text-gray-900 dark:text-white">{container.name}</span>
                                     </label>
                                 ))
                             )}
@@ -127,21 +127,21 @@ const MoveLinkModal: React.FC<MoveLinkModalProps> = ({
                     </button>
                     <button
                         onClick={handleMove}
-                        disabled={loading || !targetVaultId}
+                        disabled={loading || !targetContainerId}
                         className="btn-primary"
                         style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
                     >
                         {loading ? (
                             <>
                                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                                {t('vault.modals.moveLink.buttons.moving')}
+                                {t('container.modals.moveLink.buttons.moving')}
                             </>
                         ) : (
                             <>
                                 <ArrowRightLeft size={18} />
                                 {linkIds && linkIds.length > 0
-                                    ? t('vault.modals.moveLink.buttons.moveLinks')
-                                    : t('vault.modals.moveLink.buttons.moveLink')
+                                    ? t('container.modals.moveLink.buttons.moveLinks')
+                                    : t('container.modals.moveLink.buttons.moveLink')
                                 }
                             </>
                         )}

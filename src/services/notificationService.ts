@@ -160,7 +160,7 @@ export class NotificationService {
   // Helper: Create invitation notification
   static async notifyInvitation(
     userId: string,
-    vaultName: string,
+    containerName: string,
     inviterName: string,
     inviteId: string,
     inviterId?: string
@@ -168,8 +168,8 @@ export class NotificationService {
     await this.createNotification(
       userId,
       'invite',
-      'New Vault Invitation',
-      `${inviterName} invited you to collaborate on "${vaultName}"`,
+      'New Container Invitation',
+      `${inviterName} invited you to collaborate on "${containerName}"`,
       inviteId,
       `/invitations`,
       inviterId,
@@ -178,40 +178,40 @@ export class NotificationService {
   }
 
   // Helper: Create share notification
-  static async notifyVaultShared(
+  static async notifyContainerShared(
     userId: string,
-    vaultName: string,
+    containerName: string,
     sharerName: string,
-    vaultId: string,
+    containerId: string,
     sharerId?: string
   ): Promise<void> {
     await this.createNotification(
       userId,
       'share',
-      'Vault Shared',
-      `${sharerName} shared "${vaultName}" with you`,
-      vaultId,
-      `/vault/${vaultId}`,
+      'Container Shared',
+      `${sharerName} shared "${containerName}" with you`,
+      containerId,
+      `/container/${containerId}`,
       sharerId,
       sharerName
     );
   }
 
   // Helper: Create update notification
-  static async notifyVaultUpdate(
+  static async notifyContainerUpdate(
     userId: string,
-    vaultName: string,
+    containerName: string,
     updaterName: string,
-    vaultId: string,
+    containerId: string,
     updaterId?: string
   ): Promise<void> {
     await this.createNotification(
       userId,
       'update',
-      'Vault Updated',
-      `${updaterName} made changes to "${vaultName}"`,
-      vaultId,
-      `/vault/${vaultId}`,
+      'Container Updated',
+      `${updaterName} made changes to "${containerName}"`,
+      containerId,
+      `/container/${containerId}`,
       updaterId,
       updaterName
     );

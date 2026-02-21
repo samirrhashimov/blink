@@ -7,14 +7,14 @@ interface QRCodeModalProps {
     isOpen: boolean;
     onClose: () => void;
     link: Link | null;
-    vaultColor?: string;
+    containerColor?: string;
 }
 
 const QRCodeModal: React.FC<QRCodeModalProps> = ({
     isOpen,
     onClose,
     link,
-    vaultColor = '#6366f1'
+    containerColor = '#6366f1'
 }) => {
     const { t } = useTranslation();
 
@@ -46,7 +46,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
 
                         <div>
-                            <h2 style={{ fontSize: '1.25rem' }}>{t('vault.modals.qrCode.title')}</h2>
+                            <h2 style={{ fontSize: '1.25rem' }}>{t('container.modals.qrCode.title')}</h2>
 
                         </div>
                     </div>
@@ -70,12 +70,12 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
                         alignItems: 'center',
                         justifyContent: 'center',
                         boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
-                        border: `2px solid ${vaultColor}40`,
+                        border: `2px solid ${containerColor}40`,
                         margin: '0 auto'
                     }}>
                         <img
                             src={qrCodeUrl}
-                            alt={t('vault.modals.qrCode.alt', { url: link.url })}
+                            alt={t('container.modals.qrCode.alt', { url: link.url })}
                             style={{
                                 width: '200px',
                                 height: '200px',
@@ -95,7 +95,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
                             justifyContent: 'center',
                             gap: '8px',
                             display: 'flex',
-                            backgroundColor: vaultColor
+                            backgroundColor: containerColor
                         }}
                     >
                         <Download size={18} />

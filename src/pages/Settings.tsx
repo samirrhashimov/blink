@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
-import { useVault } from '../contexts/VaultContext';
+import { useContainer } from '../contexts/ContainerContext';
 import { updateProfile } from 'firebase/auth';
 import { doc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
@@ -23,14 +23,14 @@ import {
 import ConfirmModal from '../components/ConfirmModal';
 import { parseNetscapeBookmarks } from '../utils/bookmarkParser';
 import { downloadBookmarks } from '../utils/bookmarkExporter';
-import { VaultService } from '../services/vaultService';
+import { ContainerService } from '../services/containerService';
 import '../css/Settings.css';
 
 const Settings: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { currentUser, logout, deleteAccount } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const { vaults } = useVault();
+  const { containers } = useContainer();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     displayName: currentUser?.displayName || '',
@@ -53,7 +53,7 @@ const Settings: React.FC = () => {
 
   const [importing, setImporting] = useState(false);
 
-  const [importSummary, setImportSummary] = useState<{ vaults: number, links: number, data: any } | null>(null);
+  const [importSummary, setImportSummary] = useState<{ containers: number, links: number, data: any } | null>(null);
   const [exporting, setExporting] = useState(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
@@ -79,10 +79,10 @@ const Settings: React.FC = () => {
         grouped[folder].push(item);
       });
 
-      const totalVaults = Object.keys(grouped).length;
+      const totalContainers = Object.keys(grouped).length;
       const totalLinks = results.length;
 
-      setImportSummary({ vaults: totalVaults, links: totalLinks, data: grouped });
+      setImportSummary({ containers: totalContainers, links: totalLinks, data: grouped });
     } catch (err: any) {
       console.error(err);
       setError(err.message || 'Failed to parse bookmarks.');
@@ -98,7 +98,7 @@ const Settings: React.FC = () => {
 
     try {
       for (const [folderName, items] of Object.entries(grouped)) {
-        await VaultService.createVault({
+        await ContainerService.createContainer({
           name: folderName,
           description: `Imported from browser bookmarks on ${new Date().toLocaleDateString()}`,
           ownerId: currentUser.uid,
@@ -116,7 +116,7 @@ const Settings: React.FC = () => {
         });
       }
 
-      setSuccess(t('settings.messages.importSuccess', { links: importSummary.links, vaults: importSummary.vaults }));
+      setSuccess(t('settings.messages.importSuccess', { links: importSummary.links, containers: importSummary.containers }));
       setImportSummary(null);
 
       // Redirect to dashboard after short delay
@@ -139,7 +139,7 @@ const Settings: React.FC = () => {
   };
 
   const handleExport = async () => {
-    if (vaults.length === 0) {
+    if (containers.length === 0) {
       setError(t('settings.messages.noExport'));
       return;
     }
@@ -149,7 +149,7 @@ const Settings: React.FC = () => {
     setError('');
 
     try {
-      downloadBookmarks(vaults, `blink_backup_${new Date().toISOString().split('T')[0]}.html`);
+      downloadBookmarks(containers, `blink_backup_${new Date().toISOString().split('T')[0]}.html`);
       setSuccess(t('settings.messages.exportSuccess'));
       setTimeout(() => setSuccess(''), 3000);
     } catch (err: any) {
@@ -260,7 +260,7 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <div className="vault-details-page">
+    <div className="container-details-page">
       {/* Header */}
       <header className="header">
         <div className="container">
@@ -282,7 +282,7 @@ const Settings: React.FC = () => {
 
       {/* Main Content */}
       <main className="container">
-        <div className="vault-header">
+        <div className="container-header">
           <h2>{t('settings.title')}</h2>
           <p>{t('settings.subtitle')}</p>
         </div>
@@ -555,7 +555,7 @@ const Settings: React.FC = () => {
             onClose={cancelImport}
             onConfirm={confirmImport}
             title={t('settings.messages.importConfirm.title')}
-            message={t('settings.messages.importConfirm.message', { vaults: importSummary?.vaults, links: importSummary?.links })}
+            message={t('settings.messages.importConfirm.message', { containers: importSummary?.containers, links: importSummary?.links })}
             confirmText={importing ? t('settings.messages.importing') : t('settings.messages.importConfirm.title')}
             variant="primary"
             icon={<Download className="h-4 w-4" />}

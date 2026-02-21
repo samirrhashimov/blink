@@ -16,14 +16,14 @@ interface LinkStatsModalProps {
     isOpen: boolean;
     onClose: () => void;
     link: Link;
-    vaultColor?: string;
+    containerColor?: string;
 }
 
 const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
     isOpen,
     onClose,
     link,
-    vaultColor = '#6366f1'
+    containerColor = '#6366f1'
 }) => {
     const { t } = useTranslation();
 
@@ -82,7 +82,7 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
                     <div className="header-info">
                         <div
                             className="header-icon-box"
-                            style={{ backgroundColor: `${vaultColor}15`, color: vaultColor }}
+                            style={{ backgroundColor: `${containerColor}15`, color: containerColor }}
                         >
                             {link.favicon ? (
                                 <img src={link.favicon} alt="" className="header-favicon-img" />
@@ -92,7 +92,7 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
                         </div>
                         <div className="header-titles">
                             <h2>{link.title}</h2>
-                            <span>{t('vault.modals.linkStats.analytics')}</span>
+                            <span>{t('container.modals.linkStats.analytics')}</span>
                         </div>
                     </div>
                     <button onClick={onClose} className="header-close-btn" aria-label="Close modal">
@@ -102,11 +102,11 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
 
                 <div className="stats-cards-row">
                     <div className="premium-stat-card">
-                        <div className="stat-card-icon" style={{ color: vaultColor, background: `${vaultColor}10` }}>
+                        <div className="stat-card-icon" style={{ color: containerColor, background: `${containerColor}10` }}>
                             <MousePointer2 size={24} />
                         </div>
                         <div className="stat-card-data">
-                            <span className="stat-card-label">{t('vault.modals.linkStats.lifetime')}</span>
+                            <span className="stat-card-label">{t('container.modals.linkStats.lifetime')}</span>
                             <span className="stat-card-number">{link.clicks || 0}</span>
                         </div>
                     </div>
@@ -115,21 +115,21 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
                             <Clock size={24} />
                         </div>
                         <div className="stat-card-data">
-                            <span className="stat-card-label">{t('vault.modals.linkStats.today')}</span>
+                            <span className="stat-card-label">{t('container.modals.linkStats.today')}</span>
                             <span className="stat-card-number">{clicksToday}</span>
                         </div>
                     </div>
                 </div>
 
                 <div className="premium-chart-area">
-                    <h3 className="chart-section-title">{t('vault.modals.linkStats.history')}</h3>
+                    <h3 className="chart-section-title">{t('container.modals.linkStats.history')}</h3>
                     <div className="chart-wrapper-inner">
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                                 <defs>
                                     <linearGradient id="premiumColorClicks" x1="0" y1="0" x2="0" y2="1">
-                                        <stop offset="5%" stopColor={vaultColor} stopOpacity={0.4} />
-                                        <stop offset="95%" stopColor={vaultColor} stopOpacity={0} />
+                                        <stop offset="5%" stopColor={containerColor} stopOpacity={0.4} />
+                                        <stop offset="95%" stopColor={containerColor} stopOpacity={0} />
                                     </linearGradient>
                                 </defs>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="rgba(148, 163, 184, 0.1)" />
@@ -157,12 +157,12 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
                                         color: '#f1f5f9',
                                         padding: '8px 12px'
                                     }}
-                                    itemStyle={{ color: vaultColor, fontWeight: '600' }}
+                                    itemStyle={{ color: containerColor, fontWeight: '600' }}
                                 />
                                 <Area
                                     type="monotone"
                                     dataKey="clicks"
-                                    stroke={vaultColor}
+                                    stroke={containerColor}
                                     strokeWidth={3}
                                     fillOpacity={1}
                                     fill="url(#premiumColorClicks)"

@@ -8,7 +8,7 @@ import blinkLogo from '../assets/blinklogo2.png';
 import homepageImg from '../assets/Screenshots/homepage.png';
 import inviteImg from '../assets/Screenshots/invite.png';
 import shareImg from '../assets/Screenshots/share.png';
-import vaultDetailsImg from '../assets/Screenshots/vaultdetails.png';
+import containerDetailsImg from '../assets/Screenshots/containerdetails.png';
 import tagsImg from '../assets/Screenshots/tags.png';
 import firefoxExtImg from '../assets/og-img.png';
 import '../css/About.css';
@@ -149,7 +149,7 @@ const LandingPage: React.FC = () => {
             </p>
           </div>
           <div className="feature-image-container">
-            <img src={vaultDetailsImg} alt="Vault Details" className="feature-screenshot rotate-1 hover:rotate-0 transition-transform duration-500" />
+            <img src={containerDetailsImg} alt="Container Details" className="feature-screenshot rotate-1 hover:rotate-0 transition-transform duration-500" />
           </div>
         </div>
 
@@ -434,11 +434,6 @@ const LandingPage: React.FC = () => {
                 e.preventDefault();
                 navigate('/legal/terms-and-conditions');
               }} className="hover:text-blue-500 transition-colors">{t('landing.features.footer.terms')}</a>
-            <a href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                navigate('/legal/delete-account');
-              }} className="hover:text-blue-500 transition-colors">{t('landing.features.footer.deletion')}</a>
             <a href="https://github.com/samirrhashimov/blink.git" className="hover:text-blue-500 transition-colors">GitHub</a>
           </div>
         </div>

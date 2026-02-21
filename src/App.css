@@ -151,9 +151,9 @@ textarea {
 }
 
 /* ============================================
-   VaultDetails Page
+   ContainerDetails Page
    ============================================ */
-.vault-details-page {
+.container-details-page {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -671,7 +671,7 @@ main.container {
   }
 }
 
-.vault-header {
+.container-header {
   margin: 0 auto 1.5rem;
   padding: 1.25rem 1.75rem;
   background: rgba(255, 255, 255, 0.7);
@@ -687,7 +687,7 @@ main.container {
   overflow: visible;
 }
 
-.dark .vault-header {
+.dark .container-header {
   background: rgba(30, 41, 59, 0.6);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -697,7 +697,7 @@ main.container {
     0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
-.vault-header h2 {
+.container-header h2 {
   font-size: 1.875rem;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -709,17 +709,17 @@ main.container {
   overflow-wrap: break-word;
 }
 
-.vault-header {
+.container-header {
   margin-bottom: 1.5rem;
 }
 
-.vault-header-info {
+.container-header-info {
   display: flex;
   flex-direction: column;
   gap: 0.375rem;
 }
 
-.vault-name-title {
+.container-name-title {
   font-size: 1.75rem;
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -727,11 +727,11 @@ main.container {
   color: #1e293b;
 }
 
-.dark .vault-name-title {
+.dark .container-name-title {
   color: #f1f5f9;
 }
 
-.vault-description-text {
+.container-description-text {
   font-size: 0.9375rem;
   color: #64748b;
   max-width: 700px;
@@ -739,7 +739,7 @@ main.container {
   margin: 0;
 }
 
-.dark .vault-description-text {
+.dark .container-description-text {
   color: #94a3b8;
 }
 
@@ -844,14 +844,14 @@ main.container {
 
 
 
-.vault-content {
+.container-content {
   display: flex;
   flex-direction: column;
   gap: 2.5rem;
 }
 
 @media (min-width: 768px) {
-  .vault-content {
+  .container-content {
     flex-direction: row;
     gap: 2.5rem;
     align-items: flex-start;
@@ -2221,14 +2221,14 @@ main.container {
   }
 }
 
-.vault-grid {
+.container-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1.5rem;
   margin-bottom: 3rem;
 }
 
-.vault-card {
+.container-card {
   position: relative;
   display: block;
   aspect-ratio: 1;
@@ -2239,29 +2239,29 @@ main.container {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.vault-card-overlay {
+.container-card-overlay {
   position: absolute;
   inset: 0;
   transition: all 0.3s ease;
   z-index: 1;
 }
 
-.vault-card:hover .vault-card-overlay {
+.container-card:hover .container-card-overlay {
   opacity: 0.9;
 }
 
-.dark .vault-card {
+.dark .container-card {
   background: rgba(255, 255, 255, 0.03);
   border-color: rgba(255, 255, 255, 0.06);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
 }
 
-.vault-card:hover {
+.container-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 12px 24px -6px color-mix(in srgb, var(--vault-color, #6366f1), transparent 70%);
+  box-shadow: 0 12px 24px -6px color-mix(in srgb, var(--container-color, #6366f1), transparent 70%);
 }
 
-.vault-card-image {
+.container-card-image {
   position: absolute;
   inset: 0;
   background-size: cover;
@@ -2269,14 +2269,14 @@ main.container {
   transition: transform 0.3s ease;
 }
 
-.vault-card:hover .vault-card-image {
+.container-card:hover .container-card-image {
   transform: scale(1.05);
 }
 
 
 /* Handled above */
 
-.vault-card-content {
+.container-card-content {
   position: absolute;
   bottom: 0;
   left: 0;
@@ -2290,11 +2290,11 @@ main.container {
   background: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 100%);
 }
 
-.vault-card.light-color .vault-card-content {
+.container-card.light-color .container-card-content {
   background: linear-gradient(to top, rgba(0, 0, 0, 0.05) 0%, transparent 100%);
 }
 
-.vault-card-title {
+.container-card-title {
   font-size: 1.25rem;
   font-weight: 700;
   margin: 0;
@@ -2310,7 +2310,7 @@ main.container {
   overflow: hidden;
 }
 
-.vault-card-description {
+.container-card-description {
   font-size: 0.75rem;
   opacity: 0.85;
   color: rgba(255, 255, 255, 0.9);
@@ -2323,7 +2323,7 @@ main.container {
   flex-shrink: 0;
 }
 
-.vault-card-meta {
+.container-card-meta {
   font-size: 0.9rem;
   opacity: 0.9;
 }
@@ -2659,12 +2659,12 @@ main.container {
   color: #e8ecf1;
 }
 
-.vault-select-item-selected {
+.container-select-item-selected {
   border-color: #10b981 !important;
   background-color: rgba(16, 185, 129, 0.05) !important;
 }
 
-.dark .vault-select-item-selected {
+.dark .container-select-item-selected {
   border-color: #34d399 !important;
   background-color: rgba(52, 211, 153, 0.05) !important;
 }
@@ -2731,14 +2731,14 @@ main.container {
   box-shadow: 0 0 0 2px #1a1f2e;
 }
 
-/* High contrast support for vault titles */
-.vault-card.light-color .vault-card-title,
-.vault-card.light-color .vault-card-description,
-.vault-card.light-color .vault-card-meta {
+/* High contrast support for container titles */
+.container-card.light-color .container-card-title,
+.container-card.light-color .container-card-description,
+.container-card.light-color .container-card-meta {
   color: #1a1f2e !important;
 }
 
-.vault-card.light-color .vault-card-overlay {
+.container-card.light-color .container-card-overlay {
   opacity: 0.9;
 }
 
@@ -3020,8 +3020,8 @@ main.container {
   animation-delay: 0.6s;
 }
 
-/* Vault Skeleton */
-.vault-skeleton {
+/* Container Skeleton */
+.container-skeleton {
   background: white;
   padding: 1.5rem;
   border-radius: 10px;
@@ -3029,7 +3029,7 @@ main.container {
   border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
-.dark .vault-skeleton {
+.dark .container-skeleton {
   background: rgba(255, 255, 255, 0.03);
   border-color: rgba(255, 255, 255, 0.06);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
@@ -3339,7 +3339,7 @@ tr:hover {
   border-radius: 10px;
 }
 
-.vault-skeleton {
+.container-skeleton {
   aspect-ratio: 1;
   border-radius: 10px;
   overflow: hidden;
@@ -4647,17 +4647,17 @@ tr:hover {
     display: none !important;
   }
 
-  .vault-header {
+  .container-header {
     margin: 0 auto 1.5rem;
     padding: 1.25rem 1.25rem;
     border-radius: 10px;
   }
 
-  .vault-header h2 {
+  .container-header h2 {
     font-size: 1.5rem;
   }
 
-  .vault-header p {
+  .container-header p {
     font-size: 0.8125rem;
   }
 
@@ -4775,7 +4775,7 @@ tr:hover {
     padding: 2rem;
   }
 
-  .vault-grid {
+  .container-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
   }
@@ -5062,7 +5062,7 @@ tr:hover {
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-.vault-indicator {
+.container-indicator {
   font-size: 0.65rem;
   text-transform: uppercase;
   letter-spacing: 0.025em;
@@ -5103,14 +5103,14 @@ tr:hover {
   border-top-color: rgba(255, 255, 255, 0.05);
 }
 
-.view-vault-link {
+.view-container-link {
   font-size: 0.75rem;
   color: #64748b;
   font-weight: 500;
   transition: color 0.2s;
 }
 
-.view-vault-link:hover {
+.view-container-link:hover {
   color: var(--primary, #6366f1);
 }
 

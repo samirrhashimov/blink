@@ -20,7 +20,6 @@ const LanguageToggle: React.FC<LanguageToggleProps> = ({ className }) => {
             onClick={toggleLanguage}
             className={className || "theme-toggle mediaforbuttons uppercase font-bold text-xs"}
             title={i18n.language.startsWith('en') ? "Switch to Turkish" : "İngilizceye Geç"}
-            style={{ minWidth: '40px' }}
         >
             {currentLang}
         </button>

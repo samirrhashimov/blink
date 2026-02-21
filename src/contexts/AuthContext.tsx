@@ -180,29 +180,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const userId = user.uid;
 
     try {
-      // 1. Delete user's vaults (owned vaults)
-      const ownedVaultsQuery = query(
+      // 1. Delete user's containers (owned containers)
+      const ownedContainersQuery = query(
         collection(db, 'vaults'),
         where('ownerId', '==', userId)
       );
-      const ownedVaultsSnapshot = await getDocs(ownedVaultsQuery);
-      const deleteVaultPromises = ownedVaultsSnapshot.docs.map(docSnapshot =>
+      const ownedContainersSnapshot = await getDocs(ownedContainersQuery);
+      const deleteContainerPromises = ownedContainersSnapshot.docs.map(docSnapshot =>
         deleteDoc(doc(db, 'vaults', docSnapshot.id))
       );
-      await Promise.all(deleteVaultPromises);
+      await Promise.all(deleteContainerPromises);
 
-      // 2. Remove user from shared vaults (authorizedUsers array)
-      const sharedVaultsQuery = query(
+      // 2. Remove user from shared containers (authorizedUsers array)
+      const sharedContainersQuery = query(
         collection(db, 'vaults'),
         where('authorizedUsers', 'array-contains', userId)
       );
-      const sharedVaultsSnapshot = await getDocs(sharedVaultsQuery);
-      const updateVaultPromises = sharedVaultsSnapshot.docs.map(docSnapshot =>
+      const sharedContainersSnapshot = await getDocs(sharedContainersQuery);
+      const updateContainerPromises = sharedContainersSnapshot.docs.map(docSnapshot =>
         updateDoc(doc(db, 'vaults', docSnapshot.id), {
           authorizedUsers: arrayRemove(userId)
         })
       );
-      await Promise.all(updateVaultPromises);
+      await Promise.all(updateContainerPromises);
 
       // 3. Delete user's notifications
       const notificationsQuery = query(
@@ -239,7 +239,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       await Promise.all(deleteSentInvitePromises);
 
-      // 5. Delete user's vault permissions
+      // 5. Delete user's container permissions
       const permissionsQuery = query(
         collection(db, 'vaultPermissions'),
         where('userId', '==', userId)

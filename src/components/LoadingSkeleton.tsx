@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface SkeletonProps {
-  variant?: 'text' | 'card' | 'avatar' | 'vault' | 'fullscreen';
+  variant?: 'text' | 'card' | 'avatar' | 'container' | 'fullscreen';
   count?: number;
 }
 
@@ -28,9 +28,9 @@ const LoadingSkeleton: React.FC<SkeletonProps> = ({ variant = 'text', count = 1 
           </div>
         );
       
-      case 'vault':
+      case 'container':
         return (
-          <div className="vault-skeleton">
+          <div className="container-skeleton">
             <div className="skeleton-box skeleton-box--rounded" style={{ height: '180px', marginBottom: '1rem' }}></div>
             <div className="skeleton-box" style={{ width: '70%', height: '20px', marginBottom: '0.5rem' }}></div>
             <div className="skeleton-box" style={{ width: '50%', height: '16px' }}></div>
@@ -65,7 +65,7 @@ const LoadingSkeleton: React.FC<SkeletonProps> = ({ variant = 'text', count = 1 
   return (
     <>
       {Array.from({ length: count }).map((_, index) => (
-        <div key={index} style={{ marginBottom: variant === 'vault' ? '1.5rem' : '0.5rem' }}>
+        <div key={index} style={{ marginBottom: variant === 'container' ? '1.5rem' : '0.5rem' }}>
           {renderSkeleton()}
         </div>
       ))}

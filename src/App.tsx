@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import './App.css';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
-import { VaultProvider } from './contexts/VaultContext';
+import { ContainerProvider } from './contexts/ContainerContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { useAuth } from './contexts/AuthContext';
 import LandingPage from './pages/LandingPage';
@@ -12,8 +12,8 @@ import SignupPage from './pages/SignupPage';
 import VerifyEmailPage from './pages/VerifyEmailPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import Dashboard from './pages/Dashboard';
-import VaultDetails from './pages/VaultDetails';
-import ShareVault from './pages/ShareVault';
+import ContainerDetails from './pages/ContainerDetails';
+import ShareContainer from './pages/ShareContainer';
 import Invitations from './pages/Invitations';
 import Settings from './pages/Settings';
 import Tags from './pages/Tags';
@@ -83,18 +83,18 @@ const AppRoutes: React.FC = () => {
           }
         />
         <Route
-          path="/vault/:id"
+          path="/container/:id"
           element={
             <ProtectedRoute>
-              <VaultDetails />
+              <ContainerDetails />
             </ProtectedRoute>
           }
         />
         <Route
-          path="/vault/:id/share"
+          path="/container/:id/share"
           element={
             <ProtectedRoute>
-              <ShareVault />
+              <ShareContainer />
             </ProtectedRoute>
           }
         />
@@ -135,9 +135,9 @@ function App() {
       <ThemeProvider>
         <ToastProvider>
           <AuthProvider>
-            <VaultProvider>
+            <ContainerProvider>
               <AppRoutes />
-            </VaultProvider>
+            </ContainerProvider>
           </AuthProvider>
         </ToastProvider>
       </ThemeProvider>

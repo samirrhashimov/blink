@@ -47,7 +47,7 @@ const DeleteAccount = () => {
                 </p>
                 <ul>
                     <li><strong>Account Information:</strong> Your email address, name/surname, and profile picture.</li>
-                    <li><strong>User Content:</strong> All saved links, created folders (vaults), and tags.</li>
+                    <li><strong>User Content:</strong> All saved links, created folders (containers), and tags.</li>
                     <li><strong>Relationship Data:</strong> Folder access shared with other users and invitations.</li>
                 </ul>
 

@@ -12,20 +12,20 @@ import {
   arrayUnion,
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
-import type { ShareInvite, VaultPermission } from '../types';
+import type { ShareInvite, ContainerPermission } from '../types';
 import { UserService } from './userService';
 
 const INVITES_COLLECTION = 'shareInvites';
 const PERMISSIONS_COLLECTION = 'vaultPermissions';
 
 export class SharingService {
-  // Send an invitation to share a vault
+  // Send an invitation to share a container
   static async sendInvitation(
-    vaultId: string,
+    containerId: string,
     email: string,
     permission: 'view' | 'comment' | 'edit',
     invitedBy: string,
-    vaultName?: string,
+    containerName?: string,
     inviterName?: string
   ): Promise<string> {
     try {
@@ -35,7 +35,7 @@ export class SharingService {
       // Check if invitation already exists
       const existingInviteQuery = query(
         collection(db, INVITES_COLLECTION),
-        where('vaultId', '==', vaultId),
+        where('containerId', '==', containerId),
         where('email', '==', normalizedEmail),
         where('status', '==', 'pending')
       );
@@ -50,7 +50,7 @@ export class SharingService {
       expiresAt.setDate(expiresAt.getDate() + 7);
 
       const inviteData: any = {
-        vaultId,
+        containerId,
         email: normalizedEmail,
         permission,
         invitedBy,
@@ -60,7 +60,7 @@ export class SharingService {
       };
       
       // Add optional fields if provided
-      if (vaultName) inviteData.vaultName = vaultName;
+      if (containerName) inviteData.containerName = containerName;
       if (inviterName) inviteData.inviterName = inviterName;
 
       const docRef = await addDoc(collection(db, INVITES_COLLECTION), inviteData);
@@ -75,12 +75,12 @@ export class SharingService {
     }
   }
 
-  // Get all pending invitations for a vault
-  static async getVaultInvitations(vaultId: string): Promise<ShareInvite[]> {
+  // Get all pending invitations for a container
+  static async getContainerInvitations(containerId: string): Promise<ShareInvite[]> {
     try {
       const q = query(
         collection(db, INVITES_COLLECTION),
-        where('vaultId', '==', vaultId),
+        where('containerId', '==', containerId),
         where('status', '==', 'pending')
       );
       
@@ -123,11 +123,11 @@ export class SharingService {
       }
 
       // Create permission record first
-      await this.setUserPermission(inviteData.vaultId, userId, inviteData.permission, inviteData.invitedBy);
+      await this.setUserPermission(inviteData.containerId, userId, inviteData.permission, inviteData.invitedBy);
 
-      // Add user to vault's authorized users using arrayUnion (no read needed)
-      const vaultRef = doc(db, 'vaults', inviteData.vaultId);
-      await updateDoc(vaultRef, {
+      // Add user to container's authorized users using arrayUnion (no read needed)
+      const containerRef = doc(db, 'vaults', inviteData.containerId);
+      await updateDoc(containerRef, {
         authorizedUsers: arrayUnion(userId),
         updatedAt: serverTimestamp()
       });
@@ -168,9 +168,9 @@ export class SharingService {
     }
   }
 
-  // Set user permission for a vault
+  // Set user permission for a container
   static async setUserPermission(
-    vaultId: string,
+    containerId: string,
     userId: string,
     permission: 'view' | 'comment' | 'edit',
     grantedBy: string
@@ -179,7 +179,7 @@ export class SharingService {
       // Check if permission already exists
       const q = query(
         collection(db, PERMISSIONS_COLLECTION),
-        where('vaultId', '==', vaultId),
+        where('containerId', '==', containerId),
         where('userId', '==', userId)
       );
       
@@ -195,7 +195,7 @@ export class SharingService {
       } else {
         // Create new permission
         await addDoc(collection(db, PERMISSIONS_COLLECTION), {
-          vaultId,
+          containerId,
           userId,
           permission,
           grantedBy,
@@ -208,12 +208,12 @@ export class SharingService {
     }
   }
 
-  // Get user permission for a vault
-  static async getUserPermission(vaultId: string, userId: string): Promise<VaultPermission | null> {
+  // Get user permission for a container
+  static async getUserPermission(containerId: string, userId: string): Promise<ContainerPermission | null> {
     try {
       const q = query(
         collection(db, PERMISSIONS_COLLECTION),
-        where('vaultId', '==', vaultId),
+        where('containerId', '==', containerId),
         where('userId', '==', userId)
       );
       
@@ -229,23 +229,23 @@ export class SharingService {
         permission: data.permission,
         grantedBy: data.grantedBy,
         grantedAt: data.grantedAt?.toDate() || new Date()
-      } as VaultPermission;
+      } as ContainerPermission;
     } catch (error) {
       console.error('Error getting user permission:', error);
       return null;
     }
   }
 
-  // Get all permissions for a vault
-  static async getVaultPermissions(vaultId: string): Promise<VaultPermission[]> {
+  // Get all permissions for a container
+  static async getContainerPermissions(containerId: string): Promise<ContainerPermission[]> {
     try {
       const q = query(
         collection(db, PERMISSIONS_COLLECTION),
-        where('vaultId', '==', vaultId)
+        where('containerId', '==', containerId)
       );
       
       const querySnapshot = await getDocs(q);
-      const permissions: VaultPermission[] = [];
+      const permissions: ContainerPermission[] = [];
       
       querySnapshot.forEach((doc) => {
         const data = doc.data();
@@ -254,28 +254,28 @@ export class SharingService {
           permission: data.permission,
           grantedBy: data.grantedBy,
           grantedAt: data.grantedAt?.toDate() || new Date()
-        } as VaultPermission);
+        } as ContainerPermission);
       });
 
       return permissions;
     } catch (error) {
-      console.error('Error fetching vault permissions:', error);
-      throw new Error('Failed to fetch vault permissions');
+      console.error('Error fetching container permissions:', error);
+      throw new Error('Failed to fetch container permissions');
     }
   }
 
-  // Remove user from vault
-  static async removeUserFromVault(vaultId: string, userId: string): Promise<void> {
+  // Remove user from container
+  static async removeUserFromContainer(containerId: string, userId: string): Promise<void> {
     try {
       // Remove from authorized users
-      const vaultRef = doc(db, 'vaults', vaultId);
-      const vaultSnap = await getDoc(vaultRef);
+      const containerRef = doc(db, 'vaults', containerId);
+      const containerSnap = await getDoc(containerRef);
       
-      if (vaultSnap.exists()) {
-        const vaultData = vaultSnap.data();
-        const authorizedUsers = vaultData.authorizedUsers || [];
+      if (containerSnap.exists()) {
+        const containerData = containerSnap.data();
+        const authorizedUsers = containerData.authorizedUsers || [];
         
-        await updateDoc(vaultRef, {
+        await updateDoc(containerRef, {
           authorizedUsers: authorizedUsers.filter((id: string) => id !== userId),
           updatedAt: serverTimestamp()
         });
@@ -284,7 +284,7 @@ export class SharingService {
       // Remove permission record
       const q = query(
         collection(db, PERMISSIONS_COLLECTION),
-        where('vaultId', '==', vaultId),
+        where('containerId', '==', containerId),
         where('userId', '==', userId)
       );
       
@@ -293,8 +293,8 @@ export class SharingService {
         await deleteDoc(doc(db, PERMISSIONS_COLLECTION, docSnapshot.id));
       });
     } catch (error) {
-      console.error('Error removing user from vault:', error);
-      throw new Error('Failed to remove user from vault');
+      console.error('Error removing user from container:', error);
+      throw new Error('Failed to remove user from container');
     }
   }
 
