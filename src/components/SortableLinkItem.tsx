@@ -35,6 +35,8 @@ interface SortableLinkItemProps {
     selectionMode?: boolean;
     isSelected?: boolean;
     onSelect?: (link: LinkType) => void;
+    isDeleting?: boolean;
+    isNewlyAdded?: boolean;
 }
 
 const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
@@ -52,7 +54,9 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
     disabled,
     selectionMode = false,
     isSelected = false,
-    onSelect
+    onSelect,
+    isDeleting = false,
+    isNewlyAdded = false
 }) => {
     const { t } = useTranslation();
     const [menuOpen, setMenuOpen] = useState(false);
@@ -101,7 +105,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
         <div
             ref={setNodeRef}
             style={style}
-            className={`link-item ${isDragging ? 'dragging' : ''} ${link.isPinned ? 'pinned-link' : ''} ${menuOpen ? 'menu-active' : ''} ${isSelected ? 'selected' : ''}`}
+            className={`link-item hover-inset ${isDragging ? 'dragging' : ''} ${link.isPinned ? 'pinned-link' : ''} ${menuOpen ? 'menu-active' : ''} ${isSelected ? 'selected' : ''} ${isDeleting ? 'disintegrate' : ''} ${isNewlyAdded ? 'newly-added' : ''}`}
             onClick={(e) => {
                 if (selectionMode && onSelect) {
                     e.preventDefault();

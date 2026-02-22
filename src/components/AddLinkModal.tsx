@@ -29,6 +29,19 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState('');
   const [fetchTimeout, setFetchTimeout] = useState<any>(null);
+  const [fetchSequence, setFetchSequence] = useState(0);
+
+  useEffect(() => {
+    if (isAutoFetching) {
+      setFetchSequence(0);
+      const interval = setInterval(() => {
+        setFetchSequence(prev => (prev < 3 ? prev + 1 : prev));
+      }, 500);
+      return () => clearInterval(interval);
+    } else {
+      setFetchSequence(0);
+    }
+  }, [isAutoFetching]);
 
   // Helper to normalize URL
   const normalizeUrl = (url: string) => {
@@ -253,17 +266,31 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
                 placeholder={t('container.modals.addLink.placeholders.url')}
                 disabled={loading}
               />
-              {isAutoFetching && (
-                <div className="loading-bar-container">
-                  <div className="loading-bar"></div>
-                </div>
-              )}
               {formData.url && !loading && (
                 <button type="button" onClick={() => clearField('url')} className="input-clear-btn" title={t('container.modals.addLink.tooltips.clearUrl')}>
                   <X size={12} />
                 </button>
               )}
             </div>
+            {isAutoFetching && (
+              <div className="mt-2 p-3 rounded-lg flex flex-col gap-2" style={{ backgroundColor: 'rgba(var(--primary-rgb), 0.05)', border: '1px solid rgba(var(--primary-rgb), 0.1)' }}>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="flex items-center gap-1.5 text-primary font-medium">
+                    <Sparkles size={12} className="animate-pulse" />
+                    {t(`container.modals.addLink.fetching.step${fetchSequence + 1}`)}
+                  </span>
+                  <span className="text-gray-500 font-medium" style={{ opacity: 0.7 }}>
+                    ~1s
+                  </span>
+                </div>
+                <div className="h-1.5 w-full bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-primary transition-all duration-500 ease-out rounded-full"
+                    style={{ width: `${(fetchSequence + 1) * 25}%` }}
+                  />
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="form-group">

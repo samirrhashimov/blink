@@ -56,7 +56,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
 
     return (
         <div className="modal-overlay" onClick={handleClose}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-content scale-in" onClick={(e) => e.stopPropagation()}>
                 <div className="modal-header">
                     <h2>{title}</h2>
                     <button onClick={handleClose} className="modal-close">

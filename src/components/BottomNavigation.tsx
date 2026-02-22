@@ -35,7 +35,7 @@ const BottomNavigation: React.FC = () => {
                 <span>Tags</span>
             </NavLink>
             <div className="bottom-nav-item center-item" onClick={handlePlusClick}>
-                <div className="center-item-inner">
+                <div className="center-item-inner hover-lift">
                     <Plus size={32} />
                 </div>
             </div>

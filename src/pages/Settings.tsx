@@ -29,7 +29,7 @@ import '../css/Settings.css';
 const Settings: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { currentUser, logout, deleteAccount } = useAuth();
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, animationsEnabled, toggleAnimations } = useTheme();
   const { containers } = useContainer();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -281,7 +281,7 @@ const Settings: React.FC = () => {
       </header>
 
       {/* Main Content */}
-      <main className="container">
+      <main className="container fade-in">
         <div className="container-header">
           <h2>{t('settings.title')}</h2>
           <p>{t('settings.subtitle')}</p>
@@ -374,6 +374,29 @@ const Settings: React.FC = () => {
                       <Sun className="toggle-icon" />
                     )}
                   </div>
+                </div>
+              </div>
+
+              {/* Animation Toggle */}
+              <div className="settings-item">
+                <div className="settings-item-info">
+                  <h4>{t('settings.animations')}</h4>
+                  <p>{t('settings.animationsDesc')}</p>
+                </div>
+                <div
+                  className={`toggle-switch ${animationsEnabled ? 'checked' : ''}`}
+                  onClick={toggleAnimations}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      toggleAnimations();
+                    }
+                  }}
+                  aria-label="Toggle animations"
+                >
+                  <div className="toggle-thumb" />
                 </div>
               </div>
               <div className="settings-item">

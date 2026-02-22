@@ -5,6 +5,8 @@ type Theme = 'light' | 'dark';
 interface ThemeContextType {
   theme: Theme;
   toggleTheme: () => void;
+  animationsEnabled: boolean;
+  toggleAnimations: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -23,6 +25,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return savedTheme || 'light';
   });
 
+  const [animationsEnabled, setAnimationsEnabled] = useState<boolean>(() => {
+    const saved = localStorage.getItem('blink-animations');
+    return saved !== null ? saved === 'true' : true;
+  });
+
   useEffect(() => {
     const root = window.document.documentElement;
     root.classList.remove('light', 'dark');
@@ -30,13 +37,29 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     localStorage.setItem('blink-theme', theme);
   }, [theme]);
 
+  useEffect(() => {
+    const root = window.document.documentElement;
+    if (animationsEnabled) {
+      root.classList.add('animations-enabled');
+    } else {
+      root.classList.remove('animations-enabled');
+    }
+    localStorage.setItem('blink-animations', String(animationsEnabled));
+  }, [animationsEnabled]);
+
   const toggleTheme = () => {
     setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
   };
 
+  const toggleAnimations = () => {
+    setAnimationsEnabled(prev => !prev);
+  };
+
   const value: ThemeContextType = {
     theme,
-    toggleTheme
+    toggleTheme,
+    animationsEnabled,
+    toggleAnimations
   };
 
   return (

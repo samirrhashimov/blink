@@ -151,6 +151,8 @@
         "themeDesc": "Switch between light and dark modes.",
         "language": "Language",
         "languageDesc": "Select your preferred application language.",
+        "animations": "Animations",
+        "animationsDesc": "Enable or disable application animations.",
         "dataManagement": "Data Management",
         "import": "Import Bookmarks",
         "importDesc": "Import bookmarks from an HTML file exported from your browser.",
@@ -387,6 +389,12 @@
                 "description": "Description",
                 "tags": "Tags",
                 "autoFilled": "Auto-filled",
+                "fetching": {
+                    "step1": "Analyzing URL...",
+                    "step2": "Fetching metadata...",
+                    "step3": "Extracting details...",
+                    "step4": "Almost done..."
+                },
                 "placeholders": {
                     "url": "https://example.com",
                     "title": "Enter link title",

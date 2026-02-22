@@ -132,7 +132,7 @@ const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onClose
       <div className="notification-backdrop" onClick={onClose} />
 
       {/* Panel */}
-      <div ref={panelRef} className="notifications-panel">
+      <div ref={panelRef} className="notifications-panel slide-up">
 
         {/* Header */}
         <div className="notification-header">

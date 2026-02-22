@@ -131,16 +131,31 @@ const ContainerDetails: React.FC = () => {
     setShowDeleteConfirmModal(true);
   };
 
+  const [deletingLinkId, setDeletingLinkId] = useState<string | null>(null);
+  const [deletingLinkIds, setDeletingLinkIds] = useState<Set<string>>(new Set());
+  const [newlyAddedLinkId, setNewlyAddedLinkId] = useState<string | null>(null);
+
   const confirmBulkDelete = async () => {
     try {
       if (!container) return;
+
+      // Close modal immediately so animation is visible
+      setShowDeleteConfirmModal(false);
+
+      setDeletingLinkIds(new Set(selectedLinkIds));
+
+      // Wait for animation (400ms match CSS)
+      await new Promise(resolve => setTimeout(resolve, 400));
+
       await deleteLinksFromContainer(container.id, Array.from(selectedLinkIds));
       toast.success(t('container.messages.deleted', { count: selectedLinkIds.size }));
       setSelectionMode(false);
       setSelectedLinkIds(new Set());
+      setDeletingLinkIds(new Set());
     } catch (err: any) {
       console.error('Bulk delete error:', err);
       toast.error(err.message || t('container.messages.deleteError'));
+      setDeletingLinkIds(new Set());
       throw err;
     }
   };
@@ -366,27 +381,45 @@ const ContainerDetails: React.FC = () => {
   const confirmDeleteLink = async () => {
     if (!selectedLink || !container) return;
     try {
-      await deleteLinkFromContainer(container.id, selectedLink.id);
+      // Close modal immediately so animation is visible
       setShowDeleteLinkModal(false);
+
+      setDeletingLinkId(selectedLink.id);
+
+      // Wait for animation (400ms match CSS)
+      await new Promise(resolve => setTimeout(resolve, 400));
+
+      await deleteLinkFromContainer(container.id, selectedLink.id);
       setSelectedLink(null);
+      setDeletingLinkId(null);
       toast.success(t('container.messages.linkDeleted'));
     } catch (err: any) {
       console.error('Error deleting link:', err);
       toast.error(err.message || t('container.messages.linkDeleteError'));
+      setDeletingLinkId(null);
     }
   };
+
+  const [isDeletingContainer, setIsDeletingContainer] = useState(false);
 
   const confirmDeleteContainer = async () => {
     if (!container) return;
     try {
-      await deleteContainer(container.id);
+      // Close modal immediately
       setShowDeleteContainerModal(false);
+
+      setIsDeletingContainer(true);
+
+      // Wait for animation
+      await new Promise(resolve => setTimeout(resolve, 400));
+
+      await deleteContainer(container.id);
       toast.success(t('container.messages.containerDeleted'));
       navigate('/dashboard');
     } catch (err: any) {
       console.error('Error deleting container:', err);
       toast.error(err.message || t('container.messages.containerDeleteError'));
-      setShowDeleteContainerModal(false);
+      setIsDeletingContainer(false);
     }
   };
 
@@ -438,6 +471,23 @@ const ContainerDetails: React.FC = () => {
       '99, 102, 241';
   };
 
+  // Detect newly added links
+  const [prevLinksCount, setPrevLinksCount] = useState(container?.links.length || 0);
+  useEffect(() => {
+    if (container && container.links.length > prevLinksCount) {
+      // Find the link with the newest createdAt
+      const newestLink = [...container.links].sort((a, b) =>
+        (b.createdAt as any)?.seconds - (a.createdAt as any)?.seconds
+      )[0];
+
+      if (newestLink) {
+        setNewlyAddedLinkId(newestLink.id);
+        setTimeout(() => setNewlyAddedLinkId(null), 3000); // Clear after 3 seconds
+      }
+    }
+    setPrevLinksCount(container?.links.length || 0);
+  }, [container?.links.length]);
+
   return (
     <div
       className="container-details-page"
@@ -472,7 +522,7 @@ const ContainerDetails: React.FC = () => {
         </div>
       </header>
 
-      <main className="container">
+      <main className={`container fade-in ${isDeletingContainer ? 'disintegrate' : ''}`}>
         <div className="container-header">
           <div className="container-header-info">
             <h2 className="container-name-title">{container.name}</h2>
@@ -616,6 +666,8 @@ const ContainerDetails: React.FC = () => {
                           selectionMode={selectionMode}
                           isSelected={selectedLinkIds.has(link.id)}
                           onSelect={handleSelectLink}
+                          isDeleting={deletingLinkId === link.id || deletingLinkIds.has(link.id)}
+                          isNewlyAdded={newlyAddedLinkId === link.id}
                         />
                       ))}
                     </div>

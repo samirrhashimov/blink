@@ -151,6 +151,8 @@
         "themeDesc": "Açık ve karanlık modlar arasında geçiş yapın.",
         "language": "Dil",
         "languageDesc": "Tercih ettiğiniz uygulama dilini seçin.",
+        "animations": "Animasyonlar",
+        "animationsDesc": "Uygulama animasyonlarını açın veya kapatın.",
         "dataManagement": "Veri Yönetimi",
         "import": "Yer İmlerini İçe Aktar",
         "importDesc": "Tarayıcınızdan dışa aktarılan bir HTML dosyasından yer imlerini içe aktarın.",
@@ -387,6 +389,12 @@
                 "description": "Açıklama",
                 "tags": "Etiketler",
                 "autoFilled": "Otomatik dolduruldu",
+                "fetching": {
+                    "step1": "URL analiz ediliyor...",
+                    "step2": "Meta veriler alınıyor...",
+                    "step3": "Detaylar çıkarılıyor...",
+                    "step4": "Neredeyse bitti..."
+                },
                 "placeholders": {
                     "url": "https://ornek.com",
                     "title": "Link başlığını girin",

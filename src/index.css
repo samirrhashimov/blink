@@ -781,3 +781,227 @@ body {
   width: 14px;
   height: 14px;
 }
+
+/* Animations */
+.animations-enabled .fade-in {
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.animations-enabled .slide-up {
+  animation: slideUp 0.4s ease-out forwards;
+}
+
+.animations-enabled .scale-in {
+  animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animations-enabled .modal-content {
+  animation: scaleIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animations-enabled .notifications-panel {
+  animation: slideUp 0.4s ease-out forwards;
+}
+
+/* Global Transition Override */
+.animations-enabled body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.animations-enabled * {
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Simple Disappear Animation */
+@keyframes quickFadeOut {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+
+.animations-enabled .disintegrate {
+  animation: quickFadeOut 0.4s ease-out forwards;
+  pointer-events: none;
+  z-index: 10000;
+  position: relative;
+}
+
+/* Pressed-in Effect */
+.animations-enabled .hover-inset:hover {
+  transform: scale(0.99);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.03);
+  border-color: rgba(0, 0, 0, 0.05);
+}
+
+.dark.animations-enabled .hover-inset:hover {
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.15);
+  border-color: rgba(255, 255, 255, 0.03);
+}
+
+@keyframes highlight-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0.4);
+    transform: scale(1.02);
+  }
+
+  70% {
+    box-shadow: 0 0 0 10px rgba(var(--primary-rgb), 0);
+    transform: scale(1);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--primary-rgb), 0);
+    transform: scale(1);
+  }
+}
+
+.animations-enabled .newly-added {
+  animation: highlight-pulse 2s ease-out;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg,
+      var(--bg-active) 25%,
+      var(--bg-hover) 50%,
+      var(--bg-active) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite linear;
+}
+
+/* Glassmorphism Refinement */
+.glass-card {
+  background: rgba(var(--bg-surface-rgb, 255, 255, 255), 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass-card {
+  background: rgba(31, 41, 55, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@keyframes success-bounce {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+    color: #10b981;
+  }
+}
+
+.success-bounce {
+  animation: success-bounce 0.5s ease;
+}
+
+/* UX Refinements */
+.glass-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-hover:hover {
+  background: rgba(var(--primary-rgb), 0.05);
+  border-color: rgba(var(--primary-rgb), 0.3);
+  transform: translateY(-2px);
+}
+
+/* Micro-interactions */
+.active-press:active {
+  transform: scale(0.96);
+}
+
+/* Custom Scrollbar for modern feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Specific Interactive Animations */
+.animations-enabled .hover-scale:hover {
+  transform: scale(1.02);
+}
+
+.animations-enabled .hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.animations-enabled .btn-primary:active,
+.animations-enabled .btn-secondary:active,
+.animations-enabled .btn-danger:active {
+  transform: scale(0.95);
+}

@@ -100,7 +100,7 @@ const Tags: React.FC = () => {
 
                 <div className="tags-explorer-layout">
                     {/* Tags Sidebar */}
-                    <aside className="tags-sidebar">
+                    <aside className="tags-sidebar fade-in">
                         <div className="sidebar-header">
                             <Tag size={18} />
                             <h3>{t('tags.sidebar.title', { count: uniqueTags.length })}</h3>
@@ -127,7 +127,7 @@ const Tags: React.FC = () => {
                     </aside>
 
                     {/* Links Content */}
-                    <section className="tags-content">
+                    <section className="tags-content fade-in">
                         {selectedTag ? (
                             <>
                                 <div className="content-header">

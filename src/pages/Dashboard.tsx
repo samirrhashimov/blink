@@ -57,6 +57,24 @@ const Dashboard: React.FC = () => {
   const personalContainers = containers.filter(container => !container.isShared);
   const sharedContainers = containers.filter(container => container.isShared);
 
+  const [newlyAddedContainerId, setNewlyAddedContainerId] = useState<string | null>(null);
+  const [prevContainersCount, setPrevContainersCount] = useState(containers.length);
+
+  useEffect(() => {
+    if (containers.length > prevContainersCount) {
+      // Find the newest container (by ID or some logic, but let's assume the one not in previous ones)
+      // Actually, containers are often sorted or just appended.
+      // Let's find the one with the highest timestamp if available, but containers might not have it in this view.
+      // Simplest: find the container that wasn't in the previous list.
+      const newContainer = containers.find(c => !personalContainers.some(p => p.id === c.id) && !sharedContainers.some(s => s.id === c.id));
+      if (newContainer) {
+        setNewlyAddedContainerId(newContainer.id);
+        setTimeout(() => setNewlyAddedContainerId(null), 3000);
+      }
+    }
+    setPrevContainersCount(containers.length);
+  }, [containers.length]);
+
   // Enhanced search: search in container name, description, and link titles
   const filteredPersonalContainers = personalContainers.filter(container => {
     const query = searchQuery.toLowerCase();
@@ -233,7 +251,7 @@ const Dashboard: React.FC = () => {
         </div>
 
         {/* Personal Containers */}
-        <section>
+        <section className="fade-in">
           <h2 className="section-title">{t('dashboard.personal')}</h2>
           {filteredPersonalContainers.length === 0 ? (
             <div className="empty-state">
@@ -276,7 +294,7 @@ const Dashboard: React.FC = () => {
                   <Link
                     key={container.id}
                     to={`/container/${container.id}`}
-                    className={`container-card ${isLightColor(containerColor) ? 'light-color' : ''}`}
+                    className={`container-card hover-lift ${isLightColor(containerColor) ? 'light-color' : ''} ${newlyAddedContainerId === container.id ? 'newly-added' : ''}`}
                     style={{ '--container-color': containerColor } as React.CSSProperties}
                   >
                     <div className="container-card-overlay" style={{ backgroundColor: containerColor }}></div>
@@ -294,7 +312,7 @@ const Dashboard: React.FC = () => {
         </section>
 
         {/* Shared Containers */}
-        <section style={{ marginTop: '3rem' }}>
+        <section className="fade-in" style={{ marginTop: '3rem' }}>
           <h2 className="section-title">{t('dashboard.shared')}</h2>
           {filteredSharedContainers.length === 0 ? (
             <div className="empty-state">
@@ -327,7 +345,7 @@ const Dashboard: React.FC = () => {
                   <Link
                     key={container.id}
                     to={`/container/${container.id}`}
-                    className={`container-card ${isLightColor(containerColor) ? 'light-color' : ''}`}
+                    className={`container-card hover-lift ${isLightColor(containerColor) ? 'light-color' : ''} ${newlyAddedContainerId === container.id ? 'newly-added' : ''}`}
                     style={{ '--container-color': containerColor } as React.CSSProperties}
                   >
                     <div className="container-card-overlay" style={{ backgroundColor: containerColor }}></div>
