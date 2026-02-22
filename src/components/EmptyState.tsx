@@ -1,9 +1,9 @@
 import React from 'react';
-import { Leaf, SearchX, Inbox, BellOff, Tag } from 'lucide-react';
+import { Leaf, SearchX, Inbox, BellOff, Tag, MailOpen } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
 
 interface EmptyStateProps {
-    type: 'search' | 'personal' | 'shared' | 'links' | 'tags' | 'notifications';
+    type: 'search' | 'personal' | 'shared' | 'links' | 'tags' | 'notifications' | 'invitations';
     title: string;
     description: string;
     action?: React.ReactNode;
@@ -22,6 +22,8 @@ const EmptyState: React.FC<EmptyStateProps> = ({ type, title, description, actio
                 return <Tag className="text-amber-500 dark:text-amber-400" />;
             case 'notifications':
                 return <BellOff className="text-gray-300 dark:text-gray-600" />;
+            case 'invitations':
+                return <MailOpen className="text-amber-500 dark:text-amber-400" />;
             case 'personal':
             case 'shared':
             default:

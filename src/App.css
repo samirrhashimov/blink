@@ -608,12 +608,11 @@ textarea {
 }
 
 .add-button:hover {
-  transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
 }
 
 .add-button:active {
-  transform: translateY(0);
+  transform: scale(0.98);
 }
 
 .theme-toggle,
@@ -638,9 +637,27 @@ textarea {
 
 .theme-toggle:hover,
 .settings-link:hover,
-.logout-button:hover {
-  background: rgba(99, 102, 241, 0.1);
-  color: #6366f1;
+.logout-button:hover,
+.back-link:hover {
+  background: rgba(255, 255, 255, 0.8) !important;
+  color: var(--primary) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.dark .theme-toggle:hover,
+.dark .settings-link:hover,
+.dark .logout-button:hover,
+.dark .back-link:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+}
+
+/* Animation aware hover scaling - Removed translateY as requested */
+.animations-enabled .theme-toggle:hover,
+.animations-enabled .settings-link:hover,
+.animations-enabled .logout-button:hover,
+.animations-enabled .back-link:hover {
+  transform: none;
 }
 
 .user-avatar {
@@ -2154,12 +2171,12 @@ main.container {
 }
 
 .submit-button:hover:not(:disabled) {
-  transform: translateY(-2px);
+  opacity: 0.9;
   box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
 }
 
 .submit-button:active:not(:disabled) {
-  transform: translateY(0);
+  transform: scale(0.98);
 }
 
 .auth-footer {
@@ -2257,7 +2274,6 @@ main.container {
 }
 
 .container-card:hover {
-  transform: translateY(-5px);
   box-shadow: 0 12px 24px -6px color-mix(in srgb, var(--container-color, #6366f1), transparent 70%);
 }
 
@@ -2811,7 +2827,6 @@ main.container {
 
 .btn-danger:hover {
   background: #dc2626 !important;
-  transform: translateY(-2px);
   box-shadow: 0 6px 18px rgba(239, 68, 68, 0.3);
 }
 
@@ -3750,7 +3765,6 @@ tr:hover {
 }
 
 .invitation-item:hover {
-  transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   border-color: var(--primary, #6366f1);
 }

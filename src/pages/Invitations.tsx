@@ -21,6 +21,7 @@ import {
   MessageCircle,
   Edit3
 } from 'lucide-react';
+import EmptyState from '../components/EmptyState';
 
 const Invitations: React.FC = () => {
   const { t } = useTranslation();
@@ -160,23 +161,20 @@ const Invitations: React.FC = () => {
                 <LoadingSkeleton variant="card" count={3} />
               </div>
             ) : invitations.length === 0 ? (
-              <div className="text-center py-16">
-                <div className="collaborators-widget" style={{ maxWidth: '500px', margin: '0 auto' }}>
-                  <UserPlus className="h-16 w-16 text-gray-400 dark:text-gray-600 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold mb-2">
-                    {t('invitations.empty.title')}
-                  </h3>
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
-                    {t('invitations.empty.desc')}
-                  </p>
+              <EmptyState
+                type="invitations"
+                title={t('invitations.empty.title')}
+                description={t('invitations.empty.desc')}
+                action={
                   <Link
                     to="/dashboard"
                     className="btn-primary inline-block"
+                    style={{ textDecoration: 'none' }}
                   >
                     {t('invitations.empty.button')}
                   </Link>
-                </div>
-              </div>
+                }
+              />
             ) : (
               <div className="links-list">
                 {invitations.map((invite) => (
