@@ -310,12 +310,18 @@
 }
 
 .about-btn-primary {
-  background: linear-gradient(to right, #3b82f6, #06b6d4);
+  background: #13a4ec;
   color: #ffffff;
+  border: 1px solid #13a4ec;
 }
 
-.about-btn-primary:hover {
-  background: linear-gradient(to right, #2563eb, #0891b2);
+.about-btn-primary:hover,
+.btn-primary:hover {
+  background: transparent !important;
+  color: #13a4ec !important;
+  border-color: #13a4ec !important;
+  box-shadow: none !important;
+  transform: none !important;
 }
 
 .about-btn-secondary {
@@ -465,9 +471,9 @@ body,
 /* Buttons contrast */
 .about-btn-primary,
 .btn-primary {
-  background: #06b6d4;
+  background: #13a4ec;
   color: #ffffff;
-  border: 1px solid transparent;
+  border: 1px solid #13a4ec;
 }
 
 .about-btn-secondary,
@@ -799,9 +805,86 @@ body,
 /* Color Demo Palette */
 .color-demo-palette {
   display: flex;
+  gap: 0.5rem;
   flex-wrap: wrap;
-  gap: 0.75rem;
+}
+
+/* Language Dropdown */
+.language-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  min-width: 140px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 0.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.dark .language-dropdown {
+  background: rgba(30, 41, 59, 0.9);
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+.language-option {
+  display: flex;
   align-items: center;
+  padding: 0.625rem 0.875rem;
+  border-radius: 8px;
+  background: transparent;
+  color: #1e293b;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+}
+
+.dark .language-option {
+  color: #f1f5f9;
+}
+
+.language-option:hover {
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+}
+
+.dark .language-option:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: #60a5fa;
+}
+
+.language-option.active {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+}
+
+.dark .language-option.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: #60a5fa;
+}
+
+.animate-appear {
+  animation: dropdownAppear 0.3s cubic-bezier(0, 0, 0.2, 1) forwards;
+}
+
+@keyframes dropdownAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .color-demo-option {

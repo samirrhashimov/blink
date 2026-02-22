@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
-import { Lock, Share2, Zap, Users, Search, Moon, Sun, Shield, Layout, Globe, Tag, Palette, Github, HelpCircle } from 'lucide-react';
+import { Lock, Share2, Zap, Users, Search, Moon, Sun, Shield, Layout, Globe, Tag, Palette, Github, HelpCircle, ArrowRight } from 'lucide-react';
 import blinkLogo from '../assets/blinklogo2.png';
 import homepageImg from '../assets/Screenshots/homepage.png';
 import inviteImg from '../assets/Screenshots/invite.png';
@@ -35,6 +35,7 @@ const LandingPage: React.FC = () => {
               <img src={blinkLogo} alt="Blink" className="landing-logo" />
             </div>
             <div className="flex items-center gap-2">
+              <LanguageToggle />
               <button
                 onClick={toggleTheme}
                 className="theme-toggle-btn"
@@ -43,7 +44,6 @@ const LandingPage: React.FC = () => {
               >
                 {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
               </button>
-              <LanguageToggle className="theme-toggle-btn uppercase font-bold text-xs" />
               <a
                 href="https://github.com/samirrhashimov/blink"
                 target="_blank"
@@ -119,10 +119,12 @@ const LandingPage: React.FC = () => {
               {t('landing.hero.subtitle')}
             </p>
             <div className="hero-buttons flex gap-4">
-              <Link to="/signup" className="btn-primary about-btn-primary px-8 py-3 text-lg rounded-full shadow-lg hover:shadow-xl transition-all">
+              <Link to="/signup" className="btn-primary about-btn-primary px-8 py-3 text-lg rounded-full shadow-lg hover:shadow-xl transition-all flex items-center gap-2">
                 {t('landing.hero.startFree')}
+                <ArrowRight size={20} />
               </Link>
-              <Link to="https://github.com/samirrhashimov/blink.git" className="btn-secondary about-btn-secondary px-8 py-3 text-lg rounded-full">
+              <Link to="https://github.com/samirrhashimov/blink.git" className="btn-secondary about-btn-secondary px-8 py-3 text-lg rounded-full flex items-center gap-2">
+                <Github size={20} />
                 {t('landing.hero.viewGithub')}
               </Link>
             </div>
