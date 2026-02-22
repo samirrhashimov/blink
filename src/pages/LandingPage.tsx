@@ -423,9 +423,9 @@ const LandingPage: React.FC = () => {
       <footer className="about-footer border-t border-gray-200 dark:border-gray-800">
         <div className="about-footer-container flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center gap-2 mb-4 md:mb-0">
-            <span className="text-gray-300 font-medium">© {new Date().getFullYear()} Blink - by LinzaApps</span>
+            <span className="text-gray-600 dark:text-gray-400 font-medium">© {new Date().getFullYear()} Blink - by LinzaApps</span>
           </div>
-          <div className="flex gap-6 text-gray-300 text-sm">
+          <div className="flex gap-6 text-gray-600 dark:text-gray-400 text-sm">
             <a href="#"
               onClick={(e) => {
                 e.preventDefault();
