@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useContainer } from '../contexts/ContainerContext';
-import { X, Link as LinkIcon, Sparkles, Tag, Plus } from 'lucide-react';
+import { X, Link as LinkIcon, Sparkles, Tag, Plus, Loader2 } from 'lucide-react';
 import LinkPreviewService from '../services/linkPreviewService';
 
 interface AddLinkModalProps {
@@ -276,7 +276,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
               <div className="mt-2 p-3 rounded-lg flex flex-col gap-2" style={{ backgroundColor: 'rgba(var(--primary-rgb), 0.05)', border: '1px solid rgba(var(--primary-rgb), 0.1)' }}>
                 <div className="flex justify-between items-center text-xs">
                   <span className="flex items-center gap-1.5 text-primary font-medium">
-                    <Sparkles size={12} className="animate-pulse" />
+                    <Loader2 size={12} className="animate-spin" />
                     {t(`container.modals.addLink.fetching.step${fetchSequence + 1}`)}
                   </span>
                   <span className="text-gray-500 font-medium" style={{ opacity: 0.7 }}>
