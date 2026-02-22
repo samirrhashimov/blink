@@ -104,7 +104,8 @@
     },
     "notifications": {
         "title": "Bildirimler",
-        "empty": "Bildirim yok",
+        "empty": "Hepsi bu kadar!",
+        "emptyDesc": "Şu anda yeni bir bildiriminiz yok. Önemli bir gelişme olduğunda sizi haberdar edeceğiz.",
         "markAllRead": "Tümünü okundu işaretle",
         "markRead": "Okundu işaretle",
         "delete": "Sil",

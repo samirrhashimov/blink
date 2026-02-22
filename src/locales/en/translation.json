@@ -104,7 +104,8 @@
     },
     "notifications": {
         "title": "Notifications",
-        "empty": "No notifications",
+        "empty": "All caught up!",
+        "emptyDesc": "You don't have any new notifications at the moment. We'll let you know when something happens.",
         "markAllRead": "Mark all as read",
         "markRead": "Mark as read",
         "delete": "Delete",

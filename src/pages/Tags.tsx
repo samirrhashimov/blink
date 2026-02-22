@@ -10,11 +10,11 @@ import {
     ArrowLeft,
     ExternalLink,
     ChevronRight,
-    SearchX,
     Pin
 } from 'lucide-react';
 import blinkLogo from '../assets/blinklogo2.png';
 import LoadingSkeleton from '../components/LoadingSkeleton';
+import EmptyState from '../components/EmptyState';
 import SEO from '../components/SEO';
 
 const Tags: React.FC = () => {
@@ -174,18 +174,22 @@ const Tags: React.FC = () => {
                                 </div>
                             </>
                         ) : uniqueTags.length === 0 ? (
-                            <div className="empty-selection-state">
-                                <SearchX size={48} className="empty-state-icon" />
-                                <h3>{t('tags.empty.noTags.title')}</h3>
-                                <p>{t('tags.empty.noTags.desc')}</p>
-                                <Link to="/dashboard" className="btn-primary go-to-dashboard-btn">{t('tags.empty.button')}</Link>
-                            </div>
+                            <EmptyState
+                                type="tags"
+                                title={t('tags.empty.noTags.title')}
+                                description={t('tags.empty.noTags.desc')}
+                                action={
+                                    <Link to="/dashboard" className="btn-primary go-to-dashboard-btn" style={{ textDecoration: 'none' }}>
+                                        {t('tags.empty.button')}
+                                    </Link>
+                                }
+                            />
                         ) : (
-                            <div className="empty-selection-state">
-                                <Tag size={48} className="empty-state-icon" />
-                                <h3>{t('tags.empty.noSelection.title')}</h3>
-                                <p>{t('tags.empty.noSelection.desc')}</p>
-                            </div>
+                            <EmptyState
+                                type="search"
+                                title={t('tags.empty.noSelection.title')}
+                                description={t('tags.empty.noSelection.desc')}
+                            />
                         )}
                     </section>
                 </div>

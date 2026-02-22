@@ -5,6 +5,7 @@ import { X, Check, Trash2, CheckCheck } from 'lucide-react';
 import { NotificationService } from '../services/notificationService';
 import type { Notification } from '../types/notification';
 import LoadingSkeleton from './LoadingSkeleton';
+import EmptyState from './EmptyState';
 
 interface NotificationsPanelProps {
   isOpen: boolean;
@@ -163,9 +164,11 @@ const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onClose
               <LoadingSkeleton variant="card" count={3} />
             </div>
           ) : notifications.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-gray-500 py-8">
-              <p>{t('notifications.empty')}</p>
-            </div>
+            <EmptyState
+              type="notifications"
+              title={t('notifications.empty')}
+              description={t('notifications.emptyDesc')}
+            />
           ) : (
             <div className="flex flex-col gap-1">
               {notifications.map((notification) => (
