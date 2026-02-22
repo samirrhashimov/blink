@@ -328,8 +328,10 @@
         "selected": "seçili",
         "addLink": "Link Ekle",
         "searchLinks": "Linklerde ara...",
-        "empty": "Henüz link yok. Başlamak için \"Link Ekle\"ye tıklayın.",
-        "emptySearch": "Aramanızla eşleşen link yok.",
+        "empty": "Henüz link yok",
+        "emptyDesc": "Bu konteyner harika linklerinizi bekliyor. Başlamak için birkaç tane ekleyin!",
+        "emptySearch": "Aradığınız kriterlerde link bulunamadı",
+        "emptySearchDesc": "Aramanızla eşleşen bir sonuç bulamadık. Lütfen farklı anahtar kelimeler deneyin.",
         "collaborators": {
             "title": "Katılımcılar",
             "owner": "Sahip",
@@ -559,6 +561,7 @@
         "cancel": "İptal",
         "save": "Kaydet",
         "loading": "Yükleniyor...",
+        "undo": "Geri Al",
         "buttons": {
             "save": "Kaydet",
             "cancel": "İptal",

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useContainer } from '../contexts/ContainerContext';
@@ -33,6 +33,7 @@ import MoveLinkModal from '../components/MoveLinkModal';
 import LinkStatsModal from '../components/LinkStatsModal';
 import QRCodeModal from '../components/QRCodeModal';
 import SEO from '../components/SEO';
+import EmptyState from '../components/EmptyState';
 import {
   DndContext,
   closestCenter,
@@ -134,6 +135,22 @@ const ContainerDetails: React.FC = () => {
   const [deletingLinkId, setDeletingLinkId] = useState<string | null>(null);
   const [deletingLinkIds, setDeletingLinkIds] = useState<Set<string>>(new Set());
   const [newlyAddedLinkId, setNewlyAddedLinkId] = useState<string | null>(null);
+
+  const [softDeletedLinks, setSoftDeletedLinks] = useState<Set<string>>(new Set());
+  const deleteTimers = useRef<Record<string, any>>({});
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't intercept if inside an input or textarea unless it's strictly the command
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'f')) {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const confirmBulkDelete = async () => {
     try {
@@ -322,6 +339,7 @@ const ContainerDetails: React.FC = () => {
 
   // Filter links based on search query
   const filteredLinks = container?.links.filter(link => {
+    if (softDeletedLinks.has(link.id)) return false;
     const query = linkSearchQuery.toLowerCase();
     return (
       link.title.toLowerCase().includes(query) ||
@@ -349,8 +367,40 @@ const ContainerDetails: React.FC = () => {
   };
 
   const handleDeleteLink = (link: LinkType) => {
-    setSelectedLink(link);
-    setShowDeleteLinkModal(true);
+    if (!container) return;
+
+    // 1. Mark as disintegrating to trigger CSS animation
+    setDeletingLinkId(link.id);
+
+    // 2. Wait for animation, then soft delete and show Toast with Undo
+    setTimeout(() => {
+      setDeletingLinkId(null);
+      setSoftDeletedLinks(prev => new Set(prev).add(link.id));
+
+      const timerId = setTimeout(async () => {
+        try {
+          await deleteLinkFromContainer(container.id, link.id);
+        } catch (err: any) {
+          console.error('Error hard deleting link:', err);
+        }
+        delete deleteTimers.current[link.id];
+      }, 5000);
+
+      deleteTimers.current[link.id] = timerId;
+
+      toast.success(t('container.messages.linkDeleted'), 5000, {
+        label: t('common.undo') || 'Undo',
+        onClick: () => {
+          clearTimeout(deleteTimers.current[link.id]);
+          delete deleteTimers.current[link.id];
+          setSoftDeletedLinks(prev => {
+            const next = new Set(prev);
+            next.delete(link.id);
+            return next;
+          });
+        }
+      });
+    }, 400); // 400ms match current CSS fadeOut
   };
 
   const handleTogglePin = async (link: LinkType) => {
@@ -378,27 +428,7 @@ const ContainerDetails: React.FC = () => {
     setShowQRCodeModal(true);
   };
 
-  const confirmDeleteLink = async () => {
-    if (!selectedLink || !container) return;
-    try {
-      // Close modal immediately so animation is visible
-      setShowDeleteLinkModal(false);
-
-      setDeletingLinkId(selectedLink.id);
-
-      // Wait for animation (400ms match CSS)
-      await new Promise(resolve => setTimeout(resolve, 400));
-
-      await deleteLinkFromContainer(container.id, selectedLink.id);
-      setSelectedLink(null);
-      setDeletingLinkId(null);
-      toast.success(t('container.messages.linkDeleted'));
-    } catch (err: any) {
-      console.error('Error deleting link:', err);
-      toast.error(err.message || t('container.messages.linkDeleteError'));
-      setDeletingLinkId(null);
-    }
-  };
+  const confirmDeleteLink = async () => { };
 
   const [isDeletingContainer, setIsDeletingContainer] = useState(false);
 
@@ -574,6 +604,7 @@ const ContainerDetails: React.FC = () => {
               <div className="modern-search-bar search-links-wrapper">
                 <Search className="modern-search-icon" size={18} />
                 <input
+                  ref={searchInputRef}
                   type="text"
                   placeholder={t('container.searchLinks')}
                   value={linkSearchQuery}
@@ -630,12 +661,20 @@ const ContainerDetails: React.FC = () => {
 
             <div className="links-list">
               {container.links.length === 0 ? (
-                <div className="empty-links-state">
-                  <p>{t('container.empty')}</p>
+                <div className="fade-in">
+                  <EmptyState
+                    type="links"
+                    title={t('container.empty')}
+                    description={t('container.emptyDesc')}
+                  />
                 </div>
               ) : filteredLinks.length === 0 ? (
-                <div className="empty-search-state">
-                  <p>{t('container.emptySearch')}</p>
+                <div className="fade-in">
+                  <EmptyState
+                    type="search"
+                    title={t('container.emptySearch')}
+                    description={t('container.emptySearchDesc')}
+                  />
                 </div>
               ) : (
                 <DndContext

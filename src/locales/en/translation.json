@@ -328,8 +328,10 @@
         "selected": "selected",
         "addLink": "Add Link",
         "searchLinks": "Search links...",
-        "empty": "No links yet. Click \"Add Link\" to get started.",
-        "emptySearch": "No links match your search.",
+        "empty": "No links yet",
+        "emptyDesc": "This container is waiting for your awesome links. Add some to get started!",
+        "emptySearch": "No links match your search",
+        "emptySearchDesc": "We couldn't find any links matching your search. Try changing the query.",
         "collaborators": {
             "title": "Collaborators",
             "owner": "Owner",
@@ -561,6 +563,7 @@
             "operationFailed": "Operation failed"
         },
         "loading": "Loading...",
+        "undo": "Undo",
         "buttons": {
             "save": "Save",
             "cancel": "Cancel",

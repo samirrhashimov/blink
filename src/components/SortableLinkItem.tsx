@@ -60,6 +60,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
 }) => {
     const { t } = useTranslation();
     const [menuOpen, setMenuOpen] = useState(false);
+    const [menuPosition, setMenuPosition] = useState<{ x: number, y: number } | null>(null);
     const menuRef = useRef<HTMLDivElement>(null);
 
     const {
@@ -98,7 +99,15 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
     const handleAction = (e: React.MouseEvent, action: () => void) => {
         e.stopPropagation();
         setMenuOpen(false);
+        setMenuPosition(null);
         action();
+    };
+
+    const handleContextMenu = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setMenuPosition({ x: e.clientX, y: e.clientY });
+        setMenuOpen(true);
     };
 
     return (
@@ -112,6 +121,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                     onSelect(link);
                 }
             }}
+            onContextMenu={handleContextMenu}
         >
             <div className="link-item-content">
                 <div className="link-icon">
@@ -187,7 +197,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
 
                 <div className="more-menu-container" ref={menuRef}>
                     <button
-                        onClick={(e) => { e.stopPropagation(); setMenuOpen(!menuOpen); }}
+                        onClick={(e) => { e.stopPropagation(); setMenuPosition(null); setMenuOpen(!menuOpen); }}
                         className={`action-pill more-pill ${menuOpen ? 'active' : ''}`}
                         title={t('container.menu.more')}
                     >
@@ -195,7 +205,18 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                     </button>
 
                     {menuOpen && (
-                        <div className="link-menu-dropdown" onClick={(e) => e.stopPropagation()}>
+                        <div
+                            className="link-menu-dropdown"
+                            onClick={(e) => e.stopPropagation()}
+                            style={menuPosition ? {
+                                position: 'fixed',
+                                top: menuPosition.y,
+                                left: menuPosition.x,
+                                right: 'auto',
+                                transform: 'none',
+                                zIndex: 10000
+                            } : {}}
+                        >
                             <button className="menu-item" onClick={(e) => handleAction(e, () => onStats?.(link))}>
                                 <BarChart2 size={16} />
                                 <span>{t('container.menu.stats')}</span>

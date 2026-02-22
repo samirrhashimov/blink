@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Link } from 'react-router-dom';
@@ -15,14 +15,13 @@ import {
   Search,
   Menu,
   X,
-  FolderOpen,
-  FolderPlus,
   Tag,
   UserPlus
 } from 'lucide-react';
 import blinkLogo from '../assets/blinklogo2.png';
 import NotificationsPanel from '../components/NotificationsPanel';
 import LoadingSkeleton from '../components/LoadingSkeleton';
+import EmptyState from '../components/EmptyState';
 import SEO from '../components/SEO';
 
 const Dashboard: React.FC = () => {
@@ -34,6 +33,18 @@ const Dashboard: React.FC = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'f')) {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   useEffect(() => {
     if (currentUser) {
@@ -241,6 +252,7 @@ const Dashboard: React.FC = () => {
           <div className="modern-search-bar">
             <Search className="modern-search-icon" size={18} />
             <input
+              ref={searchInputRef}
               type="text"
               placeholder={t('dashboard.searchPlaceholder')}
               value={searchQuery}
@@ -254,25 +266,21 @@ const Dashboard: React.FC = () => {
         <section className="fade-in">
           <h2 className="section-title">{t('dashboard.personal')}</h2>
           {filteredPersonalContainers.length === 0 ? (
-            <div className="empty-state">
-              <FolderOpen className="empty-state-icon" size={64} />
-              <h3 className="empty-state-title">
-                {searchQuery ? t('dashboard.emptyPersonal.searchTitle') : t('dashboard.emptyPersonal.title')}
-              </h3>
-              <p className="empty-state-description">
-                {searchQuery
-                  ? t('dashboard.emptyPersonal.searchDesc')
-                  : t('dashboard.emptyPersonal.desc')}
-              </p>
-              {!searchQuery && (
-                <button
-                  onClick={() => (window as any).dispatchSetShowCreateModal?.(true)}
-                  className="empty-state-button"
-                >
-                  <Plus className="h-5 w-5" />
-                  {t('dashboard.emptyPersonal.button')}
-                </button>
-              )}
+            <div className="fade-in">
+              <EmptyState
+                type={searchQuery ? 'search' : 'personal'}
+                title={searchQuery ? t('dashboard.emptyPersonal.searchTitle') : t('dashboard.emptyPersonal.title')}
+                description={searchQuery ? t('dashboard.emptyPersonal.searchDesc') : t('dashboard.emptyPersonal.desc')}
+                action={!searchQuery ? (
+                  <button
+                    onClick={() => (window as any).dispatchSetShowCreateModal?.(true)}
+                    className="empty-state-button"
+                  >
+                    <Plus className="h-5 w-5" />
+                    {t('dashboard.emptyPersonal.button')}
+                  </button>
+                ) : undefined}
+              />
             </div>
           ) : (
             <div className="container-grid">
@@ -315,16 +323,12 @@ const Dashboard: React.FC = () => {
         <section className="fade-in" style={{ marginTop: '3rem' }}>
           <h2 className="section-title">{t('dashboard.shared')}</h2>
           {filteredSharedContainers.length === 0 ? (
-            <div className="empty-state">
-              <FolderPlus className="empty-state-icon" size={64} />
-              <h3 className="empty-state-title">
-                {searchQuery ? t('dashboard.emptyShared.searchTitle') : t('dashboard.emptyShared.title')}
-              </h3>
-              <p className="empty-state-description">
-                {searchQuery
-                  ? t('dashboard.emptyShared.searchDesc')
-                  : t('dashboard.emptyShared.desc')}
-              </p>
+            <div className="fade-in">
+              <EmptyState
+                type={searchQuery ? 'search' : 'shared'}
+                title={searchQuery ? t('dashboard.emptyShared.searchTitle') : t('dashboard.emptyShared.title')}
+                description={searchQuery ? t('dashboard.emptyShared.searchDesc') : t('dashboard.emptyShared.desc')}
+              />
             </div>
           ) : (
             <div className="container-grid">

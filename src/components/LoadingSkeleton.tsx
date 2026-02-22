@@ -16,8 +16,8 @@ const LoadingSkeleton: React.FC<SkeletonProps> = ({ variant = 'text', count = 1 
                 <div className="skeleton-box skeleton-box--circle shimmer"></div>
               </div>
               <div className="skeleton-fullscreen__grid">
-                {[1, 2, 3, 4, 5, 6].map((item) => (
-                  <div key={item} className="skeleton-fullscreen__card">
+                {[1, 2, 3, 4, 5, 6].map((item, index) => (
+                  <div key={item} className={`skeleton-fullscreen__card ${index < 5 ? `stagger-${index + 1}` : ''}`}>
                     <div className="skeleton-box skeleton-box--rounded shimmer" style={{ height: '160px', marginBottom: '1rem' }}></div>
                     <div className="skeleton-box shimmer" style={{ width: '70%', height: '20px', marginBottom: '0.5rem' }}></div>
                     <div className="skeleton-box shimmer" style={{ width: '50%', height: '16px' }}></div>
@@ -65,7 +65,7 @@ const LoadingSkeleton: React.FC<SkeletonProps> = ({ variant = 'text', count = 1 
   return (
     <>
       {Array.from({ length: count }).map((_, index) => (
-        <div key={index} style={{ marginBottom: variant === 'container' ? '1.5rem' : '0.5rem' }}>
+        <div key={index} className={`fade-in ${index < 5 ? `stagger-${index + 1}` : ''}`} style={{ marginBottom: variant === 'container' ? '1.5rem' : '0.5rem' }}>
           {renderSkeleton()}
         </div>
       ))}

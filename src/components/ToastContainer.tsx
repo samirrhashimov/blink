@@ -1,11 +1,12 @@
 import React from 'react';
-import Toast, { type ToastType } from './Toast';
+import Toast, { type ToastType, type ToastAction } from './Toast';
 
 export interface ToastData {
   id: string;
   type: ToastType;
   message: string;
   duration?: number;
+  action?: ToastAction;
 }
 
 interface ToastContainerProps {
@@ -23,6 +24,7 @@ const ToastContainer: React.FC<ToastContainerProps> = ({ toasts, onClose }) => {
           type={toast.type}
           message={toast.message}
           duration={toast.duration}
+          action={toast.action}
           onClose={onClose}
         />
       ))}
