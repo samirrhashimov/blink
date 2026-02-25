@@ -20,6 +20,8 @@ export interface Link {
   isPinned?: boolean;
   clicks?: number;
   clickStats?: Record<string, number>; // Format: { "YYYY-MM-DD": count }
+  note?: string;
+  emoji?: string;
 }
 
 export interface Container {

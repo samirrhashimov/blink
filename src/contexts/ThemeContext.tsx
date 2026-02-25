@@ -7,6 +7,8 @@ interface ThemeContextType {
   toggleTheme: () => void;
   animationsEnabled: boolean;
   toggleAnimations: () => void;
+  searchShortcut: 'ctrl-k' | 'cmd-f';
+  setSearchShortcut: (shortcut: 'ctrl-k' | 'cmd-f') => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -30,6 +32,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return saved !== null ? saved === 'true' : true;
   });
 
+  const [searchShortcut, setSearchShortcutState] = useState<'ctrl-k' | 'cmd-f'>(() => {
+    const saved = localStorage.getItem('blink-search-shortcut') as 'ctrl-k' | 'cmd-f';
+    return saved || 'ctrl-k';
+  });
+
   useEffect(() => {
     const root = window.document.documentElement;
     root.classList.remove('light', 'dark');
@@ -47,6 +54,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     localStorage.setItem('blink-animations', String(animationsEnabled));
   }, [animationsEnabled]);
 
+  useEffect(() => {
+    localStorage.setItem('blink-search-shortcut', searchShortcut);
+  }, [searchShortcut]);
+
   const toggleTheme = () => {
     setTheme(prevTheme => prevTheme === 'light' ? 'dark' : 'light');
   };
@@ -55,11 +66,17 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setAnimationsEnabled(prev => !prev);
   };
 
+  const setSearchShortcut = (shortcut: 'ctrl-k' | 'cmd-f') => {
+    setSearchShortcutState(shortcut);
+  };
+
   const value: ThemeContextType = {
     theme,
     toggleTheme,
     animationsEnabled,
-    toggleAnimations
+    toggleAnimations,
+    searchShortcut,
+    setSearchShortcut
   };
 
   return (

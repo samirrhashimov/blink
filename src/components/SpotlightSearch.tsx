@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useContainer } from '../contexts/ContainerContext';
 import { useAuth } from '../contexts/AuthContext';
+import { useTheme } from '../contexts/ThemeContext';
 import {
     Search,
     X,
@@ -30,6 +31,7 @@ const SpotlightSearch: React.FC = () => {
     const { currentUser } = useAuth();
     const { containers } = useContainer();
     const navigate = useNavigate();
+    const { searchShortcut } = useTheme();
 
     const [isOpen, setIsOpen] = useState(false);
     const [query, setQuery] = useState('');
@@ -42,11 +44,13 @@ const SpotlightSearch: React.FC = () => {
     const getContainerColor = (container: { id: string; color?: string }) =>
         container.color || colors[container.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length];
 
-    // Global keyboard listener for Super+F
+    // Global keyboard listener
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
-            // Super+F (metaKey+F) or Ctrl+K to open spotlight
-            if ((e.metaKey && e.key === 'f') || (e.ctrlKey && e.key === 'k')) {
+            const isCtrlK = (e.ctrlKey || e.metaKey) && e.key === 'k';
+            const isCmdF = (e.ctrlKey || e.metaKey) && e.key === 'f';
+
+            if ((searchShortcut === 'ctrl-k' && isCtrlK) || (searchShortcut === 'cmd-f' && isCmdF)) {
                 e.preventDefault();
                 e.stopPropagation();
                 setIsOpen(true);
@@ -61,7 +65,7 @@ const SpotlightSearch: React.FC = () => {
 
         window.addEventListener('keydown', handleKeyDown, true);
         return () => window.removeEventListener('keydown', handleKeyDown, true);
-    }, [isOpen]);
+    }, [isOpen, searchShortcut]);
 
     // Focus input when opened
     useEffect(() => {
@@ -330,8 +334,16 @@ const SpotlightSearch: React.FC = () => {
                             <span><kbd>esc</kbd> close</span>
                         </div>
                         <div className="spotlight-footer-shortcut">
-                            <Command size={12} />
-                            <span>+ F to open anytime</span>
+                            {searchShortcut === 'cmd-f' ? (
+                                <>
+                                    <Command size={12} />
+                                    <span>+ F to open anytime</span>
+                                </>
+                            ) : (
+                                <>
+                                    <kbd>Ctrl</kbd> + <kbd>K</kbd> to open anytime
+                                </>
+                            )}
                         </div>
                     </div>
                 )}

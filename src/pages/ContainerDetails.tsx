@@ -404,6 +404,15 @@ const ContainerDetails: React.FC = () => {
     }
   };
 
+  const handleUpdateLink = async (linkId: string, updates: Partial<LinkType>) => {
+    if (!container) return;
+    try {
+      await updateLinkInContainer(container.id, linkId, updates);
+    } catch (err: any) {
+      toast.error('Failed to update link');
+    }
+  };
+
   const handleTrackClick = (linkId: string) => {
     if (!container) return;
     trackClick(container.id, linkId);
@@ -716,6 +725,7 @@ const ContainerDetails: React.FC = () => {
                           onSelect={handleSelectLink}
                           isDeleting={deletingLinkId === link.id || deletingLinkIds.has(link.id)}
                           isNewlyAdded={newlyAddedLinkId === link.id}
+                          onUpdateLink={handleUpdateLink}
                         />
                       ))}
                     </div>

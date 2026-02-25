@@ -29,7 +29,7 @@ import '../css/Settings.css';
 const Settings: React.FC = () => {
   const { t, i18n } = useTranslation();
   const { currentUser, logout, deleteAccount } = useAuth();
-  const { theme, toggleTheme, animationsEnabled, toggleAnimations } = useTheme();
+  const { theme, toggleTheme, animationsEnabled, toggleAnimations, searchShortcut, setSearchShortcut } = useTheme();
   const { containers } = useContainer();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -413,6 +413,23 @@ const Settings: React.FC = () => {
                   >
                     <option value="en">English (US)</option>
                     <option value="tr">Türkçe (TR)</option>
+                  </select>
+                </div>
+              </div>
+              <div className="settings-item">
+                <div className="settings-item-info">
+                  <h4>Search Shortcut</h4>
+                  <p>Choose the keyboard shortcut to open global search.</p>
+                </div>
+                <div className="language-dropdown-container" style={{ width: '180px' }}>
+                  <select
+                    className="language-select"
+                    value={searchShortcut}
+                    onChange={(e) => setSearchShortcut(e.target.value as 'ctrl-k' | 'cmd-f')}
+                    aria-label="Search Shortcut"
+                  >
+                    <option value="ctrl-k">Ctrl + K</option>
+                    <option value="cmd-f">Cmd/Super + F</option>
                   </select>
                 </div>
               </div>

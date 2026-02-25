@@ -14,7 +14,9 @@ import {
     BarChart2,
     MoreVertical,
     Check,
-    QrCode
+    QrCode,
+    MessageSquare,
+    Smile
 } from 'lucide-react';
 import type { Link as LinkType } from '../types';
 import LinkPreviewService from '../services/linkPreviewService';
@@ -37,6 +39,7 @@ interface SortableLinkItemProps {
     onSelect?: (link: LinkType) => void;
     isDeleting?: boolean;
     isNewlyAdded?: boolean;
+    onUpdateLink?: (linkId: string, updates: Partial<LinkType>) => void;
 }
 
 const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
@@ -56,12 +59,20 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
     isSelected = false,
     onSelect,
     isDeleting = false,
-    isNewlyAdded = false
+    isNewlyAdded = false,
+    onUpdateLink
 }) => {
     const { t } = useTranslation();
     const [menuOpen, setMenuOpen] = useState(false);
     const [menuPosition, setMenuPosition] = useState<{ x: number, y: number } | null>(null);
+    const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
+    const [isEditingNote, setIsEditingNote] = useState(false);
+    const [noteDraft, setNoteDraft] = useState('');
     const menuRef = useRef<HTMLDivElement>(null);
+    const noteInputRef = useRef<HTMLInputElement>(null);
+    const noteContainerRef = useRef<HTMLDivElement>(null);
+
+    const emojis = ['👍', '❤️', '🔥', '👀', '🎉', '📌', '🚀', '✅', '💡', '⚠️'];
 
     const {
         attributes,
@@ -85,22 +96,43 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
         const handleClickOutside = (event: MouseEvent) => {
             if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
                 setMenuOpen(false);
+                setEmojiPickerOpen(false);
+            }
+            if (isEditingNote && noteContainerRef.current && !noteContainerRef.current.contains(event.target as Node)) {
+                setIsEditingNote(false);
             }
         };
 
-        if (menuOpen) {
+        if (menuOpen || emojiPickerOpen || isEditingNote) {
             document.addEventListener('mousedown', handleClickOutside);
         }
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, [menuOpen]);
+    }, [menuOpen, emojiPickerOpen, isEditingNote]);
 
     const handleAction = (e: React.MouseEvent, action: () => void) => {
         e.stopPropagation();
         setMenuOpen(false);
+        setEmojiPickerOpen(false);
         setMenuPosition(null);
         action();
+    };
+
+    const handleSaveNote = () => {
+        if (!onUpdateLink) return;
+        setIsEditingNote(false);
+        if (noteDraft !== link.note) {
+            onUpdateLink(link.id, { note: noteDraft.trim() || undefined });
+        }
+    };
+
+    const handleEmojiSelect = (emoji: string) => {
+        if (!onUpdateLink) return;
+        setEmojiPickerOpen(false);
+        setMenuOpen(false);
+        // Toggle if matching, otherwise set
+        onUpdateLink(link.id, { emoji: link.emoji === emoji ? undefined : emoji });
     };
 
     const handleContextMenu = (e: React.MouseEvent) => {
@@ -163,7 +195,24 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                     )}
                 </div>
                 <div className="link-info">
-                    <h4 className="font-medium text-gray-900 dark:text-white">{link.title}</h4>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <h4 className="font-medium text-gray-900 dark:text-white">{link.title}</h4>
+                        {link.emoji && (
+                            <span
+                                style={{ cursor: 'pointer', fontSize: '1rem', padding: '0 2px' }}
+                                onClick={(e) => {
+                                    if (canEdit) {
+                                        e.stopPropagation();
+                                        setMenuPosition({ x: e.clientX, y: e.clientY });
+                                        setEmojiPickerOpen(true);
+                                    }
+                                }}
+                                title="Change emoji"
+                            >
+                                {link.emoji}
+                            </span>
+                        )}
+                    </div>
                     {link.description && (
                         <p className="text-sm text-gray-600 dark:text-gray-400">{link.description}</p>
                     )}
@@ -182,6 +231,74 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                             {link.tags.map(tag => (
                                 <span key={tag} className="link-tag-chip">#{tag}</span>
                             ))}
+                        </div>
+                    )}
+
+                    {/* Quick Note */}
+                    {(link.note || isEditingNote) && (
+                        <div className="mt-2" onClick={(e) => e.stopPropagation()} ref={noteContainerRef}>
+                            {isEditingNote ? (
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', width: '100%', maxWidth: '100%' }}>
+                                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                                        <input
+                                            ref={noteInputRef}
+                                            type="text"
+                                            value={noteDraft}
+                                            maxLength={100}
+                                            onChange={(e) => setNoteDraft(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') handleSaveNote();
+                                                if (e.key === 'Escape') setIsEditingNote(false);
+                                            }}
+                                            autoFocus
+                                            placeholder="Write a note (max 100 char)..."
+                                            style={{
+                                                flex: 1,
+                                                fontSize: '0.85rem', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--border-color)',
+                                                background: 'var(--bg-secondary)', color: 'var(--text-primary)', outline: 'none'
+                                            }}
+                                        />
+                                        <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', whiteSpace: 'nowrap', minWidth: '40px', textAlign: 'right' }}>
+                                            {noteDraft.length}/100
+                                        </span>
+                                    </div>
+                                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                                        <button onClick={handleSaveNote} style={{ fontSize: '0.8rem', padding: '6px 14px', background: 'var(--primary)', color: 'white', borderRadius: '8px', fontWeight: 500, border: 'none', cursor: 'pointer' }}>Save</button>
+                                        <button onClick={() => setIsEditingNote(false)} style={{ fontSize: '0.8rem', padding: '6px 14px', background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--border-color)', borderRadius: '8px', cursor: 'pointer' }}>Cancel</button>
+                                        {link.note && (
+                                            <button
+                                                onClick={() => {
+                                                    setIsEditingNote(false);
+                                                    if (onUpdateLink) onUpdateLink(link.id, { note: '' });
+                                                }}
+                                                style={{ marginLeft: 'auto', fontSize: '0.8rem', padding: '6px 14px', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.2)', borderRadius: '8px', cursor: 'pointer' }}
+                                                title="Delete note"
+                                            >
+                                                Delete
+                                            </button>
+                                        )}
+                                    </div>
+                                </div>
+                            ) : (
+                                <div
+                                    style={{
+                                        display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 8px',
+                                        background: 'rgba(99, 102, 241, 0.1)', color: 'var(--text-secondary)',
+                                        borderRadius: '6px', fontSize: '0.75rem', cursor: canEdit ? 'pointer' : 'default',
+                                        border: '1px solid rgba(99, 102, 241, 0.2)'
+                                    }}
+                                    onClick={() => {
+                                        if (canEdit) {
+                                            setNoteDraft(link.note || '');
+                                            setIsEditingNote(true);
+                                        }
+                                    }}
+                                    title="Edit Note"
+                                >
+                                    <MessageSquare size={12} style={{ color: '#6366f1' }} />
+                                    <span>{link.note}</span>
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>
@@ -229,6 +346,31 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
 
                             {canEdit && (
                                 <>
+                                    <button
+                                        className="menu-item"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setNoteDraft(link.note || '');
+                                            setIsEditingNote(true);
+                                            setMenuOpen(false);
+                                        }}
+                                    >
+                                        <MessageSquare size={16} />
+                                        <span>{link.note ? 'Edit Note' : 'Add Note'}</span>
+                                    </button>
+                                    <button
+                                        className="menu-item"
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setEmojiPickerOpen(true);
+                                            setMenuOpen(false);
+                                            setMenuPosition({ x: e.clientX, y: e.clientY });
+                                        }}
+                                    >
+                                        <Smile size={16} />
+                                        <span>Reaction</span>
+                                    </button>
+
                                     {onTogglePin && (
                                         <button
                                             className={`menu-item ${link.isPinned ? 'pinned-active' : ''}`}
@@ -256,6 +398,53 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                         </div>
                     )}
                 </div>
+
+                {/* Emoji Picker Modal overlay logic */}
+                {emojiPickerOpen && (
+                    <div
+                        className="link-menu-dropdown emoji-grid"
+                        onClick={(e) => e.stopPropagation()}
+                        style={menuPosition ? {
+                            position: 'fixed',
+                            top: menuPosition.y,
+                            left: menuPosition.x,
+                            right: 'auto',
+                            transform: 'none',
+                            zIndex: 10000,
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(5, 1fr)',
+                            gap: '8px',
+                            padding: '12px',
+                            width: 'max-content'
+                        } : {}}
+                    >
+                        {emojis.map(em => (
+                            <button
+                                key={em}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleEmojiSelect(em);
+                                }}
+                                style={{
+                                    background: link.emoji === em ? 'var(--bg-secondary)' : 'transparent',
+                                    border: link.emoji === em ? '1px solid var(--border-color)' : '1px solid transparent',
+                                    borderRadius: '8px',
+                                    fontSize: '1.25rem',
+                                    padding: '4px',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    transition: 'transform 0.1s'
+                                }}
+                                onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.2)'}
+                                onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                            >
+                                {em}
+                            </button>
+                        ))}
+                    </div>
+                )}
 
                 {canEdit && !disabled && (
                     <div
