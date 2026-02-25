@@ -241,6 +241,12 @@
             "searchDesc": "Arama terimlerinizi ayarlamayı deneyin."
         }
     },
+    "bottomNav": {
+        "home": "Home",
+        "tags": "Tags",
+        "invitations": "Invite",
+        "settings": "Settings"
+    },
     "auth": {
         "login": {
             "title": "Giriş Yap",
