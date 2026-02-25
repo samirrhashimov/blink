@@ -69,7 +69,7 @@ const Invitations: React.FC = () => {
         const sharerName = UserService.formatUserName(currentUser.displayName, currentUser.email);
         await NotificationService.notifyContainerShared(
           invite.invitedBy,
-          invite.containerId,
+          invite.containerName || 'Container',
           sharerName,
           invite.containerId,
           currentUser.uid
@@ -108,11 +108,18 @@ const Invitations: React.FC = () => {
   };
 
   const formatDate = (date: Date) => {
-    return new Date(date).toLocaleDateString(t('common.locale', { defaultValue: 'en-US' }), {
+    const d = new Date(date);
+    const locale = t('common.locale', { defaultValue: 'en-US' });
+    const dateStr = d.toLocaleDateString(locale, {
       year: 'numeric',
       month: 'short',
       day: 'numeric'
     });
+    const timeStr = d.toLocaleTimeString(locale, {
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    return `${dateStr}, ${timeStr}`;
   };
 
   return (
@@ -204,7 +211,7 @@ const Invitations: React.FC = () => {
                           </span>
                           <span className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
                             <Clock className="h-3 w-3" />
-                            {formatDate(invite.expiresAt)}
+                            {formatDate(invite.createdAt)}
                           </span>
                         </div>
                       </div>

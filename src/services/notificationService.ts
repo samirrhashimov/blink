@@ -1,15 +1,15 @@
-import { 
-  collection, 
-  doc, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc, 
-  getDocs, 
-  query, 
-  where, 
+import {
+  collection,
+  doc,
+  addDoc,
+  updateDoc,
+  deleteDoc,
+  getDocs,
+  query,
+  where,
   orderBy,
   limit,
-  serverTimestamp 
+  serverTimestamp
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import type { Notification } from '../types/notification';
@@ -57,10 +57,10 @@ export class NotificationService {
         orderBy('createdAt', 'desc'),
         limit(limitCount)
       );
-      
+
       const querySnapshot = await getDocs(q);
       const notifications: Notification[] = [];
-      
+
       querySnapshot.forEach((doc) => {
         const data = doc.data();
         notifications.push({
@@ -85,7 +85,7 @@ export class NotificationService {
         where('userId', '==', userId),
         where('read', '==', false)
       );
-      
+
       const querySnapshot = await getDocs(q);
       return querySnapshot.size;
     } catch (error) {
@@ -115,12 +115,12 @@ export class NotificationService {
         where('userId', '==', userId),
         where('read', '==', false)
       );
-      
+
       const querySnapshot = await getDocs(q);
-      const updatePromises = querySnapshot.docs.map(doc => 
+      const updatePromises = querySnapshot.docs.map(doc =>
         updateDoc(doc.ref, { read: true })
       );
-      
+
       await Promise.all(updatePromises);
     } catch (error) {
       console.error('Error marking all as read:', error);
@@ -146,10 +146,10 @@ export class NotificationService {
         collection(db, NOTIFICATIONS_COLLECTION),
         where('userId', '==', userId)
       );
-      
+
       const querySnapshot = await getDocs(q);
       const deletePromises = querySnapshot.docs.map(doc => deleteDoc(doc.ref));
-      
+
       await Promise.all(deletePromises);
     } catch (error) {
       console.error('Error deleting all notifications:', error);
@@ -188,8 +188,8 @@ export class NotificationService {
     await this.createNotification(
       userId,
       'share',
-      'Container Shared',
-      `${sharerName} shared "${containerName}" with you`,
+      'Share Successful',
+      `${sharerName} accepted your invitation to "${containerName}"`,
       containerId,
       `/container/${containerId}`,
       sharerId,
