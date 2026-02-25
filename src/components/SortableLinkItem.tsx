@@ -194,7 +194,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                         <LinkIcon />
                     )}
                 </div>
-                <div className="link-info">
+                <div className="link-info" style={{ minWidth: 0, flex: 1 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <h4 className="font-medium text-gray-900 dark:text-white">{link.title}</h4>
                         {link.emoji && (
@@ -251,7 +251,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                                                 if (e.key === 'Escape') setIsEditingNote(false);
                                             }}
                                             autoFocus
-                                            placeholder="Write a note (max 100 char)..."
+                                            placeholder="Write a note..."
                                             style={{
                                                 flex: 1,
                                                 fontSize: '0.85rem', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--border-color)',
@@ -282,10 +282,20 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                             ) : (
                                 <div
                                     style={{
-                                        display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 8px',
-                                        background: 'rgba(99, 102, 241, 0.1)', color: 'var(--text-secondary)',
-                                        borderRadius: '6px', fontSize: '0.75rem', cursor: canEdit ? 'pointer' : 'default',
-                                        border: '1px solid rgba(99, 102, 241, 0.2)'
+                                        display: 'flex',
+                                        width: 'fit-content',
+                                        alignItems: 'flex-start',
+                                        gap: '6px',
+                                        padding: '6px 10px',
+                                        background: 'rgba(99, 102, 241, 0.08)',
+                                        color: 'var(--text-secondary)',
+                                        borderRadius: '8px',
+                                        fontSize: '0.75rem',
+                                        cursor: canEdit ? 'pointer' : 'default',
+                                        border: '1px solid rgba(99, 102, 241, 0.15)',
+                                        maxWidth: '100%',
+                                        boxSizing: 'border-box',
+                                        lineHeight: '1.4'
                                     }}
                                     onClick={() => {
                                         if (canEdit) {
@@ -295,8 +305,8 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                                     }}
                                     title="Edit Note"
                                 >
-                                    <MessageSquare size={12} style={{ color: '#6366f1' }} />
-                                    <span>{link.note}</span>
+                                    <MessageSquare size={13} style={{ color: '#6366f1', marginTop: '2px', flexShrink: 0 }} />
+                                    <span style={{ overflowWrap: 'anywhere', wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>{link.note}</span>
                                 </div>
                             )}
                         </div>
