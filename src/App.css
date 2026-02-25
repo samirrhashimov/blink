@@ -1143,6 +1143,18 @@ main.container {
   border-color: rgba(99, 102, 241, 0.3) !important;
 }
 
+.link-item.pinned-link:hover {
+  transform: scale(0.99) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.03) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
+.dark .link-item.pinned-link:hover {
+  box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.3) !important;
+  background: rgba(99, 102, 241, 0.12) !important;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
 /* Dragging state handled by consolidated block below */
 
 .drag-handle {
