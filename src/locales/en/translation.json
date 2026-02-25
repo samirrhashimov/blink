@@ -241,6 +241,12 @@
             "searchDesc": "Try adjusting your search terms."
         }
     },
+    "bottomNav": {
+        "home": "Home",
+        "tags": "Tags",
+        "invitations": "Invite",
+        "settings": "Settings"
+    },
     "auth": {
         "login": {
             "title": "Log In",

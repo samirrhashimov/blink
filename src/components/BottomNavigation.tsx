@@ -3,10 +3,12 @@ import { NavLink } from 'react-router-dom';
 import { Home, Tag, UserPlus, Settings, Plus } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 const BottomNavigation: React.FC = () => {
     const { currentUser } = useAuth();
     const location = useLocation();
+    const { t } = useTranslation();
 
     if (!currentUser) return null;
 
@@ -28,11 +30,11 @@ const BottomNavigation: React.FC = () => {
         <nav className="bottom-nav">
             <NavLink to="/dashboard" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>
                 <Home size={24} />
-                <span>Home</span>
+                <span>{t('bottomNav.home')}</span>
             </NavLink>
             <NavLink to="/tags" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>
                 <Tag size={24} />
-                <span>Tags</span>
+                <span>{t('bottomNav.tags')}</span>
             </NavLink>
             <div className="bottom-nav-item center-item" onClick={handlePlusClick}>
                 <div className="center-item-inner hover-lift">
@@ -41,11 +43,11 @@ const BottomNavigation: React.FC = () => {
             </div>
             <NavLink to="/invitations" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>
                 <UserPlus size={24} />
-                <span>Invite</span>
+                <span>{t('bottomNav.invitations')}</span>
             </NavLink>
             <NavLink to="/settings" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>
                 <Settings size={24} />
-                <span>Settings</span>
+                <span>{t('bottomNav.settings')}</span>
             </NavLink>
         </nav>
     );
