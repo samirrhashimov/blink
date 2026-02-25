@@ -216,4 +216,44 @@ export class NotificationService {
       updaterName
     );
   }
+
+  // Helper: Create invitation declined notification
+  static async notifyInvitationDeclined(
+    userId: string,
+    containerName: string,
+    declinerName: string,
+    containerId: string,
+    declinerId?: string
+  ): Promise<void> {
+    await this.createNotification(
+      userId,
+      'share',
+      'Invitation Declined',
+      `${declinerName} declined your invitation to "${containerName}"`,
+      containerId,
+      `/container/${containerId}`,
+      declinerId,
+      declinerName
+    );
+  }
+
+  // Helper: Create container left notification
+  static async notifyContainerLeft(
+    userId: string,
+    containerName: string,
+    leaverName: string,
+    containerId: string,
+    leaverId?: string
+  ): Promise<void> {
+    await this.createNotification(
+      userId,
+      'share',
+      'Collaborator Left',
+      `${leaverName} left "${containerName}"`,
+      containerId,
+      `/container/${containerId}`,
+      leaverId,
+      leaverName
+    );
+  }
 }

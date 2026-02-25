@@ -98,8 +98,25 @@ const Invitations: React.FC = () => {
     setError('');
 
     try {
+      const invite = invitations.find(inv => inv.id === inviteId);
       await SharingService.declineInvitation(inviteId);
       setInvitations(prev => prev.filter(inv => inv.id !== inviteId));
+
+      // Send notification to the inviter
+      if (invite && currentUser) {
+        try {
+          const declinerName = UserService.formatUserName(currentUser.displayName, currentUser.email);
+          await NotificationService.notifyInvitationDeclined(
+            invite.invitedBy,
+            invite.containerName || 'Container',
+            declinerName,
+            invite.containerId,
+            currentUser.uid
+          );
+        } catch (notifErr) {
+          console.error('Failed to send decline notification:', notifErr);
+        }
+      }
     } catch (err: any) {
       setError(err.message || t('invitations.errors.declineFailed'));
     } finally {

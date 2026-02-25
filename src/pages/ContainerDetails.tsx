@@ -4,6 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useContainer } from '../contexts/ContainerContext';
 import { useToast } from '../contexts/ToastContext';
 import { SharingService } from '../services/sharingService';
+import { NotificationService } from '../services/notificationService';
 import { UserService } from '../services/userService';
 import type { Link as LinkType } from '../types';
 import blinkLogo from '../assets/blinklogo2.png';
@@ -67,7 +68,8 @@ const ContainerDetails: React.FC = () => {
     deleteContainer,
     reorderLinks,
     updateLinkInContainer,
-    trackClick
+    trackClick,
+    refreshContainers
   } = useContainer();
   const navigate = useNavigate();
   const toast = useToast();
@@ -458,6 +460,24 @@ const ContainerDetails: React.FC = () => {
     try {
       await SharingService.removeUserFromContainer(container.id, currentUser.uid);
       setShowLeaveContainerModal(false);
+
+      // Notify the container owner
+      try {
+        const leaverName = UserService.formatUserName(currentUser.displayName, currentUser.email);
+        await NotificationService.notifyContainerLeft(
+          container.ownerId,
+          container.name,
+          leaverName,
+          container.id,
+          currentUser.uid
+        );
+      } catch (notifErr) {
+        console.error('Failed to send leave notification:', notifErr);
+      }
+
+      // Refresh containers so collaborators list updates in real-time
+      await refreshContainers();
+
       toast.success(t('container.messages.leftContainer'));
       navigate('/dashboard');
     } catch (err: any) {
