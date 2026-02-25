@@ -2358,6 +2358,154 @@ main.container {
   opacity: 0.9;
 }
 
+/* ============================================
+   Container Card — Favicon Previews
+   ============================================ */
+.container-card-favicons {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 0.25rem;
+}
+
+.container-card-favicon {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.15);
+  margin-left: -6px;
+  transition: transform 0.2s ease;
+  backdrop-filter: blur(4px);
+}
+
+.container-card-favicon:first-child {
+  margin-left: 0;
+}
+
+.container-card:hover .container-card-favicon {
+  transform: translateY(-2px);
+}
+
+.container-card-favicon-more {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.55rem;
+  font-weight: 700;
+  color: white;
+  margin-left: -6px;
+}
+
+.container-card.light-color .container-card-favicon {
+  border-color: rgba(0, 0, 0, 0.15);
+}
+
+.container-card.light-color .container-card-favicon-more {
+  border-color: rgba(0, 0, 0, 0.15);
+  background: rgba(0, 0, 0, 0.15);
+  color: #1a1f2e;
+}
+
+/* ============================================
+   Container Card — Stats (link count, collabs)
+   ============================================ */
+.container-card-stats {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.15rem;
+}
+
+.container-card-stat {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: 0.02em;
+}
+
+.container-card.light-color .container-card-stat {
+  color: rgba(0, 0, 0, 0.55);
+}
+
+.container-card-collab-dots {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+.container-card-collab-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.container-card.light-color .container-card-collab-dot {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================
+   Container Card — Opening Animation
+   ============================================ */
+@keyframes containerCardOpen {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+    border-radius: 10px;
+  }
+
+  60% {
+    transform: scale(1.08);
+    opacity: 1;
+    border-radius: 10px;
+    box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.4);
+  }
+
+  100% {
+    transform: scale(1.15);
+    opacity: 0;
+    border-radius: 6px;
+  }
+}
+
+.container-card-opening {
+  animation: containerCardOpen 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  pointer-events: none;
+  z-index: 50 !important;
+  position: relative;
+}
+
+/* ============================================
+   Container Card — Drag State
+   ============================================ */
+.container-card.is-dragging {
+  opacity: 0.5;
+  transform: scale(1.05);
+  box-shadow: 0 20px 40px -8px rgba(0, 0, 0, 0.3);
+  z-index: 100;
+  cursor: grabbing;
+}
+
+.container-card {
+  cursor: grab;
+  touch-action: manipulation;
+}
+
+.container-card:active {
+  cursor: grabbing;
+}
+
 .section-title {
   font-size: 1.5rem;
   font-weight: 700;

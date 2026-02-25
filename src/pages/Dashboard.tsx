@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import { useContainer } from '../contexts/ContainerContext';
@@ -22,13 +22,31 @@ import blinkLogo from '../assets/blinklogo2.png';
 import NotificationsPanel from '../components/NotificationsPanel';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import EmptyState from '../components/EmptyState';
+import SortableContainerCard from '../components/SortableContainerCard';
 import SEO from '../components/SEO';
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  TouchSensor,
+  type DragEndEvent
+} from '@dnd-kit/core';
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  rectSortingStrategy
+} from '@dnd-kit/sortable';
 
 const Dashboard: React.FC = () => {
   const { t } = useTranslation();
   const { currentUser } = useAuth();
   const { theme, toggleTheme } = useTheme();
-  const { containers, loading, error } = useContainer();
+  const { containers, loading, error, reorderContainers } = useContainer();
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
@@ -85,6 +103,67 @@ const Dashboard: React.FC = () => {
     }
     setPrevContainersCount(containers.length);
   }, [containers.length]);
+
+  // DnD sensors for container reordering
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: { distance: 8 },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: { delay: 250, tolerance: 5 },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  // Opening animation state
+  const [openingContainerId, setOpeningContainerId] = useState<string | null>(null);
+
+  const handleContainerClick = (containerId: string) => {
+    setOpeningContainerId(containerId);
+    setTimeout(() => {
+      navigate(`/container/${containerId}`);
+    }, 350);
+  };
+
+  // Helper for color detection
+  const isLightColor = (color: string) => {
+    const hex = color.replace('#', '');
+    const r = parseInt(hex.substr(0, 2), 16);
+    const g = parseInt(hex.substr(2, 2), 16);
+    const b = parseInt(hex.substr(4, 2), 16);
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    return brightness > 180;
+  };
+
+  const colors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
+
+  const getContainerColor = (container: { id: string; color?: string }) =>
+    container.color || colors[container.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length];
+
+  const handleDragEnd = async (event: DragEndEvent, section: 'personal' | 'shared') => {
+    const { active, over } = event;
+    if (!over || active.id === over.id) return;
+
+    const sourceList = section === 'personal' ? filteredPersonalContainers : filteredSharedContainers;
+    const oldIndex = sourceList.findIndex(c => c.id === active.id);
+    const newIndex = sourceList.findIndex(c => c.id === over.id);
+
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    const reordered = arrayMove(sourceList, oldIndex, newIndex);
+
+    // Merge back with the other section to maintain full list
+    const otherList = section === 'personal' ? filteredSharedContainers : filteredPersonalContainers;
+    const fullReordered = section === 'personal' ? [...reordered, ...otherList] : [...otherList, ...reordered];
+
+    try {
+      await reorderContainers(fullReordered);
+    } catch (err) {
+      console.error('Reorder failed:', err);
+    }
+  };
 
   // Enhanced search: search in container name, description, and link titles
   const filteredPersonalContainers = personalContainers.filter(container => {
@@ -283,39 +362,36 @@ const Dashboard: React.FC = () => {
               />
             </div>
           ) : (
-            <div className="container-grid">
-              {filteredPersonalContainers.map((container) => {
-                const colors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
-                const containerColor = container.color || colors[container.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length];
-
-                // Helper to check if color is light
-                const isLightColor = (color: string) => {
-                  const hex = color.replace('#', '');
-                  const r = parseInt(hex.substr(0, 2), 16);
-                  const g = parseInt(hex.substr(2, 2), 16);
-                  const b = parseInt(hex.substr(4, 2), 16);
-                  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-                  return brightness > 180;
-                };
-
-                return (
-                  <Link
-                    key={container.id}
-                    to={`/container/${container.id}`}
-                    className={`container-card hover-lift ${isLightColor(containerColor) ? 'light-color' : ''} ${newlyAddedContainerId === container.id ? 'newly-added' : ''}`}
-                    style={{ '--container-color': containerColor } as React.CSSProperties}
-                  >
-                    <div className="container-card-overlay" style={{ backgroundColor: containerColor }}></div>
-                    <div className="container-card-content">
-                      <h3 className="container-card-title">{container.name}</h3>
-                      {container.description && (
-                        <p className="container-card-description">{container.description}</p>
-                      )}
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={(e) => handleDragEnd(e, 'personal')}
+            >
+              <SortableContext
+                items={filteredPersonalContainers.map(c => c.id)}
+                strategy={rectSortingStrategy}
+              >
+                <div className="container-grid">
+                  {filteredPersonalContainers.map((container) => {
+                    const containerColor = getContainerColor(container);
+                    return (
+                      <SortableContainerCard
+                        key={container.id}
+                        container={container}
+                        containerColor={containerColor}
+                        isLightColor={isLightColor(containerColor)}
+                        isNewlyAdded={newlyAddedContainerId === container.id}
+                        isOpening={openingContainerId === container.id}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleContainerClick(container.id);
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+              </SortableContext>
+            </DndContext>
           )}
         </section>
 
@@ -331,38 +407,36 @@ const Dashboard: React.FC = () => {
               />
             </div>
           ) : (
-            <div className="container-grid">
-              {filteredSharedContainers.map((container) => {
-                const colors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
-                const containerColor = container.color || colors[container.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length];
-
-                const isLightColor = (color: string) => {
-                  const hex = color.replace('#', '');
-                  const r = parseInt(hex.substr(0, 2), 16);
-                  const g = parseInt(hex.substr(2, 2), 16);
-                  const b = parseInt(hex.substr(4, 2), 16);
-                  const brightness = (r * 299 + g * 587 + b * 114) / 1000;
-                  return brightness > 180;
-                };
-
-                return (
-                  <Link
-                    key={container.id}
-                    to={`/container/${container.id}`}
-                    className={`container-card hover-lift ${isLightColor(containerColor) ? 'light-color' : ''} ${newlyAddedContainerId === container.id ? 'newly-added' : ''}`}
-                    style={{ '--container-color': containerColor } as React.CSSProperties}
-                  >
-                    <div className="container-card-overlay" style={{ backgroundColor: containerColor }}></div>
-                    <div className="container-card-content">
-                      <h3 className="container-card-title">{container.name}</h3>
-                      {container.description && (
-                        <p className="container-card-description">{container.description}</p>
-                      )}
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
+            <DndContext
+              sensors={sensors}
+              collisionDetection={closestCenter}
+              onDragEnd={(e) => handleDragEnd(e, 'shared')}
+            >
+              <SortableContext
+                items={filteredSharedContainers.map(c => c.id)}
+                strategy={rectSortingStrategy}
+              >
+                <div className="container-grid">
+                  {filteredSharedContainers.map((container) => {
+                    const containerColor = getContainerColor(container);
+                    return (
+                      <SortableContainerCard
+                        key={container.id}
+                        container={container}
+                        containerColor={containerColor}
+                        isLightColor={isLightColor(containerColor)}
+                        isNewlyAdded={newlyAddedContainerId === container.id}
+                        isOpening={openingContainerId === container.id}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleContainerClick(container.id);
+                        }}
+                      />
+                    );
+                  })}
+                </div>
+              </SortableContext>
+            </DndContext>
           )}
         </section>
 

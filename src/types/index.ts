@@ -34,6 +34,7 @@ export interface Container {
   isShared: boolean;
   coverImage?: string;
   color?: string;
+  order?: number;
 }
 
 export interface ContainerPermission {

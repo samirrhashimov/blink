@@ -416,5 +416,19 @@ export class ContainerService {
       }
     });
   }
+  // Reorder containers by updating their order field
+  static async reorderContainers(containerOrders: { id: string; order: number }[]): Promise<void> {
+    try {
+      await Promise.all(
+        containerOrders.map(({ id, order }) => {
+          const docRef = doc(db, CONTAINERS_COLLECTION, id);
+          return updateDoc(docRef, { order });
+        })
+      );
+    } catch (error) {
+      console.error('Error reordering containers:', error);
+      throw new Error('Failed to reorder containers');
+    }
+  }
 }
 

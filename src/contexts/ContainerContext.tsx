@@ -20,6 +20,7 @@ interface ContainerContextType {
   moveLinksToContainer: (sourceContainerId: string, targetContainerId: string, linkIds: string[]) => Promise<void>;
   trackClick: (containerId: string, linkId: string) => Promise<void>;
   refreshContainers: () => Promise<void>;
+  reorderContainers: (reorderedContainers: Container[]) => Promise<void>;
 }
 
 const ContainerContext = createContext<ContainerContextType | undefined>(undefined);
@@ -49,6 +50,13 @@ export const ContainerProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       setError(null);
       setLoading(true);
       const userContainers = await ContainerService.getUserContainers(currentUser.uid);
+      // Sort by order field if available, then by updatedAt
+      userContainers.sort((a, b) => {
+        if (a.order !== undefined && b.order !== undefined) return a.order - b.order;
+        if (a.order !== undefined) return -1;
+        if (b.order !== undefined) return 1;
+        return 0;
+      });
       setContainers(userContainers);
     } catch (err: any) {
       setError(err.message || 'Failed to fetch containers');
@@ -320,6 +328,22 @@ export const ContainerProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     await fetchContainers();
   };
 
+  const reorderContainers = async (reorderedContainers: Container[]) => {
+    // Optimistic update
+    const previousContainers = [...containers];
+    setContainers(reorderedContainers);
+
+    try {
+      const orders = reorderedContainers.map((c, index) => ({ id: c.id, order: index }));
+      await ContainerService.reorderContainers(orders);
+    } catch (err: any) {
+      // Revert on error
+      setContainers(previousContainers);
+      setError(err.message || 'Failed to reorder containers');
+      throw err;
+    }
+  };
+
   useEffect(() => {
     fetchContainers();
   }, [currentUser]);
@@ -340,7 +364,8 @@ export const ContainerProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     moveLinkToContainer,
     moveLinksToContainer,
     trackClick,
-    refreshContainers
+    refreshContainers,
+    reorderContainers
   };
 
   return (
