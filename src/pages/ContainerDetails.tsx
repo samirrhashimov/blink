@@ -142,17 +142,6 @@ const ContainerDetails: React.FC = () => {
   const deleteTimers = useRef<Record<string, any>>({});
   const searchInputRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't intercept if inside an input or textarea unless it's strictly the command
-      if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'f')) {
-        e.preventDefault();
-        searchInputRef.current?.focus();
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
 
   const confirmBulkDelete = async () => {
     try {
