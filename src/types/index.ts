@@ -21,7 +21,7 @@ export interface Link {
   clicks?: number;
   clickStats?: Record<string, number>; // Format: { "YYYY-MM-DD": count }
   note?: string;
-  emoji?: string;
+  emojis?: Record<string, string>; // Format: { "userId": "emoji" }
 }
 
 export interface Container {

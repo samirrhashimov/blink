@@ -726,6 +726,7 @@ const ContainerDetails: React.FC = () => {
                           isDeleting={deletingLinkId === link.id || deletingLinkIds.has(link.id)}
                           isNewlyAdded={newlyAddedLinkId === link.id}
                           onUpdateLink={handleUpdateLink}
+                          currentUserId={currentUser?.uid}
                         />
                       ))}
                     </div>

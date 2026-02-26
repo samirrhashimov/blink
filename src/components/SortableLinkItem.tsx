@@ -40,6 +40,7 @@ interface SortableLinkItemProps {
     isDeleting?: boolean;
     isNewlyAdded?: boolean;
     onUpdateLink?: (linkId: string, updates: Partial<LinkType>) => void;
+    currentUserId?: string;
 }
 
 const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
@@ -60,7 +61,8 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
     onSelect,
     isDeleting = false,
     isNewlyAdded = false,
-    onUpdateLink
+    onUpdateLink,
+    currentUserId
 }) => {
     const { t } = useTranslation();
     const [menuOpen, setMenuOpen] = useState(false);
@@ -134,11 +136,21 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
     };
 
     const handleEmojiSelect = (emoji: string) => {
-        if (!onUpdateLink) return;
+        if (!onUpdateLink || !currentUserId) return;
         setEmojiPickerOpen(false);
         setMenuOpen(false);
+
+        const currentEmojis = link.emojis || {};
+        const newEmojis = { ...currentEmojis };
+
         // Toggle if matching, otherwise set
-        onUpdateLink(link.id, { emoji: link.emoji === emoji ? "" : emoji });
+        if (newEmojis[currentUserId] === emoji) {
+            delete newEmojis[currentUserId];
+        } else {
+            newEmojis[currentUserId] = emoji;
+        }
+
+        onUpdateLink(link.id, { emojis: newEmojis });
     };
 
     const handleContextMenu = (e: React.MouseEvent) => {
@@ -433,8 +445,8 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                                     handleEmojiSelect(em);
                                 }}
                                 style={{
-                                    background: link.emoji === em ? 'var(--bg-secondary)' : 'transparent',
-                                    border: link.emoji === em ? '1px solid var(--border-color)' : '1px solid transparent',
+                                    background: (link.emojis && currentUserId && link.emojis[currentUserId] === em) ? 'var(--bg-secondary)' : 'transparent',
+                                    border: (link.emojis && currentUserId && link.emojis[currentUserId] === em) ? '1px solid var(--border-color)' : '1px solid transparent',
                                     borderRadius: '8px',
                                     fontSize: '1.25rem',
                                     padding: '4px',
@@ -463,33 +475,73 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                     </div>
                 )}
             </div>
-            {link.emoji && (
+            {/* Emojis Display */}
+            {link.emojis && Object.keys(link.emojis).length > 0 && (
                 <div
                     style={{
                         position: 'absolute',
                         left: '12px',
-                        bottom: '-12px', /* Overlaps bottom edge like WhatsApp */
-                        background: 'var(--bg-primary, white)',
-                        border: '1px solid var(--border-color, #e2e8f0)',
-                        borderRadius: '16px',
+                        bottom: '-12px', /* Overlaps bottom edge */
+                        background: 'rgba(255, 255, 255, 0.75)',
+                        backdropFilter: 'blur(12px)',
+                        WebkitBackdropFilter: 'blur(12px)',
+                        border: '1px solid rgba(255, 255, 255, 0.4)',
+                        borderRadius: '12px',
                         padding: '2px 6px',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center',
-                        fontSize: '1.25rem',
-                        boxShadow: '0 2px 5px rgba(0,0,0,0.15)',
+                        gap: '2px',
+                        fontSize: '1rem', // slightly smaller
+                        boxShadow: '0 4px 6px rgba(0,0,0,0.05), border 1px solid rgba(255,255,255,0.1)',
                         cursor: canEdit ? 'pointer' : 'default',
-                        zIndex: 20
+                        zIndex: 20,
+                        transition: 'all 0.2s ease',
                     }}
+                    className="glass-card"
                     onClick={(e) => {
-                        if (canEdit) {
+                        if (canEdit && currentUserId) {
                             e.stopPropagation();
+
+                            // Let's implement quick toggle: if multiple emojis, open menu. 
+                            // If just yours, toggle it off. 
+                            // But for now, keeping it simple: open the picker.
                             setMenuPosition({ x: e.clientX, y: e.clientY });
                             setEmojiPickerOpen(true);
                         }
                     }}
                 >
-                    <span style={{ transform: 'translateY(-0.5px)' }}>{link.emoji}</span>
+                    {/* Render unique emojis and their counts */}
+                    {(() => {
+                        const emojiCounts: Record<string, number> = {};
+                        Object.values(link.emojis).forEach(e => {
+                            emojiCounts[e] = (emojiCounts[e] || 0) + 1;
+                        });
+
+                        const uniqueEmojis = Object.keys(emojiCounts);
+                        const displayEmojis = uniqueEmojis.slice(0, 3);
+                        const overflowCount = uniqueEmojis.length > 3 ? uniqueEmojis.length - 3 : 0;
+
+                        return (
+                            <>
+                                {displayEmojis.map(emoji => (
+                                    <span key={emoji} style={{ display: 'flex', alignItems: 'center' }}>
+                                        <span style={{ transform: 'translateY(-0.5px)' }}>{emoji}</span>
+                                        {emojiCounts[emoji] > 1 && (
+                                            <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--text-secondary)', marginLeft: '2px' }}>
+                                                {emojiCounts[emoji]}
+                                            </span>
+                                        )}
+                                    </span>
+                                ))}
+                                {overflowCount > 0 && (
+                                    <span style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--text-secondary)', paddingLeft: '4px' }}>
+                                        +{overflowCount}
+                                    </span>
+                                )}
+                            </>
+                        );
+                    })()}
                 </div>
             )}
         </div>
