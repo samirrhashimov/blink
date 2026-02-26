@@ -151,7 +151,8 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
                     flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    padding: '2.5rem 2rem'
+                    padding: '1.5rem 1rem', // Reduced padding for better mobile fit
+                    overflowX: 'hidden'
                 }}>
                     <div style={{
                         background: '#ffffff',
@@ -164,14 +165,16 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
                         border: `2px solid ${containerColor}40`,
                         margin: '0 auto',
                         position: 'relative',
-                        width: '240px',
-                        height: '240px'
+                        width: '100%',
+                        maxWidth: '240px',
+                        aspectRatio: '1/1',
+                        boxSizing: 'border-box'
                     }}>
                         {!imageLoaded && (
                             <div className="skeleton-box shimmer" style={{
                                 position: 'absolute',
-                                width: '200px',
-                                height: '200px',
+                                width: 'calc(100% - 2.5rem)',
+                                height: 'calc(100% - 2.5rem)',
                                 borderRadius: '12px'
                             }}></div>
                         )}
@@ -180,8 +183,9 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
                             alt={t('container.modals.qrCode.alt', { url: link.url })}
                             onLoad={() => setImageLoaded(true)}
                             style={{
-                                width: '200px',
-                                height: '200px',
+                                width: '100%',
+                                height: 'auto',
+                                maxWidth: '200px',
                                 display: imageLoaded ? 'block' : 'none',
                                 borderRadius: '4px'
                             }}
