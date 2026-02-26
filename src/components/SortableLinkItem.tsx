@@ -71,6 +71,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
     const menuRef = useRef<HTMLDivElement>(null);
     const noteInputRef = useRef<HTMLInputElement>(null);
     const noteContainerRef = useRef<HTMLDivElement>(null);
+    const emojiPickerRef = useRef<HTMLDivElement>(null);
 
     const emojis = ['👍', '❤️', '🔥', '👀', '🎉', '📌', '🚀', '✅', '💡', '⚠️'];
 
@@ -86,7 +87,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
     const style = {
         transform: transform ? `${CSS.Transform.toString(transform)} scale(1.02)` : CSS.Transform.toString(transform),
         transition,
-        zIndex: isDragging ? 100 : (menuOpen ? 50 : 1),
+        zIndex: isDragging ? 100 : ((menuOpen || emojiPickerOpen) ? 50 : 1),
         opacity: isDragging ? 0.9 : 1,
     };
 
@@ -94,11 +95,16 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+            const mousedownTarget = event.target as Node;
+
+            const clickOutsideMenu = !menuRef.current || !menuRef.current.contains(mousedownTarget);
+            const clickOutsideEmojiPicker = !emojiPickerRef.current || !emojiPickerRef.current.contains(mousedownTarget);
+
+            if (clickOutsideMenu && clickOutsideEmojiPicker) {
                 setMenuOpen(false);
                 setEmojiPickerOpen(false);
             }
-            if (isEditingNote && noteContainerRef.current && !noteContainerRef.current.contains(event.target as Node)) {
+            if (isEditingNote && noteContainerRef.current && !noteContainerRef.current.contains(mousedownTarget)) {
                 setIsEditingNote(false);
             }
         };
@@ -122,8 +128,8 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
     const handleSaveNote = () => {
         if (!onUpdateLink) return;
         setIsEditingNote(false);
-        if (noteDraft !== link.note) {
-            onUpdateLink(link.id, { note: noteDraft.trim() || undefined });
+        if (noteDraft !== (link.note || '')) {
+            onUpdateLink(link.id, { note: noteDraft.trim() || "" });
         }
     };
 
@@ -132,7 +138,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
         setEmojiPickerOpen(false);
         setMenuOpen(false);
         // Toggle if matching, otherwise set
-        onUpdateLink(link.id, { emoji: link.emoji === emoji ? undefined : emoji });
+        onUpdateLink(link.id, { emoji: link.emoji === emoji ? "" : emoji });
     };
 
     const handleContextMenu = (e: React.MouseEvent) => {
@@ -197,21 +203,6 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                 <div className="link-info" style={{ minWidth: 0, flex: 1 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <h4 className="font-medium text-gray-900 dark:text-white">{link.title}</h4>
-                        {link.emoji && (
-                            <span
-                                style={{ cursor: 'pointer', fontSize: '1rem', padding: '0 2px' }}
-                                onClick={(e) => {
-                                    if (canEdit) {
-                                        e.stopPropagation();
-                                        setMenuPosition({ x: e.clientX, y: e.clientY });
-                                        setEmojiPickerOpen(true);
-                                    }
-                                }}
-                                title="Change emoji"
-                            >
-                                {link.emoji}
-                            </span>
-                        )}
                     </div>
                     {link.description && (
                         <p className="text-sm text-gray-600 dark:text-gray-400">{link.description}</p>
@@ -412,26 +403,32 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                 {/* Emoji Picker Modal overlay logic */}
                 {emojiPickerOpen && (
                     <div
+                        ref={emojiPickerRef}
                         className="link-menu-dropdown emoji-grid"
                         onClick={(e) => e.stopPropagation()}
                         style={menuPosition ? {
                             position: 'fixed',
-                            top: menuPosition.y,
-                            left: menuPosition.x,
+                            top: Math.min(menuPosition.y, window.innerHeight - 150), // Prevent bottom overflow
+                            left: Math.min(menuPosition.x, window.innerWidth - 180), // Prevent right overflow
                             right: 'auto',
-                            transform: 'none',
-                            zIndex: 10000,
+                            transform: 'translate(0, 8px)', // Appear just below the cursor
+                            zIndex: 999999, // Ensure it's on top of EVERYTHING
                             display: 'grid',
                             gridTemplateColumns: 'repeat(5, 1fr)',
                             gap: '8px',
                             padding: '12px',
-                            width: 'max-content'
+                            width: 'max-content',
+                            boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
+                            background: 'var(--bg-primary)',
+                            border: '1px solid var(--border-color)',
+                            borderRadius: '12px'
                         } : {}}
                     >
                         {emojis.map(em => (
                             <button
                                 key={em}
-                                onClick={(e) => {
+                                onMouseDown={(e) => {
+                                    e.preventDefault();
                                     e.stopPropagation();
                                     handleEmojiSelect(em);
                                 }}
@@ -466,6 +463,35 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                     </div>
                 )}
             </div>
+            {link.emoji && (
+                <div
+                    style={{
+                        position: 'absolute',
+                        left: '12px',
+                        bottom: '-12px', /* Overlaps bottom edge like WhatsApp */
+                        background: 'var(--bg-primary, white)',
+                        border: '1px solid var(--border-color, #e2e8f0)',
+                        borderRadius: '16px',
+                        padding: '2px 6px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        fontSize: '1.25rem',
+                        boxShadow: '0 2px 5px rgba(0,0,0,0.15)',
+                        cursor: canEdit ? 'pointer' : 'default',
+                        zIndex: 20
+                    }}
+                    onClick={(e) => {
+                        if (canEdit) {
+                            e.stopPropagation();
+                            setMenuPosition({ x: e.clientX, y: e.clientY });
+                            setEmojiPickerOpen(true);
+                        }
+                    }}
+                >
+                    <span style={{ transform: 'translateY(-0.5px)' }}>{link.emoji}</span>
+                </div>
+            )}
         </div>
     );
 };
