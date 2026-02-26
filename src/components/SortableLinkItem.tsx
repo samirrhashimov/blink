@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation } from 'react-i18next';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -74,6 +75,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
     const noteInputRef = useRef<HTMLInputElement>(null);
     const noteContainerRef = useRef<HTMLDivElement>(null);
     const emojiPickerRef = useRef<HTMLDivElement>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
 
     const emojis = ['👍', '❤️', '🔥', '👀', '🎉', '📌', '🚀', '✅', '💡', '⚠️'];
 
@@ -100,9 +102,10 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
             const mousedownTarget = event.target as Node;
 
             const clickOutsideMenu = !menuRef.current || !menuRef.current.contains(mousedownTarget);
+            const clickOutsideDropdown = !dropdownRef.current || !dropdownRef.current.contains(mousedownTarget);
             const clickOutsideEmojiPicker = !emojiPickerRef.current || !emojiPickerRef.current.contains(mousedownTarget);
 
-            if (clickOutsideMenu && clickOutsideEmojiPicker) {
+            if (clickOutsideMenu && clickOutsideDropdown && clickOutsideEmojiPicker) {
                 setMenuOpen(false);
                 setEmojiPickerOpen(false);
             }
@@ -327,25 +330,32 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
 
                 <div className="more-menu-container" ref={menuRef}>
                     <button
-                        onClick={(e) => { e.stopPropagation(); setMenuPosition(null); setMenuOpen(!menuOpen); }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            setMenuPosition({ x: e.clientX, y: e.clientY });
+                            setMenuOpen(!menuOpen);
+                        }}
                         className={`action-pill more-pill ${menuOpen ? 'active' : ''}`}
                         title={t('container.menu.more')}
                     >
                         <MoreVertical size={18} />
                     </button>
 
-                    {menuOpen && (
+                    {menuOpen && menuPosition && createPortal(
                         <div
+                            ref={dropdownRef}
                             className="link-menu-dropdown"
                             onClick={(e) => e.stopPropagation()}
-                            style={menuPosition ? {
+                            style={{
                                 position: 'fixed',
-                                top: menuPosition.y,
-                                left: menuPosition.x,
+                                top: menuPosition.y + 350 > window.innerHeight ? menuPosition.y - 350 : menuPosition.y,
+                                left: Math.min(menuPosition.x, window.innerWidth - 220),
                                 right: 'auto',
                                 transform: 'none',
-                                zIndex: 10000
-                            } : {}}
+                                zIndex: 100000,
+                                maxHeight: '90vh',
+                                overflowY: 'auto'
+                            }}
                         >
                             <button className="menu-item" onClick={(e) => handleAction(e, () => onStats?.(link))}>
                                 <BarChart2 size={16} />
@@ -408,22 +418,22 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                                     </button>
                                 </>
                             )}
-                        </div>
+                        </div>,
+                        document.body
                     )}
                 </div>
 
                 {/* Emoji Picker Modal overlay logic */}
-                {emojiPickerOpen && (
+                {emojiPickerOpen && menuPosition && createPortal(
                     <div
                         ref={emojiPickerRef}
                         className="link-menu-dropdown emoji-grid"
                         onClick={(e) => e.stopPropagation()}
-                        style={menuPosition ? {
+                        style={{
                             position: 'fixed',
-                            top: Math.min(menuPosition.y, window.innerHeight - 150), // Prevent bottom overflow
-                            left: Math.min(menuPosition.x, window.innerWidth - 180), // Prevent right overflow
+                            top: menuPosition.y + 180 > window.innerHeight ? menuPosition.y - 180 : menuPosition.y + 8,
+                            left: Math.min(menuPosition.x, window.innerWidth - 200),
                             right: 'auto',
-                            transform: 'translate(0, 8px)', // Appear just below the cursor
                             zIndex: 999999, // Ensure it's on top of EVERYTHING
                             display: 'grid',
                             gridTemplateColumns: 'repeat(5, 1fr)',
@@ -432,9 +442,9 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                             width: 'max-content',
                             boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
                             background: 'var(--bg-primary)',
-                            border: '1px solid var(--border-color)',
+                            border: '1px solid var(--primary)',
                             borderRadius: '12px'
-                        } : {}}
+                        }}
                     >
                         {emojis.map(em => (
                             <button
@@ -445,8 +455,8 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                                     handleEmojiSelect(em);
                                 }}
                                 style={{
-                                    background: (link.emojis && currentUserId && link.emojis[currentUserId] === em) ? 'var(--bg-secondary)' : 'transparent',
-                                    border: (link.emojis && currentUserId && link.emojis[currentUserId] === em) ? '1px solid var(--border-color)' : '1px solid transparent',
+                                    background: (link.emojis && currentUserId && link.emojis[currentUserId] === em) ? 'rgba(var(--primary-rgb), 0.15)' : 'transparent',
+                                    border: (link.emojis && currentUserId && link.emojis[currentUserId] === em) ? '1.5px solid var(--primary)' : '1.5px solid transparent',
                                     borderRadius: '8px',
                                     fontSize: '1.25rem',
                                     padding: '4px',
@@ -462,7 +472,8 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                                 {em}
                             </button>
                         ))}
-                    </div>
+                    </div>,
+                    document.body
                 )}
 
                 {canEdit && !disabled && (
@@ -485,7 +496,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                         background: 'rgba(255, 255, 255, 0.75)',
                         backdropFilter: 'blur(12px)',
                         WebkitBackdropFilter: 'blur(12px)',
-                        border: '1px solid rgba(255, 255, 255, 0.4)',
+                        border: '1px solid var(--primary)',
                         borderRadius: '12px',
                         padding: '2px 6px',
                         display: 'flex',
@@ -502,10 +513,6 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                     onClick={(e) => {
                         if (canEdit && currentUserId) {
                             e.stopPropagation();
-
-                            // Let's implement quick toggle: if multiple emojis, open menu. 
-                            // If just yours, toggle it off. 
-                            // But for now, keeping it simple: open the picker.
                             setMenuPosition({ x: e.clientX, y: e.clientY });
                             setEmojiPickerOpen(true);
                         }
