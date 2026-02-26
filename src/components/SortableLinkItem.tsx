@@ -167,7 +167,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
         <div
             ref={setNodeRef}
             style={style}
-            className={`link-item hover-inset ${isDragging ? 'dragging' : ''} ${link.isPinned ? 'pinned-link' : ''} ${menuOpen ? 'menu-active' : ''} ${isSelected ? 'selected' : ''} ${isDeleting ? 'disintegrate' : ''} ${isNewlyAdded ? 'newly-added' : ''}`}
+            className={`link-item ${isDragging ? 'dragging' : ''} ${link.isPinned ? 'pinned-link' : ''} ${menuOpen ? 'menu-active' : ''} ${isSelected ? 'selected' : ''} ${isDeleting ? 'disintegrate' : ''} ${isNewlyAdded ? 'newly-added' : ''}`}
             onClick={(e) => {
                 if (selectionMode && onSelect) {
                     e.preventDefault();
