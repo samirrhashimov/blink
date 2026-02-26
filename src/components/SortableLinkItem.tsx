@@ -348,13 +348,15 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                             onClick={(e) => e.stopPropagation()}
                             style={{
                                 position: 'fixed',
-                                top: menuPosition.y + 350 > window.innerHeight ? menuPosition.y - 350 : menuPosition.y,
-                                left: Math.min(menuPosition.x, window.innerWidth - 220),
+                                top: menuPosition.y + 350 > window.innerHeight ? Math.max(10, menuPosition.y - 350) : menuPosition.y,
+                                left: Math.max(10, Math.min(menuPosition.x, window.innerWidth - 220)),
                                 right: 'auto',
                                 transform: 'none',
                                 zIndex: 100000,
                                 maxHeight: '90vh',
-                                overflowY: 'auto'
+                                overflowY: 'auto',
+                                width: 'max-content',
+                                maxWidth: 'calc(100vw - 20px)'
                             }}
                         >
                             <button className="menu-item" onClick={(e) => handleAction(e, () => onStats?.(link))}>
@@ -431,8 +433,8 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                         onClick={(e) => e.stopPropagation()}
                         style={{
                             position: 'fixed',
-                            top: menuPosition.y + 180 > window.innerHeight ? menuPosition.y - 180 : menuPosition.y + 8,
-                            left: Math.min(menuPosition.x, window.innerWidth - 200),
+                            top: menuPosition.y + 180 > window.innerHeight ? Math.max(10, menuPosition.y - 180) : menuPosition.y + 8,
+                            left: Math.max(10, Math.min(menuPosition.x, window.innerWidth - 240)), // Increased margin for mobile
                             right: 'auto',
                             zIndex: 999999, // Ensure it's on top of EVERYTHING
                             display: 'grid',
@@ -440,10 +442,12 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                             gap: '8px',
                             padding: '12px',
                             width: 'max-content',
+                            maxWidth: 'calc(100vw - 20px)',
                             boxShadow: '0 10px 25px rgba(0,0,0,0.3)',
                             background: 'var(--bg-primary)',
                             border: '1px solid var(--primary)',
-                            borderRadius: '12px'
+                            borderRadius: '12px',
+                            boxSizing: 'border-box'
                         }}
                     >
                         {emojis.map(em => (
