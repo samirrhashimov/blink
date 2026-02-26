@@ -18,7 +18,8 @@ import {
   Scale,
   Download,
   Upload,
-  HelpCircle
+  HelpCircle,
+  MessageSquare
 } from 'lucide-react';
 import ConfirmModal from '../components/ConfirmModal';
 import { parseNetscapeBookmarks } from '../utils/bookmarkParser';
@@ -334,15 +335,17 @@ const Settings: React.FC = () => {
                 <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{t('settings.messages.emailDisabled')}</p>
               </div>
             </form>
-            <button
-              type="submit"
-              onClick={handleUpdateAccount}
-              disabled={loading}
-              className="btn-primary update-account-btn"
-              style={{ marginTop: '1.5rem', opacity: loading ? 0.6 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
-            >
-              {loading ? t('settings.buttons.updating') : t('settings.buttons.update')}
-            </button>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
+              <button
+                type="submit"
+                onClick={handleUpdateAccount}
+                disabled={loading}
+                className="btn-primary update-account-btn"
+                style={{ opacity: loading ? 0.6 : 1, cursor: loading ? 'not-allowed' : 'pointer' }}
+              >
+                {loading ? t('settings.buttons.updating') : t('settings.buttons.update')}
+              </button>
+            </div>
           </section>
 
           {/* Preferences Section */}
@@ -553,6 +556,20 @@ const Settings: React.FC = () => {
               >
                 <Scale className="h-4 w-4" />
                 {t('settings.legal')}
+              </button>
+            </div>
+
+            <div className="settings-item settings-item-media">
+              <div className="settings-item-info">
+                <h4>{t('settings.feedback')}</h4>
+                <p>{t('settings.feedbackDesc')}</p>
+              </div>
+              <button
+                onClick={() => navigate('/support')}
+                className="btn-secondary"
+              >
+                <MessageSquare className="h-4 w-4" />
+                {t('settings.feedback')}
               </button>
             </div>
           </section>

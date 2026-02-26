@@ -164,6 +164,8 @@
         "openSourceDesc": "Explore the source code or give a star on GitHub.",
         "legal": "Legal",
         "legalDesc": "Privacy Policy and Terms of Service.",
+        "feedback": "Feedback",
+        "feedbackDesc": "Help us improve by sharing your thoughts or reporting bugs.",
         "dangerZone": "Danger Zone",
         "logout": "Logout",
         "logoutDesc": "Sign out of your account on this device.",
