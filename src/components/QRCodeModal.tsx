@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { X, Download } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { Link } from '../types';
@@ -17,6 +17,13 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
     containerColor = '#6366f1'
 }) => {
     const { t } = useTranslation();
+    const [imageLoaded, setImageLoaded] = useState(false);
+
+    React.useEffect(() => {
+        if (isOpen) {
+            setImageLoaded(false);
+        }
+    }, [isOpen, link?.id]);
 
     if (!isOpen || !link) return null;
 
@@ -71,15 +78,27 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
                         justifyContent: 'center',
                         boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
                         border: `2px solid ${containerColor}40`,
-                        margin: '0 auto'
+                        margin: '0 auto',
+                        position: 'relative',
+                        width: '240px',
+                        height: '240px'
                     }}>
+                        {!imageLoaded && (
+                            <div className="skeleton-box shimmer" style={{
+                                position: 'absolute',
+                                width: '200px',
+                                height: '200px',
+                                borderRadius: '12px'
+                            }}></div>
+                        )}
                         <img
                             src={qrCodeUrl}
                             alt={t('container.modals.qrCode.alt', { url: link.url })}
+                            onLoad={() => setImageLoaded(true)}
                             style={{
                                 width: '200px',
                                 height: '200px',
-                                display: 'block',
+                                display: imageLoaded ? 'block' : 'none',
                                 borderRadius: '4px'
                             }}
                         />

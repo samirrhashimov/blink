@@ -363,7 +363,10 @@
             "delete": "Linki Sil",
             "more": "Daha fazla işlem",
             "copy": "URL'yi Kopyala",
-            "copied": "Kopyalandı!"
+            "copied": "Kopyalandı!",
+            "addNote": "Not Ekle",
+            "editNote": "Notu Düzenle",
+            "reaction": "Reaksiyon"
         },
         "messages": {
             "deleted": "{{count}} link silindi",
@@ -381,6 +384,9 @@
             "leaveError": "Konteynerden ayrılamadınız"
         },
         "modals": {
+            "note": {
+                "placeholder": "Bir not yazın..."
+            },
             "deleteLink": {
                 "title": "Linki Sil",
                 "message": "\"{{title}}\" linkini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.",

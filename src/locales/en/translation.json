@@ -363,7 +363,10 @@
             "delete": "Delete Link",
             "more": "More actions",
             "copy": "Copy URL",
-            "copied": "Copied!"
+            "copied": "Copied!",
+            "addNote": "Add Note",
+            "editNote": "Edit Note",
+            "reaction": "Reaction"
         },
         "messages": {
             "deleted": "Deleted {{count}} links",
@@ -381,6 +384,9 @@
             "leaveError": "Failed to leave container"
         },
         "modals": {
+            "note": {
+                "placeholder": "Write a note..."
+            },
             "deleteLink": {
                 "title": "Delete Link",
                 "message": "Are you sure you want to delete \"{{title}}\"? This action cannot be undone.",

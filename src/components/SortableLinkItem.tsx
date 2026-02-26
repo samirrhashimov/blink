@@ -257,7 +257,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                                                 if (e.key === 'Escape') setIsEditingNote(false);
                                             }}
                                             autoFocus
-                                            placeholder="Write a note..."
+                                            placeholder={t('container.modals.note.placeholder')}
                                             style={{
                                                 flex: 1,
                                                 fontSize: '0.85rem', padding: '8px 12px', borderRadius: '8px', border: '1px solid var(--border-color)',
@@ -269,8 +269,8 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                                         </span>
                                     </div>
                                     <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
-                                        <button onClick={handleSaveNote} style={{ fontSize: '0.8rem', padding: '6px 14px', background: 'var(--primary)', color: 'white', borderRadius: '8px', fontWeight: 500, border: 'none', cursor: 'pointer' }}>Save</button>
-                                        <button onClick={() => setIsEditingNote(false)} style={{ fontSize: '0.8rem', padding: '6px 14px', background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--border-color)', borderRadius: '8px', cursor: 'pointer' }}>Cancel</button>
+                                        <button onClick={handleSaveNote} style={{ fontSize: '0.8rem', padding: '6px 14px', background: 'var(--primary)', color: 'white', borderRadius: '8px', fontWeight: 500, border: 'none', cursor: 'pointer' }}>{t('common.buttons.save')}</button>
+                                        <button onClick={() => setIsEditingNote(false)} style={{ fontSize: '0.8rem', padding: '6px 14px', background: 'transparent', color: 'var(--text-secondary)', border: '1px solid var(--border-color)', borderRadius: '8px', cursor: 'pointer' }}>{t('common.buttons.cancel')}</button>
                                         {link.note && (
                                             <button
                                                 onClick={() => {
@@ -278,9 +278,9 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                                                     if (onUpdateLink) onUpdateLink(link.id, { note: '' });
                                                 }}
                                                 style={{ marginLeft: 'auto', fontSize: '0.8rem', padding: '6px 14px', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.2)', borderRadius: '8px', cursor: 'pointer' }}
-                                                title="Delete note"
+                                                title={t('common.buttons.delete')}
                                             >
-                                                Delete
+                                                {t('common.buttons.delete')}
                                             </button>
                                         )}
                                     </div>
@@ -309,7 +309,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                                             setIsEditingNote(true);
                                         }
                                     }}
-                                    title="Edit Note"
+                                    title={t('container.menu.editNote')}
                                 >
                                     <MessageSquare size={13} style={{ color: '#6366f1', marginTop: '2px', flexShrink: 0 }} />
                                     <span style={{ overflowWrap: 'anywhere', wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>{link.note}</span>
@@ -381,7 +381,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                                         }}
                                     >
                                         <MessageSquare size={16} />
-                                        <span>{link.note ? 'Edit Note' : 'Add Note'}</span>
+                                        <span>{link.note ? t('container.menu.editNote') : t('container.menu.addNote')}</span>
                                     </button>
                                     <button
                                         className="menu-item"
@@ -393,7 +393,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                                         }}
                                     >
                                         <Smile size={16} />
-                                        <span>Reaction</span>
+                                        <span>{t('container.menu.reaction')}</span>
                                     </button>
 
                                     {onTogglePin && (
