@@ -1722,6 +1722,20 @@ main.container {
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
 }
 
+@media (max-width: 768px) {
+  .auth-page {
+    align-items: flex-start;
+    padding: 2rem 1rem;
+    overflow-y: auto;
+  }
+
+  .auth-container {
+    transform: scale(1);
+    padding: 2rem 1.5rem;
+    margin: auto 0;
+  }
+}
+
 .auth-header {
   text-align: center;
   margin-bottom: 0.5rem;
