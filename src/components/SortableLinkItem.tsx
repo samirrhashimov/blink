@@ -220,12 +220,12 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                     )}
                 </div>
                 <div className="link-info" style={{ minWidth: 0, flex: 1 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <h4 className="font-medium text-gray-900 dark:text-white truncate">{link.title}</h4>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
+                        <h4 className="font-medium text-gray-900 dark:text-white" style={{ flex: 1, overflowWrap: 'anywhere', whiteSpace: 'pre-wrap' }}>{link.title}</h4>
                     </div>
 
                     {link.description && (
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-0.5 line-clamp-2">{link.description}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-0.5 line-clamp-2" style={{ overflowWrap: 'anywhere' }}>{link.description}</p>
                     )}
 
                     {link.githubData && (
@@ -237,7 +237,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                             fontSize: '10px',
                             fontWeight: 700,
                             color: 'var(--text-muted)',
-                            marginTop: '4px',
+                            marginTop: '8px',
                             textTransform: 'uppercase',
                             letterSpacing: '0.05em'
                         }}>

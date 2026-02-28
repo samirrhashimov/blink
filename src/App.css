@@ -882,6 +882,7 @@ main.container {
    ============================================ */
 .links-section {
   flex: 1;
+  min-width: 0;
 }
 
 .links-header {

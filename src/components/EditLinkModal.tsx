@@ -59,11 +59,20 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, containe
     try {
       setError('');
       setLoading(true);
+
+      let finalTags = [...tags];
+      if (tagInput.trim()) {
+        const remainingTags = tagInput.split(',')
+          .map(t => t.trim().toLowerCase())
+          .filter(t => t !== "" && !finalTags.includes(t));
+        finalTags.push(...remainingTags);
+      }
+
       await updateLinkInContainer(containerId, link.id, {
         title: formData.title.trim(),
         url: formData.url.trim(),
         description: formData.description.trim(),
-        tags
+        tags: finalTags
       });
       onClose();
     } catch (err: any) {
@@ -80,13 +89,20 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, containe
     }));
   };
 
-  const handleAddTag = (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    const trimmed = tagInput.trim().toLowerCase();
-    if (trimmed && !tags.includes(trimmed)) {
-      setTags([...tags, trimmed]);
-      setTagInput('');
-    }
+  const handleAddTag = (text?: string) => {
+    const rawInput = text !== undefined ? text : tagInput;
+    const individualTags = rawInput.split(',').map(tag => tag.trim().toLowerCase()).filter(tag => tag !== "");
+
+    setTags(prevTags => {
+      const newTags = [...prevTags];
+      individualTags.forEach(tag => {
+        if (!newTags.includes(tag)) {
+          newTags.push(tag);
+        }
+      });
+      return newTags;
+    });
+    setTagInput('');
   };
 
   const removeTag = (tagToRemove: string) => {
@@ -117,23 +133,6 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, containe
           )}
 
           <div className="form-group">
-            <label htmlFor="edit-title" className="form-label">
-              {t('container.modals.addLink.linkTitle')} *
-            </label>
-            <input
-              id="edit-title"
-              name="title"
-              type="text"
-              required
-              value={formData.title}
-              onChange={handleChange}
-              className="form-input"
-              placeholder={t('container.modals.addLink.placeholders.title')}
-              disabled={loading}
-            />
-          </div>
-
-          <div className="form-group">
             <label htmlFor="edit-url" className="form-label">
               {t('container.modals.addLink.url')} *
             </label>
@@ -151,12 +150,37 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, containe
           </div>
 
           <div className="form-group">
+            <label htmlFor="edit-title" className="form-label">
+              {t('container.modals.addLink.linkTitle')} *
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginLeft: '10px', float: 'right' }}>
+                {formData.title.length}/100
+              </span>
+            </label>
+            <input
+              id="edit-title"
+              name="title"
+              type="text"
+              required
+              maxLength={100}
+              value={formData.title}
+              onChange={handleChange}
+              className="form-input"
+              placeholder={t('container.modals.addLink.placeholders.title')}
+              disabled={loading}
+            />
+          </div>
+
+          <div className="form-group">
             <label htmlFor="edit-description" className="form-label">
               {t('container.modals.addLink.description')}
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginLeft: '10px', float: 'right' }}>
+                {formData.description.length}/200
+              </span>
             </label>
             <textarea
               id="edit-description"
               name="description"
+              maxLength={200}
               value={formData.description}
               onChange={handleChange}
               className="form-input resize-none"
@@ -189,7 +213,14 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, containe
                   id="edit-tags"
                   type="text"
                   value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value.endsWith(',')) {
+                      handleAddTag(value);
+                    } else {
+                      setTagInput(value);
+                    }
+                  }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
@@ -201,7 +232,7 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, containe
                 />
                 <button
                   type="button"
-                  onClick={handleAddTag}
+                  onClick={() => handleAddTag()}
                   className="tag-add-btn"
                   title={t('container.modals.addLink.tooltips.addTag')}
                 >

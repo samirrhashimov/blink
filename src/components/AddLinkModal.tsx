@@ -85,12 +85,20 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
 
       // 1. Add link immediately without waiting for favicon
       // This makes the UI feel much faster
+      let finalTags = [...tags];
+      if (tagInput.trim()) {
+        const remainingTags = tagInput.split(',')
+          .map(t => t.trim().toLowerCase())
+          .filter(t => t !== "" && !finalTags.includes(t));
+        finalTags.push(...remainingTags);
+      }
+
       const linkId = await addLinkToContainer(containerId, {
         title: formData.title.trim(),
         url: normalizedUrl,
         description: formData.description.trim(),
         favicon: undefined, // Will be updated in background
-        tags,
+        tags: finalTags,
         githubData: formData.githubData
       });
 
@@ -205,13 +213,20 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
     }
   };
 
-  const handleAddTag = (e?: React.FormEvent) => {
-    if (e) e.preventDefault();
-    const trimmed = tagInput.trim().toLowerCase();
-    if (trimmed && !tags.includes(trimmed)) {
-      setTags([...tags, trimmed]);
-      setTagInput('');
-    }
+  const handleAddTag = (text?: string) => {
+    const rawInput = text !== undefined ? text : tagInput;
+    const individualTags = rawInput.split(',').map(tag => tag.trim().toLowerCase()).filter(tag => tag !== "");
+
+    setTags(prevTags => {
+      const newTags = [...prevTags];
+      individualTags.forEach(tag => {
+        if (!newTags.includes(tag)) {
+          newTags.push(tag);
+        }
+      });
+      return newTags;
+    });
+    setTagInput('');
   };
 
   const removeTag = (tagToRemove: string) => {
@@ -316,6 +331,9 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
                   <Sparkles size={10} /> {t('container.modals.addLink.autoFilled')}
                 </span>
               )}
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginLeft: '10px', float: 'right' }}>
+                {formData.title.length}/100
+              </span>
             </label>
             <div className={`input-with-icon ${isTitleAutoFilled ? 'input-with-magic' : ''} ${formData.title ? 'input-with-clear' : ''}`}>
               {isTitleAutoFilled && <Sparkles className="input-magic-icon" size={16} />}
@@ -346,6 +364,9 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
                   <Sparkles size={10} /> {t('container.modals.addLink.autoFilled')}
                 </span>
               )}
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginLeft: '10px', float: 'right' }}>
+                {formData.description.length}/200
+              </span>
             </label>
             <div className={`input-with-icon ${isDescAutoFilled ? 'input-with-magic' : ''} ${formData.description ? 'input-with-clear' : ''}`}>
               {isDescAutoFilled && <Sparkles className="input-magic-icon" size={16} />}
@@ -389,7 +410,14 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
                 <input
                   type="text"
                   value={tagInput}
-                  onChange={(e) => setTagInput(e.target.value)}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value.endsWith(',')) {
+                      handleAddTag(value);
+                    } else {
+                      setTagInput(value);
+                    }
+                  }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') {
                       e.preventDefault();
@@ -401,7 +429,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
                 />
                 <button
                   type="button"
-                  onClick={handleAddTag}
+                  onClick={() => handleAddTag()}
                   className="tag-add-btn"
                   title={t('container.modals.addLink.tooltips.addTag')}
                 >

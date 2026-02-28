@@ -1185,3 +1185,10 @@ body {
 .github-card-data div.flex:hover {
   transform: translateY(-1px);
 }
+
+/* Utility Classes */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
