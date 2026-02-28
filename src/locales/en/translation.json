@@ -350,7 +350,7 @@
             "owner": "Owner",
             "you": "You (Owner)",
             "invite": "Invite",
-            "manage": "Manage",
+            "manage": "See All",
             "more": "+{{count}} more"
         },
         "guest": {

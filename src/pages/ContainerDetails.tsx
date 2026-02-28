@@ -569,10 +569,13 @@ const ContainerDetails: React.FC = () => {
   };
 
   // Check if current user is the owner
-  const isOwner = container?.ownerId === currentUser?.uid;
+  const isOwner = !!container && !!currentUser && container.ownerId === currentUser.uid;
 
   // Check if user can edit (owner or has edit permission)
   const canEdit = isOwner || userPermission === 'edit';
+
+  // Check if current user is a member (owner or explicitly authorized)
+  const isMember = isOwner || !!(container && currentUser && container.authorizedUsers?.includes(currentUser.uid));
 
 
 
@@ -829,8 +832,8 @@ const ContainerDetails: React.FC = () => {
             <div className="collaborators-widget">
               <h3>{t('container.collaborators.title')}</h3>
               <div className="collaborators-list">
-                {/* Current User */}
-                {currentUser && (
+                {/* Current User - Only show if member */}
+                {currentUser && isMember && (
                   <div className="avatar" title={currentUser.displayName || t('container.collaborators.you')}>
                     {currentUser.displayName?.charAt(0).toUpperCase() || 'U'}
                   </div>
@@ -883,19 +886,17 @@ const ContainerDetails: React.FC = () => {
                     {t('container.collaborators.invite')}
                   </Link>
                 )}
-                {currentUser && (
-                  <button
-                    onClick={() => setShowCollaboratorsModal(true)}
-                    className="manage-collaborators-button"
-                  >
-                    <Users size={18} />
-                    {t('container.collaborators.manage')}
-                  </button>
-                )}
+                <button
+                  onClick={() => setShowCollaboratorsModal(true)}
+                  className="manage-collaborators-button"
+                >
+                  <Users size={18} />
+                  {t('container.collaborators.manage')}
+                </button>
               </div>
             </div>
 
-            {currentUser && (
+            {isMember && (
               <div className="actions-widget">
                 <h3>{t('container.actions.title')}</h3>
                 <div className="actions-list">
@@ -916,7 +917,7 @@ const ContainerDetails: React.FC = () => {
                       <Trash2 />
                       <span>{t('container.actions.deleteContainer')}</span>
                     </button>
-                  ) : (
+                  ) : isMember ? (
                     <button
                       onClick={() => setShowLeaveContainerModal(true)}
                       className="action-button delete-button"
@@ -924,7 +925,7 @@ const ContainerDetails: React.FC = () => {
                       <LogOut />
                       <span>{t('container.actions.leaveContainer')}</span>
                     </button>
-                  )}
+                  ) : null}
                 </div>
               </div>
             )}
