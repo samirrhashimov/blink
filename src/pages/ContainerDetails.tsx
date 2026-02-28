@@ -8,6 +8,7 @@ import { NotificationService } from '../services/notificationService';
 import { UserService } from '../services/userService';
 import type { Link as LinkType } from '../types';
 import blinkLogo from '../assets/blinklogo2.png';
+import { ContainerService } from '../services/containerService';
 import {
   ArrowLeft,
   Plus,
@@ -20,7 +21,8 @@ import {
   Search,
   CheckSquare,
   XCircle,
-  ArrowRightLeft
+  ArrowRightLeft,
+  X
 } from 'lucide-react';
 import AddLinkModal from '../components/AddLinkModal';
 import EditLinkModal from '../components/EditLinkModal';
@@ -101,6 +103,7 @@ const ContainerDetails: React.FC = () => {
   const [collaboratorNames, setCollaboratorNames] = useState<Record<string, string>>({});
   const [showNavbar, setShowNavbar] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [showGuestJoinBanner, setShowGuestJoinBanner] = useState(true);
 
   // Bulk Selection State
   const [selectionMode, setSelectionMode] = useState(false);
@@ -125,7 +128,7 @@ const ContainerDetails: React.FC = () => {
     if (selectedLinkIds.size === filteredLinks.length) {
       setSelectedLinkIds(new Set());
     } else {
-      setSelectedLinkIds(new Set(filteredLinks.map(l => l.id)));
+      setSelectedLinkIds(new Set(filteredLinks.map((l: LinkType) => l.id)));
     }
   };
 
@@ -136,12 +139,34 @@ const ContainerDetails: React.FC = () => {
 
   const [deletingLinkId, setDeletingLinkId] = useState<string | null>(null);
   const [deletingLinkIds, setDeletingLinkIds] = useState<Set<string>>(new Set());
+  const [publicContainer, setPublicContainer] = useState<any>(null);
+  const [fetchingPublic, setFetchingPublic] = useState(true);
+  const hasAttemptedFetch = useRef<string | null>(null);
+
+  // Find the current container from the containers array or fetch it if public
+  const container = (containers.find(v => v.id === id) || publicContainer) || null;
+
   const [newlyAddedLinkId, setNewlyAddedLinkId] = useState<string | null>(null);
+  const [prevLinksCount, setPrevLinksCount] = useState(0);
+
+  useEffect(() => {
+    if (container && container.links.length > prevLinksCount) {
+      // Find the link with the newest createdAt
+      const newestLink = [...container.links].sort((a, b) =>
+        (b.createdAt as any)?.seconds - (a.createdAt as any)?.seconds
+      )[0];
+
+      if (newestLink) {
+        setNewlyAddedLinkId(newestLink.id);
+        setTimeout(() => setNewlyAddedLinkId(null), 3000); // Clear after 3 seconds
+      }
+    }
+    setPrevLinksCount(container?.links.length || 0);
+  }, [container?.links.length, prevLinksCount]);
 
   const [softDeletedLinks, setSoftDeletedLinks] = useState<Set<string>>(new Set());
   const deleteTimers = useRef<Record<string, any>>({});
   const searchInputRef = useRef<HTMLInputElement>(null);
-
 
   const confirmBulkDelete = async () => {
     try {
@@ -167,8 +192,6 @@ const ContainerDetails: React.FC = () => {
       throw err;
     }
   };
-
-
 
   const handleBulkMove = () => {
     if (selectedLinkIds.size === 0) return;
@@ -198,8 +221,54 @@ const ContainerDetails: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [lastScrollY]);
 
-  // Find the current container from the containers array
-  const container = containers.find(v => v.id === id) || null;
+  // Fetch public container if not found in user's containers
+  useEffect(() => {
+    // Reset if ID changes
+    if (id && hasAttemptedFetch.current !== id) {
+      hasAttemptedFetch.current = null;
+      setPublicContainer(null);
+      setFetchingPublic(true);
+    }
+
+    const fetchPublicContainer = async () => {
+      if (!id) return;
+
+      // Check if we already have it in user's containers
+      const foundInContainers = containers.find(v => v.id === id);
+      if (foundInContainers) {
+        setFetchingPublic(false);
+        return;
+      }
+
+      // If we already attempted for this ID, don't do it again
+      if (hasAttemptedFetch.current === id) {
+        // But if we're here and not found in containers, it means it's not our container
+        // and fetch already ran once.
+        return;
+      }
+
+      try {
+        setFetchingPublic(true);
+        hasAttemptedFetch.current = id;
+        const data = await ContainerService.getContainer(id);
+
+        // Only set as public container if it exists and is marked public
+        if (data && data.isPublic) {
+          setPublicContainer(data);
+        } else if (data && !data.isPublic) {
+          // It's a private container and we don't have access
+          setPublicContainer(null);
+        }
+      } catch (err) {
+        console.error('Error fetching public container:', err);
+        setPublicContainer(null);
+      } finally {
+        setFetchingPublic(false);
+      }
+    };
+
+    fetchPublicContainer();
+  }, [id, containers]);
 
   // Debug container data
   useEffect(() => {
@@ -237,7 +306,7 @@ const ContainerDetails: React.FC = () => {
 
       // Add all authorized users who are not current user
       if (container.authorizedUsers && container.authorizedUsers.length > 0) {
-        container.authorizedUsers.forEach(userId => {
+        container.authorizedUsers.forEach((userId: string) => {
           if (userId !== currentUser?.uid) {
             userIdsToFetch.add(userId);
           }
@@ -281,11 +350,25 @@ const ContainerDetails: React.FC = () => {
 
       // Check permission for shared users
       const permission = await SharingService.getUserPermission(container.id, currentUser.uid);
-      setUserPermission(permission?.permission || null);
+      setUserPermission(permission?.permission || (container.isPublic ? 'view' : null));
     };
 
     loadUserPermission();
-  }, [container?.id, currentUser]);
+  }, [container?.id, container?.isPublic, currentUser]);
+
+  // Set default permission for guests or non-members if public
+  useEffect(() => {
+    if (container?.isPublic) {
+      if (!currentUser) {
+        setUserPermission('view');
+      } else if (container.ownerId !== currentUser.uid && !container.authorizedUsers.includes(currentUser.uid)) {
+        // If logged in but not member, check if we already have permission from sharingService
+        if (!userPermission) {
+          setUserPermission('view');
+        }
+      }
+    }
+  }, [container?.isPublic, container?.ownerId, container?.authorizedUsers, currentUser, userPermission]);
 
   // Handle Drag and Drop Sensors
   const sensors = useSensors(
@@ -309,13 +392,13 @@ const ContainerDetails: React.FC = () => {
     const { active, over } = event;
 
     if (over && active.id !== over.id && container) {
-      const oldIndex = container.links.findIndex((l) => l.id === active.id);
-      const newIndex = container.links.findIndex((l) => l.id === over.id);
+      const oldIndex = container.links.findIndex((l: LinkType) => l.id === active.id);
+      const newIndex = container.links.findIndex((l: LinkType) => l.id === over.id);
 
       const newLinks = arrayMove(container.links, oldIndex, newIndex);
 
       try {
-        await reorderLinks(container.id, newLinks);
+        await (reorderLinks as any)(container.id, newLinks);
         toast.success(t('container.messages.orderUpdated'));
       } catch (err: any) {
         toast.error(t('container.messages.updateOrderError'));
@@ -329,7 +412,7 @@ const ContainerDetails: React.FC = () => {
   };
 
   // Filter links based on search query
-  const filteredLinks = container?.links.filter(link => {
+  const filteredLinks = container?.links.filter((link: LinkType) => {
     if (softDeletedLinks.has(link.id)) return false;
     const query = linkSearchQuery.toLowerCase();
     return (
@@ -491,7 +574,9 @@ const ContainerDetails: React.FC = () => {
   // Check if user can edit (owner or has edit permission)
   const canEdit = isOwner || userPermission === 'edit';
 
-  if (loading) {
+
+
+  if (loading || fetchingPublic) {
     return <LoadingSkeleton variant="fullscreen" />;
   }
 
@@ -509,7 +594,7 @@ const ContainerDetails: React.FC = () => {
   }
 
   const colors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
-  const containerColor = container.color || colors[container.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length];
+  const containerColor = container.color || colors[container.id.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0) % colors.length];
 
   // Helper to get RGB from hex
   const hexToRgb = (hex: string) => {
@@ -519,22 +604,7 @@ const ContainerDetails: React.FC = () => {
       '99, 102, 241';
   };
 
-  // Detect newly added links
-  const [prevLinksCount, setPrevLinksCount] = useState(container?.links.length || 0);
-  useEffect(() => {
-    if (container && container.links.length > prevLinksCount) {
-      // Find the link with the newest createdAt
-      const newestLink = [...container.links].sort((a, b) =>
-        (b.createdAt as any)?.seconds - (a.createdAt as any)?.seconds
-      )[0];
 
-      if (newestLink) {
-        setNewlyAddedLinkId(newestLink.id);
-        setTimeout(() => setNewlyAddedLinkId(null), 3000); // Clear after 3 seconds
-      }
-    }
-    setPrevLinksCount(container?.links.length || 0);
-  }, [container?.links.length]);
 
   return (
     <div
@@ -563,7 +633,7 @@ const ContainerDetails: React.FC = () => {
                 <Settings size={20} />
               </Link>
               <div className="user-avatar">
-                {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}
+                {currentUser ? (currentUser.displayName?.charAt(0).toUpperCase() || 'U') : 'G'}
               </div>
             </div>
           </div>
@@ -571,6 +641,25 @@ const ContainerDetails: React.FC = () => {
       </header>
 
       <main className={`container fade-in ${isDeletingContainer ? 'disintegrate' : ''}`}>
+        {/* Guest Join Banner */}
+        {!currentUser && container.isPublic && showGuestJoinBanner && (
+          <div className="guest-join-footer">
+            <button
+              className="guest-join-close"
+              onClick={() => setShowGuestJoinBanner(false)}
+              aria-label="Close"
+            >
+              <X size={18} />
+            </button>
+            <div className="guest-join-info">
+              <h4>{t('container.guest.joinTitle')}</h4>
+              <p>{t('container.guest.joinDesc')}</p>
+            </div>
+            <Link to="/signup" className="guest-signup-btn">
+              {t('container.guest.signup')}
+            </Link>
+          </div>
+        )}
         <div className="container-header">
           <div className="container-header-info">
             <h2 className="container-name-title">{container.name}</h2>
@@ -741,16 +830,18 @@ const ContainerDetails: React.FC = () => {
               <h3>{t('container.collaborators.title')}</h3>
               <div className="collaborators-list">
                 {/* Current User */}
-                <div className="avatar" title={currentUser?.displayName || t('container.collaborators.you')}>
-                  {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}
-                </div>
+                {currentUser && (
+                  <div className="avatar" title={currentUser.displayName || t('container.collaborators.you')}>
+                    {currentUser.displayName?.charAt(0).toUpperCase() || 'U'}
+                  </div>
+                )}
 
                 {/* Owner (if not current user) */}
                 {container.ownerId !== currentUser?.uid && (
                   <div
                     key={container.ownerId}
                     className="avatar"
-                    title={`${collaboratorNames[container.ownerId] || t('container.collaborators.owner')} (${t('container.collaborators.owner')})`}
+                    title={`${collaboratorNames[container.ownerId] || 'Owner'} (${t('container.collaborators.owner')})`}
                   >
                     {(collaboratorNames[container.ownerId] || 'O').charAt(0).toUpperCase()}
                   </div>
@@ -758,9 +849,9 @@ const ContainerDetails: React.FC = () => {
 
                 {/* Other Authorized Users (excluding owner and current user) */}
                 {container.authorizedUsers
-                  .filter(userId => userId !== currentUser?.uid && userId !== container.ownerId)
+                  .filter((userId: string) => userId !== currentUser?.uid && userId !== container.ownerId)
                   .slice(0, 2)
-                  .map((userId) => {
+                  .map((userId: string) => {
                     const userName = collaboratorNames[userId] || 'Loading...';
                     return (
                       <div key={userId} className="avatar" title={userName}>
@@ -772,7 +863,7 @@ const ContainerDetails: React.FC = () => {
                 {/* Show +N more if there are additional collaborators */}
                 {(() => {
                   const otherUsers = container.authorizedUsers.filter(
-                    userId => userId !== currentUser?.uid && userId !== container.ownerId
+                    (userId: string) => userId !== currentUser?.uid && userId !== container.ownerId
                   );
                   const remainingCount = otherUsers.length - 2;
                   return remainingCount > 0 && (
@@ -792,47 +883,51 @@ const ContainerDetails: React.FC = () => {
                     {t('container.collaborators.invite')}
                   </Link>
                 )}
-                <button
-                  onClick={() => setShowCollaboratorsModal(true)}
-                  className="manage-collaborators-button"
-                >
-                  <Users size={18} />
-                  {t('container.collaborators.manage')}
-                </button>
+                {currentUser && (
+                  <button
+                    onClick={() => setShowCollaboratorsModal(true)}
+                    className="manage-collaborators-button"
+                  >
+                    <Users size={18} />
+                    {t('container.collaborators.manage')}
+                  </button>
+                )}
               </div>
             </div>
 
-            <div className="actions-widget">
-              <h3>{t('container.actions.title')}</h3>
-              <div className="actions-list">
-                {isOwner && (
-                  <button
-                    onClick={() => setShowEditContainerModal(true)}
-                    className="action-button"
-                  >
-                    <Edit />
-                    <span>{t('container.actions.editContainer')}</span>
-                  </button>
-                )}
-                {isOwner ? (
-                  <button
-                    onClick={() => setShowDeleteContainerModal(true)}
-                    className="action-button delete-button"
-                  >
-                    <Trash2 />
-                    <span>{t('container.actions.deleteContainer')}</span>
-                  </button>
-                ) : (
-                  <button
-                    onClick={() => setShowLeaveContainerModal(true)}
-                    className="action-button delete-button"
-                  >
-                    <LogOut />
-                    <span>{t('container.actions.leaveContainer')}</span>
-                  </button>
-                )}
+            {currentUser && (
+              <div className="actions-widget">
+                <h3>{t('container.actions.title')}</h3>
+                <div className="actions-list">
+                  {isOwner && (
+                    <button
+                      onClick={() => setShowEditContainerModal(true)}
+                      className="action-button"
+                    >
+                      <Edit />
+                      <span>{t('container.actions.editContainer')}</span>
+                    </button>
+                  )}
+                  {isOwner ? (
+                    <button
+                      onClick={() => setShowDeleteContainerModal(true)}
+                      className="action-button delete-button"
+                    >
+                      <Trash2 />
+                      <span>{t('container.actions.deleteContainer')}</span>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => setShowLeaveContainerModal(true)}
+                      className="action-button delete-button"
+                    >
+                      <LogOut />
+                      <span>{t('container.actions.leaveContainer')}</span>
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </aside>
         </div>
 
@@ -1019,4 +1114,4 @@ const ContainerDetails: React.FC = () => {
   );
 };
 
-export default ContainerDetails;
+export default ContainerDetails; 

@@ -37,6 +37,7 @@ export interface Container {
   coverImage?: string;
   color?: string;
   order?: number;
+  isPublic?: boolean;
 }
 
 export interface ContainerPermission {

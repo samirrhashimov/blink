@@ -128,7 +128,11 @@
             "view": "Görüntüleyebilir",
             "viewDesc": "Linklere salt okunur erişim.",
             "edit": "Düzenleyebilir",
-            "editDesc": "Link ekleme, düzenleme ve silme için tam erişim."
+            "editDesc": "Link ekleme, düzenleme ve silme için tam erişim.",
+            "public": "Herkese Açık",
+            "publicDesc": "Bağlantıya sahip olan herkes bu konteyneri görüntüleyebilir.",
+            "copyLink": "Konteyner Bağlantısını Kopyala",
+            "linkCopied": "Bağlantı kopyalandı!"
         },
         "pending": {
             "title": "Bekleyen Davetler",
@@ -348,6 +352,11 @@
             "invite": "Davet Et",
             "manage": "Yönet",
             "more": "+{{count}} diğer"
+        },
+        "guest": {
+            "joinTitle": "Blink'e Katıl",
+            "joinDesc": "Linklerinizi Blink ile kaydedin, düzenleyin ve paylaşın.",
+            "signup": "Ücretsiz Kaydol"
         },
         "actions": {
             "title": "İşlemler",

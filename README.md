@@ -105,16 +105,18 @@ service cloud.firestore {
   match /databases/{database}/documents {
     
     match /users/{userId} {
-      allow read: if request.auth != null;
+      // Allow reading user display names for shared contexts
+      allow read: if true;
       allow create: if request.auth != null;
       allow update, delete: if request.auth != null && request.auth.uid == userId;
     }
     
     match /vaults/{vaultId} {
       allow create: if request.auth != null && request.resource.data.ownerId == request.auth.uid;
-      allow read: if request.auth != null && 
+      // Allow public containers to be seen without authentication
+      allow read: if (resource.data.isPublic == true) || (request.auth != null && 
         (resource.data.ownerId == request.auth.uid || 
-         request.auth.uid in resource.data.authorizedUsers);
+         request.auth.uid in resource.data.authorizedUsers));
       
       allow delete: if request.auth != null && resource.data.ownerId == request.auth.uid;
    
@@ -133,7 +135,9 @@ service cloud.firestore {
     }
     
     match /shareLinks/{linkId} {
-      allow read, write: if request.auth != null;
+      // Allow reading share links by token for public access
+      allow read: if true;
+      allow write: if request.auth != null;
     }
     
     match /notifications/{notificationId} {

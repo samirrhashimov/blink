@@ -100,9 +100,9 @@ export class ContainerService {
         } as Container;
       }
       return null;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching container:', error);
-      throw new Error('Failed to fetch container');
+      throw error;
     }
   }
 

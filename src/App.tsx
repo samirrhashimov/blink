@@ -17,6 +17,7 @@ import ShareContainer from './pages/ShareContainer';
 import Invitations from './pages/Invitations';
 import Settings from './pages/Settings';
 import Tags from './pages/Tags';
+import SharePage from './pages/SharePage';
 import ProtectedRoute from './components/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary';
 import BottomNavigation from './components/BottomNavigation';
@@ -32,7 +33,7 @@ const AppRoutes: React.FC = () => {
   const { currentUser } = useAuth();
 
   return (
-    <Router>
+    <>
       <Routes>
         <Route
           path="/"
@@ -85,11 +86,11 @@ const AppRoutes: React.FC = () => {
         />
         <Route
           path="/container/:id"
-          element={
-            <ProtectedRoute>
-              <ContainerDetails />
-            </ProtectedRoute>
-          }
+          element={<ContainerDetails />}
+        />
+        <Route
+          path="/share/:token"
+          element={<SharePage />}
         />
         <Route
           path="/container/:id/share"
@@ -127,7 +128,7 @@ const AppRoutes: React.FC = () => {
       <BottomNavigation />
       <GlobalModals />
       <SpotlightSearch />
-    </Router>
+    </>
   );
 };
 
@@ -138,7 +139,9 @@ function App() {
         <ToastProvider>
           <AuthProvider>
             <ContainerProvider>
-              <AppRoutes />
+              <Router>
+                <AppRoutes />
+              </Router>
             </ContainerProvider>
           </AuthProvider>
         </ToastProvider>
