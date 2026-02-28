@@ -128,7 +128,11 @@
             "view": "Can view",
             "viewDesc": "Read-only access to links.",
             "edit": "Can edit",
-            "editDesc": "Full access to add, edit, and delete links."
+            "editDesc": "Full access to add, edit, and delete links.",
+            "public": "Public View",
+            "publicDesc": "Anyone with the link can view this container.",
+            "copyLink": "Copy Container Link",
+            "linkCopied": "Link copied!"
         },
         "pending": {
             "title": "Pending Invitations",
@@ -346,8 +350,13 @@
             "owner": "Owner",
             "you": "You (Owner)",
             "invite": "Invite",
-            "manage": "Manage",
+            "manage": "See All",
             "more": "+{{count}} more"
+        },
+        "guest": {
+            "joinTitle": "Join the blink",
+            "joinDesc": "Save, organize and share your links with Blink.",
+            "signup": "Sign up for free"
         },
         "actions": {
             "title": "Actions",
