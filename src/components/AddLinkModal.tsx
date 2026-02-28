@@ -16,7 +16,13 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
   const { t } = useTranslation();
 
   const { addLinkToContainer, updateLinkInContainer } = useContainer();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    title: string;
+    url: string;
+    description: string;
+    githubData?: any;
+    image?: string;
+  }>({
     title: '',
     url: '',
     description: ''
@@ -84,7 +90,8 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
         url: normalizedUrl,
         description: formData.description.trim(),
         favicon: undefined, // Will be updated in background
-        tags
+        tags,
+        githubData: formData.githubData
       });
 
       // 2. Close modal and reset form immediately
@@ -94,16 +101,20 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
       setLoading(false);
       onClose();
 
-      // 3. Fetch favicon in background (Fire & Forget)
+      // 3. Fetch full preview in background (Fire & Forget)
       LinkPreviewService.fetchLinkPreview(normalizedUrl)
         .then(preview => {
-          if (preview.favicon) {
-            updateLinkInContainer(containerId, linkId, { favicon: preview.favicon })
-              .catch(err => console.error('Background favicon update failed:', err));
+          const updates: any = {};
+          if (preview.favicon) updates.favicon = preview.favicon;
+          if (preview.githubData) updates.githubData = preview.githubData;
+
+          if (Object.keys(updates).length > 0) {
+            updateLinkInContainer(containerId, linkId, updates)
+              .catch(err => console.error('Background update failed:', err));
           }
         })
         .catch(() => {
-          // Silent failure for favicon is acceptable
+          // Silent failure is acceptable
         });
 
     } catch (err: any) {
@@ -146,6 +157,10 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
           if ((!prev.description || isDescAutoFilled) && preview.description) {
             newData.description = preview.description;
             setIsDescAutoFilled(true);
+          }
+
+          if (preview.githubData) {
+            newData.githubData = preview.githubData;
           }
 
           return newData;

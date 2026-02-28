@@ -3,6 +3,15 @@ export interface LinkPreviewData {
   image?: string;
   title?: string;
   description?: string;
+  githubData?: {
+    stars?: number;
+    language?: string;
+    forks?: number;
+    openIssues?: number;
+    ownerAvatar?: string;
+    repoName?: string;
+    ownerName?: string;
+  };
 }
 
 class LinkPreviewService {
@@ -13,6 +22,42 @@ class LinkPreviewService {
     } catch {
       return '';
     }
+  }
+
+  private static isGitHubRepo(url: string): { owner: string; repo: string } | null {
+    try {
+      const urlObj = new URL(url);
+      if (urlObj.hostname !== 'github.com') return null;
+
+      const parts = urlObj.pathname.split('/').filter(Boolean);
+      if (parts.length >= 2) {
+        return { owner: parts[0], repo: parts[1] };
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  }
+
+  private static async fetchGitHubData(owner: string, repo: string) {
+    try {
+      const response = await fetch(`https://api.github.com/repos/${owner}/${repo}`);
+      if (response.ok) {
+        const data = await response.json();
+        return {
+          stars: data.stargazers_count,
+          language: data.language,
+          forks: data.forks_count,
+          openIssues: data.open_issues_count,
+          ownerAvatar: data.owner.avatar_url,
+          repoName: data.name,
+          ownerName: data.owner.login
+        };
+      }
+    } catch (err) {
+      console.warn('GitHub API fetch failed:', err);
+    }
+    return undefined;
   }
 
   static getFaviconUrl(url: string): string {
@@ -29,6 +74,12 @@ class LinkPreviewService {
     }
 
     const favicon = this.getFaviconUrl(url);
+    const githubInfo = this.isGitHubRepo(url);
+    let githubData = undefined;
+
+    if (githubInfo) {
+      githubData = await this.fetchGitHubData(githubInfo.owner, githubInfo.repo);
+    }
 
     try {
       let html = '';
@@ -79,11 +130,12 @@ class LinkPreviewService {
         favicon,
         title: (title?.trim() || undefined) as string | undefined,
         description: (description?.trim() || undefined) as string | undefined,
-        image: (image?.trim() || undefined) as string | undefined
+        image: (image?.trim() || undefined) as string | undefined,
+        githubData
       };
     } catch (error) {
       console.warn('Error fetching link preview:', error);
-      return { favicon };
+      return { favicon, githubData };
     }
   }
 

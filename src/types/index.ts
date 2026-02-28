@@ -22,6 +22,15 @@ export interface Link {
   clickStats?: Record<string, number>; // Format: { "YYYY-MM-DD": count }
   note?: string;
   emojis?: Record<string, string>; // Format: { "userId": "emoji" }
+  githubData?: {
+    stars?: number;
+    language?: string;
+    forks?: number;
+    openIssues?: number;
+    ownerAvatar?: string;
+    repoName?: string;
+    ownerName?: string;
+  };
 }
 
 export interface Container {

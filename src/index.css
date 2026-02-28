@@ -1160,3 +1160,28 @@ body {
 .animations-enabled .btn-danger:active {
   transform: scale(0.95);
 }
+/* GitHub Card Styles */
+.github-card-data {
+  background: rgba(var(--primary-rgb), 0.03);
+  border-radius: 8px;
+  padding: 10px;
+  margin-top: 6px;
+  border: 1px solid var(--border-color);
+}
+
+.dark .github-card-data {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.github-card-data p {
+  line-height: 1.4 !important;
+  margin-bottom: 8px !important;
+}
+
+.github-card-data div.flex {
+  transition: transform 0.2s ease;
+}
+
+.github-card-data div.flex:hover {
+  transform: translateY(-1px);
+}

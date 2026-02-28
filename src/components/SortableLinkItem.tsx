@@ -17,7 +17,11 @@ import {
     Check,
     QrCode,
     MessageSquare,
-    Smile
+    Smile,
+    Star,
+    GitFork,
+    CircleDot,
+    Code
 } from 'lucide-react';
 import type { Link as LinkType } from '../types';
 import LinkPreviewService from '../services/linkPreviewService';
@@ -217,20 +221,62 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                 </div>
                 <div className="link-info" style={{ minWidth: 0, flex: 1 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <h4 className="font-medium text-gray-900 dark:text-white">{link.title}</h4>
+                        <h4 className="font-medium text-gray-900 dark:text-white truncate">{link.title}</h4>
                     </div>
+
                     {link.description && (
-                        <p className="text-sm text-gray-600 dark:text-gray-400">{link.description}</p>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-0.5 line-clamp-2">{link.description}</p>
                     )}
+
+                    {link.githubData && (
+                        <div style={{
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            alignItems: 'center',
+                            gap: '12px',
+                            fontSize: '10px',
+                            fontWeight: 700,
+                            color: 'var(--text-muted)',
+                            marginTop: '4px',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em'
+                        }}>
+                            {link.githubData.language && (
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    <Code size={10} />
+                                    <span>{link.githubData.language}</span>
+                                </div>
+                            )}
+                            {link.githubData.stars !== undefined && (
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    <Star size={10} className="text-yellow-500 fill-yellow-500" />
+                                    <span>{link.githubData.stars.toLocaleString()}</span>
+                                </div>
+                            )}
+                            {link.githubData.forks !== undefined && (
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    <GitFork size={10} />
+                                    <span>{link.githubData.forks.toLocaleString()}</span>
+                                </div>
+                            )}
+                            {link.githubData.openIssues !== undefined && (
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    <CircleDot size={10} />
+                                    <span>{link.githubData.openIssues.toLocaleString()}</span>
+                                </div>
+                            )}
+                        </div>
+                    )}
+
                     <a
                         href={link.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-primary hover:underline inline-flex items-center gap-1.5 mt-1 align-middle"
+                        className="text-xs text-primary hover:underline inline-flex items-center gap-1 mt-1 align-middle"
                         onClick={() => onTrackClick?.(link.id)}
                     >
-                        <span>{link.url}</span>
-                        <ExternalLink className="h-4 w-4 flex-shrink-0" />
+                        <span className="truncate max-w-[200px] md:max-w-xs">{link.url.replace(/^https?:\/\//, '')}</span>
+                        <ExternalLink size={12} className="flex-shrink-0" style={{ marginLeft: '2px' }} />
                     </a>
                     {link.tags && link.tags.length > 0 && (
                         <div className="link-tags-display">
