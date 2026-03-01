@@ -24,6 +24,7 @@ import LoadingSkeleton from '../components/LoadingSkeleton';
 import EmptyState from '../components/EmptyState';
 import SortableContainerCard from '../components/SortableContainerCard';
 import SEO from '../components/SEO';
+import SupportButton from '../components/SupportButton';
 import {
   DndContext,
   closestCenter,
@@ -241,6 +242,9 @@ const Dashboard: React.FC = () => {
               <Link to="/settings" className="theme-toggle mediaforbuttons" title={t('dashboard.tooltips.settings')}>
                 <Settings className="h-5 w-5" />
               </Link>
+              <div className="hidden md:flex">
+                <SupportButton />
+              </div>
               <div className="user-avatar">
                 {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}
               </div>

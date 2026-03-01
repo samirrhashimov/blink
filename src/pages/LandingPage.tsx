@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
-import { Lock, Share2, Zap, Users, Search, Moon, Sun, Shield, Layout, Globe, Tag, Palette, Github, HelpCircle, ArrowRight } from 'lucide-react';
+import { Lock, Share2, Zap, Users, Search, Moon, Sun, Shield, Layout, Globe, Tag, Palette, Github, ArrowRight, HelpCircle } from 'lucide-react';
 import blinkLogo from '../assets/blinklogo2.png';
 import homepageImg from '../assets/Screenshots/homepage.png';
 import inviteImg from '../assets/Screenshots/invite.png';
@@ -14,6 +14,7 @@ import firefoxExtImg from '../assets/og-img.png';
 import '../css/About.css';
 import SEO from '../components/SEO';
 import LanguageToggle from '../components/LanguageToggle';
+import SupportButton from '../components/SupportButton';
 
 const LandingPage: React.FC = () => {
   const { t } = useTranslation();
@@ -56,10 +57,13 @@ const LandingPage: React.FC = () => {
               <Link
                 to="/support"
                 className="nav-support-link"
-                title="Support"
+                title="Help"
               >
                 <HelpCircle size={20} />
               </Link>
+              <div className="hidden md:flex">
+                <SupportButton />
+              </div>
               <Link
                 to="/login"
                 className="nav-login-btn"

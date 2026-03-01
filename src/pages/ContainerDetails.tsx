@@ -55,6 +55,7 @@ import {
 } from '@dnd-kit/sortable';
 
 import { useTranslation } from 'react-i18next';
+import SupportButton from '../components/SupportButton';
 
 const ContainerDetails: React.FC = () => {
   const { t } = useTranslation();
@@ -635,6 +636,9 @@ const ContainerDetails: React.FC = () => {
               <Link to="/settings" className="settings-link" title={t('dashboard.tooltips.settings')}>
                 <Settings size={20} />
               </Link>
+              <div className="hidden md:flex">
+                <SupportButton />
+              </div>
               <div className="user-avatar">
                 {currentUser ? (currentUser.displayName?.charAt(0).toUpperCase() || 'U') : 'G'}
               </div>

@@ -602,6 +602,10 @@
         "processing": "İşleniyor...",
         "errors": {
             "operationFailed": "İşlem başarısız oldu"
+        },
+        "support": {
+            "buymeacoffee": "Geliştiriciyi Destekle",
+            "starGithub": "GitHub'da Yıldızla"
         }
     }
 }

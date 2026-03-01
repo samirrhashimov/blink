@@ -600,6 +600,10 @@
         "messages": {
             "cannotUndone": "This action cannot be undone.",
             "failedToDelete": "Failed to delete"
+        },
+        "support": {
+            "buymeacoffee": "Support Creator",
+            "starGithub": "Star on GitHub"
         }
     }
 }

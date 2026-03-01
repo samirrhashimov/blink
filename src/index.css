@@ -202,6 +202,10 @@ body {
   .md\:hidden {
     display: none;
   }
+
+  .md\:flex {
+    display: flex;
+  }
 }
 
 /* Sizing */
@@ -1160,6 +1164,7 @@ body {
 .animations-enabled .btn-danger:active {
   transform: scale(0.95);
 }
+
 /* GitHub Card Styles */
 .github-card-data {
   background: rgba(var(--primary-rgb), 0.03);
@@ -1191,4 +1196,80 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* Support Button Animated */
+.support-button-animated {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 18px;
+  background-color: #000000;
+  color: white !important;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.875rem;
+  height: 42px;
+  width: 180px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.support-button-animated:hover {
+  background-color: #111111;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.support-button-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: all 0.5s ease;
+  line-height: 1;
+  /* Match line height for better alignment */
+}
+
+.support-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.support-text {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.support-button-animated.animating .support-button-inner {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+.heart-icon {
+  fill: #ff2d55;
+  /* Instagram-like vibrant pinkish red */
+  stroke: #ff2d55;
+}
+
+.star-icon {
+  fill: #ffcc00;
+  /* Vibrant Apple-like yellow */
+  stroke: #ffcc00;
+}
+
+@media (max-width: 640px) {
+  .support-button-animated {
+    min-width: auto;
+    padding: 8px 12px;
+  }
+
+  .support-text {
+    display: none;
+  }
 }
