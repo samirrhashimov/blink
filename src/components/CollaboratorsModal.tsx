@@ -12,7 +12,7 @@ interface CollaboratorsModalProps {
   containerId: string;
   authorizedUsers: string[];
   ownerId: string;
-  currentUserId: string;
+  currentUserId: string | null;
   containerColor?: string;
 }
 
@@ -52,29 +52,33 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
       const pendingInvites = await SharingService.getContainerInvitations(containerId).catch(() => []);
       const collabInfos: CollaboratorInfo[] = [];
 
-      try {
-        const ownerDoc = await getDoc(doc(db, 'users', ownerId));
-        const ownerData = ownerDoc.exists() ? ownerDoc.data() : {};
-        collabInfos.push({
-          userId: ownerId,
-          email: ownerData?.email || t('container.modals.collaborators.unknown'),
-          displayName: ownerData?.displayName || ownerData?.email || t('container.modals.collaborators.owner'),
-          permission: 'edit',
-          isPending: false
-        });
-      } catch {
-        collabInfos.push({
-          userId: ownerId,
-          email: t('container.modals.collaborators.unknown'),
-          displayName: t('container.modals.collaborators.owner'),
-          permission: 'edit',
-          isPending: false
-        });
+      // Only try to load owner if ownerId is provided
+      if (ownerId) {
+        try {
+          const ownerDoc = await getDoc(doc(db, 'users', ownerId));
+          const ownerData = ownerDoc.exists() ? ownerDoc.data() : {};
+          collabInfos.push({
+            userId: ownerId,
+            email: ownerData?.email || t('container.modals.collaborators.unknown'),
+            displayName: ownerData?.displayName || ownerData?.email || t('container.modals.collaborators.owner'),
+            permission: 'edit',
+            isPending: false
+          });
+        } catch (err) {
+          console.error('Error loading owner doc:', err);
+          collabInfos.push({
+            userId: ownerId,
+            email: t('container.modals.collaborators.unknown'),
+            displayName: t('container.modals.collaborators.owner'),
+            permission: 'edit',
+            isPending: false
+          });
+        }
       }
 
       const usersToLoad = authorizedUsers || [];
       for (const userId of usersToLoad) {
-        if (userId === ownerId) continue;
+        if (!userId || userId === ownerId) continue;
         try {
           const userDoc = await getDoc(doc(db, 'users', userId));
           const userPermission = permissionsResult.find(p => p.userId === userId);
@@ -86,7 +90,8 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
             permission: (userPermission?.permission === 'edit' ? 'edit' : 'view'),
             isPending: false
           });
-        } catch {
+        } catch (err) {
+          console.error(`Error loading collaborator doc for ${userId}:`, err);
           const userPermission = permissionsResult.find(p => p.userId === userId);
           collabInfos.push({
             userId,
@@ -98,7 +103,9 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
         }
       }
 
+      // Guest usually can't see pending invites, but we try anyway
       for (const invite of pendingInvites) {
+        if (!invite.email) continue;
         const alreadyAccepted = collabInfos.some(c => c.email.toLowerCase() === invite.email.toLowerCase());
         if (!alreadyAccepted) {
           collabInfos.push({
@@ -113,6 +120,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
 
       setCollaborators(collabInfos);
     } catch (err: any) {
+      console.error('Core loadCollaborators error:', err);
       setError(err.message || t('container.modals.collaborators.errors.loadFailed'));
     } finally {
       setLoading(false);
@@ -132,6 +140,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
 
   const handlePermissionChange = async (userId: string, newPermission: 'view' | 'edit') => {
     try {
+      if (!currentUserId) return;
       setError('');
       await SharingService.setUserPermission(containerId, userId, newPermission, currentUserId);
       await loadCollaborators();

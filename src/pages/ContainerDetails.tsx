@@ -1023,14 +1023,14 @@ const ContainerDetails: React.FC = () => {
       )}
 
       {/* Collaborators Modal */}
-      {container && currentUser && (
+      {container && (
         <CollaboratorsModal
           isOpen={showCollaboratorsModal}
           onClose={() => setShowCollaboratorsModal(false)}
           containerId={container.id}
-          authorizedUsers={container.authorizedUsers}
+          authorizedUsers={container.authorizedUsers || []}
           ownerId={container.ownerId}
-          currentUserId={currentUser.uid}
+          currentUserId={currentUser?.uid || null}
           containerColor={containerColor}
         />
       )}

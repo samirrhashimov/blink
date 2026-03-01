@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { useContainer } from '../contexts/ContainerContext';
@@ -30,7 +30,6 @@ const ShareContainer: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const { currentUser } = useAuth();
   const { containers, updateContainer } = useContainer();
-  const navigate = useNavigate();
   const toast = useToast();
   const [email, setEmail] = useState('');
   const [permission, setPermission] = useState<'view' | 'comment' | 'edit'>('view');
@@ -123,10 +122,6 @@ const ShareContainer: React.FC = () => {
       setPermission('view');
 
       await loadPendingInvites();
-
-      setTimeout(() => {
-        navigate(`/container/${id}`);
-      }, 1500);
     } catch (err: any) {
       toast.error(err.message || t('share.messages.error'));
     } finally {
