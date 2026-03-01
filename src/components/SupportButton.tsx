@@ -7,19 +7,7 @@ const SupportButton: React.FC = () => {
     const [phase, setPhase] = useState(0); // 0: Support, 1: GitHub Star
     const [isAnimating, setIsAnimating] = useState(false);
 
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setIsAnimating(true);
-            setTimeout(() => {
-                setPhase((prev) => (prev === 0 ? 1 : 0));
-                setIsAnimating(false);
-            }, 500); // Animation duration half-time
-        }, 10000); // 10 seconds
-
-        return () => clearInterval(interval);
-    }, []);
-
-    const content = [
+    const content = React.useMemo(() => [
         {
             icon: <Heart size={18} className="heart-icon" />,
             text: t('common.support.buymeacoffee', 'Support Blink'),
@@ -30,7 +18,19 @@ const SupportButton: React.FC = () => {
             text: t('common.support.starGithub', 'Star on GitHub'),
             link: 'https://github.com/samirrhashimov/blink',
         },
-    ];
+    ], [t]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setIsAnimating(true);
+            setTimeout(() => {
+                setPhase((prev) => (prev + 1) % content.length);
+                setIsAnimating(false);
+            }, 500); // Animation duration half-time
+        }, 10000); // 10 seconds
+
+        return () => clearInterval(interval);
+    }, [content.length]);
 
     const current = content[phase];
 
