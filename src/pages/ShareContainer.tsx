@@ -16,13 +16,14 @@ import {
   Settings,
   X,
   Eye,
-  MessageCircle,
   Edit3,
   UserPlus,
   Globe,
   Copy,
-  Check
+  Check,
+  Share2
 } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const ShareContainer: React.FC = () => {
   const { t } = useTranslation();
@@ -163,6 +164,8 @@ const ShareContainer: React.FC = () => {
         '--primary-rgb': hexToRgb(containerColor)
       } as React.CSSProperties}
     >
+      <SEO title={t('share.title', { name: container?.name || 'Container' })} />
+
       {/* Header */}
       <header className="header">
         <div className="container">
@@ -186,192 +189,197 @@ const ShareContainer: React.FC = () => {
       </header>
 
       {/* Main Content */}
-      <main className="container">
+      <main className="container fade-in">
         <div className="container-header">
-          <h2>{t('share.title', { name: container?.name || 'Container' })}</h2>
-          <p>{t('share.subtitle')}</p>
+          <div className="container-header-info">
+            <h2 className="container-name-title">{t('share.title', { name: container?.name || 'Container' })}</h2>
+            <p className="container-description-text">{t('share.subtitle')}</p>
+          </div>
         </div>
 
         <div className="container-content">
           <div className="links-section">
-            <div className="collaborators-widget">
-              {/* Public View Toggle */}
-              <div className="public-toggle-wrapper">
-                <div className="public-toggle-info">
-                  <div className="public-toggle-title">
-                    <Globe size={20} className="text-primary" />
-                    {t('share.form.public')}
-                  </div>
-                  <p className="public-toggle-desc">{t('share.form.publicDesc')}</p>
-                </div>
-                <label className="switch">
-                  <input
-                    type="checkbox"
-                    checked={container?.isPublic || false}
-                    onChange={handlePublicToggle}
-                  />
-                  <span className="slider"></span>
-                </label>
-              </div>
-
-              {/* Public Link Copy Section */}
-              {container?.isPublic && (
-                <div className="public-link-copy-container animate-scaleIn">
-                  <label className="public-link-copy-label">
-                    {t('share.form.copyLink')}
-                  </label>
-                  <div className="public-link-copy-group">
-                    <div className="public-link-copy-display">
-                      {window.location.origin}/container/{id}
+            <div className="collaborators-widget" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              {/* Invite Form Section */}
+              <section className="share-section">
+                <form onSubmit={handleSubmit} className="share-invite-form">
+                  <div className="form-group">
+                    <label className="form-label" htmlFor="invite-input">
+                      {t('share.form.label')}
+                    </label>
+                    <div className="modern-search-bar" style={{ marginTop: 0 }}>
+                      <UserPlus className="modern-search-icon" size={18} />
+                      <input
+                        id="invite-input"
+                        type="email"
+                        placeholder={t('share.form.placeholder')}
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className="modern-search-input"
+                      />
                     </div>
+                  </div>
+
+                  <div className="form-group" style={{ marginTop: '1.5rem' }}>
+                    <label className="form-label">{t('share.form.permissions')}</label>
+                    <div className="permission-grid">
+                      <label
+                        className={`permission-option-card ${permission === 'view' ? 'selected' : ''}`}
+                        onClick={() => setPermission('view')}
+                      >
+                        <input
+                          type="radio"
+                          name="permissions"
+                          value="view"
+                          checked={permission === 'view'}
+                          onChange={(e) => setPermission(e.target.value as 'view' | 'comment' | 'edit')}
+                          className="sr-only"
+                        />
+                        <div className="permission-option-icon">
+                          <Eye size={20} />
+                        </div>
+                        <div className="permission-option-info">
+                          <span className="permission-option-title">{t('share.form.view')}</span>
+                          <span className="permission-option-desc">{t('share.form.viewDesc')}</span>
+                        </div>
+                      </label>
+
+                      <label
+                        className={`permission-option-card ${permission === 'edit' ? 'selected' : ''}`}
+                        onClick={() => setPermission('edit')}
+                      >
+                        <input
+                          type="radio"
+                          name="permissions"
+                          value="edit"
+                          checked={permission === 'edit'}
+                          onChange={(e) => setPermission(e.target.value as 'view' | 'comment' | 'edit')}
+                          className="sr-only"
+                        />
+                        <div className="permission-option-icon">
+                          <Edit3 size={20} />
+                        </div>
+                        <div className="permission-option-info">
+                          <span className="permission-option-title">{t('share.form.edit')}</span>
+                          <span className="permission-option-desc">{t('share.form.editDesc')}</span>
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end gap-3 mt-8">
+                    <Link to={`/container/${id}`} className="btn-cancel">
+                      {t('common.buttons.cancel')}
+                    </Link>
                     <button
-                      type="button"
-                      onClick={() => {
-                        const url = `${window.location.origin}/container/${id}`;
-                        navigator.clipboard.writeText(url);
-                        setLinkCopied(true);
-                        setTimeout(() => setLinkCopied(false), 2000);
-                      }}
-                      className={`public-link-copy-button ${linkCopied ? 'copied' : ''}`}
-                      title={linkCopied ? t('share.form.linkCopied') : t('share.form.copyLink')}
+                      type="submit"
+                      disabled={loading}
+                      className="btn-primary flex items-center gap-2"
+                      style={{ backgroundColor: 'var(--primary)' }}
                     >
-                      {linkCopied ? <Check size={18} /> : <Copy size={18} />}
+                      {loading ? (
+                        <>
+                          <div className="loading-spinner-sm"></div>
+                          <span>{t('share.form.submitting')}</span>
+                        </>
+                      ) : (
+                        <>
+                          <Share2 size={18} />
+                          <span>{t('share.form.submit')}</span>
+                        </>
+                      )}
                     </button>
                   </div>
-                </div>
-              )}
+                </form>
+              </section>
 
-              <form onSubmit={handleSubmit} className="share-invite-form">
-                <div className="form-group">
-                  <label className="form-label" htmlFor="invite-input">
-                    {t('share.form.label')}
-                  </label>
-                  <div className="form-input-container">
-                    <div className="form-input-icon">
-                    </div>
-                    <input
-                      id="invite-input"
-                      type="email"
-                      placeholder={t('share.form.placeholder')}
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      className="form-input"
-                    />
-                  </div>
-                </div>
-
-                <div className="form-section-header">
-                  <h3 className="form-section-title">{t('share.form.permissions')}</h3>
-                </div>
-                <div className="permissions-container" style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                  <label className="permission-card group cursor-pointer">
-                    <input
-                      type="radio"
-                      name="permissions"
-                      value="view"
-                      checked={permission === 'view'}
-                      onChange={(e) => setPermission(e.target.value as 'view' | 'comment' | 'edit')}
-                      className="sr-only"
-                    />
-                    <div className={`permission-card-content ${permission === 'view' ? 'permission-card-selected' : ''}`}>
-                      <div className="permission-icon-wrapper">
-                        <Eye className="permission-icon" />
-                      </div>
-                      <div className="flex-grow">
-                        <p className="permission-title">{t('share.form.view')}</p>
-                        <p className="permission-description">{t('share.form.viewDesc')}</p>
-                      </div>
-                      <div className="permission-radio">
-                        <div className="permission-radio-outer">
-                          <div className="permission-radio-inner"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </label>
-
-                  <label className="permission-card group cursor-pointer">
-                    <input
-                      type="radio"
-                      name="permissions"
-                      value="edit"
-                      checked={permission === 'edit'}
-                      onChange={(e) => setPermission(e.target.value as 'view' | 'comment' | 'edit')}
-                      className="sr-only"
-                    />
-                    <div className={`permission-card-content ${permission === 'edit' ? 'permission-card-selected' : ''}`}>
-                      <div className="permission-icon-wrapper">
-                        <Edit3 className="permission-icon" />
-                      </div>
-                      <div className="flex-grow">
-                        <p className="permission-title">{t('share.form.edit')}</p>
-                        <p className="permission-description">{t('share.form.editDesc')}</p>
-                      </div>
-                      <div className="permission-radio">
-                        <div className="permission-radio-outer">
-                          <div className="permission-radio-inner"></div>
-                        </div>
-                      </div>
-                    </div>
-                  </label>
-                </div>
-
-                <div className="flex justify-end gap-3 pt-6">
-                  <Link
-                    to={`/container/${id}`}
-                    className="btn-cancel"
-                  >
-                    {t('common.buttons.cancel')}
-                  </Link>
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="btn-primary"
-                  >
-                    {loading ? t('share.form.submitting') : t('share.form.submit')}
-                  </button>
-                </div>
-              </form>
-
-              {/* Pending Invitations */}
+              {/* Pending Invitations Section */}
               {pendingInvites.length > 0 && (
-                <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
-                  <div className="sharingcollabtitle flex items-center gap-2 mb-4">
-                    <UserPlus className="h-5 w-5 text-amber-600 dark:text-amber-400" />
-                    <h3 className="text-base font-semibold text-gray-900 dark:text-white">{t('share.pending.title')}</h3>
-                    <span className="invitation-badge">{pendingInvites.length}</span>
-                  </div>
-                  <div className="space-y-3">
-                    {pendingInvites.map((invite) => (
-                      <div key={invite.id} className="invitation-item">
-                        <div className="flex items-center gap-3 flex-grow">
-                          <div className="invitation-avatar">
+                <>
+                  <div className="share-divider"></div>
+                  <section className="share-section pending-section">
+                    <div className="pending-header">
+                      <h3 className="pending-title">{t('share.pending.title')}</h3>
+                      <span className="pending-badge">{pendingInvites.length}</span>
+                    </div>
+                    <div className="pending-list">
+                      {pendingInvites.map((invite) => (
+                        <div key={invite.id} className="pending-item">
+                          <div className="pending-item-avatar" style={{ backgroundColor: `rgba(var(--primary-rgb), 0.1)`, color: 'var(--primary)' }}>
                             {invite.email.charAt(0).toUpperCase()}
                           </div>
-                          <div className="flex-grow min-w-0">
-                            <p className="invitation-email">{invite.email}</p>
-                            <div className="flex items-center gap-2 mt-1">
-                              <span className={`permission-badge permission-badge-${invite.permission}`}>
-                                {invite.permission === 'view' && <Eye className="h-3 w-3" />}
-                                {invite.permission === 'comment' && <MessageCircle className="h-3 w-3" />}
-                                {invite.permission === 'edit' && <Edit3 className="h-3 w-3" />}
-                                <span className="capitalize">{invite.permission === 'view' ? t('share.form.view') : t('share.form.edit')}</span>
+                          <div className="pending-item-info">
+                            <p className="pending-item-email">{invite.email}</p>
+                            <div className="pending-item-meta">
+                              <span className={`permission-tag tag-${invite.permission}`}>
+                                {invite.permission === 'view' ? <Eye size={12} /> : <Edit3 size={12} />}
+                                {invite.permission === 'view' ? t('share.form.view') : t('share.form.edit')}
                               </span>
                             </div>
                           </div>
+                          <button
+                            onClick={() => handleCancelInvite(invite.id)}
+                            className="pending-item-cancel"
+                            title={t('share.pending.cancel')}
+                          >
+                            <X size={18} />
+                          </button>
                         </div>
-                        <button
-                          onClick={() => handleCancelInvite(invite.id)}
-                          className="invitation-cancel-btn"
-                          title="Cancel invitation"
-                        >
-                          <X className="h-4 w-4" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                      ))}
+                    </div>
+                  </section>
+                </>
               )}
+
+              <div className="share-divider"></div>
+
+              {/* Public Section */}
+              <section className="share-section">
+                <div className="public-toggle-wrapper">
+                  <div className="public-toggle-info">
+                    <div className="public-toggle-title">
+                      <Globe size={20} className="text-primary" />
+                      <span>{t('share.form.public')}</span>
+                    </div>
+                    <p className="public-toggle-desc">{t('share.form.publicDesc')}</p>
+                  </div>
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={container?.isPublic || false}
+                      onChange={handlePublicToggle}
+                    />
+                    <span className="slider"></span>
+                  </label>
+                </div>
+
+                {container?.isPublic && (
+                  <div className="public-link-copy-container animate-scaleIn">
+                    <label className="public-link-copy-label">
+                      {t('share.form.copyLink')}
+                    </label>
+                    <div className="public-link-copy-group">
+                      <div className="public-link-copy-display">
+                        {window.location.origin}/container/{id}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const url = `${window.location.origin}/container/${id}`;
+                          navigator.clipboard.writeText(url);
+                          setLinkCopied(true);
+                          setTimeout(() => setLinkCopied(false), 2000);
+                        }}
+                        className={`public-link-copy-button ${linkCopied ? 'copied' : ''}`}
+                        title={linkCopied ? t('share.form.linkCopied') : t('share.form.copyLink')}
+                      >
+                        {linkCopied ? <Check size={18} /> : <Copy size={18} />}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </section>
             </div>
           </div>
         </div>
