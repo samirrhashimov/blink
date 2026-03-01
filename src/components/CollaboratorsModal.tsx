@@ -48,8 +48,8 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
     setError('');
 
     try {
-      const permissions = await SharingService.getContainerPermissions(containerId);
-      const pendingInvites = await SharingService.getContainerInvitations(containerId);
+      const permissionsResult = await SharingService.getContainerPermissions(containerId).catch(() => []);
+      const pendingInvites = await SharingService.getContainerInvitations(containerId).catch(() => []);
       const collabInfos: CollaboratorInfo[] = [];
 
       try {
@@ -72,11 +72,12 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
         });
       }
 
-      for (const userId of authorizedUsers) {
+      const usersToLoad = authorizedUsers || [];
+      for (const userId of usersToLoad) {
         if (userId === ownerId) continue;
         try {
           const userDoc = await getDoc(doc(db, 'users', userId));
-          const userPermission = permissions.find(p => p.userId === userId);
+          const userPermission = permissionsResult.find(p => p.userId === userId);
           const userData = userDoc.exists() ? userDoc.data() : {};
           collabInfos.push({
             userId,
@@ -86,7 +87,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
             isPending: false
           });
         } catch {
-          const userPermission = permissions.find(p => p.userId === userId);
+          const userPermission = permissionsResult.find(p => p.userId === userId);
           collabInfos.push({
             userId,
             email: t('container.modals.collaborators.unknown'),

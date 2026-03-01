@@ -855,7 +855,7 @@ const ContainerDetails: React.FC = () => {
                 )}
 
                 {/* Other Authorized Users (excluding owner and current user) */}
-                {container.authorizedUsers
+                {(container.authorizedUsers || [])
                   .filter((userId: string) => userId !== currentUser?.uid && userId !== container.ownerId)
                   .slice(0, 2)
                   .map((userId: string) => {
@@ -869,7 +869,7 @@ const ContainerDetails: React.FC = () => {
 
                 {/* Show +N more if there are additional collaborators */}
                 {(() => {
-                  const otherUsers = container.authorizedUsers.filter(
+                  const otherUsers = (container.authorizedUsers || []).filter(
                     (userId: string) => userId !== currentUser?.uid && userId !== container.ownerId
                   );
                   const remainingCount = otherUsers.length - 2;

@@ -4412,8 +4412,18 @@ tr:hover {
 }
 
 .dark .permission-select-modern {
-  background: rgba(255, 255, 255, 0.04);
+  background: #1e293b;
   border-color: rgba(255, 255, 255, 0.1);
+  color: #f1f5f9;
+}
+
+.permission-select-modern option {
+  background-color: #ffffff;
+  color: #1e293b;
+}
+
+.dark .permission-select-modern option {
+  background-color: #1e293b;
   color: #f1f5f9;
 }
 
@@ -6670,6 +6680,35 @@ input:checked+.slider:before {
 /* Buttons handled by standard .btn-primary and .btn-cancel classes */
 
 /* Pending Items Modernized */
+.pending-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+  width: 100%;
+}
+
+.pending-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.pending-badge {
+  background: rgba(var(--primary-rgb), 0.1);
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.125rem 0.625rem;
+  border-radius: 99px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
 .pending-item {
   display: flex;
   align-items: center;
