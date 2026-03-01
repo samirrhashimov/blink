@@ -6670,6 +6670,33 @@ input:checked+.slider:before {
   margin-bottom: 0.125rem;
 }
 
+.share-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+@media (max-width: 600px) {
+  .share-form-actions {
+    display: flex;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  .share-form-actions .btn-cancel,
+  .share-form-actions .btn-primary {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    white-space: nowrap;
+  }
+}
+
 .permission-option-desc {
   display: block;
   font-size: 0.75rem;

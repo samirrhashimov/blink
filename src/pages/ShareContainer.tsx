@@ -263,14 +263,14 @@ const ShareContainer: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="flex justify-end gap-3 mt-8">
+                  <div className="share-form-actions mt-8">
                     <Link to={`/container/${id}`} className="btn-cancel">
                       {t('common.buttons.cancel')}
                     </Link>
                     <button
                       type="submit"
                       disabled={loading}
-                      className="btn-primary flex items-center gap-2"
+                      className="btn-primary flex items-center gap-2 justify-center"
                       style={{ backgroundColor: 'var(--primary)' }}
                     >
                       {loading ? (
