@@ -10,7 +10,7 @@
 </p>
 <p align="center">
    <img src="https://img.shields.io/github/license/samirrhashimov/blink?style=flat">
-   <img src="https://img.shields.io/github/v/release/samirrhashimov/blink?style=flat">
+   <a href="https://x.com/linzaapps"><img src="https://img.shields.io/twitter/follow/linzaapps" alt="X"></a>
    <img src="https://api.netlify.com/api/v1/badges/ef10eda2-aa73-433a-9afd-c0c084e76bf9/deploy-status">
 </p>
 
@@ -29,18 +29,25 @@
 - **Responsive Design** - Mobile-first design that works on all devices
 - **Copy to Clipboard** - Quick copy functionality for links
 - **Link Statistics** - Real-time click tracking and visual history with interactive charts
+- **Advanced Super Search** - Powerful global search across all content with filters and relevancy
+- **Public Containers** - Mark containers as open to everyone with optional read-only view
+- **Link Notes** - Attach personal notes or descriptions directly to individual links
+- **Link Reactions** - Add and view emoji reactions on links to express feedback
 
-## 🦊 Firefox Extension
+## Firefox Extension
 
 Enhance your productivity with the **Blink Firefox Extension**! Save any webpage directly to your containers with a single click. No more jumping between tabs—stay organized right from your browser.
 
 [**Download from Firefox Add-ons**](https://addons.mozilla.org/en-US/firefox/addon/blinklinknet/)
 
-## 📱 Android App
+## Android
 
-Take your links on the go with the official **Blink Android App**! Access your workspaces, manage your links, and share content directly from your phone. 
+Take your links on the go with the official **Blink Android App**! Access your workspaces, manage your links, and share content directly from your phone.
 
-[**Download Latest APK from Releases**](https://github.com/samirrhashimov/blink/releases)
+
+<a href="https://play.google.com/store/apps/details?id=com.linzaapps.blink"><img src="./src/assets/googleplaybadge.png" height="50px"></a>
+
+
 
 ---
 
