@@ -993,7 +993,7 @@ main.container {
 }
 
 .copy-pill:hover {
-  border-color: var(--primary);
+  background: rgba(255, 255, 255, 0.1);
   color: var(--primary);
 }
 
@@ -1129,8 +1129,8 @@ main.container {
 }
 
 .link-item:hover {
-  box-shadow: 0 0px 12px rgba(99, 102, 241, 0.25);
-  border-color: rgba(141, 143, 245, 0.2);
+  box-shadow: 0 0px 12px rgba(143, 143, 143, 0.25);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .pinned-link {
