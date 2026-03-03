@@ -1253,15 +1253,18 @@ body {
 
 .heart-icon {
   fill: #ff2d55;
-  /* Instagram-like vibrant pinkish red */
   stroke: #ff2d55;
 }
 
 .star-icon {
   fill: #ffcc00;
-  /* Vibrant Apple-like yellow */
   stroke: #ffcc00;
 }
+
+/* .playstore-icon {
+    fill: #ffcc00;
+    stroke: #ffcc00;
+} */
 
 @media (max-width: 640px) {
   .support-button-animated {

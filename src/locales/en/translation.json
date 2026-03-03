@@ -603,7 +603,8 @@
         },
         "support": {
             "buymeacoffee": "Support Creator",
-            "starGithub": "Star on GitHub"
+            "starGithub": "Star on GitHub",
+            "getPlayStore": "On Google Play"
         }
     }
 }

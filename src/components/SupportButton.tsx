@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Heart, Star } from 'lucide-react';
+import { BiLogoPlayStore } from "react-icons/bi";
 import { useTranslation } from 'react-i18next';
 
 const SupportButton: React.FC = () => {
@@ -18,6 +19,11 @@ const SupportButton: React.FC = () => {
             text: t('common.support.starGithub', 'Star on GitHub'),
             link: 'https://github.com/samirrhashimov/blink',
         },
+        {
+            icon: <BiLogoPlayStore size={18} className="playstore-icon" />,
+            text: t('common.support.getPlayStore', 'On Play Store'),
+            link: 'https://play.google.com/store/apps/details?id=com.linzaapps.blink',
+        },
     ], [t]);
 
     useEffect(() => {
@@ -27,7 +33,7 @@ const SupportButton: React.FC = () => {
                 setPhase((prev) => (prev + 1) % content.length);
                 setIsAnimating(false);
             }, 500); // Animation duration half-time
-        }, 10000); // 10 seconds
+        }, 8000); // 10 seconds
 
         return () => clearInterval(interval);
     }, [content.length]);

@@ -604,8 +604,9 @@
             "operationFailed": "İşlem başarısız oldu"
         },
         "support": {
-            "buymeacoffee": "Geliştiriciyi Destekle",
-            "starGithub": "GitHub'da Yıldızla"
+            "buymeacoffee": "Bizi Destekle",
+            "starGithub": "GitHub'da Yıldızla",
+            "getPlayStore": "Google Play’de"
         }
     }
 }
