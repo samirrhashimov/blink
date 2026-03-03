@@ -922,7 +922,6 @@ main.container {
 .add-link-button:hover,
 .manage-collaborators-button:hover {
   opacity: 0.9;
-  transform: translateY(-1px);
 }
 
 .links-list {
@@ -1432,7 +1431,7 @@ main.container {
 }
 
 .collaborators-list .avatar:hover {
-  transform: translateY(-4px) scale(1.05);
+  border: 3px solid rgba(255, 255, 255, 0.8);
   z-index: 10;
 }
 
@@ -1495,7 +1494,6 @@ main.container {
 
 .manage-collaborators-button:hover {
   opacity: 0.9;
-  transform: translateY(-1px);
 }
 
 .actions-widget {
@@ -2603,7 +2601,6 @@ main.container {
 .empty-state-button:hover,
 .dark .empty-state-button:hover {
   opacity: 0.9;
-  transform: translateY(-1px);
 }
 
 .dark .empty-state-button {
@@ -4097,7 +4094,6 @@ tr:hover {
 .invitation-btn-accept:hover:not(:disabled) {
   background: linear-gradient(135deg, #059669 0%, #047857 100%);
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
-  transform: translateY(-1px);
 }
 
 .invitation-btn-accept:active:not(:disabled) {
@@ -4113,7 +4109,6 @@ tr:hover {
 .invitation-btn-decline:hover:not(:disabled) {
   background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
   box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
-  transform: translateY(-1px);
 }
 
 .invitation-btn-decline:active:not(:disabled) {
