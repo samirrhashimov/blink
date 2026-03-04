@@ -188,6 +188,12 @@
             "updateSuccess": "Hesap başarıyla güncellendi!",
             "updateFailed": "Hesap güncellenemedi. Lütfen tekrar deneyin.",
             "noUser": "Şu anda oturum açmış kullanıcı yok.",
+            "photoSuccess": "Profil fotoğrafı güncellendi!",
+            "photoFailed": "Fotoğraf güncellenemedi.",
+            "uploadingPhoto": "Yükleniyor...",
+            "usernameSuccess": "Kullanıcı adı güncellendi!",
+            "usernameFailed": "Kullanıcı adı güncellenemedi.",
+            "usernameTaken": "Bu kullanıcı adı zaten alınmış. Lütfen başka bir ad deneyin.",
             "importHelp": {
                 "title": "Nasıl içe aktarılır:",
                 "step1": "Tarayıcıda Yer İmleri Yöneticisi'ni açın.",
@@ -211,6 +217,17 @@
             "updating": "Güncelleniyor...",
             "importHtml": "HTML İçe Aktar",
             "exportHtml": "HTML Dışa Aktar"
+        },
+        "profilePhoto": {
+            "label": "Profil Fotoğrafı",
+            "desc": "Bir profil fotoğrafı yükleyin.",
+            "change": "Fotoğrafı Değiştir"
+        },
+        "username": {
+            "label": "Kullanıcı Adı",
+            "desc": "Kullanıcı adınızı belirleyin.",
+            "placeholder": "kullaniciadi",
+            "save": "Kaydet"
         }
     },
     "dashboard": {
@@ -608,5 +625,21 @@
             "starGithub": "GitHub'da Yıldızla",
             "getPlayStore": "Google Play’de"
         }
+    },
+    "profile": {
+        "notFound": "Profil bulunamadı",
+        "notFoundDesc": "Bu kullanıcı mevcut değil veya henüz bir kullanıcı adı belirlememiş.",
+        "goHome": "Panele Git",
+        "followers": "Takipçi",
+        "following": "Takip Edilen",
+        "publicContainers": "Konteynerler",
+        "publicContainersTitle": "Konteynerler",
+        "noPublicContainers": "Henüz herkese açık konteyner yok.",
+        "follow": "Takip Et",
+        "unfollow": "Takibi Bırak",
+        "followToLogin": "Takip Et",
+        "editProfile": "Profili Düzenle",
+        "noFollowers": "Henüz takipçi yok.",
+        "noFollowing": "Kimseyi takip etmiyor."
     }
 }

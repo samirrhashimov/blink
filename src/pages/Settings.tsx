@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useNavigate, Link } from 'react-router-dom';
@@ -9,6 +9,7 @@ import { updateProfile } from 'firebase/auth';
 import { doc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
 import blinkLogo from '../assets/blinklogo2.png';
+import { ProfileService } from '../services/profileService';
 import {
   LogOut,
   Moon,
@@ -19,7 +20,11 @@ import {
   Download,
   Upload,
   HelpCircle,
-  MessageSquare
+  MessageSquare,
+  Camera,
+  AtSign,
+  User,
+  Mail
 } from 'lucide-react';
 import ConfirmModal from '../components/ConfirmModal';
 import { parseNetscapeBookmarks } from '../utils/bookmarkParser';
@@ -27,25 +32,56 @@ import { downloadBookmarks } from '../utils/bookmarkExporter';
 import { ContainerService } from '../services/containerService';
 import '../css/Settings.css';
 
+
 const Settings: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const { currentUser, logout, deleteAccount } = useAuth();
+  const { currentUser, logout, deleteAccount, refreshUserProfile } = useAuth();
   const { theme, toggleTheme, animationsEnabled, toggleAnimations, searchShortcut, setSearchShortcut } = useTheme();
   const { containers } = useContainer();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     displayName: currentUser?.displayName || '',
     email: currentUser?.email || '',
-    username: '',
+    username: currentUser?.username || '',
     password: ''
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState('');
+  const [photoLoading, setPhotoLoading] = useState(false);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(currentUser?.photoURL || null);
+  const photoInputRef = React.useRef<HTMLInputElement>(null);
 
   const [error, setError] = useState('');
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
+  // Sync photoPreview when currentUser changes
+  useEffect(() => {
+    setPhotoPreview(currentUser?.photoURL || null);
+  }, [currentUser?.photoURL]);
+
+  const handlePhotoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file || !currentUser) return;
+
+    setPhotoLoading(true);
+    setError('');
+    setSuccess('');
+    try {
+      const base64 = await ProfileService.fileToBase64(file, 256);
+      setPhotoPreview(base64);
+      await ProfileService.updateProfilePhoto(currentUser.uid, base64);
+      await refreshUserProfile();
+      setSuccess(t('settings.messages.photoSuccess'));
+      setTimeout(() => setSuccess(''), 3000);
+    } catch (err: any) {
+      console.error('Error uploading photo:', err);
+      setError(err.message || t('settings.messages.photoFailed'));
+    } finally {
+      setPhotoLoading(false);
+      if (photoInputRef.current) photoInputRef.current.value = '';
+    }
+  };
   // const language = 'English';
 
   const changeLanguage = (lng: string) => {
@@ -196,19 +232,41 @@ const Settings: React.FC = () => {
     setSuccess('');
 
     try {
-      // Update display name in Firebase Auth using the Firebase auth instance
+      let usernameChanged = false;
+      const trimmedUsername = formData.username.trim().toLowerCase().replace(/^@/, '');
+
+      // 1. Update Username if changed
+      if (trimmedUsername && trimmedUsername !== (currentUser.username || '')) {
+        const available = await ProfileService.isUsernameAvailable(trimmedUsername, currentUser.uid);
+        if (!available) {
+          setError(t('settings.messages.usernameTaken'));
+          setLoading(false);
+          return;
+        }
+        await ProfileService.updateUsername(currentUser.uid, trimmedUsername);
+        usernameChanged = true;
+      }
+
+      // 2. Update display name in Firebase Auth
+      let displayNameChanged = false;
       if (formData.displayName !== currentUser.displayName) {
         await updateProfile(auth.currentUser, {
           displayName: formData.displayName
         });
+        displayNameChanged = true;
       }
 
-      // Update user document in Firestore
+      // 3. Update user document in Firestore
       const userRef = doc(db, 'users', currentUser.uid);
       await updateDoc(userRef, {
         displayName: formData.displayName,
         updatedAt: new Date()
       });
+
+      // Refresh context if needed
+      if (usernameChanged || displayNameChanged) {
+        await refreshUserProfile();
+      }
 
       setSuccess(t('settings.messages.updateSuccess'));
 
@@ -273,9 +331,32 @@ const Settings: React.FC = () => {
               <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
             </div>
             <div className="header-right">
-              <div className="user-avatar">
-                {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}
-              </div>
+              <Link to={currentUser?.username ? `/profile/${currentUser.username}` : '#'} className="user-avatar-link" title={t('settings.profilePhoto.change')}>
+                <div
+                  className="user-avatar"
+                  style={{
+                    backgroundImage: photoPreview ? `url(${photoPreview})` : undefined,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    cursor: 'pointer',
+                    overflow: 'hidden'
+                  }}
+                  onClick={() => {
+                    // Prevent navigation to profile if they just wanted to clik the div to change photo from the setting modal body 
+                    // Wait, the user specifically asked: "ayarlarda navbarda profil resmine dokununca bizi prodil sayfaasina atmali" -> "in settings, clicking navbar profile photo should take us to profile page"
+                    // We shouldn't trigger the file picker from the navbar photo. File picker has its own dedicated button in the page content.
+                  }}
+                >
+                  {!photoPreview && (currentUser?.displayName?.charAt(0).toUpperCase() || 'U')}
+                </div>
+              </Link>
+              <input
+                type="file"
+                accept="image/*"
+                ref={photoInputRef}
+                onChange={handlePhotoUpload}
+                style={{ display: 'none' }}
+              />
             </div>
           </div>
         </div>
@@ -306,35 +387,107 @@ const Settings: React.FC = () => {
               </div>
             )}
 
-            <form onSubmit={handleUpdateAccount} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="form-group">
-                <label className="form-label" htmlFor="name">{t('settings.labels.name')}</label>
-                <input
-                  id="name"
-                  name="displayName"
-                  type="text"
-                  className="form-input"
-                  placeholder={t('settings.placeholders.name')}
-                  value={formData.displayName}
-                  onChange={handleChange}
-                />
+            {/* Profile Photo Upload */}
+            <div className="settings-item settings-profile-photo">
+              <div className="settings-item-info">
+                <h4>{t('settings.profilePhoto.label')}</h4>
+                <p>{t('settings.profilePhoto.desc')}</p>
               </div>
-              <div className="form-group">
-                <label className="form-label" htmlFor="email">{t('settings.labels.email')}</label>
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  className="form-input"
-                  placeholder={t('settings.placeholders.email')}
-                  value={formData.email}
-                  disabled
-                  style={{ opacity: 0.6, cursor: 'not-allowed' }}
-                  title={t('settings.messages.emailDisabled')}
-                />
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{t('settings.messages.emailDisabled')}</p>
+              <div className="profile-photo-upload-wrap">
+                <div
+                  className="profile-photo-upload-preview"
+                  onClick={() => photoInputRef.current?.click()}
+                  title={t('settings.profilePhoto.change')}
+                >
+                  {photoPreview ? (
+                    <img src={photoPreview} alt="Profile" className="profile-photo-preview-img" />
+                  ) : (
+                    <div className="profile-photo-placeholder">
+                      {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}
+                    </div>
+                  )}
+                  <div className="profile-photo-overlay">
+                    {photoLoading ? (
+                      <span className="profile-photo-spinner" />
+                    ) : (
+                      <Camera size={20} />
+                    )}
+                  </div>
+                </div>
               </div>
-            </form>
+            </div>
+
+            {/* Username */}
+            <div className="settings-item settings-item-media">
+              <div className="settings-item-info">
+                <h4>{t('settings.username.label')}</h4>
+                <p>{t('settings.username.desc')}</p>
+              </div>
+              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginTop: '1rem', width: '100%', maxWidth: '350px' }}>
+                <div style={{ position: 'relative', display: 'flex', alignItems: 'center', flex: '1 1 0', minWidth: 0 }}>
+                  <AtSign size={16} style={{ position: 'absolute', left: '0.75rem', color: 'var(--color-text-muted)', flexShrink: 0 }} />
+                  <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    className="form-input w-full"
+                    placeholder={t('settings.username.placeholder')}
+                    value={formData.username}
+                    onChange={handleChange}
+                    maxLength={20}
+                    style={{ paddingLeft: '2.25rem', margin: 0, minWidth: 0, width: '100%' }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Display Name */}
+            <div className="settings-item settings-item-media">
+              <div className="settings-item-info">
+                <h4>{t('settings.labels.name')}</h4>
+                <p>{t('settings.placeholders.name')}</p>
+              </div>
+              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginTop: '1rem', width: '100%', maxWidth: '350px' }}>
+                <div style={{ position: 'relative', display: 'flex', alignItems: 'center', flex: '1 1 0', minWidth: 0 }}>
+                  <User size={16} style={{ position: 'absolute', left: '0.75rem', color: 'var(--color-text-muted)', flexShrink: 0 }} />
+                  <input
+                    id="name"
+                    name="displayName"
+                    type="text"
+                    className="form-input w-full"
+                    placeholder={t('settings.placeholders.name')}
+                    value={formData.displayName}
+                    onChange={handleChange}
+                    maxLength={30}
+                    style={{ paddingLeft: '2.25rem', margin: 0, minWidth: 0, width: '100%' }}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Email */}
+            <div className="settings-item settings-item-media" style={{ borderBottom: 'none' }}>
+              <div className="settings-item-info">
+                <h4>{t('settings.labels.email')}</h4>
+                <p>{t('settings.messages.emailDisabled')}</p>
+              </div>
+              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center', marginTop: '1rem', width: '100%', maxWidth: '350px' }}>
+                <div style={{ position: 'relative', display: 'flex', alignItems: 'center', flex: '1 1 0', minWidth: 0 }}>
+                  <Mail size={16} style={{ position: 'absolute', left: '0.75rem', color: 'var(--color-text-muted)', flexShrink: 0 }} />
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    className="form-input w-full"
+                    placeholder={t('settings.placeholders.email')}
+                    value={formData.email}
+                    disabled
+                    style={{ paddingLeft: '2.25rem', margin: 0, minWidth: 0, width: '100%', opacity: 0.6, cursor: 'not-allowed' }}
+                    title={t('settings.messages.emailDisabled')}
+                  />
+                </div>
+              </div>
+            </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
               <button
                 type="submit"

@@ -73,9 +73,19 @@ const Tags: React.FC = () => {
                             <Link to="/settings" className="theme-toggle" title={t('dashboard.tooltips.settings')}>
                                 <Settings className="h-5 w-5" />
                             </Link>
-                            <div className="user-avatar">
-                                {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}
-                            </div>
+                            <Link to={currentUser?.username ? `/profile/${currentUser.username}` : '#'} className="user-avatar-link">
+                                <div
+                                    className="user-avatar"
+                                    style={{
+                                        backgroundImage: currentUser?.photoURL ? `url(${currentUser.photoURL})` : undefined,
+                                        backgroundSize: 'cover',
+                                        backgroundPosition: 'center',
+                                        overflow: 'hidden'
+                                    }}
+                                >
+                                    {!currentUser?.photoURL && (currentUser?.displayName?.charAt(0).toUpperCase() || 'U')}
+                                </div>
+                            </Link>
                         </div>
                     </div>
                 </div>

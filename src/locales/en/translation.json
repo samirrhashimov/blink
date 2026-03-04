@@ -188,6 +188,12 @@
             "updateSuccess": "Account updated successfully!",
             "updateFailed": "Failed to update account. Please try again.",
             "noUser": "No user is currently signed in.",
+            "photoSuccess": "Profile photo updated!",
+            "photoFailed": "Failed to update photo.",
+            "uploadingPhoto": "Uploading...",
+            "usernameSuccess": "Username updated!",
+            "usernameFailed": "Failed to update username.",
+            "usernameTaken": "This username is already taken. Please choose another.",
             "importHelp": {
                 "title": "How to import:",
                 "step1": "Open Bookmarks Manager in browser.",
@@ -211,6 +217,17 @@
             "updating": "Updating...",
             "importHtml": "Import HTML",
             "exportHtml": "Export HTML"
+        },
+        "profilePhoto": {
+            "label": "Profile Photo",
+            "desc": "Upload a profile photo.",
+            "change": "Change Photo"
+        },
+        "username": {
+            "label": "Username",
+            "desc": "Set your unique username.",
+            "placeholder": "yourname",
+            "save": "Save"
         }
     },
     "dashboard": {
@@ -606,5 +623,21 @@
             "starGithub": "Star on GitHub",
             "getPlayStore": "On Google Play"
         }
+    },
+    "profile": {
+        "notFound": "Profile not found",
+        "notFoundDesc": "This user doesn't exist or hasn't set a username yet.",
+        "goHome": "Go to Dashboard",
+        "followers": "Followers",
+        "following": "Following",
+        "publicContainers": "Containers",
+        "publicContainersTitle": "Containers",
+        "noPublicContainers": "No public containers yet.",
+        "follow": "Follow",
+        "unfollow": "Unfollow",
+        "followToLogin": "Follow",
+        "editProfile": "Edit Profile",
+        "noFollowers": "No followers yet.",
+        "noFollowing": "Not following anyone."
     }
 }

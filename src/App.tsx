@@ -28,6 +28,8 @@ import TermsAndConditions from './pages/TermsAndConditions';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import DeleteAccount from './pages/DeleteAccount';
 import SupportPage from './pages/SupportPage';
+import Profile from './pages/Profile';
+
 
 const AppRoutes: React.FC = () => {
   const { currentUser } = useAuth();
@@ -88,6 +90,11 @@ const AppRoutes: React.FC = () => {
           path="/container/:id"
           element={<ContainerDetails />}
         />
+        <Route
+          path="/profile/:username"
+          element={<Profile />}
+        />
+
         <Route
           path="/share/:token"
           element={<SharePage />}

@@ -3,15 +3,12 @@ import { useTranslation } from 'react-i18next';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { useTheme } from '../contexts/ThemeContext';
 import { useContainer } from '../contexts/ContainerContext';
 import { NotificationService } from '../services/notificationService';
 import {
   Bell,
   Plus,
   Settings,
-  Moon,
-  Sun,
   Search,
   Menu,
   X,
@@ -45,7 +42,6 @@ import {
 const Dashboard: React.FC = () => {
   const { t } = useTranslation();
   const { currentUser } = useAuth();
-  const { theme, toggleTheme } = useTheme();
   const { containers, loading, error, reorderContainers } = useContainer();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
@@ -236,18 +232,25 @@ const Dashboard: React.FC = () => {
                   </span>
                 )}
               </button>
-              <button onClick={toggleTheme} className="theme-toggle mediaforbuttons" title={t('dashboard.tooltips.switchTheme')}>
-                {theme === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-              </button>
               <Link to="/settings" className="theme-toggle mediaforbuttons" title={t('dashboard.tooltips.settings')}>
                 <Settings className="h-5 w-5" />
               </Link>
               <div className="hidden md:flex">
                 <SupportButton />
               </div>
-              <div className="user-avatar">
-                {currentUser?.displayName?.charAt(0).toUpperCase() || 'U'}
-              </div>
+              <Link to={currentUser?.username ? `/profile/${currentUser.username}` : '/settings'} className="user-avatar-link">
+                <div
+                  className="user-avatar"
+                  style={{
+                    backgroundImage: currentUser?.photoURL ? `url(${currentUser.photoURL})` : undefined,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    overflow: 'hidden'
+                  }}
+                >
+                  {!currentUser?.photoURL && (currentUser?.displayName?.charAt(0).toUpperCase() || 'U')}
+                </div>
+              </Link>
             </div>
           </div>
         </div>

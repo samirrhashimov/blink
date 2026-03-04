@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 const SupportButton: React.FC = () => {
     const { t } = useTranslation();
-    const [phase, setPhase] = useState(0); // 0: Support, 1: GitHub Star
+    const [phase, setPhase] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
 
     const content = React.useMemo(() => [
@@ -32,8 +32,8 @@ const SupportButton: React.FC = () => {
             setTimeout(() => {
                 setPhase((prev) => (prev + 1) % content.length);
                 setIsAnimating(false);
-            }, 500); // Animation duration half-time
-        }, 8000); // 10 seconds
+            }, 600);
+        }, 7000);
 
         return () => clearInterval(interval);
     }, [content.length]);

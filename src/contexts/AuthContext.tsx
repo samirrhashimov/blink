@@ -42,6 +42,7 @@ interface AuthContextType {
   checkEmailVerification: () => Promise<boolean>;
   sendPasswordReset: (email: string) => Promise<void>;
   updateUserEmail: (newEmail: string) => Promise<void>;
+  refreshUserProfile: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -287,6 +288,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return unsubscribe;
   }, []);
 
+  const refreshUserProfile = async () => {
+    const user = auth.currentUser;
+    if (!user) return;
+    const userRef = doc(db, 'users', user.uid);
+    const userSnap = await getDoc(userRef);
+    if (userSnap.exists()) {
+      setCurrentUser(userSnap.data() as User);
+    }
+  };
+
   const value: AuthContextType = {
     currentUser,
     loading,
@@ -299,7 +310,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     resendEmailVerification: resendEmailVerificationLink,
     checkEmailVerification,
     sendPasswordReset,
-    updateUserEmail
+    updateUserEmail,
+    refreshUserProfile
   };
 
   return (

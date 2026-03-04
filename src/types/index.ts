@@ -2,7 +2,10 @@ export interface User {
   uid: string;
   email: string;
   displayName: string;
-  photoURL?: string;
+  photoURL?: string; // base64 string stored in Firestore
+  username?: string; // unique username e.g. @samirr
+  followers?: string[]; // array of user UIDs
+  following?: string[]; // array of user UIDs
   createdAt: Date;
 }
 
