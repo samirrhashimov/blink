@@ -26,6 +26,7 @@ import {
   User,
   Mail
 } from 'lucide-react';
+import SupportButton from '../components/SupportButton';
 import ConfirmModal from '../components/ConfirmModal';
 import { parseNetscapeBookmarks } from '../utils/bookmarkParser';
 import { downloadBookmarks } from '../utils/bookmarkExporter';
@@ -331,6 +332,9 @@ const Settings: React.FC = () => {
               <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
             </div>
             <div className="header-right">
+              <div className="hidden md:flex">
+                <SupportButton />
+              </div>
               <Link to={currentUser?.username ? `/profile/${currentUser.username}` : '#'} className="user-avatar-link" title={t('settings.profilePhoto.change')}>
                 <div
                   className="user-avatar"

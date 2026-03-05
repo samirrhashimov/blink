@@ -101,7 +101,7 @@ const ContainerDetails: React.FC = () => {
   const [copiedLinkId, setCopiedLinkId] = useState<string | null>(null);
   const [linkSearchQuery, setLinkSearchQuery] = useState('');
   const [userPermission, setUserPermission] = useState<'view' | 'comment' | 'edit' | null>(null);
-  const [collaboratorNames, setCollaboratorNames] = useState<Record<string, string>>({});
+  const [collaboratorData, setCollaboratorData] = useState<Record<string, { name: string, username?: string, photoURL?: string }>>({});
   const [showNavbar, setShowNavbar] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [showGuestJoinBanner, setShowGuestJoinBanner] = useState(true);
@@ -297,7 +297,7 @@ const ContainerDetails: React.FC = () => {
       console.log('Authorized users:', container.authorizedUsers);
       console.log('Current user:', currentUser?.uid);
 
-      const names: Record<string, string> = {};
+      const data: Record<string, { name: string, username?: string, photoURL?: string }> = {};
       const userIdsToFetch = new Set<string>();
 
       // Add owner if not current user
@@ -321,18 +321,22 @@ const ContainerDetails: React.FC = () => {
         Array.from(userIdsToFetch).map(async (userId) => {
           try {
             console.log(`Fetching name for user: ${userId}`);
-            const name = await UserService.getUserDisplayName(userId);
-            console.log(`Got name for ${userId}: ${name}`);
-            names[userId] = name;
+            const userData = await UserService.getUserData(userId);
+            console.log(`Got data for ${userId}:`, userData);
+            data[userId] = {
+              name: userData?.displayName || userData?.email || 'User',
+              username: userData?.username,
+              photoURL: userData?.photoURL
+            };
           } catch (err) {
             console.error(`Failed to fetch name for user ${userId}:`, err);
-            names[userId] = 'User';
+            data[userId] = { name: 'User' };
           }
         })
       );
 
-      console.log('All collaborator names loaded:', names);
-      setCollaboratorNames(names);
+      console.log('All collaborator data loaded:', data);
+      setCollaboratorData(data);
     };
 
     loadCollaboratorNames();
@@ -852,20 +856,43 @@ const ContainerDetails: React.FC = () => {
               <div className="collaborators-list">
                 {/* Current User - Only show if member */}
                 {currentUser && isMember && (
-                  <div className="avatar" title={currentUser.displayName || t('container.collaborators.you')}>
-                    {currentUser.displayName?.charAt(0).toUpperCase() || 'U'}
-                  </div>
+                  <Link
+                    to={currentUser.username ? `/profile/${currentUser.username}` : '#'}
+                    className="avatar overflow-hidden hover:opacity-80 transition-opacity"
+                    title={currentUser.displayName || t('container.collaborators.you')}
+                  >
+                    {currentUser.photoURL ? (
+                      <img src={currentUser.photoURL} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                      currentUser.displayName?.charAt(0).toUpperCase() || 'U'
+                    )}
+                  </Link>
                 )}
 
                 {/* Owner (if not current user) */}
                 {container.ownerId !== currentUser?.uid && (
-                  <div
-                    key={container.ownerId}
-                    className="avatar"
-                    title={`${collaboratorNames[container.ownerId] || 'Owner'} (${t('container.collaborators.owner')})`}
-                  >
-                    {(collaboratorNames[container.ownerId] || 'O').charAt(0).toUpperCase()}
-                  </div>
+                  collaboratorData[container.ownerId]?.username ? (
+                    <Link
+                      to={`/profile/${collaboratorData[container.ownerId].username}`}
+                      key={container.ownerId}
+                      className="avatar overflow-hidden hover:opacity-80 transition-opacity"
+                      title={`${collaboratorData[container.ownerId]?.name || 'Owner'} (${t('container.collaborators.owner')})`}
+                    >
+                      {collaboratorData[container.ownerId]?.photoURL ? (
+                        <img src={collaboratorData[container.ownerId].photoURL} alt="" className="w-full h-full object-cover" />
+                      ) : (
+                        (collaboratorData[container.ownerId]?.name || 'O').charAt(0).toUpperCase()
+                      )}
+                    </Link>
+                  ) : (
+                    <div
+                      key={container.ownerId}
+                      className="avatar"
+                      title={`${collaboratorData[container.ownerId]?.name || 'Owner'} (${t('container.collaborators.owner')})`}
+                    >
+                      {(collaboratorData[container.ownerId]?.name || 'O').charAt(0).toUpperCase()}
+                    </div>
+                  )
                 )}
 
                 {/* Other Authorized Users (excluding owner and current user) */}
@@ -873,7 +900,26 @@ const ContainerDetails: React.FC = () => {
                   .filter((userId: string) => userId !== currentUser?.uid && userId !== container.ownerId)
                   .slice(0, 2)
                   .map((userId: string) => {
-                    const userName = collaboratorNames[userId] || 'Loading...';
+                    const userData = collaboratorData[userId];
+                    const userName = userData?.name || 'Loading...';
+
+                    if (userData?.username) {
+                      return (
+                        <Link
+                          key={userId}
+                          to={`/profile/${userData.username}`}
+                          className="avatar overflow-hidden hover:opacity-80 transition-opacity"
+                          title={userName}
+                        >
+                          {userData.photoURL ? (
+                            <img src={userData.photoURL} alt="" className="w-full h-full object-cover" />
+                          ) : (
+                            userName.charAt(0).toUpperCase()
+                          )}
+                        </Link>
+                      );
+                    }
+
                     return (
                       <div key={userId} className="avatar" title={userName}>
                         {userName.charAt(0).toUpperCase()}

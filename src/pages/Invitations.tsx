@@ -22,6 +22,7 @@ import {
   Edit3
 } from 'lucide-react';
 import EmptyState from '../components/EmptyState';
+import SupportButton from '../components/SupportButton';
 
 const Invitations: React.FC = () => {
   const { t } = useTranslation();
@@ -156,6 +157,9 @@ const Invitations: React.FC = () => {
               <Link to="/settings" className="theme-toggle" title={t('dashboard.tooltips.settings')}>
                 <Settings className="h-5 w-5" />
               </Link>
+              <div className="hidden md:flex">
+                <SupportButton />
+              </div>
               <Link to={currentUser?.username ? `/profile/${currentUser.username}` : '#'} className="user-avatar-link">
                 <div
                   className="user-avatar"

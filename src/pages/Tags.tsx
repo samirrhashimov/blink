@@ -16,6 +16,7 @@ import blinkLogo from '../assets/blinklogo2.png';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import EmptyState from '../components/EmptyState';
 import SEO from '../components/SEO';
+import SupportButton from '../components/SupportButton';
 
 const Tags: React.FC = () => {
     const { t } = useTranslation();
@@ -73,6 +74,9 @@ const Tags: React.FC = () => {
                             <Link to="/settings" className="theme-toggle" title={t('dashboard.tooltips.settings')}>
                                 <Settings className="h-5 w-5" />
                             </Link>
+                            <div className="hidden md:flex">
+                                <SupportButton />
+                            </div>
                             <Link to={currentUser?.username ? `/profile/${currentUser.username}` : '#'} className="user-avatar-link">
                                 <div
                                     className="user-avatar"

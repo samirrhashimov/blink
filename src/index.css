@@ -1220,8 +1220,7 @@ body {
 }
 
 .support-button-animated:hover {
-  background-color: #111111;
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.25);
 }
 
 .support-button-inner {
@@ -1231,7 +1230,6 @@ body {
   gap: 10px;
   transition: all 0.5s ease;
   line-height: 1;
-  /* Match line height for better alignment */
 }
 
 .support-icon {

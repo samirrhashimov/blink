@@ -7,6 +7,7 @@ import type { User, Container } from '../types';
 import { ArrowLeft, UserPlus, UserMinus, ExternalLink, X } from 'lucide-react';
 import blinkLogo from '../assets/blinklogo2.png';
 import SEO from '../components/SEO';
+import SupportButton from '../components/SupportButton';
 
 const Profile: React.FC = () => {
     const { username } = useParams<{ username: string }>();
@@ -194,6 +195,9 @@ const Profile: React.FC = () => {
                             <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
                         </div>
                         <div className="header-right">
+                            <div className="hidden md:flex">
+                                <SupportButton />
+                            </div>
                             {currentUser ? (
                                 <Link to={currentUser.username ? `/profile/${currentUser.username}` : '#'} className="user-avatar-link">
                                     <div className="user-avatar" style={{ backgroundImage: currentUser.photoURL ? `url(${currentUser.photoURL})` : undefined, backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden' }}>

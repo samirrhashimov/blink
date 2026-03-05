@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { X, UserMinus, Eye, Edit3, Crown } from 'lucide-react';
+import { X, UserMinus, Eye, Edit3 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { SharingService } from '../services/sharingService';
 import { doc, getDoc } from 'firebase/firestore';
 import { db } from '../firebase/config';
@@ -20,6 +21,8 @@ interface CollaboratorInfo {
   userId: string;
   email: string;
   displayName: string;
+  username?: string;
+  photoURL?: string;
   permission: 'view' | 'edit';
   isPending?: boolean;
 }
@@ -38,6 +41,13 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
   const [collaborators, setCollaborators] = useState<CollaboratorInfo[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const obfuscateEmail = (email: string) => {
+    if (!email || !email.includes('@')) return email;
+    const [name, domain] = email.split('@');
+    if (name.length <= 2) return `${name[0]}••••@${domain}`;
+    return `${name[0]}${'•'.repeat(Math.min(name.length - 2, 8))}${name[name.length - 1]}@${domain}`;
+  };
 
   useEffect(() => {
     if (isOpen) loadCollaborators();
@@ -61,6 +71,8 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
             userId: ownerId,
             email: ownerData?.email || t('container.modals.collaborators.unknown'),
             displayName: ownerData?.displayName || ownerData?.email || t('container.modals.collaborators.owner'),
+            username: ownerData?.username,
+            photoURL: ownerData?.photoURL,
             permission: 'edit',
             isPending: false
           });
@@ -87,6 +99,8 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
             userId,
             email: userData?.email || t('container.modals.collaborators.unknown'),
             displayName: userData?.displayName || userData?.email || 'User',
+            username: userData?.username,
+            photoURL: userData?.photoURL,
             permission: (userPermission?.permission === 'edit' ? 'edit' : 'view'),
             isPending: false
           });
@@ -111,7 +125,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
           collabInfos.push({
             userId: invite.id,
             email: invite.email,
-            displayName: `${invite.email} (${t('container.modals.collaborators.invited')})`,
+            displayName: `${obfuscateEmail(invite.email)} (${t('container.modals.collaborators.invited')})`,
             permission: (invite.permission === 'edit' ? 'edit' : 'view'),
             isPending: true
           });
@@ -187,23 +201,39 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
                 return (
                   <div key={collab.userId} className="collaborator-card">
                     <div className="collaborator-card-main">
-                      <div className="collaborator-avatar-modern">
-                        {isOwner ? (
-                          <Crown className="h-5 w-5" />
-                        ) : (
+                      {collab.username ? (
+                        <Link to={`/profile/${collab.username}`} className="collaborator-avatar-modern shrink-0 hover:opacity-80 transition-opacity overflow-hidden">
+                          {collab.photoURL ? (
+                            <img src={collab.photoURL} alt={collab.displayName} className="w-full h-full object-cover" />
+                          ) : (
+                            <span>{collab.displayName.charAt(0).toUpperCase()}</span>
+                          )}
+                        </Link>
+                      ) : (
+                        <div className="collaborator-avatar-modern shrink-0 relative">
                           <span>{collab.displayName.charAt(0).toUpperCase()}</span>
-                        )}
-                      </div>
-                      <div className="collaborator-info">
-                        <div className="collaborator-name-row">
-                          <p className="collaborator-name-modern">{collab.displayName}</p>
-                          <div className="collaborator-badges">
+                        </div>
+                      )}
+
+                      <div className="collaborator-info min-w-0">
+                        <div className="collaborator-name-row flex flex-wrap items-center gap-x-2">
+                          {collab.username ? (
+                            <Link to={`/profile/${collab.username}`} className="collaborator-name-modern hover:underline decoration-primary/50">
+                              {collab.displayName}
+                            </Link>
+                          ) : (
+                            <p className="collaborator-name-modern">{collab.displayName}</p>
+                          )}
+                          <div className="collaborator-badges flex gap-1">
                             {isOwner && <span className="badge-modern badge-owner">{t('container.modals.collaborators.owner')}</span>}
                             {isCurrentUser && !isOwner && <span className="badge-modern badge-you">{t('container.modals.collaborators.you')}</span>}
                             {isPending && <span className="badge-modern badge-pending">{t('container.modals.collaborators.pending')}</span>}
                           </div>
                         </div>
-                        <p className="collaborator-email-modern">{collab.email}</p>
+                        <div className="flex flex-col">
+                          {collab.username && <p className="text-xs text-gray-500 dark:text-gray-400">@{collab.username}</p>}
+                          <p className="collaborator-email-modern truncate">{obfuscateEmail(collab.email)}</p>
+                        </div>
                       </div>
                     </div>
 
