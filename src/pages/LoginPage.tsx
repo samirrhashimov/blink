@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import blinkLogo from '../assets/blinklogo2.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useToast } from '../contexts/ToastContext';
 import { Eye, EyeOff } from 'lucide-react';
 import SEO from '../components/SEO';
 
@@ -12,26 +13,25 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login, loginWithGoogle } = useAuth();
+  const toast = useToast();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!email || !password) {
-      setError(t('auth.errors.fillAll'));
+      toast.error(t('auth.errors.fillAll'));
       return;
     }
 
     try {
-      setError('');
       setLoading(true);
       await login(email, password);
       navigate('/dashboard');
     } catch (error: any) {
-      setError(t('auth.errors.loginFailed'));
+      toast.error(t('auth.errors.loginFailed'));
       console.error('Login error:', error);
     } finally {
       setLoading(false);
@@ -51,11 +51,7 @@ const LoginPage: React.FC = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form">
-          {error && (
-            <div className="error-alert">
-              {error}
-            </div>
-          )}
+
 
           <button
             type="button"

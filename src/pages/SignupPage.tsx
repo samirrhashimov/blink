@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import blinkLogo from '../assets/blinklogo2.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { useToast } from '../contexts/ToastContext';
 import { Eye, EyeOff, AtSign } from 'lucide-react';
 import SEO from '../components/SEO';
 import { ProfileService } from '../services/profileService';
@@ -20,11 +21,11 @@ const SignupPage: React.FC = () => {
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [showVerificationMessage, setShowVerificationMessage] = useState(false);
   const [showCheckboxError, setShowCheckboxError] = useState(false);
   const { signup, loginWithGoogle } = useAuth();
+  const toast = useToast();
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,18 +43,18 @@ const SignupPage: React.FC = () => {
     e.preventDefault();
 
     if (!formData.displayName || !formData.username || !formData.email || !formData.password || !formData.confirmPassword) {
-      setError(t('auth.errors.fillAll'));
+      toast.error(t('auth.errors.fillAll'));
       return;
     }
 
     const usernameRegex = /^[a-zA-Z0-9_]+$/;
     if (!usernameRegex.test(formData.username)) {
-      setError(t('auth.errors.usernameInvalid'));
+      toast.error(t('auth.errors.usernameInvalid'));
       return;
     }
 
     if (!formData.acceptedTerms) {
-      setError(t('auth.errors.acceptTerms'));
+      toast.error(t('auth.errors.acceptTerms'));
       // Briefly disable then enable to re-trigger animation if already showing
       setShowCheckboxError(false);
       setTimeout(() => setShowCheckboxError(true), 10);
@@ -61,28 +62,28 @@ const SignupPage: React.FC = () => {
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError(t('auth.errors.passwordsNoMatch'));
+      toast.error(t('auth.errors.passwordsNoMatch'));
       return;
     }
 
     if (formData.password.length < 6) {
-      setError(t('auth.errors.passwordLength'));
+      toast.error(t('auth.errors.passwordLength'));
       return;
     }
 
     try {
-      setError('');
       setLoading(true);
 
       // Check if username is available
       const isAvailable = await ProfileService.isUsernameAvailable(formData.username, 'new-user');
       if (!isAvailable) {
-        setError(t('auth.errors.usernameTaken'));
+        toast.error(t('auth.errors.usernameTaken'));
         setLoading(false);
         return;
       }
 
       await signup(formData.email, formData.password, formData.displayName, formData.username);
+      toast.success(t('auth.verification.title'));
       setShowVerificationMessage(true);
       // Navigate to verify email page after 3 seconds
       setTimeout(() => {
@@ -93,15 +94,15 @@ const SignupPage: React.FC = () => {
 
       // Provide more specific error messages
       if (error.code === 'auth/email-already-in-use') {
-        setError(t('auth.errors.emailInUse'));
+        toast.error(t('auth.errors.emailInUse'));
       } else if (error.code === 'auth/weak-password') {
-        setError(t('auth.errors.weakPassword'));
+        toast.error(t('auth.errors.weakPassword'));
       } else if (error.code === 'auth/invalid-email') {
-        setError(t('auth.errors.invalidEmail'));
+        toast.error(t('auth.errors.invalidEmail'));
       } else if (error.code === 'auth/operation-not-allowed') {
-        setError(t('auth.errors.operationNotAllowed'));
+        toast.error(t('auth.errors.operationNotAllowed'));
       } else {
-        setError(t('auth.errors.createFailed', { message: error.message }));
+        toast.error(t('auth.errors.createFailed', { message: error.message }));
       }
     } finally {
       setLoading(false);
@@ -121,11 +122,7 @@ const SignupPage: React.FC = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="auth-form" noValidate>
-          {error && (
-            <div className="error-alert">
-              {error}
-            </div>
-          )}
+
 
           {showVerificationMessage && (
             <div className="success-alert" style={{
