@@ -7081,6 +7081,31 @@ input:checked+.slider:before {
   }
 }
 
+.profile-desktop-actions {
+  display: none;
+}
+
+@media (min-width: 600px) {
+  .profile-desktop-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+}
+
+.profile-mobile-actions {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+@media (min-width: 600px) {
+  .profile-mobile-actions {
+    display: none;
+  }
+}
+
 .profile-action-btn {
   display: inline-flex;
   align-items: center;

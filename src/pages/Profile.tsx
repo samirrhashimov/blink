@@ -180,7 +180,7 @@ const Profile: React.FC = () => {
     return (
         <div className="profile-page">
             <SEO
-                title={`${displayName} • Blink`}
+                title={`${profileUser.username}`}
                 description={`${displayName}'s public profile on Blink`}
             />
 
@@ -236,6 +236,56 @@ const Profile: React.FC = () => {
                     <div className="profile-info">
                         <div className="profile-name-row">
                             <h1 className="profile-display-name">{displayName}</h1>
+                            <div className="profile-desktop-actions">
+                                {isOwnProfile ? (
+                                    <Link to="/settings" className="btn-secondary profile-action-btn" style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem' }}>
+                                        {t('profile.editProfile')}
+                                    </Link>
+                                ) : currentUser ? (
+                                    <button
+                                        onClick={handleFollow}
+                                        disabled={followLoading}
+                                        className={isFollowing ? 'btn-secondary profile-action-btn' : 'btn-primary profile-action-btn'}
+                                        style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem' }}
+                                    >
+                                        {followLoading ? (
+                                            t('common.processing')
+                                        ) : isFollowing ? (
+                                            <><UserMinus size={16} style={{ marginRight: '0.4rem' }} />{t('profile.unfollow')}</>
+                                        ) : (
+                                            <><UserPlus size={16} style={{ marginRight: '0.4rem' }} />{t('profile.follow')}</>
+                                        )}
+                                    </button>
+                                ) : (
+                                    <Link to="/login" className="btn-primary profile-action-btn" style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem' }}>
+                                        <UserPlus size={16} style={{ marginRight: '0.4rem' }} />
+                                        {t('profile.followToLogin')}
+                                    </Link>
+                                )}
+                            </div>
+                        </div>
+                        {uname && <p className="profile-username">{uname}</p>}
+
+                        {/* Stats */}
+                        <div className="profile-stats">
+                            <div className="profile-stat is-clickable" onClick={openFollowers}>
+                                <span className="profile-stat-num">{followerCount}</span>
+                                <span className="profile-stat-label">{t('profile.followers')}</span>
+                            </div>
+                            <div className="profile-stat-divider" />
+                            <div className="profile-stat is-clickable" onClick={openFollowing}>
+                                <span className="profile-stat-num">{followingCount}</span>
+                                <span className="profile-stat-label">{t('profile.following')}</span>
+                            </div>
+                            <div className="profile-stat-divider" />
+                            <div className="profile-stat">
+                                <span className="profile-stat-num">{publicContainers.length}</span>
+                                <span className="profile-stat-label">{t('profile.publicContainers')}</span>
+                            </div>
+                        </div>
+
+                        {/* Mobile Actions - shown only on mobile */}
+                        <div className="profile-mobile-actions">
                             {isOwnProfile ? (
                                 <Link to="/settings" className="btn-secondary profile-action-btn" style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem' }}>
                                     {t('profile.editProfile')}
@@ -261,25 +311,6 @@ const Profile: React.FC = () => {
                                     {t('profile.followToLogin')}
                                 </Link>
                             )}
-                        </div>
-                        {uname && <p className="profile-username">{uname}</p>}
-
-                        {/* Stats */}
-                        <div className="profile-stats">
-                            <div className="profile-stat is-clickable" onClick={openFollowers}>
-                                <span className="profile-stat-num">{followerCount}</span>
-                                <span className="profile-stat-label">{t('profile.followers')}</span>
-                            </div>
-                            <div className="profile-stat-divider" />
-                            <div className="profile-stat is-clickable" onClick={openFollowing}>
-                                <span className="profile-stat-num">{followingCount}</span>
-                                <span className="profile-stat-label">{t('profile.following')}</span>
-                            </div>
-                            <div className="profile-stat-divider" />
-                            <div className="profile-stat">
-                                <span className="profile-stat-num">{publicContainers.length}</span>
-                                <span className="profile-stat-label">{t('profile.publicContainers')}</span>
-                            </div>
                         </div>
 
                     </div>
