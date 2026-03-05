@@ -527,13 +527,7 @@ const Settings: React.FC = () => {
                   }}
                   aria-label="Toggle theme"
                 >
-                  <div className="toggle-thumb">
-                    {theme === 'dark' ? (
-                      <Moon className="toggle-icon" />
-                    ) : (
-                      <Sun className="toggle-icon" />
-                    )}
-                  </div>
+                  <div className="toggle-thumb" />
                 </div>
               </div>
 
