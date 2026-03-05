@@ -34,7 +34,7 @@ interface AuthContextType {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
-  signup: (email: string, password: string, displayName: string) => Promise<void>;
+  signup: (email: string, password: string, displayName: string, username: string) => Promise<void>;
   logout: () => Promise<void>;
   deleteAccount: () => Promise<void>;
   sendEmailVerification: () => Promise<void>;
@@ -59,7 +59,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const createUserDocument = async (firebaseUser: FirebaseUser, displayName?: string) => {
+  const createUserDocument = async (firebaseUser: FirebaseUser, displayName?: string, username?: string) => {
     const userRef = doc(db, 'users', firebaseUser.uid);
     const userSnap = await getDoc(userRef);
 
@@ -71,7 +71,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         uid: firebaseUser.uid,
         email: firebaseUser.email!,
         displayName: finalDisplayName,
-        createdAt: new Date()
+        createdAt: new Date(),
+        username: username || '',
+        usernameLower: username ? username.toLowerCase() : ''
       };
 
       // Only add photoURL if it exists (not undefined)
@@ -83,13 +85,25 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return userData as User;
     }
 
-    // If document exists, check if displayName needs to be updated
+    // If document exists, check if we need to update displayName or username
     const existingData = userSnap.data() as User;
+    const updates: any = {};
+    let hasUpdates = false;
+
     if (finalDisplayName !== 'Anonymous' && existingData.displayName !== finalDisplayName) {
-      await updateDoc(userRef, {
-        displayName: finalDisplayName
-      });
-      return { ...existingData, displayName: finalDisplayName } as User;
+      updates.displayName = finalDisplayName;
+      hasUpdates = true;
+    }
+
+    if (username && !existingData.username) {
+      updates.username = username;
+      updates.usernameLower = username.toLowerCase();
+      hasUpdates = true;
+    }
+
+    if (hasUpdates) {
+      await updateDoc(userRef, updates);
+      return { ...existingData, ...updates } as User;
     }
 
     return existingData;
@@ -105,10 +119,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await createUserDocument(result.user);
   };
 
-  const signup = async (email: string, password: string, displayName: string) => {
+  const signup = async (email: string, password: string, displayName: string, username: string) => {
     const { user } = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(user, { displayName });
-    const userData = await createUserDocument(user, displayName);
+    const userData = await createUserDocument(user, displayName, username);
     // Send email verification
     await sendEmailVerification(user);
     // Manually update currentUser state to ensure displayName is immediately available

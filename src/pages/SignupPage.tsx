@@ -4,13 +4,15 @@ import { useTranslation } from 'react-i18next';
 import blinkLogo from '../assets/blinklogo2.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, AtSign } from 'lucide-react';
 import SEO from '../components/SEO';
+import { ProfileService } from '../services/profileService';
 
 const SignupPage: React.FC = () => {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
     displayName: '',
+    username: '',
     email: '',
     password: '',
     confirmPassword: '',
@@ -39,8 +41,14 @@ const SignupPage: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.displayName || !formData.email || !formData.password || !formData.confirmPassword) {
+    if (!formData.displayName || !formData.username || !formData.email || !formData.password || !formData.confirmPassword) {
       setError(t('auth.errors.fillAll'));
+      return;
+    }
+
+    const usernameRegex = /^[a-zA-Z0-9_]+$/;
+    if (!usernameRegex.test(formData.username)) {
+      setError(t('auth.errors.usernameInvalid'));
       return;
     }
 
@@ -65,7 +73,16 @@ const SignupPage: React.FC = () => {
     try {
       setError('');
       setLoading(true);
-      await signup(formData.email, formData.password, formData.displayName);
+
+      // Check if username is available
+      const isAvailable = await ProfileService.isUsernameAvailable(formData.username, 'new-user');
+      if (!isAvailable) {
+        setError(t('auth.errors.usernameTaken'));
+        setLoading(false);
+        return;
+      }
+
+      await signup(formData.email, formData.password, formData.displayName, formData.username);
       setShowVerificationMessage(true);
       // Navigate to verify email page after 3 seconds
       setTimeout(() => {
@@ -161,6 +178,27 @@ const SignupPage: React.FC = () => {
               value={formData.displayName}
               onChange={handleChange}
             />
+          </div>
+          <div className="form-group">
+            <label className="form-label" htmlFor="username">{t('auth.signup.username')}</label>
+            <div className="relative">
+              <AtSign size={16} style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)', pointerEvents: 'none' }} />
+              <input
+                id="username"
+                name="username"
+                type="text"
+                required
+                className="form-input"
+                style={{ paddingLeft: '2rem' }}
+                placeholder={t('auth.signup.usernamePlaceholder')}
+                value={formData.username}
+                onChange={(e) => {
+                  const val = e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, '');
+                  setFormData(prev => ({ ...prev, username: val }));
+                }}
+                maxLength={20}
+              />
+            </div>
           </div>
           <div className="form-group">
             <label className="form-label" htmlFor="email">{t('auth.signup.email')}</label>

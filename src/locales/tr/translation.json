@@ -292,6 +292,8 @@
             "subheader": "Linklerinizi düzenlemek için bize katılın",
             "google": "Google ile kaydolun",
             "fullName": "Ad Soyad",
+            "username": "Kullanıcı Adı",
+            "usernamePlaceholder": "kullaniciadi",
             "email": "E-posta adresi",
             "password": "Şifre",
             "confirmPassword": "Şifreyi Onayla",
@@ -308,6 +310,9 @@
         },
         "errors": {
             "fillAll": "Lütfen tüm alanları doldurun",
+            "usernameRequired": "Kullanıcı adı gereklidir",
+            "usernameTaken": "Bu kullanıcı adı zaten alınmış",
+            "usernameInvalid": "Kullanıcı adı sadece harf, rakam ve alt çizgi içerebilir",
             "loginFailed": "Giriş yapılamadı. Lütfen bilgilerinizi kontrol edin.",
             "acceptTerms": "Şartlar ve Koşullar ile Gizlilik Politikasını kabul etmelisiniz",
             "passwordsNoMatch": "Şifreler eşleşmiyor",

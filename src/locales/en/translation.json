@@ -292,6 +292,8 @@
             "subheader": "Join us to organize your links",
             "google": "Sign up with Google",
             "fullName": "Full Name",
+            "username": "Username",
+            "usernamePlaceholder": "yourname",
             "email": "Email address",
             "password": "Password",
             "confirmPassword": "Confirm Password",
@@ -308,6 +310,9 @@
         },
         "errors": {
             "fillAll": "Please fill in all fields",
+            "usernameRequired": "Username is required",
+            "usernameTaken": "This username is already taken",
+            "usernameInvalid": "Username can only contain letters, numbers, and underscores",
             "loginFailed": "Failed to log in. Please check your credentials.",
             "acceptTerms": "You must accept the Terms and Conditions and Privacy Policy",
             "passwordsNoMatch": "Passwords do not match",

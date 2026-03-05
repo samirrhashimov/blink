@@ -12,8 +12,6 @@ import blinkLogo from '../assets/blinklogo2.png';
 import { ProfileService } from '../services/profileService';
 import {
   LogOut,
-  Moon,
-  Sun,
   ArrowLeft,
   Github,
   Scale,
@@ -59,7 +57,16 @@ const Settings: React.FC = () => {
   // Sync photoPreview when currentUser changes
   useEffect(() => {
     setPhotoPreview(currentUser?.photoURL || null);
-  }, [currentUser?.photoURL]);
+    // Sync other user data as well
+    if (currentUser) {
+      setFormData(prev => ({
+        ...prev,
+        displayName: currentUser.displayName || '',
+        email: currentUser.email || '',
+        username: currentUser.username || ''
+      }));
+    }
+  }, [currentUser]);
 
   const handlePhotoUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -439,7 +446,7 @@ const Settings: React.FC = () => {
                     value={formData.username}
                     onChange={handleChange}
                     maxLength={20}
-                    style={{ paddingLeft: '2.25rem', margin: 0, minWidth: 0, width: '100%' }}
+                    style={{ paddingLeft: '2.5rem', margin: 0, minWidth: 0, width: '100%' }}
                   />
                 </div>
               </div>
