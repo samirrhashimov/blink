@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
+import { useToast } from '../contexts/ToastContext';
 import { useContainer } from '../contexts/ContainerContext';
 import { updateProfile } from 'firebase/auth';
 import { doc, updateDoc } from 'firebase/firestore';
@@ -45,12 +46,11 @@ const Settings: React.FC = () => {
     password: ''
   });
   const [loading, setLoading] = useState(false);
-  const [success, setSuccess] = useState('');
+  const toast = useToast();
   const [photoLoading, setPhotoLoading] = useState(false);
   const [photoPreview, setPhotoPreview] = useState<string | null>(currentUser?.photoURL || null);
   const photoInputRef = React.useRef<HTMLInputElement>(null);
 
-  const [error, setError] = useState('');
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
@@ -73,18 +73,15 @@ const Settings: React.FC = () => {
     if (!file || !currentUser) return;
 
     setPhotoLoading(true);
-    setError('');
-    setSuccess('');
     try {
       const base64 = await ProfileService.fileToBase64(file, 256);
       setPhotoPreview(base64);
       await ProfileService.updateProfilePhoto(currentUser.uid, base64);
       await refreshUserProfile();
-      setSuccess(t('settings.messages.photoSuccess'));
-      setTimeout(() => setSuccess(''), 3000);
+      toast.success(t('settings.messages.photoSuccess'));
     } catch (err: any) {
       console.error('Error uploading photo:', err);
-      setError(err.message || t('settings.messages.photoFailed'));
+      toast.error(err.message || t('settings.messages.photoFailed'));
     } finally {
       setPhotoLoading(false);
       if (photoInputRef.current) photoInputRef.current.value = '';
@@ -105,9 +102,6 @@ const Settings: React.FC = () => {
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
-
-    setSuccess('');
-    setError('');
 
     try {
       const text = await file.text();
@@ -130,7 +124,7 @@ const Settings: React.FC = () => {
       setImportSummary({ containers: totalContainers, links: totalLinks, data: grouped });
     } catch (err: any) {
       console.error(err);
-      setError(err.message || 'Failed to parse bookmarks.');
+      toast.error(err.message || 'Failed to parse bookmarks.');
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
@@ -161,7 +155,7 @@ const Settings: React.FC = () => {
         });
       }
 
-      setSuccess(t('settings.messages.importSuccess', { links: importSummary.links, containers: importSummary.containers }));
+      toast.success(t('settings.messages.importSuccess', { links: importSummary.links, containers: importSummary.containers }));
       setImportSummary(null);
 
       // Redirect to dashboard after short delay
@@ -171,7 +165,7 @@ const Settings: React.FC = () => {
 
     } catch (err: any) {
       console.error(err);
-      setError(err.message || 'Failed to import bookmarks.');
+      toast.error(err.message || 'Failed to import bookmarks.');
     } finally {
       setImporting(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -185,21 +179,18 @@ const Settings: React.FC = () => {
 
   const handleExport = async () => {
     if (containers.length === 0) {
-      setError(t('settings.messages.noExport'));
+      toast.error(t('settings.messages.noExport'));
       return;
     }
 
     setExporting(true);
-    setSuccess('');
-    setError('');
 
     try {
       downloadBookmarks(containers, `blink_backup_${new Date().toISOString().split('T')[0]}.html`);
-      setSuccess(t('settings.messages.exportSuccess'));
-      setTimeout(() => setSuccess(''), 3000);
+      toast.success(t('settings.messages.exportSuccess'));
     } catch (err: any) {
       console.error(err);
-      setError(t('settings.messages.exportFailed'));
+      toast.error(t('settings.messages.exportFailed'));
     } finally {
       setExporting(false);
     }
@@ -236,8 +227,6 @@ const Settings: React.FC = () => {
     if (!currentUser || !auth.currentUser) return;
 
     setLoading(true);
-    setError('');
-    setSuccess('');
 
     try {
       let usernameChanged = false;
@@ -247,7 +236,7 @@ const Settings: React.FC = () => {
       if (trimmedUsername && trimmedUsername !== (currentUser.username || '')) {
         const available = await ProfileService.isUsernameAvailable(trimmedUsername, currentUser.uid);
         if (!available) {
-          setError(t('settings.messages.usernameTaken'));
+          toast.error(t('settings.messages.usernameTaken'));
           setLoading(false);
           return;
         }
@@ -276,13 +265,12 @@ const Settings: React.FC = () => {
         await refreshUserProfile();
       }
 
-      setSuccess(t('settings.messages.updateSuccess'));
+      toast.success(t('settings.messages.updateSuccess'));
 
-      // Clear success message after 3 seconds
-      setTimeout(() => setSuccess(''), 3000);
+      // Redirect/Refresh is handled by refreshUserProfile
     } catch (err: any) {
       console.error('Error updating account:', err);
-      setError(err.message || t('settings.messages.updateFailed'));
+      toast.error(err.message || t('settings.messages.updateFailed'));
     } finally {
       setLoading(false);
     }
@@ -307,12 +295,11 @@ const Settings: React.FC = () => {
 
   const performDeleteAccount = async () => {
     if (!currentUser || !auth.currentUser) {
-      setError(t('settings.messages.noUser'));
+      toast.error(t('settings.messages.noUser'));
       return;
     }
 
     setLoading(true);
-    setError('');
     setShowDeleteModal(false);
 
     try {
@@ -321,7 +308,7 @@ const Settings: React.FC = () => {
       navigate('/');
     } catch (error: any) {
       console.error('Delete account error:', error);
-      setError(error.message || 'Failed to delete account. You may need to re-authenticate.');
+      toast.error(error.message || 'Failed to delete account. You may need to re-authenticate.');
       setLoading(false);
     }
   };
@@ -386,17 +373,6 @@ const Settings: React.FC = () => {
           <section className="settings-section">
             <h3>{t('settings.account')}</h3>
 
-            {success && (
-              <div className="mb-4 p-4 rounded-lg bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200">
-                {success}
-              </div>
-            )}
-
-            {error && (
-              <div className="mb-4 p-4 rounded-lg bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200">
-                {error}
-              </div>
-            )}
 
             {/* Profile Photo Upload */}
             <div className="settings-item settings-profile-photo">
