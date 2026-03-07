@@ -957,8 +957,11 @@ const ContainerDetails: React.FC = () => {
                       onClick={() => setShowEditContainerModal(true)}
                       className="action-button"
                     >
-                      <Edit />
+                      <div className="action-icon-wrapper edit-icon">
+                        <Edit size={18} />
+                      </div>
                       <span>{t('container.actions.editContainer')}</span>
+                      <ChevronRight size={18} className="action-button-arrow" />
                     </button>
                   )}
                   {canEdit && (
@@ -966,8 +969,11 @@ const ContainerDetails: React.FC = () => {
                       to={`/container/${container.id}/share`}
                       className="action-button"
                     >
-                      <Share2 />
+                      <div className="action-icon-wrapper share-icon">
+                        <Share2 size={18} />
+                      </div>
                       <span>{t('container.actions.shareContainer')}</span>
+                      <ChevronRight size={18} className="action-button-arrow" />
                     </Link>
                   )}
                   {isOwner ? (
@@ -975,16 +981,22 @@ const ContainerDetails: React.FC = () => {
                       onClick={() => setShowDeleteContainerModal(true)}
                       className="action-button delete-button"
                     >
-                      <Trash2 />
+                      <div className="action-icon-wrapper delete-icon">
+                        <Trash2 size={18} />
+                      </div>
                       <span>{t('container.actions.deleteContainer')}</span>
+                      <ChevronRight size={18} className="action-button-arrow delete-arrow" />
                     </button>
                   ) : isMember ? (
                     <button
                       onClick={() => setShowLeaveContainerModal(true)}
                       className="action-button delete-button"
                     >
-                      <LogOut />
+                      <div className="action-icon-wrapper delete-icon">
+                        <LogOut size={18} />
+                      </div>
                       <span>{t('container.actions.leaveContainer')}</span>
+                      <ChevronRight size={18} className="action-button-arrow delete-arrow" />
                     </button>
                   ) : null}
                 </div>

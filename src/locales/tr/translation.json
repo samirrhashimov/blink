@@ -381,10 +381,10 @@
         },
         "actions": {
             "title": "İşlemler",
-            "editContainer": "Konteyneri Düzenle",
-            "deleteContainer": "Konteyneri Sil",
-            "leaveContainer": "Konteynerden Ayrıl",
-            "shareContainer": "Konteyneri Paylaş"
+            "editContainer": "Düzenle",
+            "deleteContainer": "Sil",
+            "leaveContainer": "Ayrıl",
+            "shareContainer": "Paylaş"
         },
         "menu": {
             "stats": "İstatistikler",
