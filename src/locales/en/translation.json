@@ -371,7 +371,6 @@
             "title": "Collaborators",
             "owner": "Owner",
             "you": "You (Owner)",
-            "invite": "Invite",
             "manage": "See All",
             "more": "+{{count}} more"
         },
@@ -384,7 +383,8 @@
             "title": "Actions",
             "editContainer": "Edit Container",
             "deleteContainer": "Delete Container",
-            "leaveContainer": "Leave Container"
+            "leaveContainer": "Leave Container",
+            "shareContainer": "Share Container"
         },
         "menu": {
             "stats": "Statistics",

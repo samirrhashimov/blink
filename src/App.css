@@ -1357,13 +1357,13 @@ main.container {
 
 @media (min-width: 768px) {
   .sidebar {
-    width: 20rem;
+    width: 18rem;
   }
 }
 
 @media (min-width: 1024px) {
   .sidebar {
-    width: 22rem;
+    width: 20.5rem;
   }
 }
 
@@ -1398,7 +1398,6 @@ main.container {
 .collaborators-list {
   display: flex;
   align-items: center;
-  margin: 0.5rem 0;
   gap: -0.75rem;
 }
 
@@ -1504,6 +1503,29 @@ main.container {
   opacity: 0.9;
 }
 
+.collaborators-clickable-area {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 0.5rem 0;
+  transition: all 0.2s ease;
+  margin-top: 0.25rem;
+}
+
+.collaborators-clickable-area:hover {
+  opacity: 0.8;
+}
+
+.collaborators-chevron {
+  color: #cbd5e1;
+  transition: transform 0.2s ease;
+}
+
+.collaborators-clickable-area:hover .collaborators-chevron {
+  color: #94a3b8;
+}
+
 .actions-widget {
   margin-top: 1.5rem;
 }
@@ -1512,6 +1534,7 @@ main.container {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  padding-top: 10px;
 }
 
 .action-button {
@@ -1525,8 +1548,15 @@ main.container {
   background: transparent;
   color: #2c3e50;
   font-weight: 500;
+  font-size: 0.80rem;
   transition: all 0.3s ease;
   border: 1.5px solid rgba(200, 200, 200, 0.1);
+}
+
+.action-button svg {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
 }
 
 .dark .action-button {

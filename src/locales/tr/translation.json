@@ -371,7 +371,6 @@
             "title": "Katılımcılar",
             "owner": "Sahip",
             "you": "Siz (Sahip)",
-            "invite": "Davet Et",
             "manage": "Hepsini gör",
             "more": "+{{count}} diğer"
         },
@@ -384,7 +383,8 @@
             "title": "İşlemler",
             "editContainer": "Konteyneri Düzenle",
             "deleteContainer": "Konteyneri Sil",
-            "leaveContainer": "Konteynerden Ayrıl"
+            "leaveContainer": "Konteynerden Ayrıl",
+            "shareContainer": "Konteyneri Paylaş"
         },
         "menu": {
             "stats": "İstatistikler",

@@ -16,13 +16,13 @@ import {
   Trash2,
   Share2,
   Settings,
-  Users,
   LogOut,
   Search,
   CheckSquare,
   XCircle,
   ArrowRightLeft,
-  X
+  X,
+  ChevronRight
 } from 'lucide-react';
 import AddLinkModal from '../components/AddLinkModal';
 import EditLinkModal from '../components/EditLinkModal';
@@ -853,110 +853,98 @@ const ContainerDetails: React.FC = () => {
           <aside className="sidebar">
             <div className="collaborators-widget">
               <h3>{t('container.collaborators.title')}</h3>
-              <div className="collaborators-list">
-                {/* Current User - Only show if member */}
-                {currentUser && isMember && (
-                  <Link
-                    to={currentUser.username ? `/profile/${currentUser.username}` : '#'}
-                    className="avatar overflow-hidden hover:opacity-80 transition-opacity"
-                    title={currentUser.displayName || t('container.collaborators.you')}
-                  >
-                    {currentUser.photoURL ? (
-                      <img src={currentUser.photoURL} alt="" className="w-full h-full object-cover" />
-                    ) : (
-                      currentUser.displayName?.charAt(0).toUpperCase() || 'U'
-                    )}
-                  </Link>
-                )}
-
-                {/* Owner (if not current user) */}
-                {container.ownerId !== currentUser?.uid && (
-                  collaboratorData[container.ownerId]?.username ? (
+              <div
+                className="collaborators-clickable-area"
+                onClick={() => setShowCollaboratorsModal(true)}
+              >
+                <div className="collaborators-list">
+                  {/* Current User - Only show if member */}
+                  {currentUser && isMember && (
                     <Link
-                      to={`/profile/${collaboratorData[container.ownerId].username}`}
-                      key={container.ownerId}
+                      to={currentUser.username ? `/profile/${currentUser.username}` : '#'}
                       className="avatar overflow-hidden hover:opacity-80 transition-opacity"
-                      title={`${collaboratorData[container.ownerId]?.name || 'Owner'} (${t('container.collaborators.owner')})`}
+                      title={currentUser.displayName || t('container.collaborators.you')}
                     >
-                      {collaboratorData[container.ownerId]?.photoURL ? (
-                        <img src={collaboratorData[container.ownerId].photoURL} alt="" className="w-full h-full object-cover" />
+                      {currentUser.photoURL ? (
+                        <img src={currentUser.photoURL} alt="" className="w-full h-full object-cover" />
                       ) : (
-                        (collaboratorData[container.ownerId]?.name || 'O').charAt(0).toUpperCase()
+                        currentUser.displayName?.charAt(0).toUpperCase() || 'U'
                       )}
                     </Link>
-                  ) : (
-                    <div
-                      key={container.ownerId}
-                      className="avatar"
-                      title={`${collaboratorData[container.ownerId]?.name || 'Owner'} (${t('container.collaborators.owner')})`}
-                    >
-                      {(collaboratorData[container.ownerId]?.name || 'O').charAt(0).toUpperCase()}
-                    </div>
-                  )
-                )}
+                  )}
 
-                {/* Other Authorized Users (excluding owner and current user) */}
-                {(container.authorizedUsers || [])
-                  .filter((userId: string) => userId !== currentUser?.uid && userId !== container.ownerId)
-                  .slice(0, 2)
-                  .map((userId: string) => {
-                    const userData = collaboratorData[userId];
-                    const userName = userData?.name || 'Loading...';
+                  {/* Owner (if not current user) */}
+                  {container.ownerId !== currentUser?.uid && (
+                    collaboratorData[container.ownerId]?.username ? (
+                      <Link
+                        to={`/profile/${collaboratorData[container.ownerId].username}`}
+                        key={container.ownerId}
+                        className="avatar overflow-hidden hover:opacity-80 transition-opacity"
+                        title={`${collaboratorData[container.ownerId]?.name || 'Owner'} (${t('container.collaborators.owner')})`}
+                      >
+                        {collaboratorData[container.ownerId]?.photoURL ? (
+                          <img src={collaboratorData[container.ownerId].photoURL} alt="" className="w-full h-full object-cover" />
+                        ) : (
+                          (collaboratorData[container.ownerId]?.name || 'O').charAt(0).toUpperCase()
+                        )}
+                      </Link>
+                    ) : (
+                      <div
+                        key={container.ownerId}
+                        className="avatar"
+                        title={`${collaboratorData[container.ownerId]?.name || 'Owner'} (${t('container.collaborators.owner')})`}
+                      >
+                        {(collaboratorData[container.ownerId]?.name || 'O').charAt(0).toUpperCase()}
+                      </div>
+                    )
+                  )}
 
-                    if (userData?.username) {
+                  {/* Other Authorized Users (excluding owner and current user) */}
+                  {(container.authorizedUsers || [])
+                    .filter((userId: string) => userId !== currentUser?.uid && userId !== container.ownerId)
+                    .slice(0, 2)
+                    .map((userId: string) => {
+                      const userData = collaboratorData[userId];
+                      const userName = userData?.name || 'Loading...';
+
+                      if (userData?.username) {
+                        return (
+                          <Link
+                            key={userId}
+                            to={`/profile/${userData.username}`}
+                            className="avatar overflow-hidden hover:opacity-80 transition-opacity"
+                            title={userName}
+                          >
+                            {userData.photoURL ? (
+                              <img src={userData.photoURL} alt="" className="w-full h-full object-cover" />
+                            ) : (
+                              userName.charAt(0).toUpperCase()
+                            )}
+                          </Link>
+                        );
+                      }
+
                       return (
-                        <Link
-                          key={userId}
-                          to={`/profile/${userData.username}`}
-                          className="avatar overflow-hidden hover:opacity-80 transition-opacity"
-                          title={userName}
-                        >
-                          {userData.photoURL ? (
-                            <img src={userData.photoURL} alt="" className="w-full h-full object-cover" />
-                          ) : (
-                            userName.charAt(0).toUpperCase()
-                          )}
-                        </Link>
+                        <div key={userId} className="avatar" title={userName}>
+                          {userName.charAt(0).toUpperCase()}
+                        </div>
                       );
-                    }
+                    })}
 
-                    return (
-                      <div key={userId} className="avatar" title={userName}>
-                        {userName.charAt(0).toUpperCase()}
+                  {/* Show +N more if there are additional collaborators */}
+                  {(() => {
+                    const otherUsers = (container.authorizedUsers || []).filter(
+                      (userId: string) => userId !== currentUser?.uid && userId !== container.ownerId
+                    );
+                    const remainingCount = otherUsers.length - 2;
+                    return remainingCount > 0 && (
+                      <div className="avatar" title={t('container.collaborators.more', { count: remainingCount })}>
+                        +{remainingCount}
                       </div>
                     );
-                  })}
-
-                {/* Show +N more if there are additional collaborators */}
-                {(() => {
-                  const otherUsers = (container.authorizedUsers || []).filter(
-                    (userId: string) => userId !== currentUser?.uid && userId !== container.ownerId
-                  );
-                  const remainingCount = otherUsers.length - 2;
-                  return remainingCount > 0 && (
-                    <div className="avatar" title={t('container.collaborators.more', { count: remainingCount })}>
-                      +{remainingCount}
-                    </div>
-                  );
-                })()}
-              </div>
-              <div className="collaborators-actions">
-                {canEdit && (
-                  <Link
-                    to={`/container/${container.id}/share`}
-                    className="manage-collaborators-button"
-                  >
-                    <Share2 size={18} />
-                    {t('container.collaborators.invite')}
-                  </Link>
-                )}
-                <button
-                  onClick={() => setShowCollaboratorsModal(true)}
-                  className="manage-collaborators-button"
-                >
-                  <Users size={18} />
-                  {t('container.collaborators.manage')}
-                </button>
+                  })()}
+                </div>
+                <ChevronRight size={20} className="collaborators-chevron" />
               </div>
             </div>
 
@@ -972,6 +960,15 @@ const ContainerDetails: React.FC = () => {
                       <Edit />
                       <span>{t('container.actions.editContainer')}</span>
                     </button>
+                  )}
+                  {canEdit && (
+                    <Link
+                      to={`/container/${container.id}/share`}
+                      className="action-button"
+                    >
+                      <Share2 />
+                      <span>{t('container.actions.shareContainer')}</span>
+                    </Link>
                   )}
                   {isOwner ? (
                     <button
@@ -996,186 +993,214 @@ const ContainerDetails: React.FC = () => {
           </aside>
         </div>
 
-        {error && (
-          <div className="error-message">
-            {error}
-          </div>
-        )}
-      </main>
+        {
+          error && (
+            <div className="error-message">
+              {error}
+            </div>
+          )
+        }
+      </main >
 
       {/* Add Link Modal */}
-      {container && canEdit && (
-        <AddLinkModal
-          isOpen={showAddLinkModal}
-          onClose={() => setShowAddLinkModal(false)}
-          containerId={container.id}
-          containerColor={containerColor}
-        />
-      )}
+      {
+        container && canEdit && (
+          <AddLinkModal
+            isOpen={showAddLinkModal}
+            onClose={() => setShowAddLinkModal(false)}
+            containerId={container.id}
+            containerColor={containerColor}
+          />
+        )
+      }
 
       {/* Edit Link Modal */}
-      {container && selectedLink && canEdit && (
-        <EditLinkModal
-          isOpen={showEditLinkModal}
-          onClose={() => {
-            setShowEditLinkModal(false);
-            setSelectedLink(null);
-          }}
-          containerId={container.id}
-          link={selectedLink}
-          containerColor={containerColor}
-        />
-      )}
+      {
+        container && selectedLink && canEdit && (
+          <EditLinkModal
+            isOpen={showEditLinkModal}
+            onClose={() => {
+              setShowEditLinkModal(false);
+              setSelectedLink(null);
+            }}
+            containerId={container.id}
+            link={selectedLink}
+            containerColor={containerColor}
+          />
+        )
+      }
 
       {/* Edit Container Modal */}
-      {container && isOwner && (
-        <EditContainerModal
-          isOpen={showEditContainerModal}
-          onClose={() => setShowEditContainerModal(false)}
-          container={container}
-        />
-      )}
+      {
+        container && isOwner && (
+          <EditContainerModal
+            isOpen={showEditContainerModal}
+            onClose={() => setShowEditContainerModal(false)}
+            container={container}
+          />
+        )
+      }
 
       {/* Delete Link Confirmation */}
-      {selectedLink && (
-        <ConfirmModal
-          isOpen={showDeleteLinkModal}
-          onClose={() => {
-            setShowDeleteLinkModal(false);
-            setSelectedLink(null);
-          }}
-          onConfirm={confirmDeleteLink}
-          title={t('container.modals.deleteLink.title')}
-          message={t('container.modals.deleteLink.message', { title: selectedLink.title })}
-          confirmText={t('container.modals.deleteLink.confirm')}
-          variant="danger"
-          icon={<Trash2 size={18} />}
-        />
-      )}
+      {
+        selectedLink && (
+          <ConfirmModal
+            isOpen={showDeleteLinkModal}
+            onClose={() => {
+              setShowDeleteLinkModal(false);
+              setSelectedLink(null);
+            }}
+            onConfirm={confirmDeleteLink}
+            title={t('container.modals.deleteLink.title')}
+            message={t('container.modals.deleteLink.message', { title: selectedLink.title })}
+            confirmText={t('container.modals.deleteLink.confirm')}
+            variant="danger"
+            icon={<Trash2 size={18} />}
+          />
+        )
+      }
 
       {/* Delete Container Confirmation */}
-      {container && (
-        <ConfirmModal
-          isOpen={showDeleteContainerModal}
-          onClose={() => setShowDeleteContainerModal(false)}
-          onConfirm={confirmDeleteContainer}
-          title={t('container.modals.deleteContainer.title')}
-          message={t('container.modals.deleteContainer.message', { name: container.name })}
-          confirmText={t('container.modals.deleteContainer.confirm')}
-          variant="danger"
-          icon={<Trash2 size={18} />}
-          confirmWord={container.name}
-        />
-      )}
+      {
+        container && (
+          <ConfirmModal
+            isOpen={showDeleteContainerModal}
+            onClose={() => setShowDeleteContainerModal(false)}
+            onConfirm={confirmDeleteContainer}
+            title={t('container.modals.deleteContainer.title')}
+            message={t('container.modals.deleteContainer.message', { name: container.name })}
+            confirmText={t('container.modals.deleteContainer.confirm')}
+            variant="danger"
+            icon={<Trash2 size={18} />}
+            confirmWord={container.name}
+          />
+        )
+      }
 
       {/* Leave Container Confirmation */}
-      {container && (
-        <ConfirmModal
-          isOpen={showLeaveContainerModal}
-          onClose={() => setShowLeaveContainerModal(false)}
-          onConfirm={confirmLeaveContainer}
-          title="Leave Container"
-          message={`Are you sure you want to leave "${container.name}"? You will lose access to all its contents.`}
-          confirmText="Leave Container"
-          variant="danger"
-          confirmWord="LEAVE"
-        />
-      )}
+      {
+        container && (
+          <ConfirmModal
+            isOpen={showLeaveContainerModal}
+            onClose={() => setShowLeaveContainerModal(false)}
+            onConfirm={confirmLeaveContainer}
+            title="Leave Container"
+            message={`Are you sure you want to leave "${container.name}"? You will lose access to all its contents.`}
+            confirmText="Leave Container"
+            variant="danger"
+            confirmWord="LEAVE"
+          />
+        )
+      }
 
       {/* Collaborators Modal */}
-      {container && (
-        <CollaboratorsModal
-          isOpen={showCollaboratorsModal}
-          onClose={() => setShowCollaboratorsModal(false)}
-          containerId={container.id}
-          authorizedUsers={container.authorizedUsers || []}
-          ownerId={container.ownerId}
-          currentUserId={currentUser?.uid || null}
-          containerColor={containerColor}
-        />
-      )}
+      {
+        container && (
+          <CollaboratorsModal
+            isOpen={showCollaboratorsModal}
+            onClose={() => setShowCollaboratorsModal(false)}
+            containerId={container.id}
+            authorizedUsers={container.authorizedUsers || []}
+            ownerId={container.ownerId}
+            currentUserId={currentUser?.uid || null}
+            containerColor={containerColor}
+          />
+        )
+      }
 
       {/* Share Link Modal */}
-      {container && currentUser && (
-        <ShareLinkModal
-          isOpen={showShareLinkModal}
-          onClose={() => setShowShareLinkModal(false)}
-          containerId={container.id}
-          containerName={container.name}
-          currentUserId={currentUser.uid}
-          containerColor={containerColor}
-        />
-      )}
+      {
+        container && currentUser && (
+          <ShareLinkModal
+            isOpen={showShareLinkModal}
+            onClose={() => setShowShareLinkModal(false)}
+            containerId={container.id}
+            containerName={container.name}
+            currentUserId={currentUser.uid}
+            containerColor={containerColor}
+          />
+        )
+      }
 
       {/* Move Link Modal (Single) */}
-      {container && selectedLink && (
-        <MoveLinkModal
-          isOpen={showMoveLinkModal}
-          onClose={() => {
-            setShowMoveLinkModal(false);
-            setSelectedLink(null);
-          }}
-          link={selectedLink}
-          currentContainerId={container.id}
-          containerColor={containerColor}
-        />
-      )}
+      {
+        container && selectedLink && (
+          <MoveLinkModal
+            isOpen={showMoveLinkModal}
+            onClose={() => {
+              setShowMoveLinkModal(false);
+              setSelectedLink(null);
+            }}
+            link={selectedLink}
+            currentContainerId={container.id}
+            containerColor={containerColor}
+          />
+        )
+      }
 
       {/* Move Link Modal (Bulk) */}
-      {container && showBulkMoveModal && (
-        <MoveLinkModal
-          isOpen={showBulkMoveModal}
-          onClose={() => {
-            setShowBulkMoveModal(false);
-            setSelectionMode(false);
-            setSelectedLinkIds(new Set());
-          }}
-          linkIds={Array.from(selectedLinkIds)}
-          currentContainerId={container.id}
-          containerColor={containerColor}
-        />
-      )}
+      {
+        container && showBulkMoveModal && (
+          <MoveLinkModal
+            isOpen={showBulkMoveModal}
+            onClose={() => {
+              setShowBulkMoveModal(false);
+              setSelectionMode(false);
+              setSelectedLinkIds(new Set());
+            }}
+            linkIds={Array.from(selectedLinkIds)}
+            currentContainerId={container.id}
+            containerColor={containerColor}
+          />
+        )
+      }
 
       {/* Bulk Delete Confirm Modal */}
-      {container && showDeleteConfirmModal && (
-        <ConfirmModal
-          isOpen={showDeleteConfirmModal}
-          onClose={() => setShowDeleteConfirmModal(false)}
-          onConfirm={confirmBulkDelete}
-          title="Delete Selected Links"
-          message={`Are you sure you want to delete these ${selectedLinkIds.size} selected links? This action cannot be undone.`}
-          confirmText={`Delete ${selectedLinkIds.size} Links`}
-          variant="danger"
-          icon={<Trash2 size={18} />}
-        />
-      )}
+      {
+        container && showDeleteConfirmModal && (
+          <ConfirmModal
+            isOpen={showDeleteConfirmModal}
+            onClose={() => setShowDeleteConfirmModal(false)}
+            onConfirm={confirmBulkDelete}
+            title="Delete Selected Links"
+            message={`Are you sure you want to delete these ${selectedLinkIds.size} selected links? This action cannot be undone.`}
+            confirmText={`Delete ${selectedLinkIds.size} Links`}
+            variant="danger"
+            icon={<Trash2 size={18} />}
+          />
+        )
+      }
 
       {/* Link Stats Modal */}
-      {container && selectedLink && (
-        <LinkStatsModal
-          isOpen={showStatsModal}
-          onClose={() => {
-            setShowStatsModal(false);
-            setSelectedLink(null);
-          }}
-          link={selectedLink}
-          containerColor={containerColor}
-        />
-      )}
+      {
+        container && selectedLink && (
+          <LinkStatsModal
+            isOpen={showStatsModal}
+            onClose={() => {
+              setShowStatsModal(false);
+              setSelectedLink(null);
+            }}
+            link={selectedLink}
+            containerColor={containerColor}
+          />
+        )
+      }
 
       {/* QR Code Modal */}
-      {container && selectedLink && (
-        <QRCodeModal
-          isOpen={showQRCodeModal}
-          onClose={() => {
-            setShowQRCodeModal(false);
-            setSelectedLink(null);
-          }}
-          link={selectedLink}
-          containerColor={containerColor}
-        />
-      )}
-    </div>
+      {
+        container && selectedLink && (
+          <QRCodeModal
+            isOpen={showQRCodeModal}
+            onClose={() => {
+              setShowQRCodeModal(false);
+              setSelectedLink(null);
+            }}
+            link={selectedLink}
+            containerColor={containerColor}
+          />
+        )
+      }
+    </div >
   );
 };
 
