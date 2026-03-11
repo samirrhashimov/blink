@@ -21,8 +21,8 @@
                 "desc": "Koleksiyonlarınızı dünyayla veya belirli kişilerle paylaşın. İzinleri yönetin, gerektiğinde yükseltin veya geri alın."
             },
             "invitations": {
-                "title": "Gelen Davetler",
-                "desc": "Diğer konteynerlere katılma isteklerini yönetin. Paylaşılan konteynerlerde işbirliği yapmak ve yönetmeye yardımcı olmak için gelen davetleri inceleyin, kabul edin veya reddedin."
+                "title": "Gelen İstekler",
+                "desc": "Diğer konteynerlere katılma isteklerini yönetin. Paylaşılan konteynerlerde işbirliği yapmak ve yönetmeye yardımcı olmak için gelen istekleri inceleyin, kabul edin veya reddedin."
             },
             "tagging": {
                 "title": "Akıllı Etiketleme Sistemi",
@@ -240,12 +240,12 @@
         "nav": {
             "home": "Ana Sayfa",
             "tags": "Etiketler",
-            "invitations": "Davetler",
+            "invitations": "İstekler",
             "settings": "Ayarlar"
         },
         "tooltips": {
             "tags": "Etiketler",
-            "invitations": "Davetler",
+            "invitations": "İstekler",
             "notifications": "Bildirimler",
             "switchTheme": "Temayı Değiştir",
             "settings": "Ayarlar"
@@ -267,7 +267,7 @@
     "bottomNav": {
         "home": "Ana Sayfa",
         "tags": "Etiketler",
-        "invitations": "Davetler",
+        "invitations": "İstekler",
         "settings": "Ayarlar"
     },
     "auth": {
@@ -330,15 +330,15 @@
         }
     },
     "invitations": {
-        "title": "Davetler",
-        "subtitle": "Konteynerler üzerinde iş birliği yapmak için davetleri kabul edin veya reddedin",
+        "title": "İstekler",
+        "subtitle": "Konteynerler üzerinde iş birliği yapmak için istekleri kabul edin veya reddedin",
         "empty": {
-            "title": "Bekleyen davet yok",
+            "title": "Bekleyen istek yok",
             "desc": "Birisi sizi bir konteyner üzerinde iş birliği yapmaya davet ettiğinde burada görünecektir.",
-            "button": "Panale Git"
+            "button": "Panele Git"
         },
         "item": {
-            "title": "{{name}} Daveti",
+            "title": "{{name}} İsteği",
             "from": "Gönderen: {{name}}",
             "buttons": {
                 "accept": "Kabul Et",
@@ -346,9 +346,9 @@
             }
         },
         "errors": {
-            "loadFailed": "Davetler yüklenemedi",
-            "acceptFailed": "Davet kabul edilemedi",
-            "declineFailed": "Davet reddedilemedi"
+            "loadFailed": "İstekler yüklenemedi",
+            "acceptFailed": "İstek kabul edilemedi",
+            "declineFailed": "İstek reddedilemedi"
         }
     },
     "container": {

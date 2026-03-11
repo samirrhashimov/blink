@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Tag, UserPlus, Settings, Plus } from 'lucide-react';
+import { Home, Tag, Settings, Plus } from 'lucide-react';
+import { FiInbox } from "react-icons/fi";
 import { useAuth } from '../contexts/AuthContext';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -41,8 +42,8 @@ const BottomNavigation: React.FC = () => {
                     <Plus size={32} />
                 </div>
             </div>
-            <NavLink to="/invitations" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>
-                <UserPlus size={24} />
+            <NavLink to="/requests" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>
+                <FiInbox size={24} />
                 <span>{t('bottomNav.invitations')}</span>
             </NavLink>
             <NavLink to="/settings" className={({ isActive }) => `bottom-nav-item ${isActive ? 'active' : ''}`}>

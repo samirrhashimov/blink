@@ -6,7 +6,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { Lock, Share2, Zap, Users, Search, Moon, Sun, Shield, Layout, Globe, Tag, Palette, Github, ArrowRight, HelpCircle } from 'lucide-react';
 import blinkLogo from '../assets/blinklogo2.png';
 import homepageImg from '../assets/Screenshots/homepage.png';
-import inviteImg from '../assets/Screenshots/invite.png';
+import inviteImg from '../assets/Screenshots/requests.png';
 import shareImg from '../assets/Screenshots/share.png';
 import containerDetailsImg from '../assets/Screenshots/containerdetails.png';
 import tagsImg from '../assets/Screenshots/tags.png';

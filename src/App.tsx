@@ -14,7 +14,7 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import Dashboard from './pages/Dashboard';
 import ContainerDetails from './pages/ContainerDetails';
 import ShareContainer from './pages/ShareContainer';
-import Invitations from './pages/Invitations';
+import Requests from './pages/Requests';
 import Settings from './pages/Settings';
 import Tags from './pages/Tags';
 import SharePage from './pages/SharePage';
@@ -108,10 +108,10 @@ const AppRoutes: React.FC = () => {
           }
         />
         <Route
-          path="/invitations"
+          path="/requests"
           element={
             <ProtectedRoute>
-              <Invitations />
+              <Requests />
             </ProtectedRoute>
           }
         />

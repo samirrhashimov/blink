@@ -32,8 +32,8 @@ const SupportButton: React.FC = () => {
             setTimeout(() => {
                 setPhase((prev) => (prev + 1) % content.length);
                 setIsAnimating(false);
-            }, 600);
-        }, 7000);
+            }, 450);
+        }, 4500);
 
         return () => clearInterval(interval);
     }, [content.length]);

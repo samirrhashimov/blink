@@ -168,10 +168,10 @@ export class NotificationService {
     await this.createNotification(
       userId,
       'invite',
-      'New Container Invitation',
+      'New Container Request',
       `${inviterName} invited you to collaborate on "${containerName}"`,
       inviteId,
-      `/invitations`,
+      `/requests`,
       inviterId,
       inviterName
     );
@@ -228,7 +228,7 @@ export class NotificationService {
     await this.createNotification(
       userId,
       'share',
-      'Invitation Declined',
+      'Request Declined',
       `${declinerName} declined your invitation to "${containerName}"`,
       containerId,
       `/container/${containerId}`,

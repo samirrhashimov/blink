@@ -21,7 +21,7 @@
                 "desc": "Share your collections with the world or specific people. Manage permissions, elevate or revoke them when necessary."
             },
             "invitations": {
-                "title": "Incoming Invitations",
+                "title": "Incoming Requests",
                 "desc": "Manage requests to join other containers. Review, accept, or decline incoming invitations to collaborate on and help manage shared containers."
             },
             "tagging": {
@@ -240,12 +240,12 @@
         "nav": {
             "home": "Home",
             "tags": "Tags",
-            "invitations": "Invitations",
+            "invitations": "Requests",
             "settings": "Settings"
         },
         "tooltips": {
             "tags": "Tags",
-            "invitations": "Invitations",
+            "invitations": "Requests",
             "notifications": "Notifications",
             "switchTheme": "Switch Theme",
             "settings": "Settings"
@@ -267,7 +267,7 @@
     "bottomNav": {
         "home": "Home",
         "tags": "Tags",
-        "invitations": "Invite",
+        "invitations": "Requests",
         "settings": "Settings"
     },
     "auth": {
@@ -330,15 +330,15 @@
         }
     },
     "invitations": {
-        "title": "Invitations",
-        "subtitle": "Accept or decline invitations to collaborate on containers",
+        "title": "Requests",
+        "subtitle": "Accept or decline requests to collaborate on containers",
         "empty": {
-            "title": "No pending invitations",
+            "title": "No pending requests",
             "desc": "When someone invites you to collaborate on a container, it will appear here.",
             "button": "Go to Dashboard"
         },
         "item": {
-            "title": "{{name}} Invitation",
+            "title": "{{name}} Request",
             "from": "From: {{name}}",
             "buttons": {
                 "accept": "Accept",
@@ -346,9 +346,9 @@
             }
         },
         "errors": {
-            "loadFailed": "Failed to load invitations",
-            "acceptFailed": "Failed to accept invitation",
-            "declineFailed": "Failed to decline invitation"
+            "loadFailed": "Failed to load requests",
+            "acceptFailed": "Failed to accept request",
+            "declineFailed": "Failed to decline request"
         }
     },
     "container": {

@@ -12,9 +12,9 @@ import {
   Search,
   Menu,
   X,
-  Tag,
-  UserPlus
+  Tag
 } from 'lucide-react';
+import { FiInbox } from "react-icons/fi";
 import blinkLogo from '../assets/blinklogo2.png';
 import NotificationsPanel from '../components/NotificationsPanel';
 import LoadingSkeleton from '../components/LoadingSkeleton';
@@ -214,8 +214,8 @@ const Dashboard: React.FC = () => {
               <Link to="/tags" className="theme-toggle mediaforbuttons" title={t('dashboard.tooltips.tags')}>
                 <Tag className="h-5 w-5" />
               </Link>
-              <Link to="/invitations" className="theme-toggle mediaforbuttons" title={t('dashboard.tooltips.invitations')}>
-                <UserPlus className="h-5 w-5" />
+              <Link to="/requests" className="theme-toggle mediaforbuttons" title={t('dashboard.tooltips.invitations')}>
+                <FiInbox className="h-5 w-5" />
               </Link>
               <button
                 type="button"
@@ -287,7 +287,7 @@ const Dashboard: React.FC = () => {
                   {t('dashboard.nav.tags')}
                 </Link>
                 <Link
-                  to="/invitations"
+                  to="/requests"
                   className="mobile-nav-link"
                   onClick={() => setMobileMenuOpen(false)}
                 >
