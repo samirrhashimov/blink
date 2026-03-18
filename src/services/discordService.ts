@@ -42,7 +42,7 @@ class DiscordService {
         embeds: [
           {
             title: titleText,
-            description: descriptionText,
+            description: descriptionText + `\n\n[**👉 ${isTurkish ? "Konteyneri Aç" : "Open Container"}**](${containerUrl})`,
             url: containerUrl,
             color: embedColor,
             author: {
@@ -56,19 +56,6 @@ class DiscordService {
               text: isTurkish ? "Blink Workspace" : "Blink Workspace"
             },
             timestamp: new Date().toISOString()
-          }
-        ],
-        components: [
-          {
-            type: 1, // Action Row
-            components: [
-              {
-                type: 2, // Button
-                style: 5, // Link
-                label: isTurkish ? "Konteyneri Aç" : "Open Container",
-                url: containerUrl
-              }
-            ]
           }
         ]
       };

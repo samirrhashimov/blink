@@ -1071,28 +1071,16 @@ const ContainerDetails: React.FC = () => {
                 <h3>{t('container.actions.title')}</h3>
                 <div className="actions-list">
                   {isOwner && (
-                    <>
-                      <button
-                        onClick={() => setShowEditContainerModal(true)}
-                        className="action-button"
-                      >
-                        <div className="action-icon-wrapper edit-icon">
-                          <Edit size={18} />
-                        </div>
-                        <span>{t('container.actions.editContainer')}</span>
-                        <ChevronRight size={18} className="action-button-arrow" />
-                      </button>
-                      <button
-                        onClick={() => setShowWebhooksModal(true)}
-                        className="action-button"
-                      >
-                        <div className="action-icon-wrapper edit-icon">
-                          <Webhook size={18} />
-                        </div>
-                        <span>{t('container.actions.webhooks')}</span>
-                        <ChevronRight size={18} className="action-button-arrow" />
-                      </button>
-                    </>
+                    <button
+                      onClick={() => setShowEditContainerModal(true)}
+                      className="action-button"
+                    >
+                      <div className="action-icon-wrapper edit-icon">
+                        <Edit size={18} />
+                      </div>
+                      <span>{t('container.actions.editContainer')}</span>
+                      <ChevronRight size={18} className="action-button-arrow" />
+                    </button>
                   )}
                   {canEdit && (
                     <Link
@@ -1105,6 +1093,18 @@ const ContainerDetails: React.FC = () => {
                       <span>{t('container.actions.shareContainer')}</span>
                       <ChevronRight size={18} className="action-button-arrow" />
                     </Link>
+                  )}
+                  {isOwner && (
+                    <button
+                      onClick={() => setShowWebhooksModal(true)}
+                      className="action-button"
+                    >
+                      <div className="action-icon-wrapper edit-icon">
+                        <Webhook size={18} />
+                      </div>
+                      <span>{t('container.actions.webhooks')}</span>
+                      <ChevronRight size={18} className="action-button-arrow" />
+                    </button>
                   )}
                   {isOwner ? (
                     <button
