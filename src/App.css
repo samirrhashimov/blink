@@ -7182,7 +7182,7 @@ input:checked+.slider:before {
 .profile-actions {
   display: flex;
   justify-content: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
   width: 100%;
   margin-top: 0.5rem;
@@ -7202,7 +7202,7 @@ input:checked+.slider:before {
   .profile-desktop-actions {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 0.5rem;
   }
 }
 
@@ -7671,4 +7671,175 @@ input:checked+.slider:before {
     transform: translateY(0);
     opacity: 1;
   }
+}
+
+/* ============================================
+   Profile Icon Buttons (Share & Report)
+   ============================================ */
+.profile-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 10px;
+  border: 1.5px solid rgba(0, 0, 0, 0.09);
+  background: transparent;
+  color: #64748b;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.profile-icon-btn:hover {
+  background: rgba(99, 102, 241, 0.08);
+  border-color: rgba(99, 102, 241, 0.3);
+  color: #6366f1;
+}
+
+.dark .profile-icon-btn {
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+}
+
+.dark .profile-icon-btn:hover {
+  background: rgba(99, 102, 241, 0.12);
+  border-color: rgba(99, 102, 241, 0.4);
+  color: #818cf8;
+}
+
+.profile-icon-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.profile-report-btn:hover {
+  background: rgba(239, 68, 68, 0.08);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+
+.dark .profile-report-btn:hover {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #f87171;
+}
+
+
+/* Mobile: also adjust mobile actions to use flex gap */
+.profile-mobile-actions {
+  gap: 0.5rem;
+}
+
+/* ============================================
+   Report Modal
+   ============================================ */
+.report-modal {
+  max-width: 420px;
+}
+
+.report-modal-body {
+  padding: 1.25rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.125rem;
+  overflow-y: auto;
+}
+
+.report-modal-desc {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.dark .report-modal-desc {
+  color: #94a3b8;
+}
+
+/* Reason chips grid */
+.report-reasons-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+}
+
+.report-reason-chip {
+  padding: 0.55rem 0.75rem;
+  border-radius: 10px;
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
+  background: transparent;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #475569;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.18s ease;
+  line-height: 1.3;
+}
+
+.report-reason-chip:hover {
+  border-color: #ef4444;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.report-reason-chip.selected {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.08);
+  color: #dc2626;
+  font-weight: 600;
+}
+
+.dark .report-reason-chip {
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+}
+
+.dark .report-reason-chip:hover {
+  border-color: #f87171;
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.08);
+}
+
+.dark .report-reason-chip.selected {
+  border-color: #f87171;
+  background: rgba(239, 68, 68, 0.12);
+  color: #f87171;
+}
+
+/* reCAPTCHA wrapper — centres the widget */
+.report-captcha-wrap {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  min-height: 78px;
+}
+
+/* Submit button */
+.report-submit-btn {
+  width: 100%;
+  padding: 0.7rem 1.25rem;
+  border-radius: 12px;
+  border: none;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.report-submit-btn:hover:not(:disabled) {
+  background: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+}
+
+.report-submit-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }

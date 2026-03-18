@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
+import { useToast } from '../contexts/ToastContext';
 import { ProfileService } from '../services/profileService';
 import type { User, Container } from '../types';
-import { ArrowLeft, UserPlus, UserMinus, ExternalLink, X } from 'lucide-react';
+import { ArrowLeft, UserPlus, UserMinus, ExternalLink, X, Share2, Flag } from 'lucide-react';
 import blinkLogo from '../assets/blinklogo2.png';
 import SEO from '../components/SEO';
 import SupportButton from '../components/SupportButton';
@@ -14,6 +15,7 @@ const Profile: React.FC = () => {
     const { currentUser } = useAuth();
     const { t } = useTranslation();
     const navigate = useNavigate();
+    const toast = useToast();
 
     const [profileUser, setProfileUser] = useState<User | null>(null);
     const [publicContainers, setPublicContainers] = useState<Container[]>([]);
@@ -27,6 +29,12 @@ const Profile: React.FC = () => {
     const [showFollowingModal, setShowFollowingModal] = useState(false);
     const [followList, setFollowList] = useState<User[]>([]);
     const [listLoading, setListLoading] = useState(false);
+    const [reportLoading, setReportLoading] = useState(false);
+    const [showReportModal, setShowReportModal] = useState(false);
+    const [selectedReason, setSelectedReason] = useState<string>('');
+    const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+    const captchaRef = React.useRef<HTMLDivElement>(null);
+    const captchaWidgetId = React.useRef<number | null>(null);
 
     useEffect(() => {
         if (!username) return;
@@ -128,6 +136,118 @@ const Profile: React.FC = () => {
         setShowFollowersModal(false);
         setShowFollowingModal(false);
         setFollowList([]);
+    };
+
+    const handleShare = async () => {
+        const url = window.location.href;
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: profileUser?.displayName || profileUser?.username || 'Profile',
+                    url,
+                });
+            } catch {
+                // user cancelled, do nothing
+            }
+        } else {
+            try {
+                await navigator.clipboard.writeText(url);
+                toast.success(t('profile.linkCopied'));
+            } catch {
+                toast.error(t('profile.linkCopyFailed'));
+            }
+        }
+    };
+
+    const REPORT_REASONS = [
+        { key: 'spam',        labelKey: 'profile.reportReasonSpam' },
+        { key: 'harassment',  labelKey: 'profile.reportReasonHarassment' },
+        { key: 'fake',        labelKey: 'profile.reportReasonFake' },
+        { key: 'hate',        labelKey: 'profile.reportReasonHate' },
+        { key: 'inappropriate', labelKey: 'profile.reportReasonInappropriate' },
+        { key: 'other',      labelKey: 'profile.reportReasonOther' },
+    ];
+
+    const handleReport = () => {
+        if (!profileUser) return;
+        const reportKey = `reported_${profileUser.uid}`;
+        if (localStorage.getItem(reportKey)) {
+            toast.error(t('profile.alreadyReported'));
+            return;
+        }
+        setSelectedReason('');
+        setCaptchaToken(null);
+        setShowReportModal(true);
+    };
+
+    // Render reCAPTCHA once modal is open
+    React.useEffect(() => {
+        if (!showReportModal) {
+            captchaWidgetId.current = null;
+            return;
+        }
+        const tryRender = () => {
+            if (captchaRef.current && (window as any).grecaptcha && captchaWidgetId.current === null) {
+                // Clear previous content
+                captchaRef.current.innerHTML = '';
+                const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
+                captchaWidgetId.current = (window as any).grecaptcha.render(captchaRef.current, {
+                    sitekey: siteKey,
+                    callback: (token: string) => setCaptchaToken(token),
+                    'expired-callback': () => setCaptchaToken(null),
+                });
+            } else {
+                setTimeout(tryRender, 300);
+            }
+        };
+        setTimeout(tryRender, 150);
+    }, [showReportModal]);
+
+    const submitReport = async () => {
+        if (!profileUser) return;
+        if (!selectedReason) {
+            toast.error(t('profile.reportSelectReason'));
+            return;
+        }
+        if (!captchaToken) {
+            toast.error(t('profile.reportCompleteCaptcha'));
+            return;
+        }
+        setReportLoading(true);
+        try {
+            const now = new Date().toISOString();
+            const body = new FormData();
+            body.append('_subject', 'Report User');
+            body.append('reason', selectedReason);
+            body.append('reported_username', profileUser.username || '');
+            body.append('reported_email', profileUser.email || '');
+            body.append('reported_uid', profileUser.uid);
+            body.append('reported_display_name', profileUser.displayName || '');
+            body.append('reported_at', now);
+            body.append('g-recaptcha-response', captchaToken);
+            if (currentUser) {
+                body.append('reporter_uid', currentUser.uid);
+                body.append('reporter_email', currentUser.email || '');
+                body.append('reporter_username', (currentUser as any).username || '');
+            }
+            const res = await fetch('https://formspree.io/f/xaqpaqky', {
+                method: 'POST',
+                body,
+                headers: { Accept: 'application/json' },
+            });
+            if (res.ok) {
+                const reportKey = `reported_${profileUser.uid}`;
+                localStorage.setItem(reportKey, now);
+                setShowReportModal(false);
+                toast.success(t('profile.reportSent'));
+            } else {
+                toast.error(t('profile.reportFailed'));
+            }
+        } catch {
+            toast.error(t('profile.reportFailed'));
+        } finally {
+            setReportLoading(false);
+        }
     };
 
     const isOwnProfile = currentUser?.uid === profileUser?.uid;
@@ -262,6 +382,25 @@ const Profile: React.FC = () => {
                                         {t('profile.followToLogin')}
                                     </Link>
                                 )}
+                                <button
+                                    onClick={handleShare}
+                                    className="profile-icon-btn"
+                                    title={t('profile.shareProfile')}
+                                    aria-label={t('profile.shareProfile')}
+                                >
+                                    <Share2 size={17} />
+                                </button>
+                                {!isOwnProfile && currentUser && (
+                                    <button
+                                        onClick={handleReport}
+                                        disabled={reportLoading}
+                                        className="profile-icon-btn profile-report-btn"
+                                        title={t('profile.reportUser')}
+                                        aria-label={t('profile.reportUser')}
+                                    >
+                                        <Flag size={17} />
+                                    </button>
+                                )}
                             </div>
                         </div>
                         {uname && <p className="profile-username">{uname}</p>}
@@ -310,6 +449,25 @@ const Profile: React.FC = () => {
                                     <UserPlus size={16} style={{ marginRight: '0.4rem' }} />
                                     {t('profile.followToLogin')}
                                 </Link>
+                            )}
+                            <button
+                                onClick={handleShare}
+                                className="profile-icon-btn"
+                                title={t('profile.shareProfile')}
+                                aria-label={t('profile.shareProfile')}
+                            >
+                                <Share2 size={17} />
+                            </button>
+                            {!isOwnProfile && currentUser && (
+                                <button
+                                    onClick={handleReport}
+                                    disabled={reportLoading}
+                                    className="profile-icon-btn profile-report-btn"
+                                    title={t('profile.reportUser')}
+                                    aria-label={t('profile.reportUser')}
+                                >
+                                    <Flag size={17} />
+                                </button>
                             )}
                         </div>
 
@@ -441,6 +599,47 @@ const Profile: React.FC = () => {
                                     ))}
                                 </div>
                             )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Report Modal */}
+            {showReportModal && (
+                <div className="follow-modal-overlay" onClick={() => !reportLoading && setShowReportModal(false)}>
+                    <div className="follow-modal-content report-modal" onClick={e => e.stopPropagation()}>
+                        <div className="follow-modal-header">
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <Flag size={18} style={{ color: '#ef4444' }} />
+                                <h3 style={{ color: '#ef4444' }}>{t('profile.reportUser')}</h3>
+                            </div>
+                            <button className="follow-modal-close" onClick={() => setShowReportModal(false)} disabled={reportLoading}>
+                                <X size={20} />
+                            </button>
+                        </div>
+                        <div className="follow-modal-body report-modal-body">
+                            <p className="report-modal-desc">{t('profile.reportModalDesc')}</p>
+                            <div className="report-reasons-grid">
+                                {REPORT_REASONS.map(r => (
+                                    <button
+                                        key={r.key}
+                                        className={`report-reason-chip${selectedReason === r.key ? ' selected' : ''}`}
+                                        onClick={() => setSelectedReason(r.key)}
+                                    >
+                                        {t(r.labelKey)}
+                                    </button>
+                                ))}
+                            </div>
+                            <div className="report-captcha-wrap">
+                                <div ref={captchaRef} />
+                            </div>
+                            <button
+                                className="report-submit-btn"
+                                onClick={submitReport}
+                                disabled={reportLoading || !selectedReason || !captchaToken}
+                            >
+                                {reportLoading ? t('common.processing') : t('profile.reportSubmit')}
+                            </button>
                         </div>
                     </div>
                 </div>

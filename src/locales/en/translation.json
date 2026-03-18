@@ -643,6 +643,23 @@
         "followToLogin": "Follow",
         "editProfile": "Edit Profile",
         "noFollowers": "No followers yet.",
-        "noFollowing": "Not following anyone."
+        "noFollowing": "Not following anyone.",
+        "shareProfile": "Share Profile",
+        "linkCopied": "Profile link copied!",
+        "linkCopyFailed": "Failed to copy link",
+        "reportUser": "Report User",
+        "reportSent": "Report submitted. Thank you.",
+        "reportFailed": "Failed to send report. Please try again.",
+        "alreadyReported": "You have already reported this user.",
+        "reportModalDesc": "Select the reason that best describes why you are reporting this user. All reports are reviewed carefully.",
+        "reportSelectReason": "Please select a reason before submitting.",
+        "reportCompleteCaptcha": "Please complete the CAPTCHA verification.",
+        "reportSubmit": "Submit Report",
+        "reportReasonSpam": "Spam",
+        "reportReasonHarassment": "Harassment",
+        "reportReasonFake": "Fake Account",
+        "reportReasonHate": "Hate Content",
+        "reportReasonInappropriate": "Inappropriate",
+        "reportReasonOther": "Other"
     }
 }

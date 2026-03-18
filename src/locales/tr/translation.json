@@ -645,6 +645,23 @@
         "followToLogin": "Takip Et",
         "editProfile": "Profili Düzenle",
         "noFollowers": "Henüz takipçi yok.",
-        "noFollowing": "Kimseyi takip etmiyor."
+        "noFollowing": "Kimseyi takip etmiyor.",
+        "shareProfile": "Profili Paylaş",
+        "linkCopied": "Profil linki kopyalandı!",
+        "linkCopyFailed": "Link kopyalanamadı",
+        "reportUser": "Kullanıcıyı Şikayet Et",
+        "reportSent": "Şikayetiniz iletildi. Teşekkürler.",
+        "reportFailed": "Şikayet gönderilemedi. Lütfen tekrar deneyin.",
+        "alreadyReported": "Bu kullanıcıyı zaten şikayet ettiniz.",
+        "reportModalDesc": "Bu kullanıcıyı şikayet etme nedeninizi en iyi tanımlayan seçeneği işaretleyin. Tüm şikayetler dikkatlice incelenir.",
+        "reportSelectReason": "Göndermeden önce lütfen bir neden seçin.",
+        "reportCompleteCaptcha": "Lütfen CAPTCHA doğrulamasını tamamlayın.",
+        "reportSubmit": "Şikayeti Gönder",
+        "reportReasonSpam": "Spam",
+        "reportReasonHarassment": "Taciz",
+        "reportReasonFake": "Sahte Hesap",
+        "reportReasonHate": "Nefret İçeriği",
+        "reportReasonInappropriate": "Uygunsuz İçerik",
+        "reportReasonOther": "Diğer"
     }
 }
