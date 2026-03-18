@@ -1125,12 +1125,10 @@ main.container {
 .dark .link-item {
   background: var(--bg-surface);
   border-color: var(--border-color);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .link-item:hover {
-  box-shadow: 0 0px 12px rgba(143, 143, 143, 0.25);
-  border-color: rgba(255, 255, 255, 0.1);
+  border-color: #cbd5e133;
 }
 
 .pinned-link {
@@ -1202,10 +1200,6 @@ main.container {
   pointer-events: none;
 }
 
-.dark .link-item:hover {
-  box-shadow: 0 0px 3px rgba(141, 143, 245, 0.15);
-}
-
 .link-icon {
   display: flex;
   align-items: center;
@@ -1227,7 +1221,6 @@ main.container {
 .link-item:hover .link-icon {
   background: var(--accent-color, linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%));
   color: white;
-  transform: scale(1.05);
 }
 
 .link-favicon {
@@ -1361,6 +1354,20 @@ main.container {
 @media (min-width: 768px) {
   .sidebar {
     width: 18rem;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 6rem; /* Ensures it stays well below the header */
+    max-height: calc(100vh - 7.5rem);
+    align-self: flex-start; /* CRITICAL: Must not stretch, otherwise sticky won't work */
+    overflow-y: auto;
+    /* Hide scrollbar for a cleaner look while keeping functionality */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    z-index: 10; /* Keeps it above moving contents */
+  }
+
+  .sidebar::-webkit-scrollbar {
+    display: none;
   }
 }
 
@@ -4098,7 +4105,6 @@ tr:hover {
 
 .invitation-item:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  border-color: var(--primary, #6366f1);
 }
 
 .dark .invitation-item:hover {
@@ -7692,9 +7698,8 @@ input:checked+.slider:before {
 }
 
 .profile-icon-btn:hover {
-  background: rgba(99, 102, 241, 0.08);
-  border-color: rgba(99, 102, 241, 0.3);
-  color: #6366f1;
+  background: rgba(255, 255, 255, 0.1);
+  color: #f1f5f9;
 }
 
 .dark .profile-icon-btn {
@@ -7703,9 +7708,8 @@ input:checked+.slider:before {
 }
 
 .dark .profile-icon-btn:hover {
-  background: rgba(99, 102, 241, 0.12);
-  border-color: rgba(99, 102, 241, 0.4);
-  color: #818cf8;
+  background: rgba(255, 255, 255, 0.1);
+  color: #f1f5f9;
 }
 
 .profile-icon-btn:disabled {
