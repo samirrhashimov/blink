@@ -541,6 +541,12 @@
                 "discordLanguage": "Message Language",
                 "discordLanguageEn": "English",
                 "discordLanguageTr": "Turkish",
+                "slackWebhook": "Slack Webhook",
+                "slackWebhookDesc": "Notifies a Slack channel automatically when a new link is added.",
+                "slackWebhookPlaceholder": "https://hooks.slack.com/services/...",
+                "slackLanguage": "Message Language",
+                "slackLanguageEn": "English",
+                "slackLanguageTr": "Turkish",
                 "buttons": {
                     "save": "Save Webhook",
                     "saving": "Saving..."

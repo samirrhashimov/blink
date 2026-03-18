@@ -541,6 +541,12 @@
                 "discordLanguage": "Mesaj Dili",
                 "discordLanguageEn": "İngilizce",
                 "discordLanguageTr": "Türkçe",
+                "slackWebhook": "Slack Webhook",
+                "slackWebhookDesc": "Konteynere her yeni link eklendiğinde Slack kanalını otomatik olarak bilgilendirir.",
+                "slackWebhookPlaceholder": "https://hooks.slack.com/services/...",
+                "slackLanguage": "Mesaj Dili",
+                "slackLanguageEn": "İngilizce",
+                "slackLanguageTr": "Türkçe",
                 "buttons": {
                     "save": "Webhook'u Kaydet",
                     "saving": "Kaydediliyor..."

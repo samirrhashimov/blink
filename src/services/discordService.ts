@@ -16,7 +16,9 @@ class DiscordService {
     newLink: Link,
     user: DiscordUser
   ): Promise<void> {
-    if (!container.discordWebhookUrl) return; // Feature disabled for this container
+    if (!container.discordWebhookUrl) return;
+    // If explicitly disabled by user, skip
+    if (container.discordEnabled === false) return; // Feature disabled for this container
 
     try {
       const language = container.discordLanguage || 'en';

@@ -52,6 +52,10 @@ export interface Container {
   isPublic?: boolean;
   discordWebhookUrl?: string;
   discordLanguage?: 'en' | 'tr';
+  discordEnabled?: boolean;
+  slackWebhookUrl?: string;
+  slackLanguage?: 'en' | 'tr';
+  slackEnabled?: boolean;
 }
 
 export interface ContainerPermission {
