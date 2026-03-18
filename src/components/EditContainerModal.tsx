@@ -14,10 +14,18 @@ const EditContainerModal: React.FC<EditContainerModalProps> = ({ isOpen, onClose
   const { t } = useTranslation();
 
   const { updateContainer } = useContainer();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    name: string;
+    description: string;
+    color: string;
+    discordWebhookUrl: string;
+    discordLanguage: 'en' | 'tr';
+  }>({
     name: container.name,
     description: container.description || '',
-    color: container.color || '#6366f1'
+    color: container.color || '#6366f1',
+    discordWebhookUrl: container.discordWebhookUrl || '',
+    discordLanguage: container.discordLanguage || 'en'
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -30,7 +38,9 @@ const EditContainerModal: React.FC<EditContainerModalProps> = ({ isOpen, onClose
       setFormData({
         name: container.name,
         description: container.description || '',
-        color: container.color || '#6366f1'
+        color: container.color || '#6366f1',
+        discordWebhookUrl: container.discordWebhookUrl || '',
+        discordLanguage: container.discordLanguage || 'en'
       });
       setError('');
     }
@@ -60,7 +70,9 @@ const EditContainerModal: React.FC<EditContainerModalProps> = ({ isOpen, onClose
       await updateContainer(container.id, {
         name: formData.name.trim(),
         description: formData.description.trim(),
-        color: formData.color
+        color: formData.color,
+        discordWebhookUrl: formData.discordWebhookUrl.trim(),
+        discordLanguage: formData.discordLanguage
       });
       onClose();
     } catch (err: any) {
@@ -70,7 +82,7 @@ const EditContainerModal: React.FC<EditContainerModalProps> = ({ isOpen, onClose
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
@@ -161,6 +173,47 @@ const EditContainerModal: React.FC<EditContainerModalProps> = ({ isOpen, onClose
                 />
               ))}
             </div>
+          </div>
+
+          <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border-color)' }}>
+            <div className="form-group">
+              <label htmlFor="discord-webhook" className="form-label mb-1">
+                {t('container.modals.editContainer.discordWebhook')}
+              </label>
+              <p className="text-xs text-secondary mb-2">
+                {t('container.modals.editContainer.discordWebhookDesc')}
+              </p>
+              <input
+                id="discord-webhook"
+                name="discordWebhookUrl"
+                type="url"
+                value={formData.discordWebhookUrl}
+                onChange={handleChange}
+                className="form-input"
+                placeholder={t('container.modals.editContainer.discordWebhookPlaceholder')}
+                disabled={loading}
+              />
+            </div>
+
+            {formData.discordWebhookUrl && (
+              <div className="form-group mt-3">
+                <label htmlFor="discord-language" className="form-label mb-1">
+                  {t('container.modals.editContainer.discordLanguage')}
+                </label>
+                <select
+                  id="discord-language"
+                  name="discordLanguage"
+                  value={formData.discordLanguage}
+                  onChange={handleChange}
+                  className="form-input"
+                  disabled={loading}
+                  style={{ cursor: 'pointer' }}
+                >
+                  <option value="en">{t('container.modals.editContainer.discordLanguageEn')}</option>
+                  <option value="tr">{t('container.modals.editContainer.discordLanguageTr')}</option>
+                </select>
+              </div>
+            )}
           </div>
         </form>
 

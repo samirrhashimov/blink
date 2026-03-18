@@ -50,6 +50,8 @@ export interface Container {
   color?: string;
   order?: number;
   isPublic?: boolean;
+  discordWebhookUrl?: string;
+  discordLanguage?: 'en' | 'tr';
 }
 
 export interface ContainerPermission {

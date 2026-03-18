@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useAuth } from './AuthContext';
 import { ContainerService } from '../services/containerService';
+import DiscordService from '../services/discordService';
 import type { Container, Link } from '../types';
 
 interface ContainerContextType {
@@ -155,6 +156,20 @@ export const ContainerProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             : container
         )
       );
+
+      // --- Trigger Discord Webhook Notification --- //
+      const targetContainer = containers.find(c => c.id === containerId);
+      if (targetContainer && targetContainer.discordWebhookUrl) {
+        DiscordService.notifyNewLink(
+          targetContainer,
+          newLink,
+          {
+            name: currentUser.displayName || 'User',
+            photoURL: currentUser.photoURL || undefined,
+            email: currentUser.email || undefined
+          }
+        ).catch(err => console.error("Discord webhook failed:", err));
+      }
 
       return linkId;
     } catch (err: any) {

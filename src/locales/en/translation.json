@@ -520,6 +520,12 @@
                 "name": "Container Name",
                 "description": "Description",
                 "color": "Container Color",
+                "discordWebhook": "Discord Webhook (Optional)",
+                "discordWebhookDesc": "Notifies the server whenever a new link is added to this container.",
+                "discordWebhookPlaceholder": "https://discord.com/api/webhooks/...",
+                "discordLanguage": "Discord Message Language",
+                "discordLanguageEn": "English",
+                "discordLanguageTr": "Turkish",
                 "placeholders": {
                     "name": "Enter container name",
                     "description": "Enter container description (optional)"

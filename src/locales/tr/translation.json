@@ -520,6 +520,12 @@
                 "name": "Konteyner Adı",
                 "description": "Açıklama",
                 "color": "Konteyner Rengi",
+                "discordWebhook": "Discord Webhook (İsteğe Bağlı)",
+                "discordWebhookDesc": "Bu konteynere ne zaman yeni bir link eklenirse sunucuya otomatik mesaj atar.",
+                "discordWebhookPlaceholder": "https://discord.com/api/webhooks/...",
+                "discordLanguage": "Discord Mesaj Dili",
+                "discordLanguageEn": "İngilizce",
+                "discordLanguageTr": "Türkçe",
                 "placeholders": {
                     "name": "Konteyner adını girin",
                     "description": "Konteyner açıklaması girin (isteğe bağlı)"
