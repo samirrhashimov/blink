@@ -7506,7 +7506,7 @@ input:checked+.slider:before {
 }
 
 .follow-modal-header {
-  padding: 1rem 1.25rem;
+  padding: 1.3rem 1.5rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
   display: flex;
   align-items: center;
@@ -7740,7 +7740,7 @@ input:checked+.slider:before {
 }
 
 .report-modal-body {
-  padding: 1.25rem 1.5rem 1.5rem;
+  padding: 1.5rem 1.7rem 1.5rem;
   display: flex;
   flex-direction: column;
   gap: 1.125rem;
@@ -7781,8 +7781,6 @@ input:checked+.slider:before {
 
 .report-reason-chip:hover {
   border-color: #ef4444;
-  color: #ef4444;
-  background: rgba(239, 68, 68, 0.05);
 }
 
 .report-reason-chip.selected {
@@ -7799,8 +7797,6 @@ input:checked+.slider:before {
 
 .dark .report-reason-chip:hover {
   border-color: #f87171;
-  color: #f87171;
-  background: rgba(239, 68, 68, 0.08);
 }
 
 .dark .report-reason-chip.selected {
@@ -7809,17 +7805,52 @@ input:checked+.slider:before {
   color: #f87171;
 }
 
+/* Textarea for "Other" reason */
+.report-other-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 10px;
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
+  background: #f8fafc;
+  font-family: inherit;
+  font-size: 0.875rem;
+  color: #334155;
+  resize: vertical;
+  min-height: 80px;
+  transition: all 0.2s ease;
+}
+
+.report-other-textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+  background: #ffffff;
+}
+
+.dark .report-other-textarea {
+  background: rgba(15, 23, 42, 0.4);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #f1f5f9;
+}
+
+.dark .report-other-textarea:focus {
+  border-color: #818cf8;
+  background: rgba(15, 23, 42, 0.8);
+}
+
 /* reCAPTCHA wrapper — centres the widget */
 .report-captcha-wrap {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
   min-height: 78px;
+  width: 100%;
 }
 
-/* Submit button */
+/* Submit button perfectly matching the fixed 304px width of reCAPTCHA */
 .report-submit-btn {
   width: 100%;
+  margin: 0 auto;
+  display: block;
   padding: 0.7rem 1.25rem;
   border-radius: 12px;
   border: none;
@@ -7833,7 +7864,6 @@ input:checked+.slider:before {
 
 .report-submit-btn:hover:not(:disabled) {
   background: #dc2626;
-  transform: translateY(-1px);
   box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
 }
 

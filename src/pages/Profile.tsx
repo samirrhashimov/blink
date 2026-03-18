@@ -32,6 +32,7 @@ const Profile: React.FC = () => {
     const [reportLoading, setReportLoading] = useState(false);
     const [showReportModal, setShowReportModal] = useState(false);
     const [selectedReason, setSelectedReason] = useState<string>('');
+    const [otherReasonText, setOtherReasonText] = useState<string>('');
     const [captchaToken, setCaptchaToken] = useState<string | null>(null);
     const captchaRef = React.useRef<HTMLDivElement>(null);
     const captchaWidgetId = React.useRef<number | null>(null);
@@ -176,6 +177,7 @@ const Profile: React.FC = () => {
             return;
         }
         setSelectedReason('');
+        setOtherReasonText('');
         setCaptchaToken(null);
         setShowReportModal(true);
     };
@@ -209,6 +211,10 @@ const Profile: React.FC = () => {
             toast.error(t('profile.reportSelectReason'));
             return;
         }
+        if (selectedReason === 'other' && !otherReasonText.trim()) {
+            toast.error(t('profile.reportProvideDetails'));
+            return;
+        }
         if (!captchaToken) {
             toast.error(t('profile.reportCompleteCaptcha'));
             return;
@@ -218,7 +224,7 @@ const Profile: React.FC = () => {
             const now = new Date().toISOString();
             const body = new FormData();
             body.append('_subject', 'Report User');
-            body.append('reason', selectedReason);
+            body.append('reason', selectedReason === 'other' ? `Other: ${otherReasonText}` : selectedReason);
             body.append('reported_username', profileUser.username || '');
             body.append('reported_email', profileUser.email || '');
             body.append('reported_uid', profileUser.uid);
@@ -630,13 +636,22 @@ const Profile: React.FC = () => {
                                     </button>
                                 ))}
                             </div>
+                            {selectedReason === 'other' && (
+                                <textarea
+                                    className="report-other-textarea"
+                                    placeholder={t('profile.reportOtherPlaceholder')}
+                                    value={otherReasonText}
+                                    onChange={(e) => setOtherReasonText(e.target.value)}
+                                    rows={3}
+                                />
+                            )}
                             <div className="report-captcha-wrap">
                                 <div ref={captchaRef} />
                             </div>
                             <button
                                 className="report-submit-btn"
                                 onClick={submitReport}
-                                disabled={reportLoading || !selectedReason || !captchaToken}
+                                disabled={reportLoading || !selectedReason || (selectedReason === 'other' && !otherReasonText.trim()) || !captchaToken}
                             >
                                 {reportLoading ? t('common.processing') : t('profile.reportSubmit')}
                             </button>

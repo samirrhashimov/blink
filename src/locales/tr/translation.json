@@ -662,6 +662,8 @@
         "reportReasonFake": "Sahte Hesap",
         "reportReasonHate": "Nefret İçeriği",
         "reportReasonInappropriate": "Uygunsuz İçerik",
-        "reportReasonOther": "Diğer"
+        "reportReasonOther": "Diğer",
+        "reportOtherPlaceholder": "Lütfen şikayet nedeninizi detaylandırın...",
+        "reportProvideDetails": "Lütfen şikayetiniz için detay belirtin."
     }
 }

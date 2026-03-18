@@ -660,6 +660,8 @@
         "reportReasonFake": "Fake Account",
         "reportReasonHate": "Hate Content",
         "reportReasonInappropriate": "Inappropriate",
-        "reportReasonOther": "Other"
+        "reportReasonOther": "Other",
+        "reportOtherPlaceholder": "Please provide more details...",
+        "reportProvideDetails": "Please provide details for your report."
     }
 }
