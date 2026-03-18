@@ -535,6 +535,9 @@
             },
             "webhooks": {
                 "title": "Webhook'lar",
+                "subtitle": "Konteynere her yeni link eklendiğinde kanalı otomatik olarak bilgilendirir.",
+                "howToDiscord": "Discord webhook nasıl alınır?",
+                "howToSlack": "Slack webhook nasıl alınır?",
                 "discordWebhook": "Discord Webhook",
                 "discordWebhookDesc": "Konteynere her yeni link eklendiğinde Discord kanalını otomatik olarak bilgilendirir.",
                 "discordWebhookPlaceholder": "https://discord.com/api/webhooks/...",

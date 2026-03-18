@@ -535,6 +535,9 @@
             },
             "webhooks": {
                 "title": "Webhooks",
+                "subtitle": "Notifies a channel automatically when a new link is added.",
+                "howToDiscord": "How to get a Discord webhook?",
+                "howToSlack": "How to get a Slack webhook?",
                 "discordWebhook": "Discord Webhook",
                 "discordWebhookDesc": "Notifies a Discord channel automatically when a new link is added.",
                 "discordWebhookPlaceholder": "https://discord.com/api/webhooks/...",

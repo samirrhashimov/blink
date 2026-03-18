@@ -144,7 +144,7 @@ const WebhooksModal: React.FC<WebhooksModalProps> = ({ isOpen, onClose, containe
           <div>
             <h2 style={{ marginBottom: '0.2rem' }}>{t('container.modals.webhooks.title')}</h2>
             <p style={{ margin: 0, fontSize: '0.8rem', color: 'var(--text-secondary)', fontWeight: 400 }}>
-              Notifies a channel automatically when a new link is added.
+              {t('container.modals.webhooks.subtitle')}
             </p>
           </div>
           <button onClick={onClose} className="modal-close">
