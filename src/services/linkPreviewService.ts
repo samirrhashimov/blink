@@ -82,6 +82,29 @@ class LinkPreviewService {
     }
 
     try {
+      // --- 1. NEW LOGIC: LINKPREVIEW.NET API ---
+      const apiKey = import.meta.env.VITE_LINK_PREVIEW_API_KEY;
+      if (apiKey && apiKey.trim() !== '') {
+        try {
+          const apiRes = await fetch(`https://api.linkpreview.net/?key=${apiKey}&q=${encodeURIComponent(url)}`);
+          if (apiRes.ok) {
+            const data = await apiRes.json();
+            return {
+              favicon,
+              title: data.title?.trim() || undefined,
+              description: data.description?.trim() || undefined,
+              image: data.image?.trim() || undefined,
+              githubData
+            };
+          } else {
+            console.warn('LinkPreview API returned an error, falling back to scraper...');
+          }
+        } catch (apiErr) {
+          console.warn('LinkPreview API fetch failed, falling back to scraper:', apiErr);
+        }
+      }
+
+      // --- 2. FALLBACK/LEGACY LOGIC: WEB SCRAPING ---
       let html = '';
 
       // Try corsproxy.io first (usually more reliable for raw HTML)
@@ -107,22 +130,22 @@ class LinkPreviewService {
         }
       }
 
-      if (!html) return { favicon };
+      if (!html) return { favicon, githubData };
 
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
 
-      // 1. Extract Title
+      // Extract Title
       let title = doc.querySelector('title')?.innerText ||
         doc.querySelector('meta[property="og:title"]')?.getAttribute('content') ||
         doc.querySelector('meta[name="twitter:title"]')?.getAttribute('content');
 
-      // 2. Extract Description
+      // Extract Description
       let description = doc.querySelector('meta[name="description"]')?.getAttribute('content') ||
         doc.querySelector('meta[property="og:description"]')?.getAttribute('content') ||
         doc.querySelector('meta[name="twitter:description"]')?.getAttribute('content');
 
-      // 3. Extract Image
+      // Extract Image
       let image = doc.querySelector('meta[property="og:image"]')?.getAttribute('content') ||
         doc.querySelector('meta[name="twitter:image"]')?.getAttribute('content');
 
