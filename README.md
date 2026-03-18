@@ -54,7 +54,7 @@ Take your links on the go with the official **Blink Android App**! Access your w
 <br></br>
 <img align="center" src="./src/assets/Screenshots/homepage.png">
 <br></br>
-<img align="center" src="./src/assets/Screenshots/vaultdetails.png">
+<img align="center" src="./src/assets/Screenshots/containerdetails.png">
 
 
 ## Tech Stack

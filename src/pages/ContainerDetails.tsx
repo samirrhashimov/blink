@@ -722,7 +722,7 @@ const ContainerDetails: React.FC = () => {
 
   return (
     <div
-      className="container-details-page"
+      className="container-details-page fixed-layout-page"
       style={{
         '--accent-color': containerColor,
         '--primary': containerColor,
@@ -791,27 +791,26 @@ const ContainerDetails: React.FC = () => {
             </Link>
           </div>
         )}
-        <div className="container-header">
-          <div className="container-header-info">
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
-              <h2 className="container-name-title" style={{ margin: 0 }}>{container.name}</h2>
-              {!isOwner && (
-                <button
-                  onClick={handleReportContainer}
-                  className="profile-icon-btn profile-report-btn"
-                  title={t('container.report.title')}
-                  style={{ width: '36px', height: '36px', flexShrink: 0 }}
-                >
-                  <Flag size={18} />
-                </button>
-              )}
-            </div>
-            {container.description && <p className="container-description-text" style={{ marginTop: '0.5rem' }}>{container.description}</p>}
-          </div>
-        </div>
-
         <div className="container-content">
           <div className="links-section">
+            <div className="container-header" style={{ marginBottom: '1.5rem' }}>
+              <div className="container-header-info">
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
+                  <h2 className="container-name-title" style={{ margin: 0 }}>{container.name}</h2>
+                  {!isOwner && (
+                    <button
+                      onClick={handleReportContainer}
+                      className="profile-icon-btn profile-report-btn"
+                      title={t('container.report.title')}
+                      style={{ width: '36px', height: '36px', flexShrink: 0 }}
+                    >
+                      <Flag size={18} />
+                    </button>
+                  )}
+                </div>
+                {container.description && <p className="container-description-text" style={{ marginTop: '0.5rem' }}>{container.description}</p>}
+              </div>
+            </div>
             <div className="links-header" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
               <h3>{t('container.links')} ({container.links.length})</h3>
               <div style={{ display: 'flex', gap: '8px' }}>

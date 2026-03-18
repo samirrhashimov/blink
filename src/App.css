@@ -159,6 +159,13 @@ textarea {
   min-height: 100vh;
 }
 
+@media (min-width: 768px) {
+  .fixed-layout-page.container-details-page {
+    height: 100vh;
+    overflow: hidden;
+  }
+}
+
 /* ============================================
    Header
    ============================================ */
@@ -686,8 +693,13 @@ main.container {
 }
 
 @media (min-width: 768px) {
-  main.container {
-    padding: 1.5rem 1.5rem;
+  .fixed-layout-page main.container {
+    padding-top: 1rem;
+    height: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
 }
 
@@ -705,6 +717,7 @@ main.container {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: visible;
+  width: 100%;
 }
 
 .dark .container-header {
@@ -871,10 +884,13 @@ main.container {
 }
 
 @media (min-width: 768px) {
-  .container-content {
+  .fixed-layout-page .container-content {
     flex-direction: row;
-    gap: 2.5rem;
-    align-items: flex-start;
+    gap: 1.5rem; 
+    align-items: stretch;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
   }
 }
 
@@ -884,6 +900,20 @@ main.container {
 .links-section {
   flex: 1;
   min-width: 0;
+}
+
+@media (min-width: 768px) {
+  .fixed-layout-page .links-section {
+    height: 100%;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-bottom: 3rem;
+  }
+
+  .fixed-layout-page .links-section::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .links-header {
@@ -1352,21 +1382,17 @@ main.container {
 }
 
 @media (min-width: 768px) {
-  .sidebar {
-    width: 18rem;
-    position: -webkit-sticky;
-    position: sticky;
-    top: 6rem; /* Ensures it stays well below the header */
-    max-height: calc(100vh - 7.5rem);
-    align-self: flex-start; /* CRITICAL: Must not stretch, otherwise sticky won't work */
+  .fixed-layout-page .sidebar {
+    width: 20rem;
+    height: 100%;
     overflow-y: auto;
-    /* Hide scrollbar for a cleaner look while keeping functionality */
+    align-self: flex-start;
+    padding-bottom: 3rem;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    z-index: 10; /* Keeps it above moving contents */
   }
 
-  .sidebar::-webkit-scrollbar {
+  .fixed-layout-page .sidebar::-webkit-scrollbar {
     display: none;
   }
 }
@@ -2753,7 +2779,7 @@ main.container {
 }
 
 .settings-content {
-  max-width: 800px;
+  max-width: 100%;
   margin: 0 auto;
   width: 100%;
 }
