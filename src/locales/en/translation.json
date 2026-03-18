@@ -382,6 +382,7 @@
         "actions": {
             "title": "Actions",
             "editContainer": "Edit",
+            "webhooks": "Webhooks",
             "deleteContainer": "Delete",
             "leaveContainer": "Leave",
             "shareContainer": "Share",
@@ -520,12 +521,6 @@
                 "name": "Container Name",
                 "description": "Description",
                 "color": "Container Color",
-                "discordWebhook": "Discord Webhook (Optional)",
-                "discordWebhookDesc": "Notifies the server whenever a new link is added to this container.",
-                "discordWebhookPlaceholder": "https://discord.com/api/webhooks/...",
-                "discordLanguage": "Discord Message Language",
-                "discordLanguageEn": "English",
-                "discordLanguageTr": "Turkish",
                 "placeholders": {
                     "name": "Enter container name",
                     "description": "Enter container description (optional)"
@@ -536,6 +531,22 @@
                 },
                 "errors": {
                     "failed": "Failed to update container"
+                }
+            },
+            "webhooks": {
+                "title": "Webhooks",
+                "discordWebhook": "Discord Webhook",
+                "discordWebhookDesc": "Notifies a Discord channel automatically when a new link is added.",
+                "discordWebhookPlaceholder": "https://discord.com/api/webhooks/...",
+                "discordLanguage": "Message Language",
+                "discordLanguageEn": "English",
+                "discordLanguageTr": "Turkish",
+                "buttons": {
+                    "save": "Save Webhook",
+                    "saving": "Saving..."
+                },
+                "errors": {
+                    "failed": "Failed to update Webhook settings"
                 }
             },
             "linkStats": {

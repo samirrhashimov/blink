@@ -23,11 +23,13 @@ import {
   ArrowRightLeft,
   X,
   ChevronRight,
-  Flag
+  Flag,
+  Webhook
 } from 'lucide-react';
 import AddLinkModal from '../components/AddLinkModal';
 import EditLinkModal from '../components/EditLinkModal';
 import EditContainerModal from '../components/EditContainerModal';
+import WebhooksModal from '../components/WebhooksModal';
 import ConfirmModal from '../components/ConfirmModal';
 import CollaboratorsModal from '../components/CollaboratorsModal';
 import ShareLinkModal from '../components/ShareLinkModal';
@@ -88,6 +90,7 @@ const ContainerDetails: React.FC = () => {
     };
   }, []);
   const [showEditContainerModal, setShowEditContainerModal] = useState(false);
+  const [showWebhooksModal, setShowWebhooksModal] = useState(false);
   const [showDeleteLinkModal, setShowDeleteLinkModal] = useState(false);
   const [showDeleteContainerModal, setShowDeleteContainerModal] = useState(false);
   const [showLeaveContainerModal, setShowLeaveContainerModal] = useState(false);
@@ -594,12 +597,12 @@ const ContainerDetails: React.FC = () => {
 
   // --- Report Container Functions ---
   const CONTAINER_REPORT_REASONS = [
-    { key: 'spam',        labelKey: 'container.report.reasonSpam' },
-    { key: 'harassment',  labelKey: 'container.report.reasonHarassment' },
-    { key: 'fake',        labelKey: 'container.report.reasonFake' },
-    { key: 'hate',        labelKey: 'container.report.reasonHate' },
+    { key: 'spam', labelKey: 'container.report.reasonSpam' },
+    { key: 'harassment', labelKey: 'container.report.reasonHarassment' },
+    { key: 'fake', labelKey: 'container.report.reasonFake' },
+    { key: 'hate', labelKey: 'container.report.reasonHate' },
     { key: 'inappropriate', labelKey: 'container.report.reasonInappropriate' },
-    { key: 'other',      labelKey: 'container.report.reasonOther' },
+    { key: 'other', labelKey: 'container.report.reasonOther' },
   ];
 
   const handleReportContainer = () => {
@@ -1068,16 +1071,28 @@ const ContainerDetails: React.FC = () => {
                 <h3>{t('container.actions.title')}</h3>
                 <div className="actions-list">
                   {isOwner && (
-                    <button
-                      onClick={() => setShowEditContainerModal(true)}
-                      className="action-button"
-                    >
-                      <div className="action-icon-wrapper edit-icon">
-                        <Edit size={18} />
-                      </div>
-                      <span>{t('container.actions.editContainer')}</span>
-                      <ChevronRight size={18} className="action-button-arrow" />
-                    </button>
+                    <>
+                      <button
+                        onClick={() => setShowEditContainerModal(true)}
+                        className="action-button"
+                      >
+                        <div className="action-icon-wrapper edit-icon">
+                          <Edit size={18} />
+                        </div>
+                        <span>{t('container.actions.editContainer')}</span>
+                        <ChevronRight size={18} className="action-button-arrow" />
+                      </button>
+                      <button
+                        onClick={() => setShowWebhooksModal(true)}
+                        className="action-button"
+                      >
+                        <div className="action-icon-wrapper edit-icon">
+                          <Webhook size={18} />
+                        </div>
+                        <span>{t('container.actions.webhooks')}</span>
+                        <ChevronRight size={18} className="action-button-arrow" />
+                      </button>
+                    </>
                   )}
                   {canEdit && (
                     <Link
@@ -1163,6 +1178,17 @@ const ContainerDetails: React.FC = () => {
           <EditContainerModal
             isOpen={showEditContainerModal}
             onClose={() => setShowEditContainerModal(false)}
+            container={container}
+          />
+        )
+      }
+
+      {/* Webhooks Modal */}
+      {
+        container && isOwner && (
+          <WebhooksModal
+            isOpen={showWebhooksModal}
+            onClose={() => setShowWebhooksModal(false)}
             container={container}
           />
         )

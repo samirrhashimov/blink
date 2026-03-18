@@ -36,12 +36,14 @@ class DiscordService {
         embedColor = parseInt(container.color.replace('#', ''), 16);
       }
 
-      const payload = {
+      const containerUrl = `${window.location.origin}/container/${container.id}`;
+
+      const payload: any = {
         embeds: [
           {
             title: titleText,
             description: descriptionText,
-            url: newLink.url,
+            url: containerUrl,
             color: embedColor,
             author: {
               name: "Blink - Your Links, Organized",
@@ -54,6 +56,19 @@ class DiscordService {
               text: isTurkish ? "Blink Workspace" : "Blink Workspace"
             },
             timestamp: new Date().toISOString()
+          }
+        ],
+        components: [
+          {
+            type: 1, // Action Row
+            components: [
+              {
+                type: 2, // Button
+                style: 5, // Link
+                label: isTurkish ? "Konteyneri Aç" : "Open Container",
+                url: containerUrl
+              }
+            ]
           }
         ]
       };
