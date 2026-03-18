@@ -384,7 +384,26 @@
             "editContainer": "Edit",
             "deleteContainer": "Delete",
             "leaveContainer": "Leave",
-            "shareContainer": "Share"
+            "shareContainer": "Share",
+            "reportContainer": "Report Container"
+        },
+        "report": {
+            "title": "Report Container",
+            "desc": "Select the reason that best describes why you are reporting this container. All reports are reviewed carefully.",
+            "selectReason": "Please select a reason before submitting.",
+            "provideDetails": "Please provide details for your report.",
+            "completeCaptcha": "Please complete the CAPTCHA verification.",
+            "submit": "Submit Report",
+            "reasonSpam": "Spam / Promotion",
+            "reasonHarassment": "Harassment / Abuse",
+            "reasonFake": "Fake / Misleading Content",
+            "reasonHate": "Hate Content",
+            "reasonInappropriate": "Inappropriate Content",
+            "reasonOther": "Other",
+            "otherPlaceholder": "Please provide more details...",
+            "sent": "Report submitted. Thank you.",
+            "failed": "Failed to send report. Please try again.",
+            "alreadyReported": "You have already reported this container."
         },
         "menu": {
             "stats": "Statistics",

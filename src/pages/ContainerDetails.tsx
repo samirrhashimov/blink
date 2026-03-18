@@ -22,7 +22,8 @@ import {
   XCircle,
   ArrowRightLeft,
   X,
-  ChevronRight
+  ChevronRight,
+  Flag
 } from 'lucide-react';
 import AddLinkModal from '../components/AddLinkModal';
 import EditLinkModal from '../components/EditLinkModal';
@@ -143,6 +144,15 @@ const ContainerDetails: React.FC = () => {
   const [publicContainer, setPublicContainer] = useState<any>(null);
   const [fetchingPublic, setFetchingPublic] = useState(true);
   const hasAttemptedFetch = useRef<string | null>(null);
+
+  // Container Report states
+  const [showContainerReportModal, setShowContainerReportModal] = useState(false);
+  const [containerReportReason, setContainerReportReason] = useState<string>('');
+  const [containerOtherReasonText, setContainerOtherReasonText] = useState<string>('');
+  const [containerCaptchaToken, setContainerCaptchaToken] = useState<string | null>(null);
+  const [containerReportLoading, setContainerReportLoading] = useState(false);
+  const containerCaptchaRef = useRef<HTMLDivElement>(null);
+  const containerCaptchaWidgetId = useRef<number | null>(null);
 
   // Find the current container from the containers array or fetch it if public
   const container = (containers.find(v => v.id === id) || publicContainer) || null;
@@ -582,6 +592,99 @@ const ContainerDetails: React.FC = () => {
   // Check if current user is a member (owner or explicitly authorized)
   const isMember = isOwner || !!(container && currentUser && container.authorizedUsers?.includes(currentUser.uid));
 
+  // --- Report Container Functions ---
+  const CONTAINER_REPORT_REASONS = [
+    { key: 'spam',        labelKey: 'container.report.reasonSpam' },
+    { key: 'harassment',  labelKey: 'container.report.reasonHarassment' },
+    { key: 'fake',        labelKey: 'container.report.reasonFake' },
+    { key: 'hate',        labelKey: 'container.report.reasonHate' },
+    { key: 'inappropriate', labelKey: 'container.report.reasonInappropriate' },
+    { key: 'other',      labelKey: 'container.report.reasonOther' },
+  ];
+
+  const handleReportContainer = () => {
+    if (!container) return;
+    const reportKey = `reported_container_${container.id}`;
+    if (localStorage.getItem(reportKey)) {
+      toast.error(t('container.report.alreadyReported'));
+      return;
+    }
+    setContainerReportReason('');
+    setContainerOtherReasonText('');
+    setContainerCaptchaToken(null);
+    setShowContainerReportModal(true);
+  };
+
+  useEffect(() => {
+    if (!showContainerReportModal) {
+      containerCaptchaWidgetId.current = null;
+      return;
+    }
+    const tryRender = () => {
+      if (containerCaptchaRef.current && (window as any).grecaptcha && containerCaptchaWidgetId.current === null) {
+        containerCaptchaRef.current.innerHTML = '';
+        const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
+        containerCaptchaWidgetId.current = (window as any).grecaptcha.render(containerCaptchaRef.current, {
+          sitekey: siteKey,
+          callback: (token: string) => setContainerCaptchaToken(token),
+          'expired-callback': () => setContainerCaptchaToken(null),
+        });
+      } else {
+        setTimeout(tryRender, 300);
+      }
+    };
+    setTimeout(tryRender, 150);
+  }, [showContainerReportModal]);
+
+  const submitContainerReport = async () => {
+    if (!container) return;
+    if (!containerReportReason) {
+      toast.error(t('container.report.selectReason'));
+      return;
+    }
+    if (containerReportReason === 'other' && !containerOtherReasonText.trim()) {
+      toast.error(t('container.report.provideDetails'));
+      return;
+    }
+    if (!containerCaptchaToken) {
+      toast.error(t('container.report.completeCaptcha'));
+      return;
+    }
+    setContainerReportLoading(true);
+    try {
+      const now = new Date().toISOString();
+      const body = new FormData();
+      body.append('_subject', 'Report Container');
+      body.append('reason', containerReportReason === 'other' ? `Other: ${containerOtherReasonText}` : containerReportReason);
+      body.append('reported_container_id', container.id);
+      body.append('reported_container_name', container.name || '');
+      body.append('reported_container_owner', container.ownerId || '');
+      body.append('reported_at', now);
+      body.append('g-recaptcha-response', containerCaptchaToken);
+      if (currentUser) {
+        body.append('reporter_uid', currentUser.uid);
+        body.append('reporter_email', currentUser.email || '');
+      }
+      const res = await fetch('https://formspree.io/f/mqeywpqv', {
+        method: 'POST',
+        body,
+        headers: { Accept: 'application/json' },
+      });
+      if (res.ok) {
+        const reportKey = `reported_container_${container.id}`;
+        localStorage.setItem(reportKey, now);
+        setShowContainerReportModal(false);
+        toast.success(t('container.report.sent'));
+      } else {
+        toast.error(t('container.report.failed'));
+      }
+    } catch {
+      toast.error(t('container.report.failed'));
+    } finally {
+      setContainerReportLoading(false);
+    }
+  };
+  // ----------------------------------
 
 
   if (loading || fetchingPublic) {
@@ -687,8 +790,20 @@ const ContainerDetails: React.FC = () => {
         )}
         <div className="container-header">
           <div className="container-header-info">
-            <h2 className="container-name-title">{container.name}</h2>
-            {container.description && <p className="container-description-text">{container.description}</p>}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
+              <h2 className="container-name-title" style={{ margin: 0 }}>{container.name}</h2>
+              {!isOwner && (
+                <button
+                  onClick={handleReportContainer}
+                  className="profile-icon-btn profile-report-btn"
+                  title={t('container.report.title')}
+                  style={{ width: '36px', height: '36px', flexShrink: 0 }}
+                >
+                  <Flag size={18} />
+                </button>
+              )}
+            </div>
+            {container.description && <p className="container-description-text" style={{ marginTop: '0.5rem' }}>{container.description}</p>}
           </div>
         </div>
 
@@ -1212,6 +1327,62 @@ const ContainerDetails: React.FC = () => {
           />
         )
       }
+
+      {/* Container Report Modal */}
+      {showContainerReportModal && (
+        <div className="follow-modal-overlay" onClick={() => !containerReportLoading && setShowContainerReportModal(false)}>
+          <div className="follow-modal-content report-modal" onClick={e => e.stopPropagation()}>
+            <div className="follow-modal-header">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                <Flag size={18} style={{ color: '#ef4444' }} />
+                <h3 style={{ color: '#ef4444', margin: 0, fontSize: '1.25rem', fontWeight: 700 }}>{t('container.report.title')}</h3>
+              </div>
+              <button className="follow-modal-close" onClick={() => setShowContainerReportModal(false)} disabled={containerReportLoading}>
+                <X size={20} />
+              </button>
+            </div>
+            <div className="follow-modal-body report-modal-body">
+              <p className="report-modal-desc">{t('container.report.desc')}</p>
+              <div className="report-reasons-grid">
+                {CONTAINER_REPORT_REASONS.map(r => (
+                  <button
+                    key={r.key}
+                    className={`report-reason-chip${containerReportReason === r.key ? ' selected' : ''}`}
+                    onClick={() => setContainerReportReason(r.key)}
+                  >
+                    {t(r.labelKey)}
+                  </button>
+                ))}
+              </div>
+              {containerReportReason === 'other' && (
+                <textarea
+                  className="report-other-textarea"
+                  placeholder={t('container.report.otherPlaceholder')}
+                  value={containerOtherReasonText}
+                  onChange={(e) => setContainerOtherReasonText(e.target.value)}
+                  rows={3}
+                />
+              )}
+              <div className="report-captcha-wrap">
+                <div ref={containerCaptchaRef} />
+              </div>
+              <button
+                className="report-submit-btn"
+                onClick={submitContainerReport}
+                disabled={
+                  containerReportLoading ||
+                  !containerReportReason ||
+                  (containerReportReason === 'other' && !containerOtherReasonText.trim()) ||
+                  !containerCaptchaToken
+                }
+              >
+                {containerReportLoading ? t('common.processing') : t('container.report.submit')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div >
   );
 };

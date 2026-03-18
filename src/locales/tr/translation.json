@@ -384,7 +384,26 @@
             "editContainer": "Düzenle",
             "deleteContainer": "Sil",
             "leaveContainer": "Ayrıl",
-            "shareContainer": "Paylaş"
+            "shareContainer": "Paylaş",
+            "reportContainer": "Konteyneri Şikayet Et"
+        },
+        "report": {
+            "title": "Konteyneri Şikayet Et",
+            "desc": "Bu konteyneri şikayet etme nedeninizi en iyi tanımlayan seçeneği işaretleyin. Tüm şikayetler dikkatlice incelenir.",
+            "selectReason": "Göndermeden önce lütfen bir neden seçin.",
+            "provideDetails": "Lütfen şikayetiniz için detay belirtin.",
+            "completeCaptcha": "Lütfen CAPTCHA doğrulamasını tamamlayın.",
+            "submit": "Şikayeti Gönder",
+            "reasonSpam": "Spam / Reklam",
+            "reasonHarassment": "Taciz / Kötüye Kullanım",
+            "reasonFake": "Sahte / Yanıltıcı İçerik",
+            "reasonHate": "Nefret İçeriği",
+            "reasonInappropriate": "Uygunsuz İçerik",
+            "reasonOther": "Diğer",
+            "otherPlaceholder": "Lütfen şikayet nedeninizi detaylandırın...",
+            "sent": "Şikayetiniz iletildi. Teşekkürler.",
+            "failed": "Şikayet gönderilemedi. Lütfen tekrar deneyin.",
+            "alreadyReported": "Bu konteyneri zaten şikayet ettiniz."
         },
         "menu": {
             "stats": "İstatistikler",
