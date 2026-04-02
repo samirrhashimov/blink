@@ -1855,36 +1855,102 @@ main.container {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+}
+
+.dark .auth-page {
+  background: var(--bg-body);
+}
+
+.auth-page::before,
+.auth-page::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  z-index: 0;
+  animation: floatBackground 12s ease-in-out infinite alternate;
+}
+
+.auth-page::before {
+  width: 45vw;
+  height: 45vw;
+  background: rgba(99, 102, 241, 0.25);
+  top: -10vw;
+  left: -10vw;
+}
+
+.auth-page::after {
+  width: 40vw;
+  height: 40vw;
+  background: rgba(139, 92, 246, 0.25);
+  bottom: -5vw;
+  right: -10vw;
+  animation-duration: 15s;
+  animation-delay: -5s;
+}
+
+.dark .auth-page::before {
+  background: rgba(99, 102, 241, 0.12);
+}
+
+.dark .auth-page::after {
+  background: rgba(139, 92, 246, 0.12);
+}
+
+@keyframes floatBackground {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  100% {
+    transform: translate(8%, 8%) scale(1.1);
+  }
 }
 
 .auth-container {
   width: 100%;
-  max-width: 480px;
-  padding: 3rem;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  transform: scale(0.9);
-  transform-origin: center center;
+  max-width: 450px;
+  padding: 2.5rem;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  z-index: 1;
 }
 
 .dark .auth-container {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+  background: rgba(23, 29, 36, 0.7);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
 }
 
 @media (max-width: 768px) {
   .auth-page {
-    align-items: flex-start;
-    padding: 2rem 1rem;
+    align-items: center;
+    padding: 1.5rem;
     overflow-y: auto;
   }
 
+  .auth-page::before {
+    width: 80vw;
+    height: 80vw;
+  }
+
+  .auth-page::after {
+    width: 70vw;
+    height: 70vw;
+  }
+
   .auth-container {
-    transform: scale(1);
-    padding: 2rem 1.5rem;
+    padding: 2.5rem 1.75rem;
     margin: auto 0;
   }
 }
