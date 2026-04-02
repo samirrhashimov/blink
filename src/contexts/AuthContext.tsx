@@ -8,6 +8,7 @@ import {
   updateProfile,
   signInWithPopup,
   GoogleAuthProvider,
+  GithubAuthProvider,
   deleteUser,
   sendEmailVerification,
   reload,
@@ -34,6 +35,7 @@ interface AuthContextType {
   loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   loginWithGoogle: () => Promise<void>;
+  loginWithGithub: () => Promise<void>;
   signup: (email: string, password: string, displayName: string, username: string) => Promise<void>;
   logout: () => Promise<void>;
   deleteAccount: () => Promise<void>;
@@ -115,6 +117,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const loginWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    await createUserDocument(result.user);
+  };
+
+  const loginWithGithub = async () => {
+    const provider = new GithubAuthProvider();
     const result = await signInWithPopup(auth, provider);
     await createUserDocument(result.user);
   };
@@ -317,6 +325,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     loading,
     login,
     loginWithGoogle,
+    loginWithGithub,
     signup,
     logout,
     deleteAccount,

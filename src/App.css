@@ -886,7 +886,7 @@ main.container {
 @media (min-width: 768px) {
   .fixed-layout-page .container-content {
     flex-direction: row;
-    gap: 1.5rem; 
+    gap: 1.5rem;
     align-items: stretch;
     flex: 1;
     min-height: 0;
@@ -3637,6 +3637,16 @@ tr:hover {
   font-weight: 600;
   border-radius: 12px;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.auth-buttons-row {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+}
+
+.auth-buttons-row .google-btn {
+  flex: 1;
 }
 
 .google-btn:hover {

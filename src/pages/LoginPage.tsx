@@ -5,7 +5,7 @@ import blinkLogo from '../assets/blinklogo2.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
-import { Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff, Github } from 'lucide-react';
 import SEO from '../components/SEO';
 
 const LoginPage: React.FC = () => {
@@ -14,7 +14,7 @@ const LoginPage: React.FC = () => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { login, loginWithGoogle } = useAuth();
+  const { login, loginWithGoogle, loginWithGithub } = useAuth();
   const toast = useToast();
   const navigate = useNavigate();
 
@@ -53,24 +53,43 @@ const LoginPage: React.FC = () => {
         <form onSubmit={handleSubmit} className="auth-form">
 
 
-          <button
-            type="button"
-            className="google-btn desktop-only"
-            onClick={loginWithGoogle}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '12px',
-              backgroundColor: '#fff',
-              color: '#3c4043',
-              border: '1px solid #dadce0',
-              fontWeight: '500'
-            }}
-          >
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style={{ width: '20px', height: '20px' }} />
-            {t('auth.login.google')}
-          </button>
+          <div className="auth-buttons-row desktop-only">
+            <button
+              type="button"
+              className="google-btn"
+              onClick={loginWithGoogle}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '12px',
+                backgroundColor: '#fff',
+                color: '#3c4043',
+                border: '1px solid #dadce0',
+                fontWeight: '500'
+              }}
+            >
+              <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style={{ width: '24px', height: '24px' }} />
+            </button>
+
+            <button
+              type="button"
+              className="google-btn"
+              onClick={loginWithGithub}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '12px',
+                backgroundColor: '#fff',
+                color: '#3c4043',
+                border: '1px solid #dadce0',
+                fontWeight: '500'
+              }}
+            >
+              <Github style={{ width: '24px', height: '24px' }} />
+            </button>
+          </div>
 
           <div className="auth-divider desktop-only">OR</div>
 
