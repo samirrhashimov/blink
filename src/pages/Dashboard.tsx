@@ -129,43 +129,27 @@ const Dashboard: React.FC = () => {
   const getContainerColor = (container: { id: string; color?: string }) =>
     container.color || colors[container.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % colors.length];
 
-  const handleDragEnd = async (event: DragEndEvent, section: 'personal' | 'shared') => {
+  const handleDragEnd = async (event: DragEndEvent) => {
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
-    const sourceList = section === 'personal' ? filteredPersonalContainers : filteredSharedContainers;
-    const oldIndex = sourceList.findIndex(c => c.id === active.id);
-    const newIndex = sourceList.findIndex(c => c.id === over.id);
+    const oldIndex = filteredContainers.findIndex(c => c.id === active.id);
+    const newIndex = filteredContainers.findIndex(c => c.id === over.id);
 
     if (oldIndex === -1 || newIndex === -1) return;
 
-    const reordered = arrayMove(sourceList, oldIndex, newIndex);
-
-    // Merge back with the other section to maintain full list
-    const otherList = section === 'personal' ? filteredSharedContainers : filteredPersonalContainers;
-    const fullReordered = section === 'personal' ? [...reordered, ...otherList] : [...otherList, ...reordered];
+    const reordered = arrayMove(filteredContainers, oldIndex, newIndex);
 
     try {
-      await reorderContainers(fullReordered);
+      await reorderContainers(reordered);
     } catch (err) {
       console.error('Reorder failed:', err);
     }
   };
 
   // Enhanced search: search in container name, description, and link titles
-  const filteredPersonalContainers = personalContainers.filter(container => {
-    const query = searchQuery.toLowerCase();
-    const nameMatch = container.name.toLowerCase().includes(query);
-    const descMatch = container.description?.toLowerCase().includes(query);
-    const linkMatch = container.links.some(link =>
-      link.title.toLowerCase().includes(query) ||
-      link.description?.toLowerCase().includes(query) ||
-      link.url.toLowerCase().includes(query)
-    );
-    return nameMatch || descMatch || linkMatch;
-  });
-
-  const filteredSharedContainers = sharedContainers.filter(container => {
+  // Combined filtered containers
+  const filteredContainers = containers.filter(container => {
     const query = searchQuery.toLowerCase();
     const nameMatch = container.name.toLowerCase().includes(query);
     const descMatch = container.description?.toLowerCase().includes(query);
@@ -338,10 +322,9 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Personal Containers */}
+        {/* Unified Containers Section */}
         <section className="fade-in">
-          <h2 className="section-title">{t('dashboard.personal')}</h2>
-          {filteredPersonalContainers.length === 0 ? (
+          {filteredContainers.length === 0 ? (
             <div className="fade-in">
               <EmptyState
                 type={searchQuery ? 'search' : 'personal'}
@@ -362,59 +345,14 @@ const Dashboard: React.FC = () => {
             <DndContext
               sensors={sensors}
               collisionDetection={closestCenter}
-              onDragEnd={(e) => handleDragEnd(e, 'personal')}
+              onDragEnd={handleDragEnd}
             >
               <SortableContext
-                items={filteredPersonalContainers.map(c => c.id)}
+                items={filteredContainers.map(c => c.id)}
                 strategy={rectSortingStrategy}
               >
                 <div className="container-grid">
-                  {filteredPersonalContainers.map((container) => {
-                    const containerColor = getContainerColor(container);
-                    return (
-                      <SortableContainerCard
-                        key={container.id}
-                        container={container}
-                        containerColor={containerColor}
-                        isLightColor={isLightColor(containerColor)}
-                        isNewlyAdded={newlyAddedContainerId === container.id}
-                        isOpening={openingContainerId === container.id}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleContainerClick(container.id);
-                        }}
-                      />
-                    );
-                  })}
-                </div>
-              </SortableContext>
-            </DndContext>
-          )}
-        </section>
-
-        {/* Shared Containers */}
-        <section className="fade-in" style={{ marginTop: '3rem' }}>
-          <h2 className="section-title">{t('dashboard.shared')}</h2>
-          {filteredSharedContainers.length === 0 ? (
-            <div className="fade-in">
-              <EmptyState
-                type={searchQuery ? 'search' : 'shared'}
-                title={searchQuery ? t('dashboard.emptyShared.searchTitle') : t('dashboard.emptyShared.title')}
-                description={searchQuery ? t('dashboard.emptyShared.searchDesc') : t('dashboard.emptyShared.desc')}
-              />
-            </div>
-          ) : (
-            <DndContext
-              sensors={sensors}
-              collisionDetection={closestCenter}
-              onDragEnd={(e) => handleDragEnd(e, 'shared')}
-            >
-              <SortableContext
-                items={filteredSharedContainers.map(c => c.id)}
-                strategy={rectSortingStrategy}
-              >
-                <div className="container-grid">
-                  {filteredSharedContainers.map((container) => {
+                  {filteredContainers.map((container) => {
                     const containerColor = getContainerColor(container);
                     return (
                       <SortableContainerCard

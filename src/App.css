@@ -2490,6 +2490,7 @@ main.container {
   grid-template-columns: repeat(2, 1fr);
   gap: 1rem;
   margin-bottom: 3rem;
+  margin-top: 3rem;
 }
 
 @media (min-width: 600px) {
@@ -2518,7 +2519,7 @@ main.container {
 }
 
 .container-card:hover .container-card-overlay {
-  opacity: 0.9;
+  opacity: 0.8;
 }
 
 .dark .container-card {
@@ -2562,6 +2563,35 @@ main.container {
 
 .container-card.light-color .container-card-content {
   background: linear-gradient(to top, rgba(0, 0, 0, 0.05) 0%, transparent 100%);
+}
+
+.container-card-badges {
+  position: absolute;
+  top: 1.25rem;
+  left: 1.25rem;
+  display: flex;
+  gap: 0.5rem;
+  z-index: 5;
+}
+
+.container-card-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  opacity: 0.9;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.container-card.light-color .container-card-badge {
+  color: #1e293b;
+  filter: none;
+}
+
+.container-card:hover .container-card-badge {
+  transform: translateY(-2px);
+  opacity: 1;
 }
 
 .container-card-title {
@@ -3173,7 +3203,7 @@ main.container {
 }
 
 .container-card.light-color .container-card-overlay {
-  opacity: 0.9;
+  opacity: 0.8;
 }
 
 @media (max-width: 768px) {
@@ -7971,6 +8001,13 @@ input:checked+.slider:before {
 .report-submit-btn:hover:not(:disabled) {
   background: #dc2626;
   box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+}
+
+.report-submit-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .report-submit-btn:disabled {

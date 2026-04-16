@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Link as LinkIcon } from 'lucide-react';
+import { Link as LinkIcon, Users, Lock } from 'lucide-react';
 import type { Container } from '../types';
 
 interface SortableContainerCardProps {
@@ -56,6 +56,21 @@ const SortableContainerCard: React.FC<SortableContainerCardProps> = ({
             onClick={onClick}
         >
             <div className="container-card-overlay" style={{ backgroundColor: containerColor }} />
+
+            {/* Status Badges - Moved here to be relative to the card itself */}
+            <div className="container-card-badges">
+                {container.isShared && (
+                    <div className="container-card-badge shared" title="Shared Space">
+                        <Users size={16} />
+                    </div>
+                )}
+                {!container.isPublic && (
+                    <div className="container-card-badge private" title="Private Space">
+                        <Lock size={16} />
+                    </div>
+                )}
+            </div>
+
             <div className="container-card-content">
                 {/* Favicon previews */}
                 {favicons.length > 0 && (

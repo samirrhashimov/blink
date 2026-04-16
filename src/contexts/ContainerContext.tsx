@@ -82,6 +82,7 @@ export const ContainerProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         authorizedUsers: [],
         links: [],
         isShared: false,
+        isPublic: true,
         color: randomColor
       };
 
