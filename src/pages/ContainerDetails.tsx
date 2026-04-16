@@ -892,14 +892,19 @@ const ContainerDetails: React.FC = () => {
                           <span>{t('container.typeLink')}</span>
                         </button>
                         <button 
-                          className="add-content-item"
+                          className={`add-content-item ${currentUser?.email !== 'samirhasimov10@gmail.com' ? 'disabled' : ''}`}
                           onClick={() => {
-                            setShowAddTextModal(true);
-                            setShowAddDropdown(false);
+                            if (currentUser?.email === 'samirhasimov10@gmail.com') {
+                              setShowAddTextModal(true);
+                              setShowAddDropdown(false);
+                            }
                           }}
                         >
                           <FileText size={16} />
-                          <span>{t('container.typeText')}</span>
+                          <div className="flex flex-col items-start">
+                            <span>{t('container.typeText')}</span>
+                            <span className="coming-soon-label">{t('container.comingSoon')}</span>
+                          </div>
                         </button>
                         <button 
                           className="add-content-item disabled"
@@ -908,7 +913,7 @@ const ContainerDetails: React.FC = () => {
                           <FileCode size={16} />
                           <div className="flex flex-col items-start">
                             <span>{t('container.typeFile')}</span>
-                            <span className="text-[10px] opacity-70">{t('container.comingSoon')}</span>
+                            <span className="coming-soon-label">{t('container.comingSoon')}</span>
                           </div>
                         </button>
                       </div>
