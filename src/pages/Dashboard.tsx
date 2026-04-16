@@ -22,6 +22,9 @@ import EmptyState from '../components/EmptyState';
 import SortableContainerCard from '../components/SortableContainerCard';
 import SEO from '../components/SEO';
 import SupportButton from '../components/SupportButton';
+import EditContainerModal from '../components/EditContainerModal';
+import ConfirmModal from '../components/ConfirmModal';
+import type { Container } from '../types';
 import {
   DndContext,
   closestCenter,
@@ -42,13 +45,28 @@ import {
 const Dashboard: React.FC = () => {
   const { t } = useTranslation();
   const { currentUser } = useAuth();
-  const { containers, loading, error, reorderContainers } = useContainer();
+  const { containers, loading, error, reorderContainers, deleteContainer } = useContainer();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // States for Edit/Delete modals
+  const [selectedContainer, setSelectedContainer] = useState<Container | null>(null);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const handleEditInitiate = (container: Container) => {
+    setSelectedContainer(container);
+    setShowEditModal(true);
+  };
+
+  const handleDeleteInitiate = (container: Container) => {
+    setSelectedContainer(container);
+    setShowDeleteModal(true);
+  };
 
 
   useEffect(() => {
@@ -362,6 +380,8 @@ const Dashboard: React.FC = () => {
                         isLightColor={isLightColor(containerColor)}
                         isNewlyAdded={newlyAddedContainerId === container.id}
                         isOpening={openingContainerId === container.id}
+                        onEdit={handleEditInitiate}
+                        onDelete={handleDeleteInitiate}
                         onClick={(e) => {
                           e.preventDefault();
                           handleContainerClick(container.id);
@@ -396,6 +416,28 @@ const Dashboard: React.FC = () => {
           />
         )
       }
+      {/* Modals */}
+      {selectedContainer && (
+        <>
+          <EditContainerModal
+            isOpen={showEditModal}
+            onClose={() => setShowEditModal(false)}
+            container={selectedContainer}
+          />
+          <ConfirmModal
+            isOpen={showDeleteModal}
+            onClose={() => setShowDeleteModal(false)}
+            title={t('container.modals.deleteContainer.title')}
+            message={t('container.modals.deleteContainer.message', { name: selectedContainer.name })}
+            onConfirm={async () => {
+              await deleteContainer(selectedContainer.id);
+            }}
+            variant="danger"
+            confirmText={t('common.buttons.delete')}
+            confirmWord={selectedContainer.name}
+          />
+        </>
+      )}
     </div >
   );
 };

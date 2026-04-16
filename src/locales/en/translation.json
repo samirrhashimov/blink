@@ -412,10 +412,10 @@
             "stats": "Statistics",
             "qrCode": "QR Code",
             "pin": "Pin to Top",
-            "unpin": "Unpin Link",
-            "move": "Move Link",
-            "edit": "Edit Details",
-            "delete": "Delete Link",
+            "unpin": "Unpin",
+            "move": "Move",
+            "edit": "Edit",
+            "delete": "Delete",
             "more": "More actions",
             "copy": "Copy URL",
             "copied": "Copied!",
@@ -640,7 +640,7 @@
         "locale": "en-US",
         "confirm": "Confirm",
         "confirmation": {
-            "typeToConfirm": "Please type \"{{word}}\" to confirm",
+            "typeToConfirm": "Please type <b>\"{{word}}\"</b> to confirm",
             "placeholder": "Type \"{{word}}\"",
             "logout": {
                 "title": "Logout",

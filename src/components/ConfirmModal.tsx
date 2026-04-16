@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation, Trans } from 'react-i18next';
 
 import { X } from 'lucide-react';
 
@@ -78,7 +78,11 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
                     {confirmWord && (
                         <div style={{ marginTop: '1.5rem' }}>
                             <p className="text-sm font-medium mb-2" style={{ color: '#64748b' }}>
-                                {t('common.confirmation.typeToConfirm', { word: confirmWord })}:
+                                <Trans
+                                    i18nKey="common.confirmation.typeToConfirm"
+                                    values={{ word: confirmWord }}
+                                    components={{ b: <b /> }}
+                                />:
                             </p>
                             <input
                                 type="text"

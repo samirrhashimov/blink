@@ -413,9 +413,9 @@
             "qrCode": "QR Kodu",
             "pin": "Başa Sabitle",
             "unpin": "Sabitlemeyi Kaldır",
-            "move": "Linki Taşı",
-            "edit": "Detayları Düzenle",
-            "delete": "Linki Sil",
+            "move": "Taşı",
+            "edit": "Düzenle",
+            "delete": "Sil",
             "more": "Daha fazla işlem",
             "copy": "URL'yi Kopyala",
             "copied": "Kopyalandı!",
@@ -436,7 +436,7 @@
             "containerDeleted": "Konteyner başarıyla silindi",
             "containerDeleteError": "Konteyner silinemedi",
             "leftContainer": "Konteynerden başarıyla ayrıldınız",
-            "leaveError": "Konteynerden ayrılamadınız"
+            "leaveError": "Konteynerden ayrılırken hata oluştu"
         },
         "modals": {
             "note": {
@@ -640,7 +640,7 @@
         "locale": "tr-TR",
         "confirm": "Onayla",
         "confirmation": {
-            "typeToConfirm": "Onaylamak için lütfen \"{{word}}\" yazın",
+            "typeToConfirm": "Onaylamak için lütfen <b>\"{{word}}\"</b> yazın",
             "placeholder": "\"{{word}}\" yazın",
             "logout": {
                 "title": "Çıkış Yap",
