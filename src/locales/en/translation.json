@@ -364,6 +364,11 @@
         "cancel": "Cancel",
         "selected": "selected",
         "addLink": "Add Link",
+        "addContent": "Add Content",
+        "typeLink": "Link",
+        "typeText": "Text",
+        "typeFile": "File",
+        "comingSoon": "Coming Soon",
         "searchLinks": "Search links...",
         "empty": "No links yet",
         "emptyDesc": "This container is waiting for your awesome links. Add some to get started!",
@@ -431,7 +436,7 @@
             "unpinned": "Link unpinned",
             "pinned": "Link pinned to top",
             "pinError": "Failed to update pin status",
-            "linkDeleted": "Link deleted successfully",
+            "linkDeleted": "Content deleted successfully",
             "linkDeleteError": "Failed to delete link",
             "containerDeleted": "Container deleted successfully",
             "containerDeleteError": "Failed to delete container",
@@ -486,6 +491,28 @@
                     "required": "Title and URL are required",
                     "invalidUrl": "Please enter a valid URL",
                     "failed": "Failed to add link"
+                }
+            },
+            "addText": {
+                "title": "New Text Note",
+                "editTitle": "Edit Text Note",
+                "subtitle": "Format your notes using Markdown.",
+                "textTitle": "Title",
+                "content": "Text Content",
+                "placeholder": "Write your text here...",
+                "titlePlaceholder": "Enter note title",
+                "buttons": {
+                    "add": "Add Note",
+                    "adding": "Adding...",
+                    "update": "Update Note",
+                    "updating": "Updating...",
+                    "cancel": "Cancel",
+                    "edit": "Edit",
+                    "preview": "Preview"
+                },
+                "errors": {
+                    "required": "Title and content are required",
+                    "failed": "Failed to add text note"
                 }
             },
             "editLink": {

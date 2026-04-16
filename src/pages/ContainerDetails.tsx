@@ -23,10 +23,16 @@ import {
   ArrowRightLeft,
   X,
   ChevronRight,
+  ChevronDown,
   Flag,
-  Webhook
+  Webhook,
+  FileText,
+  Link as LinkIcon,
+  FileCode
 } from 'lucide-react';
 import AddLinkModal from '../components/AddLinkModal';
+import AddTextModal from '../components/AddTextModal';
+import ViewTextModal from '../components/ViewTextModal';
 import EditLinkModal from '../components/EditLinkModal';
 import EditContainerModal from '../components/EditContainerModal';
 import WebhooksModal from '../components/WebhooksModal';
@@ -102,6 +108,10 @@ const ContainerDetails: React.FC = () => {
   const [showStatsModal, setShowStatsModal] = useState(false);
   const [showQRCodeModal, setShowQRCodeModal] = useState(false);
   const [selectedLink, setSelectedLink] = useState<LinkType | null>(null);
+  const [showAddTextModal, setShowAddTextModal] = useState(false);
+  const [showViewTextModal, setShowViewTextModal] = useState(false);
+  const [showAddDropdown, setShowAddDropdown] = useState(false);
+  const addDropdownRef = useRef<HTMLDivElement>(null);
   const [copiedLinkId, setCopiedLinkId] = useState<string | null>(null);
   const [linkSearchQuery, setLinkSearchQuery] = useState('');
   const [userPermission, setUserPermission] = useState<'view' | 'comment' | 'edit' | null>(null);
@@ -145,7 +155,17 @@ const ContainerDetails: React.FC = () => {
   const [deletingLinkId, setDeletingLinkId] = useState<string | null>(null);
   const [deletingLinkIds, setDeletingLinkIds] = useState<Set<string>>(new Set());
   const [publicContainer, setPublicContainer] = useState<any>(null);
-  const [fetchingPublic, setFetchingPublic] = useState(true);
+  const [fetchingPublic, setFetchingPublic] = useState(false);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (addDropdownRef.current && !addDropdownRef.current.contains(event.target as Node)) {
+        setShowAddDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
   const hasAttemptedFetch = useRef<string | null>(null);
 
   // Container Report states
@@ -455,7 +475,11 @@ const ContainerDetails: React.FC = () => {
 
   const handleEditLink = (link: LinkType) => {
     setSelectedLink(link);
-    setShowEditLinkModal(true);
+    if (link.type === 'text') {
+      setShowAddTextModal(true);
+    } else {
+      setShowEditLinkModal(true);
+    }
   };
 
   const handleDeleteLink = (link: LinkType) => {
@@ -837,13 +861,59 @@ const ContainerDetails: React.FC = () => {
                   <span className="hidden sm:inline">{selectionMode ? t('container.cancel') : t('container.select')}</span>
                 </button>
                 {canEdit && (
-                  <button
-                    onClick={() => setShowAddLinkModal(true)}
-                    className="add-link-button"
-                  >
-                    <Plus size={18} />
-                    {t('container.addLink')}
-                  </button>
+                  <div className="add-content-dropdown-wrapper" ref={addDropdownRef}>
+                    <div className="split-button-container">
+                      <button
+                        onClick={() => setShowAddLinkModal(true)}
+                        className="main-add-button"
+                        title={t('container.addLink')}
+                      >
+                        <Plus size={18} />
+                        <span>{t('container.addLink')}</span>
+                      </button>
+                      <button
+                        onClick={() => setShowAddDropdown(!showAddDropdown)}
+                        className={`dropdown-toggle-button ${showAddDropdown ? 'active' : ''}`}
+                        title={t('container.addContent')}
+                      >
+                        <ChevronDown size={16} />
+                      </button>
+                    </div>
+                    {showAddDropdown && (
+                      <div className="add-content-menu glass-card fade-in">
+                        <button 
+                          className="add-content-item"
+                          onClick={() => {
+                            setShowAddLinkModal(true);
+                            setShowAddDropdown(false);
+                          }}
+                        >
+                          <LinkIcon size={16} />
+                          <span>{t('container.typeLink')}</span>
+                        </button>
+                        <button 
+                          className="add-content-item"
+                          onClick={() => {
+                            setShowAddTextModal(true);
+                            setShowAddDropdown(false);
+                          }}
+                        >
+                          <FileText size={16} />
+                          <span>{t('container.typeText')}</span>
+                        </button>
+                        <button 
+                          className="add-content-item disabled"
+                          title={t('container.comingSoon')}
+                        >
+                          <FileCode size={16} />
+                          <div className="flex flex-col items-start">
+                            <span>{t('container.typeFile')}</span>
+                            <span className="text-[10px] opacity-70">{t('container.comingSoon')}</span>
+                          </div>
+                        </button>
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
             </div>
@@ -958,6 +1028,10 @@ const ContainerDetails: React.FC = () => {
                           isNewlyAdded={newlyAddedLinkId === link.id}
                           onUpdateLink={handleUpdateLink}
                           currentUserId={currentUser?.uid}
+                          onViewText={(link) => {
+                            setSelectedLink(link);
+                            setShowViewTextModal(true);
+                          }}
                         />
                       ))}
                     </div>
@@ -1150,6 +1224,37 @@ const ContainerDetails: React.FC = () => {
             isOpen={showAddLinkModal}
             onClose={() => setShowAddLinkModal(false)}
             containerId={container.id}
+            containerColor={containerColor}
+          />
+        )
+      }
+
+      {/* Add Text Modal */}
+      {
+        container && canEdit && (
+          <AddTextModal
+            isOpen={showAddTextModal}
+            onClose={() => {
+              setShowAddTextModal(false);
+              setSelectedLink(null);
+            }}
+            containerId={id || ''}
+            containerColor={container.color}
+            editLink={selectedLink && selectedLink.type === 'text' ? selectedLink : undefined}
+          />
+        )
+      }
+
+      {/* View Text Modal */}
+      {
+        container && selectedLink && (
+          <ViewTextModal
+            isOpen={showViewTextModal}
+            onClose={() => {
+              setShowViewTextModal(false);
+              setSelectedLink(null);
+            }}
+            link={selectedLink}
             containerColor={containerColor}
           />
         )

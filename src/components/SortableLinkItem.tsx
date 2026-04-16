@@ -21,7 +21,8 @@ import {
     Star,
     GitFork,
     CircleDot,
-    Code
+    Code,
+    FileText
 } from 'lucide-react';
 import type { Link as LinkType } from '../types';
 import LinkPreviewService from '../services/linkPreviewService';
@@ -46,6 +47,7 @@ interface SortableLinkItemProps {
     isNewlyAdded?: boolean;
     onUpdateLink?: (linkId: string, updates: Partial<LinkType>) => void;
     currentUserId?: string;
+    onViewText?: (link: LinkType) => void;
 }
 
 const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
@@ -67,7 +69,8 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
     isDeleting = false,
     isNewlyAdded = false,
     onUpdateLink,
-    currentUserId
+    currentUserId,
+    onViewText
 }) => {
     const { t } = useTranslation();
     const [menuOpen, setMenuOpen] = useState(false);
@@ -176,6 +179,8 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                 if (selectionMode && onSelect) {
                     e.preventDefault();
                     onSelect(link);
+                } else if (link.type === 'text') {
+                    onViewText?.(link);
                 }
             }}
             onContextMenu={handleContextMenu}
@@ -199,6 +204,8 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                             }}
                             onClick={(e) => e.stopPropagation()}
                         />
+                    ) : link.type === 'text' ? (
+                        <FileText />
                     ) : faviconUrl ? (
                         <img
                             src={faviconUrl}
@@ -268,16 +275,27 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                         </div>
                     )}
 
-                    <a
-                        href={link.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-xs text-primary hover:underline inline-flex items-center gap-1 mt-1 align-middle"
-                        onClick={() => onTrackClick?.(link.id)}
-                    >
-                        <span className="truncate max-w-[200px] md:max-w-xs">{link.url.replace(/^https?:\/\//, '')}</span>
-                        <ExternalLink size={12} className="flex-shrink-0" style={{ marginLeft: '2px' }} />
-                    </a>
+                    {link.type !== 'text' ? (
+                        <a
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-xs text-primary hover:underline inline-flex items-center gap-1 mt-1 align-middle"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onTrackClick?.(link.id);
+                            }}
+                        >
+                            <span className="truncate max-w-[200px] md:max-w-xs">{link.url.replace(/^https?:\/\//, '')}</span>
+                            <ExternalLink size={12} className="flex-shrink-0" style={{ marginLeft: '2px' }} />
+                        </a>
+                    ) : (
+                        link.content && (
+                            <p className="text-xs text-gray-500 mt-1 line-clamp-1">
+                                {link.content.substring(0, 100)}{link.content.length > 100 ? '...' : ''}
+                            </p>
+                        )
+                    )}
                     {link.tags && link.tags.length > 0 && (
                         <div className="link-tags-display">
                             {link.tags.map(tag => (
@@ -366,13 +384,15 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                 </div>
             </div>
             <div className="link-item-actions">
-                <button
-                    onClick={(e) => { e.stopPropagation(); onCopy(link.url, link.id); }}
-                    className="action-pill copy-pill"
-                    title={copiedLinkId === link.id ? t('container.menu.copied') : t('container.menu.copy')}
-                >
-                    {copiedLinkId === link.id ? <Check size={16} /> : <Copy size={16} />}
-                </button>
+                {link.type !== 'text' && (
+                    <button
+                        onClick={(e) => { e.stopPropagation(); onCopy(link.url, link.id); }}
+                        className="action-pill copy-pill"
+                        title={copiedLinkId === link.id ? t('container.menu.copied') : t('container.menu.copy')}
+                    >
+                        {copiedLinkId === link.id ? <Check size={16} /> : <Copy size={16} />}
+                    </button>
+                )}
 
                 <div className="more-menu-container" ref={menuRef}>
                     <button

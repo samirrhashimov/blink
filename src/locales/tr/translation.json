@@ -364,6 +364,11 @@
         "cancel": "İptal",
         "selected": "seçili",
         "addLink": "Link Ekle",
+        "addContent": "İçerik Ekle",
+        "typeLink": "Link",
+        "typeText": "Metin",
+        "typeFile": "Dosya",
+        "comingSoon": "Yakında",
         "searchLinks": "Linklerde ara...",
         "empty": "Henüz link yok",
         "emptyDesc": "Bu konteyner harika linklerinizi bekliyor. Başlamak için birkaç tane ekleyin!",
@@ -431,8 +436,8 @@
             "unpinned": "Link sabitlemesi kaldırıldı",
             "pinned": "Link üste sabitlendi",
             "pinError": "Sabitleme durumu güncellenemedi",
-            "linkDeleted": "Link başarıyla silindi",
-            "linkDeleteError": "Link silinemedi",
+            "linkDeleted": "İçerik başarıyla silindi",
+            "linkDeleteError": "İçerik silinemedi",
             "containerDeleted": "Konteyner başarıyla silindi",
             "containerDeleteError": "Konteyner silinemedi",
             "leftContainer": "Konteynerden başarıyla ayrıldınız",
@@ -486,6 +491,28 @@
                     "required": "Başlık ve URL gereklidir",
                     "invalidUrl": "Lütfen geçerli bir URL girin",
                     "failed": "Link eklenemedi"
+                }
+            },
+            "addText": {
+                "title": "Yeni Metin Notu",
+                "editTitle": "Metin Notunu Düzenle",
+                "subtitle": "Markdown kullanarak notlarınızı biçimlendirin.",
+                "textTitle": "Başlık",
+                "content": "Metin İçeriği",
+                "placeholder": "Metninizi buraya yazın (Markdown desteklenir)...",
+                "titlePlaceholder": "Not başlığı girin",
+                "buttons": {
+                    "add": "Notu Ekle",
+                    "adding": "Ekleniyor...",
+                    "update": "Notu Güncelle",
+                    "updating": "Güncelleniyor...",
+                    "cancel": "İptal",
+                    "edit": "Düzenle",
+                    "preview": "Önizleme"
+                },
+                "errors": {
+                    "required": "Başlık ve içerik gereklidir",
+                    "failed": "Metin notu eklenemedi"
                 }
             },
             "editLink": {

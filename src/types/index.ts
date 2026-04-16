@@ -9,10 +9,14 @@ export interface User {
   createdAt: Date;
 }
 
+export type LinkType = 'link' | 'text' | 'file';
+
 export interface Link {
   id: string;
   title: string;
-  url: string;
+  url: string; // fallback to # for text/file? or make optional
+  type?: LinkType;
+  content?: string; // for text entries (Markdown)
   description?: string;
   favicon?: string;
   createdAt: Date;
