@@ -3,6 +3,7 @@ import { useAuth } from './AuthContext';
 import { ContainerService } from '../services/containerService';
 import DiscordService from '../services/discordService';
 import SlackService from '../services/slackService';
+import i18n from '../i18n';
 import type { Container, Link } from '../types';
 
 interface ContainerContextType {
@@ -75,6 +76,9 @@ export const ContainerProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       const containerColors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
       const randomColor = color || containerColors[Math.floor(Math.random() * containerColors.length)];
 
+      // Check if this is the test user or regular onboarding
+      const isTestUser = currentUser.email === 'test@example.com';
+
       const containerData = {
         name,
         description: description || '',
@@ -85,8 +89,24 @@ export const ContainerProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         isPublic: true,
         color: randomColor
       };
+      
+      const newContainerId = await ContainerService.createContainer(containerData);
 
-      await ContainerService.createContainer(containerData);
+      // System kicks in every time for test@example.com, disabled for normal users for now
+      if (isTestUser) {
+        const welcomeTitle = i18n.t('onboarding.welcomeNote.title');
+        const welcomeContent = i18n.t('onboarding.welcomeNote.content');
+
+        const welcomeNote = {
+          title: welcomeTitle,
+          url: '#',
+          type: 'text' as const,
+          content: welcomeContent,
+          createdBy: currentUser.uid
+        };
+        await ContainerService.addLinkToContainer(newContainerId, welcomeNote);
+      }
+
       await fetchContainers(); // Refresh the list
     } catch (err: any) {
       setError(err.message || 'Failed to create container');

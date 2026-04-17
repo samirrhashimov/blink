@@ -1,4 +1,10 @@
 {
+    "onboarding": {
+        "welcomeNote": {
+            "title": "Hoş geldin 👋",
+            "content": "# Merhaba!\n\nBurası senin alanın. Linklerini, notlarını ve dosyalarını tek bir yerde topla - dağınık sekmelerden, kaybolmuş yer imlerinden bir daha bunalma.\n\n## Ne ekleyebilirsin?\n\n- 🔗 **Linkler** - Web'den kaydettiğin her şey. Makale, video, araç, ilham.\n- 📝 **Metinler** - Hızlı bir not, alıntı, fikir taslağı. Markdown desteklenir.\n- 📎 **Dosyalar** - Belge, görsel, PDF.\n\n## Nasıl kullanırsan en iyi sonucu alırsın?\n\nKonteynerleri bir **konu** veya **proje** etrafında oluştur. Örneğin; \"Okuyacaklarım\", \"İş Araçları\", \"Tasarım İlhamları\" gibi. Böylece her şey yerli yerinde olur ve aradığında hemen bulursun.\n\nHazırsan **+ Link Ekle** butonuna bas ve ilk öğeni ekle.\n\n---\n\n*Bu karşılama metnini istediğin zaman silebilirsin.*"
+        }
+    },
     "landing": {
         "title": "Linkleriniz, düzenli",
         "description": "Blink, ekibinizle linkleri depolamak, yönetmek ve işbirliği yapmak için nihai çalışma alanıdır. Güvenli, hızlı ve güzel tasarlanmış.",
