@@ -56,7 +56,7 @@ const AddTextModal: React.FC<AddTextModalProps> = ({ isOpen, onClose, containerI
       setPreviewMode(false);
       setLoading(false);
       setError('');
-      
+
       // Always open in fullscreen on mobile
       if (window.innerWidth < 768) {
         setIsFullscreen(true);
@@ -241,7 +241,7 @@ const AddTextModal: React.FC<AddTextModalProps> = ({ isOpen, onClose, containerI
                 </div>
               </div>
 
-              <div className="flex-1 min-h-0 mt-4 flex flex-col overflow-hidden">
+              <div className="flex-1 min-h-0 flex flex-col overflow-hidden">
                 {error && <div className="error-message mb-4">{error}</div>}
                 {!previewMode ? (
                   <textarea

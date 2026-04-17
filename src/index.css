@@ -1660,8 +1660,9 @@ body {
 }
 
 .fullscreen-textarea {
-  flex: 1;
-  min-height: 250px;
+  flex: 1 !important;
+  min-height: calc(100vh - 320px) !important;
+  height: 100%;
 }
 
 /* Custom Scrollbar for Preview and Editor */
@@ -1719,7 +1720,8 @@ body {
 
 .fullscreen-preview-area {
   overflow-y: auto !important;
-  max-height: calc(100vh - 350px);
+  flex: 1 !important;
+  min-height: calc(100vh - 320px) !important;
 }
 
 /* Split Button Styling */
@@ -1804,25 +1806,25 @@ body {
 
   .editor-toolbar {
     padding: 0.4rem 0.6rem !important;
-    overflow-x: hidden !important;
     flex-wrap: nowrap !important;
     justify-content: space-between !important;
     gap: 0.4rem !important;
     border-radius: 10px !important;
   }
 
-  .editor-toolbar > div {
+  .editor-toolbar>div {
     display: flex;
     align-items: center;
     overflow-x: auto;
-    scrollbar-width: none; /* Hide scrollbar Hide scrollbars */
+    scrollbar-width: none;
+    /* Hide scrollbar Hide scrollbars */
   }
 
-  .editor-toolbar > div::-webkit-scrollbar {
+  .editor-toolbar>div::-webkit-scrollbar {
     display: none;
   }
 
-  .editor-toolbar > div.ml-auto {
+  .editor-toolbar>div.ml-auto {
     position: static !important;
     background: transparent !important;
     padding-left: 0 !important;
@@ -1838,7 +1840,8 @@ body {
   .editor-tab-btn {
     padding: 0.4rem 0.6rem !important;
     gap: 0.25rem !important;
-    min-width: unset !important; /* Remove the 110px global min-width */
+    min-width: unset !important;
+    /* Remove the 110px global min-width */
   }
 
   .toolbar-btn {
