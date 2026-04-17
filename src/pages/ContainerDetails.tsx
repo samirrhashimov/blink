@@ -1036,6 +1036,7 @@ const ContainerDetails: React.FC = () => {
                           onViewText={(link) => {
                             setSelectedLink(link);
                             setShowViewTextModal(true);
+                            handleTrackClick(link.id);
                           }}
                         />
                       ))}

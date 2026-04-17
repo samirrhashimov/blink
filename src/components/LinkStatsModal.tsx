@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, TrendingUp, Clock, MousePointer2 } from 'lucide-react';
+import { X, TrendingUp, Clock, MousePointer2, Eye } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
     XAxis,
@@ -28,6 +28,13 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
     const { t } = useTranslation();
 
     if (!isOpen) return null;
+
+    const isText = link.type === 'text';
+    const lifetimeLabel = isText ? t('container.modals.linkStats.lifetimeText') : t('container.modals.linkStats.lifetime');
+    const todayLabel = isText ? t('container.modals.linkStats.todayText') : t('container.modals.linkStats.today');
+    const historyHeader = isText ? t('container.modals.linkStats.historyText') : t('container.modals.linkStats.history');
+    const analyticsHeader = isText ? t('container.modals.linkStats.analyticsText') : t('container.modals.linkStats.analytics');
+    const shortLabel = isText ? t('container.modals.linkStats.viewsShort') : t('container.modals.linkStats.clicksShort');
 
     // Prepare data for the chart
     const stats = link.clickStats || {};
@@ -92,7 +99,7 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
                         </div>
                         <div className="header-titles">
                             <h2>{link.title}</h2>
-                            <span>{t('container.modals.linkStats.analytics')}</span>
+                            <span>{analyticsHeader}</span>
                         </div>
                     </div>
                     <button onClick={onClose} className="header-close-btn" aria-label="Close modal">
@@ -103,10 +110,10 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
                 <div className="stats-cards-row">
                     <div className="premium-stat-card">
                         <div className="stat-card-icon" style={{ color: containerColor, background: `${containerColor}10` }}>
-                            <MousePointer2 size={24} />
+                            {isText ? <Eye size={24} /> : <MousePointer2 size={24} />}
                         </div>
                         <div className="stat-card-data">
-                            <span className="stat-card-label">{t('container.modals.linkStats.lifetime')}</span>
+                            <span className="stat-card-label">{lifetimeLabel}</span>
                             <span className="stat-card-number">{link.clicks || 0}</span>
                         </div>
                     </div>
@@ -115,14 +122,14 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
                             <Clock size={24} />
                         </div>
                         <div className="stat-card-data">
-                            <span className="stat-card-label">{t('container.modals.linkStats.today')}</span>
+                            <span className="stat-card-label">{todayLabel}</span>
                             <span className="stat-card-number">{clicksToday}</span>
                         </div>
                     </div>
                 </div>
 
                 <div className="premium-chart-area">
-                    <h3 className="chart-section-title">{t('container.modals.linkStats.history')}</h3>
+                    <h3 className="chart-section-title">{historyHeader}</h3>
                     <div className="chart-wrapper-inner">
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
@@ -162,6 +169,7 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
                                 <Area
                                     type="monotone"
                                     dataKey="clicks"
+                                    name={shortLabel}
                                     stroke={containerColor}
                                     strokeWidth={3}
                                     fillOpacity={1}

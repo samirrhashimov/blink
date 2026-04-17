@@ -208,7 +208,7 @@ const AddTextModal: React.FC<AddTextModalProps> = ({ isOpen, onClose, containerI
 
             <div className="editor-container">
               <div className="editor-toolbar">
-                <div className="flex items-center gap-1 overflow-x-auto no-scrollbar">
+                <div className="flex items-center gap-1 overflow-x-auto no-scrollbar flex-1">
                   <button type="button" onClick={() => insertFormat('h1')} className="toolbar-btn" title="Heading 1"><Heading1 size={18} /></button>
                   <button type="button" onClick={() => insertFormat('h2')} className="toolbar-btn" title="Heading 2"><Heading2 size={18} /></button>
                   <div className="toolbar-divider" />
@@ -221,14 +221,14 @@ const AddTextModal: React.FC<AddTextModalProps> = ({ isOpen, onClose, containerI
                   <button type="button" onClick={() => insertFormat('link')} className="toolbar-btn" title="Link"><LinkIcon size={18} /></button>
                 </div>
 
-                <div className="flex items-center gap-2 ml-auto">
+                <div className="flex items-center gap-2 overflow-x-auto no-scrollbar ml-auto">
                   <button
                     type="button"
                     onClick={() => setPreviewMode(false)}
                     className={`editor-tab-btn ${!previewMode ? 'active' : ''}`}
                   >
                     <Edit3 size={16} />
-                    {t('container.modals.addText.buttons.edit')}
+                    <span className="mediaforbuttons">{t('container.modals.addText.buttons.edit')}</span>
                   </button>
                   <button
                     type="button"
@@ -236,7 +236,7 @@ const AddTextModal: React.FC<AddTextModalProps> = ({ isOpen, onClose, containerI
                     className={`editor-tab-btn ${previewMode ? 'active' : ''}`}
                   >
                     <Eye size={16} />
-                    {t('container.modals.addText.buttons.preview')}
+                    <span className="mediaforbuttons">{t('container.modals.addText.buttons.preview')}</span>
                   </button>
                 </div>
               </div>

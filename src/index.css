@@ -1797,26 +1797,42 @@ body {
   }
 
   .editor-toolbar {
-    padding: 0.5rem !important;
-    overflow-x: auto;
+    padding: 0.4rem 0.6rem !important;
+    overflow-x: hidden !important;
     flex-wrap: nowrap !important;
-    justify-content: flex-start !important;
-    -webkit-overflow-scrolling: touch;
-    gap: 0.25rem !important;
+    justify-content: space-between !important;
+    gap: 0.4rem !important;
+    border-radius: 10px !important;
   }
 
-  .editor-toolbar::-webkit-scrollbar {
+  .editor-toolbar > div {
+    display: flex;
+    align-items: center;
+    overflow-x: auto;
+    scrollbar-width: none; /* Hide scrollbar Hide scrollbars */
+  }
+
+  .editor-toolbar > div::-webkit-scrollbar {
     display: none;
   }
 
-  .editor-toolbar>div.ml-auto {
-    position: sticky;
-    right: 0;
-    background: var(--bg-hover);
-    padding-left: 0.5rem;
-    margin-left: auto;
+  .editor-toolbar > div.ml-auto {
+    position: static !important;
+    background: transparent !important;
+    padding-left: 0 !important;
+    box-shadow: none !important;
     flex-shrink: 0;
-    box-shadow: -10px 0 10px -5px var(--bg-hover);
+  }
+
+  .toolbar-divider {
+    height: 16px !important;
+    margin: 0 0.2rem !important;
+  }
+
+  .editor-tab-btn {
+    padding: 0.4rem 0.6rem !important;
+    gap: 0.25rem !important;
+    min-width: unset !important; /* Remove the 110px global min-width */
   }
 
   .toolbar-btn {
@@ -1833,9 +1849,11 @@ body {
   }
 }
 
-.editor-toolbar .ml-auto button {
-  min-width: 110px !important;
-  justify-content: center !important;
+@media (min-width: 641px) {
+  .editor-toolbar .ml-auto button {
+    min-width: 110px !important;
+    justify-content: center !important;
+  }
 }
 
 @media (max-width: 640px) {

@@ -591,7 +591,14 @@
                 "analytics": "Link Analizi",
                 "lifetime": "Toplam Tıklama",
                 "today": "Bugün",
-                "history": "Tıklama geçmişi"
+                "history": "Tıklama geçmişi",
+                "titleText": "Metin Notu Analizi",
+                "analyticsText": "Metin Notu Analizi",
+                "lifetimeText": "Toplam Görüntüleme",
+                "todayText": "Bugün",
+                "historyText": "Görüntülenme geçmişi",
+                "clicksShort": "Tıklama",
+                "viewsShort": "Görüntüleme"
             },
             "qrCode": {
                 "title": "QR Kodu",

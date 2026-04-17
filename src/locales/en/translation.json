@@ -591,7 +591,14 @@
                 "analytics": "Link Analytics",
                 "lifetime": "Lifetime Clicks",
                 "today": "Today",
-                "history": "Click history"
+                "history": "Click history",
+                "titleText": "Note Analytics",
+                "analyticsText": "Note Analytics",
+                "lifetimeText": "Lifetime Views",
+                "todayText": "Today",
+                "historyText": "View history",
+                "clicksShort": "Clicks",
+                "viewsShort": "Views"
             },
             "qrCode": {
                 "title": "QR Code",
