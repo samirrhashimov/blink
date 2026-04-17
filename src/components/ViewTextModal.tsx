@@ -1,5 +1,5 @@
-import React from 'react';
-import { X, FileText, Download, Copy, Check } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { X, FileText, Download, Copy, Check, Maximize2, Minimize2 } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type { Link as LinkType } from '../types';
@@ -12,7 +12,14 @@ interface ViewTextModalProps {
 }
 
 const ViewTextModal: React.FC<ViewTextModalProps> = ({ isOpen, onClose, link, containerColor }) => {
-  const [copied, setCopied] = React.useState(false);
+  const [copied, setCopied] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setIsFullscreen(false);
+    }
+  }, [isOpen]);
 
   if (!isOpen || !link) return null;
 
@@ -38,12 +45,12 @@ const ViewTextModal: React.FC<ViewTextModalProps> = ({ isOpen, onClose, link, co
 
   return (
     <div
-      className="modal-overlay"
+      className={`modal-overlay ${isFullscreen ? 'fullscreen-overlay' : ''}`}
       onClick={onClose}
       style={{ '--primary': containerColor } as React.CSSProperties}
     >
-      <div className="modal-content view-text-modal-content" onClick={(e) => e.stopPropagation()}>
-        <div className="modal-header">
+      <div className={`modal-content view-text-modal-content ${isFullscreen ? 'fullscreen-content' : ''}`} onClick={(e) => e.stopPropagation()}>
+        <div className={`modal-header ${isFullscreen ? 'fullscreen-header' : ''}`}>
           <div className="flex items-center gap-2">
             <FileText size={20} className="text-primary" />
             <h2 className="line-clamp-1">{link.title}</h2>
@@ -63,13 +70,20 @@ const ViewTextModal: React.FC<ViewTextModalProps> = ({ isOpen, onClose, link, co
             >
               <Download size={18} />
             </button>
+            <button
+              onClick={() => setIsFullscreen(!isFullscreen)}
+              className="action-pill"
+              title={isFullscreen ? "Minimize" : "Full screen"}
+            >
+              {isFullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
+            </button>
             <button onClick={onClose} className="modal-close">
               <X className="h-6 w-6" />
             </button>
           </div>
         </div>
 
-        <div className="modal-body markdown-view-body">
+        <div className={`modal-body markdown-view-body ${isFullscreen ? 'fullscreen-body' : ''}`}>
           <div className="markdown-content">
             <ReactMarkdown remarkPlugins={[remarkGfm]}>
               {link.content || ''}

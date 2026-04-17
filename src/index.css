@@ -1413,7 +1413,7 @@ body {
   flex: 1 !important;
   display: flex !important;
   flex-direction: column !important;
-  overflow: hidden !important;
+  overflow: auto !important;
   padding: 1.5rem 2rem !important;
   width: 100%;
   max-width: 1600px;
