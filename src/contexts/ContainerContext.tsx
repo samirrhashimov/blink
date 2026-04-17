@@ -76,8 +76,8 @@ export const ContainerProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       const containerColors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
       const randomColor = color || containerColors[Math.floor(Math.random() * containerColors.length)];
 
-      // Check if this is the test user or regular onboarding
-      const isTestUser = currentUser.email === 'test@example.com';
+      // Check if this is the user's very first container (onboarding)
+      const isFirstContainer = containers.filter(c => !c.isShared).length === 0;
 
       const containerData = {
         name,
@@ -92,8 +92,8 @@ export const ContainerProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       
       const newContainerId = await ContainerService.createContainer(containerData);
 
-      // System kicks in every time for test@example.com, disabled for normal users for now
-      if (isTestUser) {
+      // If this is the first container, add a localized welcome text note
+      if (isFirstContainer) {
         const welcomeTitle = i18n.t('onboarding.welcomeNote.title');
         const welcomeContent = i18n.t('onboarding.welcomeNote.content');
 

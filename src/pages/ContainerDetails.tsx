@@ -892,19 +892,14 @@ const ContainerDetails: React.FC = () => {
                           <span>{t('container.typeLink')}</span>
                         </button>
                         <button 
-                          className={`add-content-item ${currentUser?.email !== 'samirhasimov10@gmail.com' ? 'disabled' : ''}`}
+                          className="add-content-item"
                           onClick={() => {
-                            if (currentUser?.email === 'samirhasimov10@gmail.com') {
-                              setShowAddTextModal(true);
-                              setShowAddDropdown(false);
-                            }
+                            setShowAddTextModal(true);
+                            setShowAddDropdown(false);
                           }}
                         >
                           <FileText size={16} />
-                          <div className="flex flex-col items-start">
-                            <span>{t('container.typeText')}</span>
-                            <span className="coming-soon-label">{t('container.comingSoon')}</span>
-                          </div>
+                          <span>{t('container.typeText')}</span>
                         </button>
                         <button 
                           className="add-content-item disabled"
