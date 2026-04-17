@@ -221,8 +221,7 @@ const AddTextModal: React.FC<AddTextModalProps> = ({ isOpen, onClose, containerI
                   <button
                     type="button"
                     onClick={() => setPreviewMode(false)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all ${!previewMode ? 'bg-white dark:bg-gray-700 shadow-md text-primary font-semibold border-none' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 border border-transparent'
-                      }`}
+                    className={`editor-tab-btn ${!previewMode ? 'active' : ''}`}
                   >
                     <Edit3 size={16} />
                     {t('container.modals.addText.buttons.edit')}
@@ -230,8 +229,7 @@ const AddTextModal: React.FC<AddTextModalProps> = ({ isOpen, onClose, containerI
                   <button
                     type="button"
                     onClick={() => setPreviewMode(true)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm transition-all ${previewMode ? 'bg-white dark:bg-gray-700 shadow-md text-primary font-semibold border-none' : 'text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 border border-transparent'
-                      }`}
+                    className={`editor-tab-btn ${previewMode ? 'active' : ''}`}
                   >
                     <Eye size={16} />
                     {t('container.modals.addText.buttons.preview')}
@@ -283,7 +281,7 @@ const AddTextModal: React.FC<AddTextModalProps> = ({ isOpen, onClose, containerI
                 type="button"
                 onClick={onClose}
                 disabled={loading}
-                className="btn-secondary px-6"
+                className="btn-secondary"
               >
                 {t('container.modals.addText.buttons.cancel')}
               </button>
@@ -291,7 +289,7 @@ const AddTextModal: React.FC<AddTextModalProps> = ({ isOpen, onClose, containerI
                 type="button"
                 onClick={handleSubmit}
                 disabled={loading}
-                className="btn-primary px-8 flex items-center gap-2"
+                className="btn-primary flex items-center gap-2"
               >
                 {loading ? (
                   <>
