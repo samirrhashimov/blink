@@ -2567,11 +2567,26 @@ main.container {
 
 .container-card-badges {
   position: absolute;
-  top: 1.25rem;
-  left: 1.25rem;
+  top: 1.5rem;
+  left: 1.5rem;
   display: flex;
   gap: 0.5rem;
   z-index: 5;
+}
+
+@media (max-width: 600px) {
+  .container-card-badges {
+    top: 1.2rem;
+    left: 1.2rem;
+  }
+
+  .container-card-content {
+    padding: 1.2rem;
+  }
+
+  .container-card-title {
+    font-size: 1rem !important;
+  }
 }
 
 .container-card-badge {
