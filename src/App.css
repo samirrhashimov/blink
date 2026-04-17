@@ -5294,6 +5294,12 @@ tr:hover {
     padding: 2rem;
   }
 
+  /* Reset padding for text-related modals on mobile to allow edge-to-edge fullscreen */
+  .modal-content.text-modal-content,
+  .modal-content.view-text-modal-content {
+    padding: 0;
+  }
+
   .container-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
