@@ -291,8 +291,8 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                         </a>
                     ) : (
                         link.content && (
-                            <p className="text-xs text-gray-500 mt-1 line-clamp-1">
-                                {link.content.substring(0, 100)}{link.content.length > 100 ? '...' : ''}
+                            <p className="text-xs text-gray-500 mt-1 line-clamp-1 leading-relaxed" style={{ wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>
+                                {link.content}
                             </p>
                         )
                     )}
@@ -384,15 +384,17 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                 </div>
             </div>
             <div className="link-item-actions">
-                {link.type !== 'text' && (
-                    <button
-                        onClick={(e) => { e.stopPropagation(); onCopy(link.url, link.id); }}
-                        className="action-pill copy-pill"
-                        title={copiedLinkId === link.id ? t('container.menu.copied') : t('container.menu.copy')}
-                    >
-                        {copiedLinkId === link.id ? <Check size={16} /> : <Copy size={16} />}
-                    </button>
-                )}
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        const textToCopy = link.type === 'text' ? link.content || '' : link.url;
+                        onCopy(textToCopy, link.id);
+                    }}
+                    className="action-pill copy-pill"
+                    title={copiedLinkId === link.id ? t('container.menu.copied') : t('container.menu.copy')}
+                >
+                    {copiedLinkId === link.id ? <Check size={16} /> : <Copy size={16} />}
+                </button>
 
                 <div className="more-menu-container" ref={menuRef}>
                     <button
@@ -430,10 +432,12 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                                 <span>{t('container.menu.stats')}</span>
                             </button>
 
-                            <button className="menu-item" onClick={(e) => handleAction(e, () => onQRCode?.(link))}>
-                                <QrCode size={16} />
-                                <span>{t('container.menu.qrCode')}</span>
-                            </button>
+                            {link.type !== 'text' && (
+                                <button className="menu-item" onClick={(e) => handleAction(e, () => onQRCode?.(link))}>
+                                    <QrCode size={16} />
+                                    <span>{t('container.menu.qrCode')}</span>
+                                </button>
+                            )}
 
                             {canEdit && (
                                 <>
