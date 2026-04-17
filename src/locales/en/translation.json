@@ -426,7 +426,8 @@
             "copied": "Copied!",
             "addNote": "Add Note",
             "editNote": "Edit Note",
-            "reaction": "Reaction"
+            "reaction": "Reaction",
+            "download": "Download"
         },
         "messages": {
             "deleted": "Deleted {{count}} links",

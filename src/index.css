@@ -979,6 +979,12 @@ body {
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
+@media (max-width: 767px) {
+  .mobile-hidden-menu-item {
+    display: none !important;
+  }
+}
+
 .menu-item:hover {
   background: rgba(var(--primary-rgb), 0.1) !important;
   transform: translateX(4px);

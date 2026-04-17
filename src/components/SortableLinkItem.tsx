@@ -22,7 +22,8 @@ import {
     GitFork,
     CircleDot,
     Code,
-    FileText
+    FileText,
+    Download
 } from 'lucide-react';
 import type { Link as LinkType } from '../types';
 import LinkPreviewService from '../services/linkPreviewService';
@@ -143,6 +144,19 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
         if (noteDraft !== (link.note || '')) {
             onUpdateLink(link.id, { note: noteDraft.trim() || "" });
         }
+    };
+
+    const handleDownload = () => {
+        if (!link.content) return;
+        const blob = new Blob([link.content], { type: 'text/markdown;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${link.title || 'note'}.md`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     };
 
     const handleEmojiSelect = (emoji: string) => {
@@ -436,6 +450,13 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                                 <button className="menu-item" onClick={(e) => handleAction(e, () => onQRCode?.(link))}>
                                     <QrCode size={16} />
                                     <span>{t('container.menu.qrCode')}</span>
+                                </button>
+                            )}
+
+                            {link.type === 'text' && (
+                                <button className="menu-item mobile-hidden-menu-item" onClick={(e) => handleAction(e, handleDownload)}>
+                                    <Download size={16} />
+                                    <span>{t('container.menu.download')}</span>
                                 </button>
                             )}
 

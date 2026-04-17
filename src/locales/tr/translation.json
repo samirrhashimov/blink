@@ -426,7 +426,8 @@
             "copied": "Kopyalandı!",
             "addNote": "Not Ekle",
             "editNote": "Notu Düzenle",
-            "reaction": "Reaksiyon"
+            "reaction": "Reaksiyon",
+            "download": "İndir"
         },
         "messages": {
             "deleted": "{{count}} link silindi",
