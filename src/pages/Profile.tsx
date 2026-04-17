@@ -5,7 +5,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
 import { ProfileService } from '../services/profileService';
 import type { User, Container } from '../types';
-import { ArrowLeft, UserPlus, UserMinus, ExternalLink, X, Share2, Flag } from 'lucide-react';
+import { ArrowLeft, UserPlus, UserMinus, X, Share2, Flag, Link as LinkIcon } from 'lucide-react';
 import blinkLogo from '../assets/blinklogo2.png';
 import SEO from '../components/SEO';
 import SupportButton from '../components/SupportButton';
@@ -161,12 +161,12 @@ const Profile: React.FC = () => {
     };
 
     const REPORT_REASONS = [
-        { key: 'spam',        labelKey: 'profile.reportReasonSpam' },
-        { key: 'harassment',  labelKey: 'profile.reportReasonHarassment' },
-        { key: 'fake',        labelKey: 'profile.reportReasonFake' },
-        { key: 'hate',        labelKey: 'profile.reportReasonHate' },
+        { key: 'spam', labelKey: 'profile.reportReasonSpam' },
+        { key: 'harassment', labelKey: 'profile.reportReasonHarassment' },
+        { key: 'fake', labelKey: 'profile.reportReasonFake' },
+        { key: 'hate', labelKey: 'profile.reportReasonHate' },
         { key: 'inappropriate', labelKey: 'profile.reportReasonInappropriate' },
-        { key: 'other',      labelKey: 'profile.reportReasonOther' },
+        { key: 'other', labelKey: 'profile.reportReasonOther' },
     ];
 
     const handleReport = () => {
@@ -539,7 +539,7 @@ const Profile: React.FC = () => {
                                             {/* Link count badge */}
                                             <div className="container-card-stats">
                                                 <span className="container-card-stat">
-                                                    <ExternalLink size={12} />
+                                                    <LinkIcon size={12} />
                                                     {linkCount} {t('container.links')}
                                                 </span>
                                                 {container.authorizedUsers && container.authorizedUsers.length > 0 && (
