@@ -56,6 +56,11 @@ const AddTextModal: React.FC<AddTextModalProps> = ({ isOpen, onClose, containerI
       setPreviewMode(false);
       setLoading(false);
       setError('');
+      
+      // Always open in fullscreen on mobile
+      if (window.innerWidth < 768) {
+        setIsFullscreen(true);
+      }
     }
   }, [isOpen, editLink]);
 
@@ -171,13 +176,12 @@ const AddTextModal: React.FC<AddTextModalProps> = ({ isOpen, onClose, containerI
               <h2 className="mb-0">
                 {editLink ? t('container.modals.addText.editTitle') : t('container.modals.addText.title')}
               </h2>
-              <p className="text-xs text-gray-500 mb-0">{t('container.modals.addText.subtitle')}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={() => setIsFullscreen(!isFullscreen)}
-              className="modal-action-btn"
+              className="modal-action-btn mediaforbuttons"
               type="button"
             >
               {isFullscreen ? <Minimize2 size={20} /> : <Maximize2 size={20} />}

@@ -494,9 +494,8 @@
                 }
             },
             "addText": {
-                "title": "New Text Note",
-                "editTitle": "Edit Text Note",
-                "subtitle": "Format your notes using Markdown.",
+                "title": "Add New Text",
+                "editTitle": "Edit Text",
                 "textTitle": "Title",
                 "content": "Text Content",
                 "placeholder": "Write your text here...",

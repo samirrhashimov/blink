@@ -17,7 +17,12 @@ const ViewTextModal: React.FC<ViewTextModalProps> = ({ isOpen, onClose, link, co
 
   useEffect(() => {
     if (isOpen) {
-      setIsFullscreen(false);
+      // Always open in fullscreen on mobile
+      if (window.innerWidth < 768) {
+        setIsFullscreen(true);
+      } else {
+        setIsFullscreen(false);
+      }
     }
   }, [isOpen]);
 
@@ -65,14 +70,14 @@ const ViewTextModal: React.FC<ViewTextModalProps> = ({ isOpen, onClose, link, co
             </button>
             <button
               onClick={handleDownload}
-              className="action-pill"
+              className="action-pill mediaforbuttons"
               title="Download as .md"
             >
               <Download size={18} />
             </button>
             <button
               onClick={() => setIsFullscreen(!isFullscreen)}
-              className="action-pill"
+              className="action-pill mediaforbuttons"
               title={isFullscreen ? "Minimize" : "Full screen"}
             >
               {isFullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}

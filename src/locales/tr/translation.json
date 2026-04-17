@@ -496,10 +496,9 @@
             "addText": {
                 "title": "Yeni Metin Notu",
                 "editTitle": "Metin Notunu Düzenle",
-                "subtitle": "Markdown kullanarak notlarınızı biçimlendirin.",
                 "textTitle": "Başlık",
                 "content": "Metin İçeriği",
-                "placeholder": "Metninizi buraya yazın (Markdown desteklenir)...",
+                "placeholder": "Metninizi buraya yazın...",
                 "titlePlaceholder": "Not başlığı girin",
                 "buttons": {
                     "add": "Notu Ekle",
