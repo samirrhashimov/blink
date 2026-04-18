@@ -10,7 +10,7 @@ const MobileUpgrade: React.FC = () => {
   const toast = useToast();
 
   const handleCopy = () => {
-    navigator.clipboard.writeText('https://blink-linknet.netlify.app');
+    navigator.clipboard.writeText('https://blinklinknet.netlify.app');
     toast.success(t('mobileUpgrade.copied', 'Website link copied!'));
   };
 
@@ -80,7 +80,7 @@ const MobileUpgrade: React.FC = () => {
           boxShadow: '0 4px 20px rgba(0,0,0,0.05)'
         }}>
           <span style={{ fontWeight: '600', fontSize: '18px', color: 'var(--primary)' }}>
-            blink-linknet.netlify.app
+            blinklinknet.netlify.app
           </span>
           <button 
             onClick={handleCopy}
@@ -111,7 +111,7 @@ const MobileUpgrade: React.FC = () => {
       {/* Footer CTA */}
       <div style={{ marginTop: 'auto', padding: '20px 0' }}>
         <button 
-          onClick={() => window.open('https://blink-linknet.netlify.app', '_blank')}
+          onClick={() => window.open('https://blinklinknet.netlify.app', '_blank')}
           className="btn-primary"
           style={{ 
             width: '100%', 
