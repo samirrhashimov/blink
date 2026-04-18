@@ -6,7 +6,6 @@ declare global {
 
 export class SubscriptionService {
   private static PADDLE_CLIENT_TOKEN = import.meta.env.VITE_PADDLE_CLIENT_TOKEN || 'test_token_placeholder';
-  private static PADDLE_ENV = (import.meta.env.VITE_PADDLE_ENV || 'sandbox') as 'sandbox' | 'production';
 
   /**
    * Initialize Paddle.js
@@ -14,8 +13,7 @@ export class SubscriptionService {
   static async initialize(): Promise<void> {
     if (window.Paddle) {
       window.Paddle.Initialize({ 
-        token: this.PADDLE_CLIENT_TOKEN,
-        environment: this.PADDLE_ENV
+        token: this.PADDLE_CLIENT_TOKEN
       });
     }
   }
