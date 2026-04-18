@@ -202,6 +202,14 @@
         "logoutDesc": "Bu cihazdaki hesabınızdan çıkış yapın.",
         "deleteAccount": "Hesabı Sil",
         "deleteAccountDesc": "Hesabınızı ve tüm verilerinizi kalıcı olarak silin.",
+        "plan": {
+            "title": "Abonelik Planı",
+            "desc": "Aboneliğinizi yönetin ve daha fazla özelliğin kilidini açın.",
+            "upgradeHint": "Dosya yükleme ve daha fazlasını açmak için yükseltin.",
+            "upgradeBtn": "Planı Yükselt",
+            "manageBtn": "Planı Yönet",
+            "devBtn": "Planı Değiştir (Dev)"
+        },
         "placeholders": {
             "name": "Tam ad",
             "email": "E-posta adresi"
@@ -561,7 +569,28 @@
                 "errors": {
                     "required": "Başlık ve içerik gereklidir",
                     "failed": "Metin notu eklenemedi"
+                },
+                "previewEmpty": "Henüz önizlenecek bir şey yok...",
+                "supported": "Destekleniyor",
+                "characters": "{{count}} karakter",
+                "words": "{{count}} kelime",
+                "toolbar": {
+                    "h1": "Başlık 1",
+                    "h2": "Başlık 2",
+                    "bold": "Kalın",
+                    "italic": "İtalik",
+                    "code": "Kod",
+                    "list": "Liste",
+                    "quote": "Alıntı",
+                    "link": "Bağlantı"
                 }
+            },
+            "viewText": {
+                "copy": "İçeriği kopyala",
+                "copied": "Kopyalandı!",
+                "download": ".md olarak indir",
+                "fullscreen": "Tam ekran",
+                "minimize": "Küçült"
             },
             "editLink": {
                 "title": "Linki Düzenle",

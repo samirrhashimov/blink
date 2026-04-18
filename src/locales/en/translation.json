@@ -202,6 +202,14 @@
         "logoutDesc": "Sign out of your account on this device.",
         "deleteAccount": "Delete Account",
         "deleteAccountDesc": "Permanently delete your account and all of your data.",
+        "plan": {
+            "title": "Subscription Plan",
+            "desc": "Manage your subscription and unlock more features.",
+            "upgradeHint": "Upgrade to unlock file uploads and more.",
+            "upgradeBtn": "Upgrade Plan",
+            "manageBtn": "Manage Plan",
+            "devBtn": "Change Plan (Dev)"
+        },
         "placeholders": {
             "name": "Full name",
             "email": "Email address"
@@ -561,7 +569,28 @@
                 "errors": {
                     "required": "Title and content are required",
                     "failed": "Failed to add text note"
+                },
+                "previewEmpty": "Nothing to preview yet...",
+                "supported": "Supported",
+                "characters": "{{count}} characters",
+                "words": "{{count}} words",
+                "toolbar": {
+                    "h1": "Heading 1",
+                    "h2": "Heading 2",
+                    "bold": "Bold",
+                    "italic": "Italic",
+                    "code": "Code",
+                    "list": "List",
+                    "quote": "Quote",
+                    "link": "Link"
                 }
+            },
+            "viewText": {
+                "copy": "Copy content",
+                "copied": "Copied!",
+                "download": "Download as .md",
+                "fullscreen": "Full screen",
+                "minimize": "Minimize"
             },
             "editLink": {
                 "title": "Edit Link",

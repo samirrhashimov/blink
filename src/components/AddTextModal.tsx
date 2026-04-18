@@ -209,16 +209,16 @@ const AddTextModal: React.FC<AddTextModalProps> = ({ isOpen, onClose, containerI
             <div className="editor-container">
               <div className="editor-toolbar">
                 <div className="flex items-center gap-1 overflow-x-auto no-scrollbar flex-1">
-                  <button type="button" onClick={() => insertFormat('h1')} className="toolbar-btn" title="Heading 1"><Heading1 size={18} /></button>
-                  <button type="button" onClick={() => insertFormat('h2')} className="toolbar-btn" title="Heading 2"><Heading2 size={18} /></button>
+                  <button type="button" onClick={() => insertFormat('h1')} className="toolbar-btn" title={t('container.modals.addText.toolbar.h1')}><Heading1 size={18} /></button>
+                  <button type="button" onClick={() => insertFormat('h2')} className="toolbar-btn" title={t('container.modals.addText.toolbar.h2')}><Heading2 size={18} /></button>
                   <div className="toolbar-divider" />
-                  <button type="button" onClick={() => insertFormat('bold')} className="toolbar-btn" title="Bold"><Bold size={18} /></button>
-                  <button type="button" onClick={() => insertFormat('italic')} className="toolbar-btn" title="Italic"><Italic size={18} /></button>
-                  <button type="button" onClick={() => insertFormat('code')} className="toolbar-btn" title="Code"><Code size={18} /></button>
+                  <button type="button" onClick={() => insertFormat('bold')} className="toolbar-btn" title={t('container.modals.addText.toolbar.bold')}><Bold size={18} /></button>
+                  <button type="button" onClick={() => insertFormat('italic')} className="toolbar-btn" title={t('container.modals.addText.toolbar.italic')}><Italic size={18} /></button>
+                  <button type="button" onClick={() => insertFormat('code')} className="toolbar-btn" title={t('container.modals.addText.toolbar.code')}><Code size={18} /></button>
                   <div className="toolbar-divider" />
-                  <button type="button" onClick={() => insertFormat('list')} className="toolbar-btn" title="List"><List size={18} /></button>
-                  <button type="button" onClick={() => insertFormat('quote')} className="toolbar-btn" title="Quote"><Quote size={18} /></button>
-                  <button type="button" onClick={() => insertFormat('link')} className="toolbar-btn" title="Link"><LinkIcon size={18} /></button>
+                  <button type="button" onClick={() => insertFormat('list')} className="toolbar-btn" title={t('container.modals.addText.toolbar.list')}><List size={18} /></button>
+                  <button type="button" onClick={() => insertFormat('quote')} className="toolbar-btn" title={t('container.modals.addText.toolbar.quote')}><Quote size={18} /></button>
+                  <button type="button" onClick={() => insertFormat('link')} className="toolbar-btn" title={t('container.modals.addText.toolbar.link')}><LinkIcon size={18} /></button>
                 </div>
 
                 <div className="flex items-center gap-2 overflow-x-auto no-scrollbar ml-auto">
@@ -258,7 +258,7 @@ const AddTextModal: React.FC<AddTextModalProps> = ({ isOpen, onClose, containerI
                       <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
                     ) : (
                       <div className="flex items-center justify-center h-full text-gray-400 italic">
-                        Nothing to preview yet...
+                        {t('container.modals.addText.previewEmpty', 'Nothing to preview yet...')}
                       </div>
                     )}
                   </div>
@@ -273,11 +273,11 @@ const AddTextModal: React.FC<AddTextModalProps> = ({ isOpen, onClose, containerI
             <div className="text-sm text-gray-500 flex items-center gap-6">
               <div className="flex items-center gap-2">
                 <FaMarkdown size={24} style={{ opacity: 0.8 }} />
-                <span className="font-semibold tracking-wide uppercase text-[10px]">Supported</span>
+                <span className="font-semibold tracking-wide uppercase text-[10px]">{t('container.modals.addText.supported', 'Supported')}</span>
               </div>
               <div className="flex items-center gap-4">
-                <span>{content.length} characters</span>
-                <span>{content.split(/\s+/).filter(Boolean).length} words</span>
+                <span>{t('container.modals.addText.characters', { count: content.length })}</span>
+                <span>{t('container.modals.addText.words', { count: content.split(/\s+/).filter(Boolean).length })}</span>
               </div>
             </div>
             <div className="flex items-center gap-3">

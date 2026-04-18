@@ -1291,7 +1291,6 @@ body {
 
 .add-content-item:hover:not(.disabled) {
   background: var(--bg-hover);
-  color: var(--primary);
 }
 
 .add-content-item.disabled {

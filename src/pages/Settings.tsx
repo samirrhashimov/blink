@@ -544,7 +544,7 @@ const Settings: React.FC = () => {
                       whiteSpace: 'nowrap'
                     }}
                   >
-                    Change Plan (Dev)
+                    {t('settings.plan.devBtn', 'Change Plan (Dev)')}
                   </button>
                 )}
                 <button

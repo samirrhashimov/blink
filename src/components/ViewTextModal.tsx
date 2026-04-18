@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, FileText, Download, Copy, Check, Maximize2, Minimize2 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import type { Link as LinkType } from '../types';
@@ -12,6 +13,7 @@ interface ViewTextModalProps {
 }
 
 const ViewTextModal: React.FC<ViewTextModalProps> = ({ isOpen, onClose, link, containerColor }) => {
+  const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
 
@@ -64,21 +66,21 @@ const ViewTextModal: React.FC<ViewTextModalProps> = ({ isOpen, onClose, link, co
             <button
               onClick={handleCopy}
               className="action-pill"
-              title={copied ? "Copied!" : "Copy content"}
+              title={copied ? t('container.modals.viewText.copied') : t('container.modals.viewText.copy')}
             >
               {copied ? <Check size={18} /> : <Copy size={18} />}
             </button>
             <button
               onClick={handleDownload}
               className="action-pill mediaforbuttons"
-              title="Download as .md"
+              title={t('container.modals.viewText.download')}
             >
               <Download size={18} />
             </button>
             <button
               onClick={() => setIsFullscreen(!isFullscreen)}
               className="action-pill mediaforbuttons"
-              title={isFullscreen ? "Minimize" : "Full screen"}
+              title={isFullscreen ? t('container.modals.viewText.minimize') : t('container.modals.viewText.fullscreen')}
             >
               {isFullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
             </button>
