@@ -23,7 +23,11 @@
             "downgrade": "Ücretsiz Devam Et",
             "currentBtn": "Mevcut Plan",
             "comingSoon": "Ödeme entegrasyonu yakında!",
-            "note": "Ödemeler RevenueCat tarafından yönetilir. İstediğin zaman iptal edebilirsin."
+            "manageBilling": "Aboneliği Yönet",
+            "error": "Ödeme başlatılamadı. Lütfen tekrar deneyin.",
+            "portalError": "Ödeme portalı açılamadı.",
+            "portalNote": "Aboneliğinizi e-postanıza gelen bağlantı üzerinden veya destek ekibiyle iletişime geçerek yönetebilirsiniz.",
+            "note": "Ödemeler Paddle tarafından güvence altına alınmıştır. İstediğin zaman iptal edebilirsin."
         }
     },
     "landing": {
@@ -208,7 +212,8 @@
             "upgradeHint": "Dosya yükleme ve daha fazlasını açmak için yükseltin.",
             "upgradeBtn": "Planı Yükselt",
             "manageBtn": "Planı Yönet",
-            "devBtn": "Planı Değiştir (Dev)"
+            "devBtn": "Planı Değiştir (Dev)",
+            "portalError": "Ödeme portalı açılamadı."
         },
         "placeholders": {
             "name": "Tam ad",

@@ -13,8 +13,11 @@ const firebaseConfig = {
   measurementId: "G-7EHHGHRVY3"
 };
 
+import { getFunctions } from 'firebase/functions';
+
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app);
+export const functions = getFunctions(app);
 export const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
 export default app;

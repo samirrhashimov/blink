@@ -23,7 +23,11 @@
             "downgrade": "Continue with Free",
             "currentBtn": "Current Plan",
             "comingSoon": "Payment integration coming soon!",
-            "note": "Payments powered by RevenueCat. Cancel anytime."
+            "manageBilling": "Manage Billing",
+            "error": "Failed to initiate payment. Please try again.",
+            "portalError": "Failed to open billing portal.",
+            "portalNote": "You can manage your subscription through the link in your email or by contacting support.",
+            "note": "Payments secured by Paddle. Cancel anytime."
         }
     },
     "landing": {
@@ -208,7 +212,8 @@
             "upgradeHint": "Upgrade to unlock file uploads and more.",
             "upgradeBtn": "Upgrade Plan",
             "manageBtn": "Manage Plan",
-            "devBtn": "Change Plan (Dev)"
+            "devBtn": "Change Plan (Dev)",
+            "portalError": "Failed to open billing portal."
         },
         "placeholders": {
             "name": "Full name",

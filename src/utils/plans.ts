@@ -38,7 +38,7 @@ export const PLANS: Record<UserPlan, PlanConfig> = {
   'pro': {
     id: 'pro',
     name: 'Pro',
-    price: 5.99,
+    price: 5,
     storageLimit: 200,
     fileSizeLimit: 10,
     canUploadFiles: true,
@@ -59,7 +59,7 @@ export const PLANS: Record<UserPlan, PlanConfig> = {
   'pro+': {
     id: 'pro+',
     name: 'Pro+',
-    price: 10.99,
+    price: 10,
     storageLimit: 1024,
     fileSizeLimit: 20,
     canUploadFiles: true,

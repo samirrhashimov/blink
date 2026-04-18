@@ -6,6 +6,7 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { ContainerProvider } from './contexts/ContainerContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { useAuth } from './contexts/AuthContext';
+import { isMobileDevice } from './utils/device';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
@@ -30,6 +31,7 @@ import DeleteAccount from './pages/DeleteAccount';
 import SupportPage from './pages/SupportPage';
 import Profile from './pages/Profile';
 import Paywall from './pages/Paywall';
+import MobileUpgrade from './pages/MobileUpgrade';
 
 
 const AppRoutes: React.FC = () => {
@@ -132,13 +134,30 @@ const AppRoutes: React.FC = () => {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/paywall"
+        {/* Planlar ve Upgrade - Mobilde gizle/engelle */}
+        <Route 
+          path="/paywall" 
           element={
             <ProtectedRoute>
-              <Paywall />
+              {isMobileDevice() ? <Navigate to="/mobile-upgrade" replace /> : <Paywall />}
             </ProtectedRoute>
-          }
+          } 
+        />
+        <Route 
+          path="/upgrade" 
+          element={
+            <ProtectedRoute>
+              {isMobileDevice() ? <Navigate to="/mobile-upgrade" replace /> : <Paywall />}
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/mobile-upgrade" 
+          element={
+            <ProtectedRoute>
+              <MobileUpgrade />
+            </ProtectedRoute>
+          } 
         />
       </Routes>
       <BottomNavigation />

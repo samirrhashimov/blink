@@ -6,6 +6,7 @@ import { useToast } from '../contexts/ToastContext';
 import { SharingService } from '../services/sharingService';
 import { NotificationService } from '../services/notificationService';
 import { UserService } from '../services/userService';
+import { isMobileDevice } from '../utils/device';
 import type { Link as LinkType } from '../types';
 import blinkLogo from '../assets/blinklogo2.png';
 import { ContainerService } from '../services/containerService';
@@ -907,7 +908,7 @@ const ContainerDetails: React.FC = () => {
                           className={`add-content-item ${(!currentUser?.plan || currentUser?.plan === 'starter') ? 'plan-restricted' : ''}`}
                           onClick={() => {
                             if (!currentUser?.plan || currentUser?.plan === 'starter') {
-                              navigate('/paywall');
+                              navigate(isMobileDevice() ? '/mobile-upgrade' : '/paywall');
                               return;
                             }
                             setShowAddFileModal(true);
@@ -1179,7 +1180,7 @@ const ContainerDetails: React.FC = () => {
                     <button
                       onClick={() => {
                         if (!currentUser?.plan || currentUser?.plan === 'starter') {
-                          navigate('/paywall');
+                          navigate(isMobileDevice() ? '/mobile-upgrade' : '/paywall');
                           return;
                         }
                         setShowWebhooksModal(true);

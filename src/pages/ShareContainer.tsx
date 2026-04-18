@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
+import { isMobileDevice } from '../utils/device';
 import { useContainer } from '../contexts/ContainerContext';
 import { useToast } from '../contexts/ToastContext';
 import { SharingService } from '../services/sharingService';
@@ -79,7 +80,7 @@ const ShareContainer: React.FC = () => {
 
     if (maxCollabs !== -1 && currentCount >= maxCollabs) {
       toast.error(t('plans.limitReached', `You have reached your limit of ${maxCollabs} collaborators. Upgrade for more.`));
-      navigate('/paywall');
+      navigate(isMobileDevice() ? '/mobile-upgrade' : '/paywall');
       return;
     }
 

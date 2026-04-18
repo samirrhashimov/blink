@@ -6,6 +6,9 @@ import { PLANS, getPlanDisplayName } from '../utils/plans';
 import type { UserPlan } from '../types';
 import { useTranslation } from 'react-i18next';
 
+import { SubscriptionService } from '../services/subscriptionService';
+import { useState } from 'react';
+
 const PLAN_ICONS: Record<UserPlan, React.ReactNode> = {
   'starter': <Star size={22} />,
   'pro': <Zap size={22} />,
@@ -34,14 +37,41 @@ const Paywall: React.FC = () => {
   const { currentUser } = useAuth();
   const navigate = useNavigate();
   const { t } = useTranslation();
+  const [loading, setLoading] = useState<string | null>(null);
   const userPlan = currentUser?.plan ?? 'starter';
 
   const planOrder: UserPlan[] = ['starter', 'pro', 'pro+'];
 
-  const handleUpgrade = (plan: UserPlan) => {
-    // RevenueCat entegrasyon noktası — şimdilik placeholder
-    console.log(`Initiate purchase for plan: ${plan}`);
-    alert(t('plans.paywall.comingSoon', 'Payment integration coming soon! Plan: ' + PLANS[plan].name));
+  React.useEffect(() => {
+    SubscriptionService.initialize();
+  }, []);
+
+  const handleUpgrade = async (plan: UserPlan) => {
+    if (plan === 'starter' || !currentUser) return;
+    
+    setLoading(plan);
+    try {
+      const priceId = plan === 'pro+' 
+        ? import.meta.env.VITE_PADDLE_PRO_PLUS_PRICE_ID 
+        : import.meta.env.VITE_PADDLE_PRO_PRICE_ID;
+        
+      if (!priceId) {
+        throw new Error('Price ID not configured');
+      }
+
+      await SubscriptionService.openCheckout(currentUser.uid, currentUser.email, priceId);
+    } catch (error) {
+      console.error('Upgrade error:', error);
+      alert(t('plans.paywall.error', 'Failed to initiate payment. Please try again.'));
+    } finally {
+      setLoading(null);
+    }
+  };
+
+  const handleManageBilling = async () => {
+    // Paddle handle'ları genellikle email üzerinden veya portal linki ile yönetilir.
+    // Dashboard'da müşteriye özel bir buton yerine yardım mesajı gösterebiliriz.
+    alert(t('plans.paywall.portalNote', 'You can manage your subscription through the link in your email or by contacting support.'));
   };
 
   return (
@@ -57,16 +87,29 @@ const Paywall: React.FC = () => {
       </div>
 
       <div className="paywall-current-plan">
-        <span className="paywall-current-label">
-          {t('plans.paywall.currentPlan', 'Your current plan:')}
-        </span>
-        <span
-          className="plan-badge"
-          style={{ backgroundColor: PLAN_COLORS[userPlan].badge }}
-        >
-          {PLAN_ICONS[userPlan]}
-          {getPlanDisplayName(userPlan)}
-        </span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div>
+            <span className="paywall-current-label">
+              {t('plans.paywall.currentPlan', 'Your current plan:')}
+            </span>
+            <span
+              className="plan-badge"
+              style={{ backgroundColor: PLAN_COLORS[userPlan].badge }}
+            >
+              {PLAN_ICONS[userPlan]}
+              {getPlanDisplayName(userPlan)}
+            </span>
+          </div>
+          {userPlan !== 'starter' && (
+            <button 
+              className="paywall-manage-btn" 
+              onClick={handleManageBilling}
+              disabled={!!loading}
+            >
+              {loading === 'portal' ? t('common.loading', 'Loading...') : t('plans.paywall.manageBilling', 'Manage Billing')}
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="paywall-plans-grid">
@@ -79,7 +122,7 @@ const Paywall: React.FC = () => {
           return (
             <div
               key={planId}
-              className={`paywall-plan-card ${isCurrent ? 'paywall-plan-card--current' : ''} ${isPopular ? 'paywall-plan-card--popular' : ''}`}
+              className={`paywall-plan-card ${isCurrent ? 'paywall-plan-card--current' : ''} ${isPopular ? 'paywall-plan-card--popular' : ''} ${loading === planId ? 'paywall-plan-card--loading' : ''}`}
               style={{
                 background: colors.bg,
                 borderColor: isCurrent ? colors.border : undefined,
@@ -147,9 +190,16 @@ const Paywall: React.FC = () => {
                     className="paywall-btn paywall-btn--upgrade"
                     style={{ background: colors.badge }}
                     onClick={() => handleUpgrade(planId)}
+                    disabled={!!loading}
                   >
-                    <Zap size={16} />
-                    {t('plans.paywall.upgrade', 'Upgrade to {{plan}}', { plan: plan.name })}
+                    {loading === planId ? (
+                      t('common.loading', 'Loading...')
+                    ) : (
+                      <>
+                        <Zap size={16} />
+                        {t('plans.paywall.upgrade', 'Upgrade to {{plan}}', { plan: plan.name })}
+                      </>
+                    )}
                   </button>
                 )}
               </div>
@@ -159,7 +209,7 @@ const Paywall: React.FC = () => {
       </div>
 
       <p className="paywall-footer-note">
-        {t('plans.paywall.note', 'Payment powered by RevenueCat. Cancel anytime.')}
+        {t('plans.paywall.note', 'Payment secured by Stripe. Cancel anytime.')}
       </p>
     </div>
   );
