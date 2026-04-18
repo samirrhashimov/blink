@@ -8451,3 +8451,63 @@ input:checked+.slider:before {
 }
 
 /* Remove earlier opacity overrides */
+/* File Info Styling */
+.file-info-container {
+  /* Alttaki tum dosya bilgi satiri */
+  opacity: 0.9;
+  transition: opacity 0.2s;
+}
+
+.file-info-container:hover {
+  opacity: 1;
+}
+
+.file-format-badge {
+  /* PDF, JPG, vb. yazan rozet */
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--primary);
+}
+
+.file-info-dot {
+  color: var(--text-muted);
+  font-weight: bold;
+  margin: 0 3px;
+}
+
+.file-size-info {
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+.file-download-icon {
+  color: var(--primary);
+  margin: 0 3px;
+}
+
+/* File Upload Dropzone */
+.file-upload-dropzone {
+  border: 2px dashed var(--border-color);
+  border-radius: 1rem;
+  padding: 2rem;
+  text-align: center;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  min-height: 200px;
+}
+
+.file-upload-dropzone:hover {
+  border-color: var(--text-secondary);
+  background-color: rgba(var(--primary-rgb), 0.02);
+}
+
+.file-upload-dropzone.is-dragging {
+  border-color: var(--primary);
+  background-color: rgba(var(--primary-rgb), 0.05);
+  transform: scale(1.01);
+}

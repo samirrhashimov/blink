@@ -339,14 +339,14 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                             <ExternalLink size={12} className="flex-shrink-0" style={{ marginLeft: '2px' }} />
                         </a>
                     ) : link.type === 'file' ? (
-                        <div className="text-xs text-primary mt-1 inline-flex items-center gap-1.5 align-middle font-medium cursor-pointer" onClick={(e) => {
+                        <div className="file-info-container text-xs text-primary mt-1 inline-flex items-center gap-1.5 align-middle font-medium cursor-pointer" onClick={(e) => {
                             e.stopPropagation();
                             handleDownloadFile();
                         }}>
-                            <span className="truncate uppercase bg-[rgba(var(--primary-rgb),0.1)] px-1.5 py-0.5 rounded text-[10px] tracking-wider">{link.fileData?.format || 'FILE'}</span>
-                            <span>·</span>
-                            <span>{link.fileData?.bytes ? (link.fileData.bytes / 1024 / 1024).toFixed(2) : 0} MB</span>
-                            <Download size={12} className="ml-1" />
+                            <span className="file-format-badge truncate uppercase bg-[rgba(var(--primary-rgb),0.1)] px-1.5 py-0.5 rounded text-[10px] tracking-wider">{link.fileData?.format || 'FILE'}</span>
+                            <span className="file-info-dot">·</span>
+                            <span className="file-size-info">{link.fileData?.bytes ? (link.fileData.bytes / 1024 / 1024).toFixed(2) : 0} MB</span>
+                            <Download size={12} className="ml-1 file-download-icon" />
                         </div>
                     ) : (
                         link.content && (

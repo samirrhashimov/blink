@@ -28,7 +28,7 @@ import {
   Webhook,
   FileText,
   Link as LinkIcon,
-  FileCode
+  File
 } from 'lucide-react';
 import AddLinkModal from '../components/AddLinkModal';
 import AddTextModal from '../components/AddTextModal';
@@ -914,7 +914,7 @@ const ContainerDetails: React.FC = () => {
                             setShowAddDropdown(false);
                           }}
                         >
-                          <FileCode size={16} />
+                          <File size={16} />
                           <span>{t('container.typeFile')}</span>
                           {(!currentUser?.plan || currentUser?.plan === 'starter') && <span className="pro-badge-mini">PRO</span>}
                         </button>

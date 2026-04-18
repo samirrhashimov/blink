@@ -262,9 +262,7 @@ const AddFileModal: React.FC<AddFileModalProps> = ({ isOpen, onClose, containerI
           {/* Drag & Drop Area */}
           {!file && status !== 'uploading' && status !== 'success' && (
             <div
-              className={`border-2 border-dashed rounded-xl p-8 text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-3 ${
-                isDragging ? 'border-primary bg-[rgba(var(--primary-rgb),0.05)]' : 'border-[var(--border-color)] hover:border-[var(--text-secondary)]'
-              }`}
+              className={`file-upload-dropzone ${isDragging ? 'is-dragging' : ''}`}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
