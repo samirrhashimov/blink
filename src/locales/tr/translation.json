@@ -451,6 +451,27 @@
             "leaveError": "Konteynerden ayrılırken hata oluştu"
         },
         "modals": {
+            "addFile": {
+                "title": "Dosya Yükle",
+                "dragDrop": "Dosyayı sürükleyin veya seçin",
+                "limits": "PDF, DOC, Görseller (Maks 10MB)",
+                "fileTitle": "Başlık",
+                "description": "Açıklama",
+                "placeholders": {
+                    "title": "Dosya Adı",
+                    "description": "Kısa bir açıklama ekleyin"
+                },
+                "buttons": {
+                    "upload": "Dosya Yükle",
+                    "uploading": "Yükleniyor...",
+                    "success": "Yüklendi"
+                },
+                "errors": {
+                    "tooLarge": "Dosya çok büyük. Maksimum boyut: {{size}}.",
+                    "noFile": "Lütfen yüklenecek bir dosya seçin.",
+                    "failed": "Dosya yüklenemedi. Lütfen tekrar deneyin."
+                }
+            },
             "note": {
                 "placeholder": "Bir not yazın..."
             },

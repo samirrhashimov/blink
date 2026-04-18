@@ -1,0 +1,55 @@
+{
+  "version": "5",
+  "remote": {
+    "https://edge.netlify.com/": "fd941d61d88673d5f28aab283fb86fcc50f08a3bc80ee5470498fcfa88c65cfb",
+    "https://edge.netlify.com/bootstrap/config.ts": "6a2ce0e544e15e8f8883a5c18da5948e37fd0f2619f68cb31f3af53c51817025",
+    "https://edge.netlify.com/bootstrap/context.ts": "e97240232121e2f369f6546ce961490f34d961ea1ea54be3ff09633e3f08373f",
+    "https://edge.netlify.com/bootstrap/cookie.ts": "8b0baae708989ca183c6f3b4ab3d029e6abcbc2e43f93edeb0ff447b3bbc3a05",
+    "https://edge.netlify.com/bootstrap/edge_function.ts": "b8253e86aa83c67341f5cfedeba5049d77fbf84dcab7eceff7566b7728ae9b39",
+    "https://edge.netlify.com/bootstrap/globals/types.ts": "eaa6148ded3121d8dee62dd91c86e7fe76601df0f3ca8d7962243a30f4c8935f"
+  },
+  "workspace": {
+    "packageJson": {
+      "dependencies": [
+        "npm:@dnd-kit/core@^6.3.1",
+        "npm:@dnd-kit/sortable@10",
+        "npm:@dnd-kit/utilities@^3.2.2",
+        "npm:@eslint/js@^9.36.0",
+        "npm:@tailwindcss/postcss@^4.1.14",
+        "npm:@types/node@^24.6.0",
+        "npm:@types/react-dom@^19.1.9",
+        "npm:@types/react-router-dom@^5.3.3",
+        "npm:@types/react@^19.1.16",
+        "npm:@vitejs/plugin-react@^5.0.4",
+        "npm:autoprefixer@^10.4.21",
+        "npm:cloudinary@^2.9.0",
+        "npm:eslint-plugin-react-hooks@^5.2.0",
+        "npm:eslint-plugin-react-refresh@~0.4.22",
+        "npm:eslint@^9.36.0",
+        "npm:firebase@^12.4.0",
+        "npm:globals@^16.4.0",
+        "npm:i18next-browser-languagedetector@^8.2.0",
+        "npm:i18next@^25.8.4",
+        "npm:lucide-react@0.545",
+        "npm:postcss@^8.5.6",
+        "npm:react-dom@^18.3.1",
+        "npm:react-helmet-async@^2.0.5",
+        "npm:react-i18next@^16.5.4",
+        "npm:react-icons@^5.5.0",
+        "npm:react-is@^19.2.3",
+        "npm:react-markdown@^10.1.0",
+        "npm:react-router-dom@^7.9.4",
+        "npm:react@^18.3.1",
+        "npm:recharts@^3.6.0",
+        "npm:remark-gfm@^4.0.1",
+        "npm:rolldown-vite@7.1.14",
+        "npm:tailwindcss@^4.1.14",
+        "npm:typescript-eslint@^8.45.0",
+        "npm:typescript@~5.9.3"
+      ],
+      "overrides": {
+        "vite": "npm:rolldown-vite@7.1.14"
+      }
+    }
+  }
+}

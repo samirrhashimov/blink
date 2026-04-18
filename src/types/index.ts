@@ -38,6 +38,13 @@ export interface Link {
     repoName?: string;
     ownerName?: string;
   };
+  fileData?: {
+    originalName: string;
+    publicId: string;
+    format: string;
+    bytes: number;
+    resourceType?: string;
+  };
 }
 
 export interface Container {

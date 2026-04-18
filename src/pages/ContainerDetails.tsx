@@ -32,6 +32,7 @@ import {
 } from 'lucide-react';
 import AddLinkModal from '../components/AddLinkModal';
 import AddTextModal from '../components/AddTextModal';
+import AddFileModal from '../components/AddFileModal';
 import ViewTextModal from '../components/ViewTextModal';
 import EditLinkModal from '../components/EditLinkModal';
 import EditContainerModal from '../components/EditContainerModal';
@@ -109,6 +110,7 @@ const ContainerDetails: React.FC = () => {
   const [showQRCodeModal, setShowQRCodeModal] = useState(false);
   const [selectedLink, setSelectedLink] = useState<LinkType | null>(null);
   const [showAddTextModal, setShowAddTextModal] = useState(false);
+  const [showAddFileModal, setShowAddFileModal] = useState(false);
   const [showViewTextModal, setShowViewTextModal] = useState(false);
   const [showAddDropdown, setShowAddDropdown] = useState(false);
   const addDropdownRef = useRef<HTMLDivElement>(null);
@@ -902,14 +904,14 @@ const ContainerDetails: React.FC = () => {
                           <span>{t('container.typeText')}</span>
                         </button>
                         <button 
-                          className="add-content-item disabled"
-                          title={t('container.comingSoon')}
+                          className="add-content-item"
+                          onClick={() => {
+                            setShowAddFileModal(true);
+                            setShowAddDropdown(false);
+                          }}
                         >
                           <FileCode size={16} />
-                          <div className="flex flex-col items-start">
-                            <span>{t('container.typeFile')}</span>
-                            <span className="coming-soon-label">{t('container.comingSoon')}</span>
-                          </div>
+                          <span>{t('container.typeFile')}</span>
                         </button>
                       </div>
                     )}
@@ -1242,6 +1244,18 @@ const ContainerDetails: React.FC = () => {
             containerId={id || ''}
             containerColor={container.color}
             editLink={selectedLink && selectedLink.type === 'text' ? selectedLink : undefined}
+          />
+        )
+      }
+
+      {/* Add File Modal */}
+      {
+        container && canEdit && (
+          <AddFileModal
+            isOpen={showAddFileModal}
+            onClose={() => setShowAddFileModal(false)}
+            containerId={container.id}
+            containerColor={containerColor}
           />
         )
       }

@@ -23,6 +23,7 @@ import {
     CircleDot,
     Code,
     FileText,
+    File,
     Download
 } from 'lucide-react';
 import type { Link as LinkType } from '../types';
@@ -159,6 +160,31 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
         URL.revokeObjectURL(url);
     };
 
+    const handleDownloadFile = () => {
+        if (!link.url || link.url === '#') return;
+        
+        try {
+            // Inject fl_attachment to Cloudinary URL to force download
+            // Standard Cloudinary URL: .../upload/v12345/public_id.ext
+            // We want: .../upload/fl_attachment/v12345/public_id.ext
+            let downloadUrl = link.url;
+            if (downloadUrl.includes('cloudinary.com') && !downloadUrl.includes('fl_attachment')) {
+                downloadUrl = downloadUrl.replace('/upload/', '/upload/fl_attachment/');
+            }
+
+            const a = document.createElement('a');
+            a.href = downloadUrl;
+            // Use original name if available
+            a.download = link.fileData?.originalName || link.title;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        } catch (error) {
+            console.error('Download failed:', error);
+            window.open(link.url, '_blank');
+        }
+    };
+
     const handleEmojiSelect = (emoji: string) => {
         if (!onUpdateLink || !currentUserId) return;
         setEmojiPickerOpen(false);
@@ -195,6 +221,8 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                     onSelect(link);
                 } else if (link.type === 'text') {
                     onViewText?.(link);
+                } else if (link.type === 'file') {
+                    handleDownloadFile();
                 }
             }}
             onContextMenu={handleContextMenu}
@@ -220,6 +248,8 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                         />
                     ) : link.type === 'text' ? (
                         <FileText />
+                    ) : link.type === 'file' ? (
+                        <File />
                     ) : faviconUrl ? (
                         <img
                             src={faviconUrl}
@@ -242,7 +272,9 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                 </div>
                 <div className="link-info" style={{ minWidth: 0, flex: 1 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: 0 }}>
-                        <h4 className="font-medium text-gray-900 dark:text-white" style={{ flex: 1, overflowWrap: 'anywhere', whiteSpace: 'pre-wrap' }}>{link.title}</h4>
+                        <h4 className="font-medium text-gray-900 dark:text-white" style={{ flex: 1, overflowWrap: 'anywhere', whiteSpace: 'pre-wrap' }}>
+                            {link.type === 'file' ? (link.fileData?.originalName || link.title) : link.title}
+                        </h4>
                     </div>
 
                     {link.description && (
@@ -289,7 +321,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                         </div>
                     )}
 
-                    {link.type !== 'text' ? (
+                    {link.type === 'link' || !link.type ? (
                         <a
                             href={link.url}
                             target="_blank"
@@ -303,6 +335,16 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
                             <span className="truncate max-w-[200px] md:max-w-xs">{link.url.replace(/^https?:\/\//, '')}</span>
                             <ExternalLink size={12} className="flex-shrink-0" style={{ marginLeft: '2px' }} />
                         </a>
+                    ) : link.type === 'file' ? (
+                        <div className="text-xs text-primary mt-1 inline-flex items-center gap-1.5 align-middle font-medium cursor-pointer" onClick={(e) => {
+                            e.stopPropagation();
+                            handleDownloadFile();
+                        }}>
+                            <span className="truncate uppercase bg-[rgba(var(--primary-rgb),0.1)] px-1.5 py-0.5 rounded text-[10px] tracking-wider">{link.fileData?.format || 'FILE'}</span>
+                            <span>·</span>
+                            <span>{link.fileData?.bytes ? (link.fileData.bytes / 1024 / 1024).toFixed(2) : 0} MB</span>
+                            <Download size={12} className="ml-1" />
+                        </div>
                     ) : (
                         link.content && (
                             <p className="text-xs text-gray-500 mt-1 line-clamp-1 leading-relaxed" style={{ wordBreak: 'break-word', whiteSpace: 'pre-wrap' }}>

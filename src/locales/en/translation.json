@@ -451,6 +451,27 @@
             "leaveError": "Failed to leave container"
         },
         "modals": {
+            "addFile": {
+                "title": "Upload File",
+                "dragDrop": "Click or drag file to this area",
+                "limits": "PDF, DOC, Images (Max 10MB)",
+                "fileTitle": "Title",
+                "description": "Description",
+                "placeholders": {
+                    "title": "File Name",
+                    "description": "Add a short description"
+                },
+                "buttons": {
+                    "upload": "Upload File",
+                    "uploading": "Uploading...",
+                    "success": "Uploaded"
+                },
+                "errors": {
+                    "tooLarge": "File is too large. Max size is {{size}}.",
+                    "noFile": "Please select a file to upload.",
+                    "failed": "File upload failed. Please try again."
+                }
+            },
             "note": {
                 "placeholder": "Write a note..."
             },

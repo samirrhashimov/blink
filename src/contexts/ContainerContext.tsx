@@ -242,10 +242,31 @@ export const ContainerProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
   };
 
+  const deleteCloudinaryFile = async (publicId: string, resourceType?: string) => {
+    try {
+      await fetch('/.netlify/functions/deleteFile', {
+        method: 'POST',
+        body: JSON.stringify({ publicId, resourceType })
+      });
+    } catch (err) {
+      console.error('Failed to delete file from Cloudinary:', err);
+    }
+  };
+
   const deleteLinkFromContainer = async (containerId: string, linkId: string) => {
     try {
       setError(null);
+
+      // Find the link to check if it's a file
+      const targetContainer = containers.find(c => c.id === containerId);
+      const linkToDelete = targetContainer?.links.find(l => l.id === linkId);
+
       await ContainerService.deleteLinkFromContainer(containerId, linkId);
+
+      // If it's a file, delete from Cloudinary in background
+      if (linkToDelete?.type === 'file' && linkToDelete.fileData?.publicId) {
+        deleteCloudinaryFile(linkToDelete.fileData.publicId, linkToDelete.fileData.resourceType);
+      }
 
       // Update local state
       setContainers(prevContainers =>
@@ -268,7 +289,19 @@ export const ContainerProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const deleteLinksFromContainer = async (containerId: string, linkIds: string[]) => {
     try {
       setError(null);
+
+      // Find links to check for files
+      const targetContainer = containers.find(c => c.id === containerId);
+      const linksToDelete = targetContainer?.links.filter(l => linkIds.includes(l.id)) || [];
+
       await ContainerService.deleteLinksFromContainer(containerId, linkIds);
+
+      // Delete files from Cloudinary in background
+      linksToDelete.forEach(link => {
+        if (link.type === 'file' && link.fileData?.publicId) {
+          deleteCloudinaryFile(link.fileData.publicId, link.fileData.resourceType);
+        }
+      });
 
       // Update local state
       setContainers(prevContainers =>
