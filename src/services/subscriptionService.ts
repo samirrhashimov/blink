@@ -54,11 +54,7 @@ export class SubscriptionService {
    * Handle Billing Portal / Cancel
    * Paddle Billing uses standard links or the customer portal
    */
-  static async openCustomerPortal(customerId: string): Promise<void> {
-    // Note: For Paddle Billing, you usually generate a portal URL via Backend 
-    // or use their standard management URLs if enabled.
-    // For now, we'll suggest using the backend to get a URL if needed, 
-    // or direct them to their Paddle email management.
-    alert('Subscription management is available via the link in your email or contact support.');
+  static async openCustomerPortal(): Promise<void> {
+    alert('Please check your email from Paddle to manage your subscription.');
   }
 }
