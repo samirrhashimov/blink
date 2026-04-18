@@ -1,8 +1,29 @@
 {
     "onboarding": {
         "welcomeNote": {
-            "title": "Hoş geldin 👋",
-            "content": "# Merhaba!\n\nBurası senin alanın. Linklerini, notlarını ve dosyalarını tek bir yerde topla - dağınık sekmelerden, kaybolmuş yer imlerinden bir daha bunalma.\n\n## Ne ekleyebilirsin?\n\n- 🔗 **Linkler** - Web'den kaydettiğin her şey. Makale, video, araç, ilham.\n- 📝 **Metinler** - Hızlı bir not, alıntı, fikir taslağı. Markdown desteklenir.\n- 📎 **Dosyalar** - Belge, görsel, PDF.\n\n## Nasıl kullanırsan en iyi sonucu alırsın?\n\nKonteynerleri bir **konu** veya **proje** etrafında oluştur. Örneğin; \"Okuyacaklarım\", \"İş Araçları\", \"Tasarım İlhamları\" gibi. Böylece her şey yerli yerinde olur ve aradığında hemen bulursun.\n\nHazırsan **+ Link Ekle** butonuna bas ve ilk öğeni ekle.\n\n---\n\n*Bu karşılama metnini istediğin zaman silebilirsin.*"
+            "title": "👋 Blink'e Hoş Geldin!",
+            "content": "## Blink'e Hoş Geldin! 🚀\n\nBurası senin alanın. Linklerini, notlarını ve dosyalarını tek bir yerde topla -\ndağınık sekmelerden, kaybolmuş yer imlerinden bir daha bunalma.\n\n## Ne ekleyebilirsin?\n\n- 🔗 **Linkler** - Webden kaydettiğin her şey. Makaleler, videolar, araçlar, ilham.\n- 📝 **Notlar** - Hızlı bir not, bir alıntı, ham bir fikir. Markdown desteklenir.\n- 📎 **Dosyalar** - Belgeler, görseller, PDF'ler.\n\n## En iyi nasıl kullanırsın?\n\nKonteyner'ları bir **konu** veya **proje** etrafında kur - \"Okuma Listesi\",\n\"İş Araçları\" veya \"Tasarım İlhamı\" gibi. Her şey düzenli kalır\nve aradığını her zaman bulursun.\n\nHazır mısın? **+ Link Ekle** butonuna tıkla ve ilk öğeni ekle.\n\n---\n\n*Bu karşılama mesajını istediğin zaman silebilirsin.*"
+        }
+    },
+    "plans": {
+        "gate": {
+            "title": "{{plan}} Planı Gerekli",
+            "desc": "Bu özellik {{required}} planını gerektiriyor. Şu anda {{current}} planındasın.",
+            "cta": "Şimdi Yükselt"
+        },
+        "paywall": {
+            "title": "Planını Seç",
+            "subtitle": "Blink aboneliğiyle daha fazla özelliğin kilidini aç",
+            "currentPlan": "Mevcut planın:",
+            "popular": "En Popüler",
+            "currentBadge": "Mevcut",
+            "free": "Ücretsiz",
+            "month": "ay",
+            "upgrade": "{{plan}}'a Geç",
+            "downgrade": "Ücretsiz Devam Et",
+            "currentBtn": "Mevcut Plan",
+            "comingSoon": "Ödeme entegrasyonu yakında!",
+            "note": "Ödemeler RevenueCat tarafından yönetilir. İstediğin zaman iptal edebilirsin."
         }
     },
     "landing": {

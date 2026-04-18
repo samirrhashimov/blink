@@ -24,6 +24,8 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, containe
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  
+  const isContentFile = link.type === 'file';
   const [tags, setTags] = useState<string[]>(link.tags || []);
   const [tagInput, setTagInput] = useState('');
 
@@ -43,17 +45,19 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, containe
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formData.title.trim() || !formData.url.trim()) {
+    if (!formData.title.trim() || (!isContentFile && !formData.url.trim())) {
       setError(t('container.modals.addLink.errors.required'));
       return;
     }
 
-    // Basic URL validation
-    try {
-      new URL(formData.url);
-    } catch {
-      setError(t('container.modals.addLink.errors.invalidUrl'));
-      return;
+    // Basic URL validation only for links
+    if (!isContentFile) {
+      try {
+        new URL(formData.url);
+      } catch {
+        setError(t('container.modals.addLink.errors.invalidUrl'));
+        return;
+      }
     }
 
     try {
@@ -119,7 +123,7 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, containe
     >
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>{t('container.modals.editLink.title')}</h2>
+          <h2>{isContentFile ? t('container.modals.editFile.title', 'Edit File') : t('container.modals.editLink.title')}</h2>
           <button onClick={onClose} className="modal-close">
             <X className="h-6 w-6" />
           </button>
@@ -132,26 +136,28 @@ const EditLinkModal: React.FC<EditLinkModalProps> = ({ isOpen, onClose, containe
             </div>
           )}
 
-          <div className="form-group">
-            <label htmlFor="edit-url" className="form-label">
-              {t('container.modals.addLink.url')} *
-            </label>
-            <input
-              id="edit-url"
-              name="url"
-              type="url"
-              required
-              value={formData.url}
-              onChange={handleChange}
-              className="form-input"
-              placeholder={t('container.modals.addLink.placeholders.url')}
-              disabled={loading}
-            />
-          </div>
+          {!isContentFile && (
+            <div className="form-group">
+              <label htmlFor="edit-url" className="form-label">
+                {t('container.modals.addLink.url')} *
+              </label>
+              <input
+                id="edit-url"
+                name="url"
+                type="url"
+                required
+                value={formData.url}
+                onChange={handleChange}
+                className="form-input"
+                placeholder={t('container.modals.addLink.placeholders.url')}
+                disabled={loading}
+              />
+            </div>
+          )}
 
           <div className="form-group">
             <label htmlFor="edit-title" className="form-label">
-              {t('container.modals.addLink.linkTitle')} *
+              {isContentFile ? t('container.modals.addFile.fileTitle', 'File Title') : t('container.modals.addLink.linkTitle')} *
               <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginLeft: '10px', float: 'right' }}>
                 {formData.title.length}/100
               </span>

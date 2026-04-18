@@ -904,14 +904,19 @@ const ContainerDetails: React.FC = () => {
                           <span>{t('container.typeText')}</span>
                         </button>
                         <button 
-                          className="add-content-item"
+                          className={`add-content-item ${(!currentUser?.plan || currentUser?.plan === 'starter') ? 'plan-restricted' : ''}`}
                           onClick={() => {
+                            if (!currentUser?.plan || currentUser?.plan === 'starter') {
+                              navigate('/paywall');
+                              return;
+                            }
                             setShowAddFileModal(true);
                             setShowAddDropdown(false);
                           }}
                         >
                           <FileCode size={16} />
                           <span>{t('container.typeFile')}</span>
+                          {(!currentUser?.plan || currentUser?.plan === 'starter') && <span className="pro-badge-mini">PRO</span>}
                         </button>
                       </div>
                     )}
@@ -1172,13 +1177,22 @@ const ContainerDetails: React.FC = () => {
                   )}
                   {isOwner && (
                     <button
-                      onClick={() => setShowWebhooksModal(true)}
-                      className="action-button"
+                      onClick={() => {
+                        if (!currentUser?.plan || currentUser?.plan === 'starter') {
+                          navigate('/paywall');
+                          return;
+                        }
+                        setShowWebhooksModal(true);
+                      }}
+                      className={`action-button ${(!currentUser?.plan || currentUser?.plan === 'starter') ? 'plan-restricted' : ''}`}
                     >
                       <div className="action-icon-wrapper edit-icon">
                         <Webhook size={18} />
                       </div>
-                      <span>{t('container.actions.webhooks')}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
+                        <span>{t('container.actions.webhooks')}</span>
+                        {(!currentUser?.plan || currentUser?.plan === 'starter') && <span className="pro-badge-mini">PRO</span>}
+                      </div>
                       <ChevronRight size={18} className="action-button-arrow" />
                     </button>
                   )}

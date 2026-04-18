@@ -1,3 +1,5 @@
+export type UserPlan = 'starter' | 'pro' | 'pro+';
+
 export interface User {
   uid: string;
   email: string;
@@ -7,6 +9,7 @@ export interface User {
   followers?: string[]; // array of user UIDs
   following?: string[]; // array of user UIDs
   createdAt: Date;
+  plan?: UserPlan; // subscription plan
 }
 
 export type LinkType = 'link' | 'text' | 'file';

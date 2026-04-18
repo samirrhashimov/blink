@@ -29,6 +29,7 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import DeleteAccount from './pages/DeleteAccount';
 import SupportPage from './pages/SupportPage';
 import Profile from './pages/Profile';
+import Paywall from './pages/Paywall';
 
 
 const AppRoutes: React.FC = () => {
@@ -128,6 +129,14 @@ const AppRoutes: React.FC = () => {
           element={
             <ProtectedRoute>
               <Tags />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/paywall"
+          element={
+            <ProtectedRoute>
+              <Paywall />
             </ProtectedRoute>
           }
         />

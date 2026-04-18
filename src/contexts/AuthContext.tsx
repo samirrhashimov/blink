@@ -75,7 +75,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         displayName: finalDisplayName,
         createdAt: new Date(),
         username: username || '',
-        usernameLower: username ? username.toLowerCase() : ''
+        usernameLower: username ? username.toLowerCase() : '',
+        plan: 'starter' // Default plan for all new users
       };
 
       // Only add photoURL if it exists (not undefined)

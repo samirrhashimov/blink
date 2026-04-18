@@ -23,8 +23,13 @@ import {
   Camera,
   AtSign,
   User,
-  Mail
+  Mail,
+  Zap,
+  Crown,
+  Star
 } from 'lucide-react';
+import { getPlanConfig } from '../utils/plans';
+import type { UserPlan } from '../types';
 import SupportButton from '../components/SupportButton';
 import ConfirmModal from '../components/ConfirmModal';
 import { parseNetscapeBookmarks } from '../utils/bookmarkParser';
@@ -486,6 +491,84 @@ const Settings: React.FC = () => {
                 {loading ? t('settings.buttons.updating') : t('settings.buttons.update')}
               </button>
             </div>
+
+            {/* Subscription Plan Sub-Item */}
+            <div className="settings-item settings-item-media" style={{ marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border-color)' }}>
+              <div className="settings-item-info">
+                <h4>{t('settings.plan.title', 'Subscription Plan')}</h4>
+                <p>{t('settings.plan.desc', 'Manage your Blink subscription and unlock more features.')}</p>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
+                  <span
+                    className="settings-plan-badge"
+                    style={{
+                      backgroundColor:
+                        currentUser?.plan === 'pro+' ? '#f59e0b' :
+                          currentUser?.plan === 'pro' ? '#8b5cf6' :
+                            'var(--text-secondary)'
+                    }}
+                  >
+                    {currentUser?.plan === 'pro+' ? <Crown size={13} /> :
+                      currentUser?.plan === 'pro' ? <Zap size={13} /> :
+                        <Star size={13} />}
+                    {getPlanConfig(currentUser?.plan as UserPlan | undefined).name}
+                  </span>
+                  {(!currentUser?.plan || currentUser?.plan === 'starter') && (
+                    <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                      {t('settings.plan.upgradeHint', 'Upgrade to unlock file uploads and more.')}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                {currentUser?.email === 'samirhasimov10@gmail.com' && (
+                  <button
+                    onClick={async () => {
+                      if (!currentUser) return;
+                      try {
+                        const order: UserPlan[] = ['starter', 'pro', 'pro+'];
+                        const currentIdx = order.indexOf((currentUser.plan as UserPlan) ?? 'starter');
+                        const nextPlan = order[(currentIdx + 1) % order.length];
+                        const userRef = doc(db, 'users', currentUser.uid);
+                        await updateDoc(userRef, { plan: nextPlan });
+                        toast.success(`Debug: Plan updated to ${nextPlan}. Reloading...`);
+                        setTimeout(() => window.location.reload(), 1500);
+                      } catch (err: any) {
+                        toast.error('Failed to change plan: ' + err.message);
+                      }
+                    }}
+                    className="btn-secondary"
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    Change Plan (Dev)
+                  </button>
+                )}
+                <button
+                  onClick={() => navigate('/paywall')}
+                  className="btn-primary"
+                  style={{
+                    background:
+                      currentUser?.plan === 'pro+' ? 'linear-gradient(135deg, #f59e0b, #ef4444)' :
+                        currentUser?.plan === 'pro' ? 'linear-gradient(135deg, #8b5cf6, #6366f1)' :
+                          'linear-gradient(135deg, #8b5cf6, #6366f1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    whiteSpace: 'nowrap'
+                  }}
+                >
+                  <Zap size={15} />
+                  {currentUser?.plan === 'starter' || !currentUser?.plan
+                    ? t('settings.plan.upgradeBtn', 'Upgrade Plan')
+                    : t('settings.plan.manageBtn', 'Manage Plan')
+                  }
+                </button>
+              </div>
+            </div>
           </section>
 
           {/* Preferences Section */}
@@ -659,8 +742,6 @@ const Settings: React.FC = () => {
                 </button>
               </div>
             </div>
-
-
           </section>
 
           <section className="settings-section">

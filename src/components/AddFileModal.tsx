@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useContainer } from '../contexts/ContainerContext';
-import { X, UploadCloud, File as FileIcon, AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
+import { X, UploadCloud, File as FileIcon, AlertCircle, CheckCircle2, Loader2, Tag, Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
+import { useAuth } from '../contexts/AuthContext';
+import { canUploadFile, getFileSizeLimit } from '../utils/plans';
+import PlanGate from './PlanGate';
 
 interface AddFileModalProps {
   isOpen: boolean;
@@ -13,6 +16,10 @@ interface AddFileModalProps {
 const AddFileModal: React.FC<AddFileModalProps> = ({ isOpen, onClose, containerId, containerColor }) => {
   const { t } = useTranslation();
   const { addLinkToContainer } = useContainer();
+  const { currentUser } = useAuth();
+
+  const userPlan = currentUser?.plan;
+  const fileSizeLimitMB = getFileSizeLimit(userPlan);
 
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState('');
@@ -21,8 +28,10 @@ const AddFileModal: React.FC<AddFileModalProps> = ({ isOpen, onClose, containerI
   const [status, setStatus] = useState<'idle' | 'uploading' | 'success' | 'error'>('idle');
   const [progress, setProgress] = useState(0);
   const [errorMsg, setErrorMsg] = useState('');
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState('');
 
-  const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+  const MAX_FILE_SIZE = fileSizeLimitMB * 1024 * 1024;
 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -32,11 +41,33 @@ const AddFileModal: React.FC<AddFileModalProps> = ({ isOpen, onClose, containerI
       setFile(null);
       setTitle('');
       setDescription('');
+      setTags([]);
+      setTagInput('');
       setStatus('idle');
       setProgress(0);
       setErrorMsg('');
     }
   }, [isOpen]);
+
+  const handleAddTag = (text?: string) => {
+    const rawInput = text !== undefined ? text : tagInput;
+    const individualTags = rawInput.split(',').map(tag => tag.trim().toLowerCase()).filter(tag => tag !== "");
+
+    setTags(prevTags => {
+      const newTags = [...prevTags];
+      individualTags.forEach(tag => {
+        if (!newTags.includes(tag)) {
+          newTags.push(tag);
+        }
+      });
+      return newTags;
+    });
+    setTagInput('');
+  };
+
+  const removeTag = (tagToRemove: string) => {
+    setTags(tags.filter(t => t !== tagToRemove));
+  };
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -154,6 +185,7 @@ const AddFileModal: React.FC<AddFileModalProps> = ({ isOpen, onClose, containerI
         url: response.secure_url, // Direct link
         type: 'file',
         description: description,
+        tags: tags,
         fileData: {
           originalName: file.name,
           publicId: response.public_id,
@@ -178,6 +210,32 @@ const AddFileModal: React.FC<AddFileModalProps> = ({ isOpen, onClose, containerI
   };
 
   if (!isOpen) return null;
+
+  // Plan check: Starter users cannot upload files
+  if (!canUploadFile(userPlan)) {
+    return (
+      <div
+        className="modal-overlay"
+        onClick={onClose}
+        style={{ '--primary': containerColor } as React.CSSProperties}
+      >
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-header">
+            <h2>{t('container.modals.addFile.title', 'Upload File')}</h2>
+            <button onClick={onClose} className="modal-close">
+              <X className="h-6 w-6" />
+            </button>
+          </div>
+          <div className="modal-body" style={{ padding: '24px' }}>
+            <PlanGate requiredPlan="pro">
+              {/* This is never rendered but keeps PlanGate happy */}
+              <span />
+            </PlanGate>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -293,6 +351,60 @@ const AddFileModal: React.FC<AddFileModalProps> = ({ isOpen, onClose, containerI
               placeholder={t('container.modals.addFile.placeholders.description', 'Add a short description')}
               disabled={status !== 'idle'}
             />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="tags" className="form-label">
+              {t('container.modals.addLink.tags', 'Tags')}
+            </label>
+            <div className="tags-input-wrapper">
+              <div className="tags-list">
+                {tags.map(tag => (
+                  <span key={tag} className="tag-badge">
+                    {tag}
+                    <button type="button" onClick={() => removeTag(tag)} className="remove-tag" disabled={status !== 'idle'}>
+                      <X size={10} />
+                    </button>
+                  </span>
+                ))}
+              </div>
+              <div className="tag-input-field-wrapper">
+                <div className="tag-input-icon">
+                  <Tag size={16} />
+                </div>
+                <input
+                  id="tags"
+                  type="text"
+                  value={tagInput}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (value.endsWith(',')) {
+                      handleAddTag(value);
+                    } else {
+                      setTagInput(value);
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      handleAddTag();
+                    }
+                  }}
+                  className="form-input tag-input-padding"
+                  placeholder={t('container.modals.addLink.placeholders.tags', 'Add tags separated by commas')}
+                  disabled={status !== 'idle'}
+                />
+                <button
+                  type="button"
+                  onClick={() => handleAddTag()}
+                  className="tag-add-btn"
+                  title={t('container.modals.addLink.tooltips.addTag')}
+                  disabled={status !== 'idle'}
+                >
+                  <Plus size={16} />
+                </button>
+              </div>
+            </div>
           </div>
         </form>
 

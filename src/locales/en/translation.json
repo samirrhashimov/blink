@@ -5,6 +5,27 @@
             "content": "# Hello!\n\nThis is your space. Collect your links, notes, and files in one place -\nno more drowning in scattered tabs and lost bookmarks.\n\n## What can you add?\n\n- 🔗 **Links** - Anything you save from the web. Articles, videos, tools, inspiration.\n- 📝 **Texts** - A quick note, a quote, a rough idea. Markdown supported.\n- 📎 **Files** - Documents, images, PDFs.\n\n## How to get the most out of it?\n\nBuild containers around a **topic** or **project** - like \"Reading List\",\n\"Work Tools\", or \"Design Inspiration\". Everything stays organized,\nand you'll always find what you're looking for.\n\nReady? Hit the **+ Add Link** button and add your first item.\n\n---\n\n*You can delete this welcome message whenever you'd like.*"
         }
     },
+    "plans": {
+        "gate": {
+            "title": "{{plan}} Plan Required",
+            "desc": "This feature requires the {{required}} plan. You are currently on the {{current}} plan.",
+            "cta": "Upgrade Now"
+        },
+        "paywall": {
+            "title": "Choose Your Plan",
+            "subtitle": "Unlock more features with a Blink subscription",
+            "currentPlan": "Your current plan:",
+            "popular": "Most Popular",
+            "currentBadge": "Current",
+            "free": "Free",
+            "month": "mo",
+            "upgrade": "Upgrade to {{plan}}",
+            "downgrade": "Continue with Free",
+            "currentBtn": "Current Plan",
+            "comingSoon": "Payment integration coming soon!",
+            "note": "Payments powered by RevenueCat. Cancel anytime."
+        }
+    },
     "landing": {
         "title": "Your links, organized",
         "description": "Blink is the ultimate workspace to store, manage, and collaborate on links with your team. Secure, fast, and beautifully designed.",

@@ -4,6 +4,8 @@ import { X, Save, CheckCircle2, PauseCircle } from 'lucide-react';
 import { FaDiscord, FaSlack } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
 import type { Container } from '../types';
+import { useAuth } from '../contexts/AuthContext';
+import PlanGate, { hasAccess } from './PlanGate';
 
 interface WebhooksModalProps {
   isOpen: boolean;
@@ -57,6 +59,7 @@ const Toggle = ({
 const WebhooksModal: React.FC<WebhooksModalProps> = ({ isOpen, onClose, container }) => {
   const { t } = useTranslation();
   const { updateContainer } = useContainer();
+  const { currentUser } = useAuth();
 
   const [formData, setFormData] = useState({
     discordWebhookUrl: container.discordWebhookUrl || '',
@@ -109,6 +112,32 @@ const WebhooksModal: React.FC<WebhooksModalProps> = ({ isOpen, onClose, containe
   };
 
   if (!isOpen) return null;
+
+  // Plan check: Starter users cannot use webhooks
+  if (!hasAccess(currentUser?.plan, 'pro')) {
+    return (
+      <div
+        className="modal-overlay"
+        onClick={onClose}
+        style={{ '--primary': container.color || '#6366f1' } as React.CSSProperties}
+      >
+        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-header">
+            <h2>{t('container.modals.webhooks.title')}</h2>
+            <button onClick={onClose} className="modal-close">
+              <X className="h-6 w-6" />
+            </button>
+          </div>
+          <div className="modal-body" style={{ padding: '24px' }}>
+            <PlanGate requiredPlan="pro">
+              {/* This is never rendered but keeps PlanGate happy */}
+              <span />
+            </PlanGate>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   const discordConnected = !!formData.discordWebhookUrl.trim();
   const slackConnected = !!formData.slackWebhookUrl.trim();

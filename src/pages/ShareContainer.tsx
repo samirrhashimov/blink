@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
 import { useContainer } from '../contexts/ContainerContext';
@@ -24,10 +24,13 @@ import {
   Share2
 } from 'lucide-react';
 import SEO from '../components/SEO';
+import PlanGate from '../components/PlanGate';
+import { getMaxCollaborators } from '../utils/plans';
 
 const ShareContainer: React.FC = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { currentUser } = useAuth();
   const { containers, updateContainer } = useContainer();
   const toast = useToast();
@@ -69,6 +72,16 @@ const ShareContainer: React.FC = () => {
     e.preventDefault();
 
     if (!id || !currentUser) return;
+
+    const maxCollabs = getMaxCollaborators(currentUser.plan);
+    const authUsersCount = Math.max(0, (container?.authorizedUsers?.length || 1) - 1);
+    const currentCount = authUsersCount + pendingInvites.length;
+
+    if (maxCollabs !== -1 && currentCount >= maxCollabs) {
+      toast.error(t('plans.limitReached', `You have reached your limit of ${maxCollabs} collaborators. Upgrade for more.`));
+      navigate('/paywall');
+      return;
+    }
 
     setLoading(true);
 
@@ -207,7 +220,17 @@ const ShareContainer: React.FC = () => {
             <div className="collaborators-widget" style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               {/* Invite Form Section */}
               <section className="share-section">
-                <form onSubmit={handleSubmit} className="share-invite-form">
+                <div className="section-header" style={{ marginBottom: '16px' }}>
+                  <h3 style={{ fontSize: '1.05rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
+                    <UserPlus size={18} />
+                    {t('container.modals.collaborators.title', 'Collaborators')}
+                  </h3>
+                  <p style={{ margin: '4px 0 0 26px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
+                    {t('share.subtitle')}
+                  </p>
+                </div>
+                <PlanGate requiredPlan="pro">
+                  <form onSubmit={handleSubmit} className="share-invite-form">
                   <div className="form-group">
                     <label className="form-label" htmlFor="invite-input">
                       {t('share.form.label')}
@@ -297,6 +320,7 @@ const ShareContainer: React.FC = () => {
                     </button>
                   </div>
                 </form>
+                </PlanGate>
               </section>
 
               {/* Pending Invitations Section */}
