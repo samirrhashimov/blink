@@ -646,8 +646,14 @@
                 "lifetimeText": "Toplam Görüntüleme",
                 "todayText": "Bugün",
                 "historyText": "Görüntülenme geçmişi",
+                "titleFile": "Dosya Analizi",
+                "analyticsFile": "Dosya Analizi",
+                "lifetimeFile": "Toplam İndirme",
+                "todayFile": "Bugün",
+                "historyFile": "İndirme geçmişi",
                 "clicksShort": "Tıklama",
-                "viewsShort": "Görüntüleme"
+                "viewsShort": "Görüntüleme",
+                "downloadsShort": "İndirme"
             },
             "qrCode": {
                 "title": "QR Kodu",

@@ -646,8 +646,14 @@
                 "lifetimeText": "Lifetime Views",
                 "todayText": "Today",
                 "historyText": "View history",
+                "titleFile": "File Analytics",
+                "analyticsFile": "File Analytics",
+                "lifetimeFile": "Lifetime Downloads",
+                "todayFile": "Today",
+                "historyFile": "Download history",
                 "clicksShort": "Clicks",
-                "viewsShort": "Views"
+                "viewsShort": "Views",
+                "downloadsShort": "Downloads"
             },
             "qrCode": {
                 "title": "QR Code",

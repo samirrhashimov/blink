@@ -164,6 +164,9 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
         if (!link.url || link.url === '#') return;
         
         try {
+            // Track the click
+            onTrackClick?.(link.id);
+
             // Inject fl_attachment to Cloudinary URL to force download
             // Standard Cloudinary URL: .../upload/v12345/public_id.ext
             // We want: .../upload/fl_attachment/v12345/public_id.ext
@@ -497,6 +500,13 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
 
                             {link.type === 'text' && (
                                 <button className="menu-item mobile-hidden-menu-item" onClick={(e) => handleAction(e, handleDownload)}>
+                                    <Download size={16} />
+                                    <span>{t('container.menu.download')}</span>
+                                </button>
+                            )}
+
+                            {link.type === 'file' && (
+                                <button className="menu-item mobile-hidden-menu-item" onClick={(e) => handleAction(e, handleDownloadFile)}>
                                     <Download size={16} />
                                     <span>{t('container.menu.download')}</span>
                                 </button>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, TrendingUp, Clock, MousePointer2, Eye } from 'lucide-react';
+import { X, TrendingUp, Clock, MousePointer2, Eye, Download } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
     XAxis,
@@ -30,11 +30,12 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
     if (!isOpen) return null;
 
     const isText = link.type === 'text';
-    const lifetimeLabel = isText ? t('container.modals.linkStats.lifetimeText') : t('container.modals.linkStats.lifetime');
-    const todayLabel = isText ? t('container.modals.linkStats.todayText') : t('container.modals.linkStats.today');
-    const historyHeader = isText ? t('container.modals.linkStats.historyText') : t('container.modals.linkStats.history');
-    const analyticsHeader = isText ? t('container.modals.linkStats.analyticsText') : t('container.modals.linkStats.analytics');
-    const shortLabel = isText ? t('container.modals.linkStats.viewsShort') : t('container.modals.linkStats.clicksShort');
+    const isFile = link.type === 'file';
+    const lifetimeLabel = isFile ? t('container.modals.linkStats.lifetimeFile', 'Lifetime Downloads') : isText ? t('container.modals.linkStats.lifetimeText') : t('container.modals.linkStats.lifetime');
+    const todayLabel = isFile ? t('container.modals.linkStats.todayFile', 'Today') : isText ? t('container.modals.linkStats.todayText') : t('container.modals.linkStats.today');
+    const historyHeader = isFile ? t('container.modals.linkStats.historyFile', 'Download history') : isText ? t('container.modals.linkStats.historyText') : t('container.modals.linkStats.history');
+    const analyticsHeader = isFile ? t('container.modals.linkStats.analyticsFile', 'File Analytics') : isText ? t('container.modals.linkStats.analyticsText') : t('container.modals.linkStats.analytics');
+    const shortLabel = isFile ? t('container.modals.linkStats.downloadsShort', 'Downloads') : isText ? t('container.modals.linkStats.viewsShort') : t('container.modals.linkStats.clicksShort');
 
     // Prepare data for the chart
     const stats = link.clickStats || {};
@@ -110,7 +111,7 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
                 <div className="stats-cards-row">
                     <div className="premium-stat-card">
                         <div className="stat-card-icon" style={{ color: containerColor, background: `${containerColor}10` }}>
-                            {isText ? <Eye size={24} /> : <MousePointer2 size={24} />}
+                            {isFile ? <Download size={24} /> : isText ? <Eye size={24} /> : <MousePointer2 size={24} />}
                         </div>
                         <div className="stat-card-data">
                             <span className="stat-card-label">{lifetimeLabel}</span>
