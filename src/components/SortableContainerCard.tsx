@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Link as LinkIcon, Users, Lock, Edit, Trash2 } from 'lucide-react';
+import { Link as LinkIcon, Users, Lock, Edit, Trash2, LogOut } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { Container } from '../types';
 
@@ -15,7 +15,9 @@ interface SortableContainerCardProps {
     onClick: (e: React.MouseEvent) => void;
     onEdit?: (container: Container) => void;
     onDelete?: (container: Container) => void;
+    onLeave?: (container: Container) => void;
     canEdit?: boolean;
+    currentUserId?: string;
 }
 
 const SortableContainerCard: React.FC<SortableContainerCardProps> = ({
@@ -27,7 +29,9 @@ const SortableContainerCard: React.FC<SortableContainerCardProps> = ({
     onClick,
     onEdit,
     onDelete,
+    onLeave,
     canEdit = true,
+    currentUserId,
 }) => {
     const { t } = useTranslation();
     const [menuOpen, setMenuOpen] = useState(false);
@@ -176,18 +180,25 @@ const SortableContainerCard: React.FC<SortableContainerCardProps> = ({
                         minWidth: '160px'
                     }}
                 >
-                    {canEdit && (
+                    {container.ownerId === currentUserId ? (
                         <>
-                            <button className="menu-item" onClick={(e) => handleAction(e, () => onEdit?.(container))}>
-                                <Edit size={16} />
-                                <span>{t('container.actions.editContainer')}</span>
-                            </button>
+                            {canEdit && (
+                                <button className="menu-item" onClick={(e) => handleAction(e, () => onEdit?.(container))}>
+                                    <Edit size={16} />
+                                    <span>{t('container.actions.editContainer')}</span>
+                                </button>
+                            )}
                             <div className="menu-divider"></div>
                             <button className="menu-item delete-item" onClick={(e) => handleAction(e, () => onDelete?.(container))}>
                                 <Trash2 size={16} />
                                 <span>{t('container.actions.deleteContainer')}</span>
                             </button>
                         </>
+                    ) : (
+                        <button className="menu-item delete-item" onClick={(e) => handleAction(e, () => onLeave?.(container))}>
+                            <LogOut size={16} />
+                            <span>{t('container.actions.leaveContainer')}</span>
+                        </button>
                     )}
                 </div>,
                 document.body

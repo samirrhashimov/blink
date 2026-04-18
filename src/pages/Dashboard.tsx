@@ -14,6 +14,8 @@ import {
   X,
   Tag
 } from 'lucide-react';
+import { SharingService } from '../services/sharingService';
+import { useToast } from '../contexts/ToastContext';
 import { FiInbox } from "react-icons/fi";
 import blinkLogo from '../assets/blinklogo2.png';
 import NotificationsPanel from '../components/NotificationsPanel';
@@ -46,6 +48,7 @@ const Dashboard: React.FC = () => {
   const { t } = useTranslation();
   const { currentUser } = useAuth();
   const { containers, loading, error, reorderContainers, deleteContainer } = useContainer();
+  const toast = useToast();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
@@ -66,6 +69,22 @@ const Dashboard: React.FC = () => {
   const handleDeleteInitiate = (container: Container) => {
     setSelectedContainer(container);
     setShowDeleteModal(true);
+  };
+
+  const handleLeaveContainer = async (container: Container) => {
+    if (!currentUser) return;
+    
+    const confirmLeave = window.confirm(t('container.modals.leaveContainer.confirm', 'Are you sure you want to leave this shared container?'));
+    if (!confirmLeave) return;
+
+    try {
+      await SharingService.removeUserFromContainer(container.id, currentUser.uid);
+      toast.success(t('container.modals.leaveContainer.success', 'You have left the container.'));
+      // Refresh containers
+      window.location.reload();
+    } catch (err: any) {
+      toast.error(err.message || 'Failed to leave container');
+    }
   };
 
 
@@ -382,6 +401,8 @@ const Dashboard: React.FC = () => {
                         isOpening={openingContainerId === container.id}
                         onEdit={handleEditInitiate}
                         onDelete={handleDeleteInitiate}
+                        onLeave={handleLeaveContainer}
+                        currentUserId={currentUser?.uid}
                         onClick={(e) => {
                           e.preventDefault();
                           handleContainerClick(container.id);
@@ -430,7 +451,12 @@ const Dashboard: React.FC = () => {
             title={t('container.modals.deleteContainer.title')}
             message={t('container.modals.deleteContainer.message', { name: selectedContainer.name })}
             onConfirm={async () => {
-              await deleteContainer(selectedContainer.id);
+              try {
+                await deleteContainer(selectedContainer.id);
+                toast.success(t('container.messages.containerDeleted', 'Container deleted successfully'));
+              } catch (err: any) {
+                toast.error(err.message || 'Failed to delete container');
+              }
             }}
             variant="danger"
             confirmText={t('common.buttons.delete')}

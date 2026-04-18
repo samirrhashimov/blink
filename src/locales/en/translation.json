@@ -514,6 +514,10 @@
                 "message": "Are you sure you want to delete \"{{name}}\"? All links will be permanently deleted.",
                 "confirm": "Delete Container"
             },
+            "leaveContainer": {
+                "confirm": "Are you sure you want to leave this shared container?",
+                "success": "You have left the container."
+            },
             "addLink": {
                 "title": "Add New Link",
                 "url": "URL",
