@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { isMobileDevice } from '../utils/device';
+import { isAppWebView } from '../utils/device';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
@@ -550,7 +550,7 @@ const Settings: React.FC = () => {
                 )}
                 <button
                   onClick={() => {
-                    if (isMobileDevice()) {
+                    if (isAppWebView()) {
                       navigate('/mobile-upgrade');
                     } else {
                       navigate('/paywall');

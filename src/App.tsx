@@ -6,7 +6,7 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { ContainerProvider } from './contexts/ContainerContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { useAuth } from './contexts/AuthContext';
-import { isMobileDevice } from './utils/device';
+import { isAppWebView } from './utils/device';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
@@ -139,7 +139,7 @@ const AppRoutes: React.FC = () => {
           path="/paywall" 
           element={
             <ProtectedRoute>
-              {isMobileDevice() ? <Navigate to="/mobile-upgrade" replace /> : <Paywall />}
+              {isAppWebView() ? <Navigate to="/mobile-upgrade" replace /> : <Paywall />}
             </ProtectedRoute>
           } 
         />
@@ -147,7 +147,7 @@ const AppRoutes: React.FC = () => {
           path="/upgrade" 
           element={
             <ProtectedRoute>
-              {isMobileDevice() ? <Navigate to="/mobile-upgrade" replace /> : <Paywall />}
+              {isAppWebView() ? <Navigate to="/mobile-upgrade" replace /> : <Paywall />}
             </ProtectedRoute>
           } 
         />

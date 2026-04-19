@@ -89,14 +89,25 @@ const Paywall: React.FC = () => {
       </div>
 
       <div className="paywall-current-plan">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <div>
-            <span className="paywall-current-label">
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            <span className="paywall-current-label" style={{ fontWeight: 500, opacity: 0.8 }}>
               {t('plans.paywall.currentPlan', 'Your current plan:')}
             </span>
             <span
               className="plan-badge"
-              style={{ backgroundColor: PLAN_COLORS[userPlan].badge }}
+              style={{ 
+                backgroundColor: `${PLAN_COLORS[userPlan].badge}15`, 
+                color: PLAN_COLORS[userPlan].badge,
+                border: `1px solid ${PLAN_COLORS[userPlan].badge}30`,
+                padding: '6px 12px',
+                borderRadius: '99px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                fontWeight: 600,
+                fontSize: '0.9rem'
+              }}
             >
               {PLAN_ICONS[userPlan]}
               {getPlanDisplayName(userPlan)}

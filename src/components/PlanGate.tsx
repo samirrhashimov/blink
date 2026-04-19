@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Zap, Lock } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
-import { isMobileDevice } from '../utils/device';
+import { isAppWebView } from '../utils/device';
 import type { UserPlan } from '../types';
 import { useTranslation } from 'react-i18next';
 
@@ -44,9 +44,9 @@ const PlanGate: React.FC<PlanGateProps> = ({ requiredPlan, children, inline = fa
     return (
       <div
         className="plan-gate-inline"
-        onClick={() => !isMobileDevice() && navigate('/paywall')}
-        style={{ cursor: isMobileDevice() ? 'default' : 'pointer' }}
-        title={isMobileDevice() ? `Requires ${PLAN_LABELS[requiredPlan]} plan` : `Upgrade to ${PLAN_LABELS[requiredPlan]}`}
+        onClick={() => !isAppWebView() && navigate('/paywall')}
+        style={{ cursor: isAppWebView() ? 'default' : 'pointer' }}
+        title={isAppWebView() ? `Requires ${PLAN_LABELS[requiredPlan]} plan` : `Upgrade to ${PLAN_LABELS[requiredPlan]}`}
       >
         <Lock size={12} />
         <span>{PLAN_LABELS[requiredPlan]}</span>
@@ -71,7 +71,7 @@ const PlanGate: React.FC<PlanGateProps> = ({ requiredPlan, children, inline = fa
         </p>
         <button
           className="plan-gate-btn"
-          onClick={() => navigate(isMobileDevice() ? '/mobile-upgrade' : '/paywall')}
+          onClick={() => navigate(isAppWebView() ? '/mobile-upgrade' : '/paywall')}
         >
           <Zap size={16} />
           {t('plans.gate.cta')}
