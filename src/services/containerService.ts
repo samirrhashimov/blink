@@ -209,28 +209,32 @@ export class ContainerService {
 
         // Basic Info Detection
         const userAgent = window.navigator.userAgent;
-        let device = 'desktop';
-        if (/tablet|ipad/i.test(userAgent)) device = 'tablet';
-        else if (/mobile|iphone|android/i.test(userAgent)) device = 'mobile';
+        let device = 'Desktop';
+        if (/tablet|ipad/i.test(userAgent)) device = 'Tablet';
+        else if (/mobile|iphone|android/i.test(userAgent)) device = 'Mobile';
 
-        let browser = 'other';
+        let browser = 'Other';
         if (userAgent.includes('Chrome')) browser = 'Chrome';
-        else if (userAgent.includes('Safari')) browser = 'Safari';
+        else if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) browser = 'Safari';
         else if (userAgent.includes('Firefox')) browser = 'Firefox';
         else if (userAgent.includes('Edge')) browser = 'Edge';
 
-        // Get Country (Asynchronously from a free public API)
+        // Get Country (More robust way)
         let country = 'Unknown';
         try {
-          // Bu işlem navigasyonu bekletmemeli, o yüzden sonucunu beklemeden devam edebiliriz 
-          // ama Firestore güncellemesi için beklemek daha güvenli.
-          // Ücretsiz limitler için genelde client-side fetch yapılır.
-          const geoRes = await fetch('https://ipapi.co/country/').catch(() => null);
+          // fetch timeout ekleyelim
+          const controller = new AbortController();
+          const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 sn sınırlı
+          
+          const geoRes = await fetch('https://ipapi.co/country/', { signal: controller.signal }).catch(() => null);
+          clearTimeout(timeoutId);
+
           if (geoRes && geoRes.ok) {
             country = await geoRes.text();
+            country = country.trim();
           }
         } catch (e) {
-          console.warn('Geo IP failed');
+          console.warn('Geo IP failed, using Unknown');
         }
 
         const updatedLinks = links.map((link: Link) => {
