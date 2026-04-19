@@ -26,20 +26,23 @@ export class SubscriptionService {
    * @param checkoutUrl Lemon Squeezy Store'dan alınan checkout linki
    */
   static async openCheckout(userId: string, checkoutUrl: string): Promise<void> {
-    if (!window.LemonSqueezy) {
-      // Eğer script henüz yüklenmediyse doğrudan yönlendir
-      const url = new URL(checkoutUrl);
-      url.searchParams.append('checkout[custom][firebaseUID]', userId);
-      window.location.href = url.toString();
-      return;
-    }
+    try {
+      if (!checkoutUrl) {
+        throw new Error('Checkout URL is missing!');
+      }
 
-    // Overlay modunda aç
-    // Custom veriyi URL'e ekleyerek Lemon Squeezy'nin tanımasını sağlıyoruz
-    const url = new URL(checkoutUrl);
-    url.searchParams.append('checkout[custom][firebaseUID]', userId);
-    
-    window.LemonSqueezy.Url.Open(url.toString());
+      // URL'i manuel oluşturuyoruz çünkü Lemon Squeezy kodlanmış parantezleri (%5B %5D) bazen tanımıyor.
+      const separator = checkoutUrl.includes('?') ? '&' : '?';
+      const redirectUrl = encodeURIComponent(`${window.location.origin}/dashboard`);
+      
+      const finalUrl = `${checkoutUrl}${separator}checkout[custom][user_id]=${userId}&checkout[settings][redirect_url]=${redirectUrl}`;
+      
+      console.log('Redirecting to checkout (manual URL):', finalUrl);
+      window.location.href = finalUrl;
+    } catch (error) {
+      console.error('Error in openCheckout:', error);
+      window.location.href = checkoutUrl;
+    }
   }
 
   /**

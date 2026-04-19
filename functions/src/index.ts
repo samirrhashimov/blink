@@ -1,10 +1,7 @@
-import * as functions from "firebase-functions/v2";
+import { onRequest } from "firebase-functions/v2/https";
 import * as admin from "firebase-admin";
 import * as crypto from "crypto";
 import { defineSecret } from "firebase-functions/params";
-
-admin.initializeApp();
-const db = admin.firestore();
 
 // Secret tanımlamaları
 const LEMON_SQUEEZY_WEBHOOK_SECRET = defineSecret("LEMON_SQUEEZY_WEBHOOK_SECRET");
@@ -25,7 +22,7 @@ const verifyLemonSqueezySignature = (signature: string, rawBody: Buffer, secret:
 };
 
 // Webhook Handler
-export const handleLemonSqueezyWebhook = functions.https.onRequest(
+export const handleLemonSqueezyWebhook = onRequest(
   { 
     secrets: [
       LEMON_SQUEEZY_WEBHOOK_SECRET, 
@@ -34,25 +31,35 @@ export const handleLemonSqueezyWebhook = functions.https.onRequest(
     ] 
   },
   async (req, res) => {
+    // Admin yetkisini fonksiyonun içinde başlatalım (Keşif hızını artırmak için)
+    if (admin.apps.length === 0) {
+      admin.initializeApp();
+    }
+    const db = admin.firestore();
+
     const signature = req.headers["x-signature"] as string;
     const webhookSecret = LEMON_SQUEEZY_WEBHOOK_SECRET.value();
 
+    console.log("Full Webhook Body:", JSON.stringify(req.body));
+
     if (!signature || !verifyLemonSqueezySignature(signature, (req as any).rawBody, webhookSecret)) {
-      console.error("Invalid Lemon Squeezy Signature");
+      console.error("Signature mismatch!");
       res.status(401).send("Unauthorized");
       return;
     }
 
     const event = req.body;
-    const eventName = event.meta.event_name;
+    const eventName = event.meta ? event.meta.event_name : "unknown";
     const data = event.data;
 
     try {
-      const customData = event.meta.custom_data || {};
-      const firebaseUID = customData.firebaseUID;
+      const customData = event.meta?.custom_data || {};
+      const firebaseUID = customData.user_id || customData.firebaseUID;
+
+      console.log(`Processing Event: ${eventName} for UID: ${firebaseUID}`);
 
       if (!firebaseUID) {
-        console.warn("No firebaseUID found in webhook metadata");
+        console.warn("CRITICAL: No firebaseUID/user_id found in metadata!");
         res.json({ received: true, message: "No UID" });
         return;
       }
@@ -65,11 +72,11 @@ export const handleLemonSqueezyWebhook = functions.https.onRequest(
 
           let plan = "starter";
           if (status === "active" || status === "on_trial") {
-            // Secret .value() metodu ile okunur
             if (variantId === LEMON_SQUEEZY_PRO_VARIANT_ID.value()) plan = "pro";
             if (variantId === LEMON_SQUEEZY_PRO_PLUS_VARIANT_ID.value()) plan = "pro+";
           }
 
+          console.log(`Updating user ${firebaseUID} to plan: ${plan}`);
           await db.collection("users").doc(firebaseUID).update({
             plan: plan,
             lemonSqueezySubscriptionId: data.id,
@@ -87,10 +94,10 @@ export const handleLemonSqueezyWebhook = functions.https.onRequest(
         }
       }
 
-      res.json({ received: true });
+      res.status(200).json({ received: true });
     } catch (error) {
-      console.error("Webhook processing error:", error);
-      res.status(500).send("Internal Server Error");
+      console.error("Error processing LS webhook:", error);
+      res.status(500).send("Error");
     }
   }
 );
