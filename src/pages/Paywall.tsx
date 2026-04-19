@@ -69,7 +69,11 @@ const Paywall: React.FC = () => {
   };
 
   const handleManageBilling = async () => {
-    alert(t('plans.paywall.portalNote', 'You can manage your subscription through the link in your email or by contacting support.'));
+    if (currentUser?.lemonSqueezyPortalUrl) {
+      window.open(currentUser.lemonSqueezyPortalUrl, '_blank');
+    } else {
+      alert(t('plans.paywall.portalNote', 'You can manage your subscription through the link in your email or by contacting support.'));
+    }
   };
 
   return (

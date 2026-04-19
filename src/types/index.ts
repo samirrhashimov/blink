@@ -10,6 +10,10 @@ export interface User {
   following?: string[]; // array of user UIDs
   createdAt: Date;
   plan?: UserPlan; // subscription plan
+  lemonSqueezySubscriptionId?: string;
+  lemonSqueezyCustomerId?: string;
+  lemonSqueezyPortalUrl?: string; // URL for managing subscription via LS portal
+  lemonSqueezyUpdatePaymentUrl?: string; // URL for updating payment method
 }
 
 export type LinkType = 'link' | 'text' | 'file';

@@ -77,10 +77,13 @@ export const handleLemonSqueezyWebhook = onRequest(
           }
 
           console.log(`Updating user ${firebaseUID} to plan: ${plan}`);
+          const urls = data.attributes.urls || {};
           await db.collection("users").doc(firebaseUID).update({
             plan: plan,
             lemonSqueezySubscriptionId: data.id,
-            lemonSqueezyCustomerId: data.attributes.customer_id
+            lemonSqueezyCustomerId: data.attributes.customer_id,
+            lemonSqueezyPortalUrl: urls.customer_portal || null,
+            lemonSqueezyUpdatePaymentUrl: urls.update_payment_method || null
           });
           break;
         }

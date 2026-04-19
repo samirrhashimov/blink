@@ -550,9 +550,7 @@ const Settings: React.FC = () => {
                 )}
                 <button
                   onClick={() => {
-                    if (currentUser?.plan && currentUser.plan !== 'starter') {
-                      alert(t('plans.paywall.portalNote', 'You can manage your subscription through the link in your email or by contacting support.'));
-                    } else if (isMobileDevice()) {
+                    if (isMobileDevice()) {
                       navigate('/mobile-upgrade');
                     } else {
                       navigate('/paywall');

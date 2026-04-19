@@ -25,7 +25,8 @@ import {
   query,
   where,
   getDocs,
-  arrayRemove
+  arrayRemove,
+  onSnapshot
 } from 'firebase/firestore';
 import { auth, db } from '../firebase/config';
 import type { User } from '../types';
@@ -298,17 +299,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+    let unsubscribeUser: (() => void) | undefined;
+
+    const unsubscribeAuth = onAuthStateChanged(auth, async (firebaseUser) => {
       if (firebaseUser) {
-        const userData = await createUserDocument(firebaseUser);
-        setCurrentUser(userData);
+        // Initial creation if document doesn't exist
+        await createUserDocument(firebaseUser);
+        
+        // Setup real-time listener for current user data
+        const userRef = doc(db, 'users', firebaseUser.uid);
+        unsubscribeUser = onSnapshot(userRef, (userSnap: any) => {
+          if (userSnap.exists()) {
+            setCurrentUser(userSnap.data() as User);
+          }
+          setLoading(false);
+        }, (error: any) => {
+          console.error("User document sync error:", error);
+          setLoading(false);
+        });
       } else {
+        if (unsubscribeUser) unsubscribeUser();
         setCurrentUser(null);
+        setLoading(false);
       }
-      setLoading(false);
     });
 
-    return unsubscribe;
+    return () => {
+      unsubscribeAuth();
+      if (unsubscribeUser) unsubscribeUser();
+    };
   }, []);
 
   const refreshUserProfile = async () => {
