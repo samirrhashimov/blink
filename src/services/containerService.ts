@@ -196,7 +196,7 @@ export class ContainerService {
     }
   }
 
-  // Track a link click
+  // Track a link click with optional detailed stats
   static async trackLinkClick(containerId: string, linkId: string): Promise<void> {
     try {
       const containerRef = doc(db, CONTAINERS_COLLECTION, containerId);
@@ -207,15 +207,59 @@ export class ContainerService {
         const links = containerData.links || [];
         const today = new Date().toISOString().split('T')[0];
 
+        // Basic Info Detection
+        const userAgent = window.navigator.userAgent;
+        let device = 'desktop';
+        if (/tablet|ipad/i.test(userAgent)) device = 'tablet';
+        else if (/mobile|iphone|android/i.test(userAgent)) device = 'mobile';
+
+        let browser = 'other';
+        if (userAgent.includes('Chrome')) browser = 'Chrome';
+        else if (userAgent.includes('Safari')) browser = 'Safari';
+        else if (userAgent.includes('Firefox')) browser = 'Firefox';
+        else if (userAgent.includes('Edge')) browser = 'Edge';
+
+        // Get Country (Asynchronously from a free public API)
+        let country = 'Unknown';
+        try {
+          // Bu işlem navigasyonu bekletmemeli, o yüzden sonucunu beklemeden devam edebiliriz 
+          // ama Firestore güncellemesi için beklemek daha güvenli.
+          // Ücretsiz limitler için genelde client-side fetch yapılır.
+          const geoRes = await fetch('https://ipapi.co/country/').catch(() => null);
+          if (geoRes && geoRes.ok) {
+            country = await geoRes.text();
+          }
+        } catch (e) {
+          console.warn('Geo IP failed');
+        }
+
         const updatedLinks = links.map((link: Link) => {
           if (link.id === linkId) {
             const currentStats = link.clickStats || {};
+            const detailedStats = link.detailedStats || {};
+            const todayDetailed = detailedStats[today] || {
+              count: 0,
+              countries: {},
+              devices: {},
+              browsers: {}
+            };
+
+            // Update aggregates
+            todayDetailed.count += 1;
+            todayDetailed.countries[country] = (todayDetailed.countries[country] || 0) + 1;
+            todayDetailed.devices[device] = (todayDetailed.devices[device] || 0) + 1;
+            todayDetailed.browsers[browser] = (todayDetailed.browsers[browser] || 0) + 1;
+
             return {
               ...link,
               clicks: (link.clicks || 0) + 1,
               clickStats: {
                 ...currentStats,
                 [today]: (currentStats[today] || 0) + 1
+              },
+              detailedStats: {
+                ...detailedStats,
+                [today]: todayDetailed
               },
               updatedAt: new Date()
             };
@@ -230,7 +274,6 @@ export class ContainerService {
       }
     } catch (error) {
       console.error('Error tracking link click:', error);
-      // We don't throw here to avoid interrupting the user's navigation
     }
   }
 

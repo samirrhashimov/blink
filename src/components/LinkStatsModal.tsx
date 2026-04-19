@@ -1,5 +1,6 @@
 import React from 'react';
-import { X, TrendingUp, Clock, MousePointer2, Eye, Download } from 'lucide-react';
+import { X, TrendingUp, Clock, MousePointer2, Eye, Download, Zap } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
     XAxis,
@@ -8,8 +9,14 @@ import {
     Tooltip,
     ResponsiveContainer,
     AreaChart,
-    Area
+    Area,
+    PieChart,
+    Pie,
+    Cell,
+    BarChart,
+    Bar
 } from 'recharts';
+import { useAuth } from '../contexts/AuthContext';
 import type { Link } from '../types';
 
 interface LinkStatsModalProps {
@@ -26,6 +33,10 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
     containerColor = '#6366f1'
 }) => {
     const { t } = useTranslation();
+    const navigate = useNavigate();
+
+    const { currentUser } = useAuth();
+    const userPlan = currentUser?.plan || 'starter';
 
     if (!isOpen) return null;
 
@@ -37,46 +48,72 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
     const analyticsHeader = isFile ? t('container.modals.linkStats.analyticsFile', 'File Analytics') : isText ? t('container.modals.linkStats.analyticsText') : t('container.modals.linkStats.analytics');
     const shortLabel = isFile ? t('container.modals.linkStats.downloadsShort', 'Downloads') : isText ? t('container.modals.linkStats.viewsShort') : t('container.modals.linkStats.clicksShort');
 
+    // --- PLAN BASED LIMITS ---
+    let limitDays = 7;
+    if (userPlan === 'pro') limitDays = 90;
+    if (userPlan === 'pro+') limitDays = 3650; // Effectively unlimited
+
     // Prepare data for the chart
     const stats = link.clickStats || {};
-    const sortedDates = Object.keys(stats).sort();
     const today = new Date().toISOString().split('T')[0];
     const clicksToday = stats[today] || 0;
 
     let chartData = [];
-    if (sortedDates.length === 0) {
-        for (let i = 6; i >= 0; i--) {
-            const date = new Date();
-            date.setDate(date.getDate() - i);
-            chartData.push({
-                date: date.toISOString().split('T')[0],
-                clicks: 0
-            });
-        }
-    } else {
-        const startDate = new Date(sortedDates[0]);
-        // Always show at least last 7 days even if empty, or until today
-        const endDate = new Date();
-        const current = new Date(startDate);
+    const endDate = new Date();
+    const startDate = new Date();
+    startDate.setDate(endDate.getDate() - (limitDays - 1));
 
-        // Ensure we show at least a week of context if the link is new
-        if (chartData.length < 7 && sortedDates.length > 0) {
-            const sevenDaysAgo = new Date();
-            sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
-            if (startDate > sevenDaysAgo) {
-                current.setTime(sevenDaysAgo.getTime());
-            }
-        }
-
-        while (current <= endDate) {
-            const dateStr = current.toISOString().split('T')[0];
-            chartData.push({
-                date: dateStr,
-                clicks: stats[dateStr] || 0
-            });
-            current.setDate(current.getDate() + 1);
-        }
+    let current = new Date(startDate);
+    while (current <= endDate) {
+        const dateStr = current.toISOString().split('T')[0];
+        chartData.push({
+            date: dateStr,
+            clicks: stats[dateStr] || 0
+        });
+        current.setDate(current.getDate() + 1);
     }
+
+    // --- ADVANCED STATS (PRO+) ---
+    const getAdvancedData = (key: 'countries' | 'devices' | 'browsers') => {
+        const aggregated: Record<string, number> = {};
+        const dStats = link.detailedStats || {};
+        
+        // Filter detailed stats within plan limit dates
+        Object.keys(dStats).forEach(date => {
+            if (date >= startDate.toISOString().split('T')[0]) {
+                const dayData = dStats[date][key] || {};
+                Object.keys(dayData).forEach(item => {
+                    aggregated[item] = (aggregated[item] || 0) + dayData[item];
+                });
+            }
+        });
+
+        return Object.keys(aggregated).map(name => ({ name, value: aggregated[name] })).sort((a,b) => b.value - a.value).slice(0, 5);
+    };
+
+    const countryData = getAdvancedData('countries');
+    const deviceData = getAdvancedData('devices');
+    const COLORS = [containerColor, '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+
+    // --- EXPORT LOGIC ---
+    const handleExport = () => {
+        if (userPlan === 'starter') return;
+        
+        const headers = ['Date', 'Clicks'];
+        const rows = chartData.map(d => [d.date, d.clicks]);
+        
+        const csvContent = "data:text/csv;charset=utf-8," 
+            + headers.join(",") + "\n"
+            + rows.map(e => e.join(",")).join("\n");
+            
+        const encodedUri = encodeURI(csvContent);
+        const linkElem = document.createElement("a");
+        linkElem.setAttribute("href", encodedUri);
+        linkElem.setAttribute("download", `stats_${link.title}_${today}.csv`);
+        document.body.appendChild(linkElem);
+        linkElem.click();
+        document.body.removeChild(linkElem);
+    };
 
     const formatXAxis = (tickItem: string) => {
         const date = new Date(tickItem);
@@ -130,8 +167,17 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
                 </div>
 
                 <div className="premium-chart-area">
-                    <h3 className="chart-section-title">{historyHeader}</h3>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                        <h3 className="chart-section-title" style={{ margin: 0 }}>{historyHeader} ({limitDays} {t('plans.paywall.days', 'days')})</h3>
+                        {userPlan !== 'starter' && (
+                            <button onClick={handleExport} className="export-btn-stats">
+                                <Download size={14} />
+                                {t('common.export', 'Export')}
+                            </button>
+                        )}
+                    </div>
                     <div className="chart-wrapper-inner">
+                        {/* CHART CONTENT ... */}
                         <ResponsiveContainer width="100%" height="100%">
                             <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
                                 <defs>
@@ -181,6 +227,68 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
                         </ResponsiveContainer>
                     </div>
                 </div>
+
+                {userPlan === 'pro+' && (
+                    <div className="advanced-analytics-grid">
+                        <div className="advanced-chart-box">
+                            <h4>{t('plans.paywall.countries', 'Countries')}</h4>
+                            <div style={{ height: '200px' }}>
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <PieChart>
+                                        <Pie
+                                            data={countryData}
+                                            cx="50%"
+                                            cy="50%"
+                                            innerRadius={60}
+                                            outerRadius={80}
+                                            paddingAngle={5}
+                                            dataKey="value"
+                                        >
+                                            {countryData.map((_entry, index) => (
+                                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                            ))}
+                                        </Pie>
+                                        <Tooltip />
+                                    </PieChart>
+                                </ResponsiveContainer>
+                            </div>
+                            <div className="mini-legend">
+                                {countryData.map((d, i) => (
+                                    <div key={d.name} className="legend-item">
+                                        <span className="dot" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
+                                        <span className="name">{d.name}</span>
+                                        <span className="val">{d.value}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+
+                        <div className="advanced-chart-box">
+                            <h4>{t('plans.paywall.devices', 'Devices')}</h4>
+                            <div style={{ height: '200px' }}>
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart data={deviceData} layout="vertical" margin={{ left: -20 }}>
+                                        <XAxis type="number" hide />
+                                        <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#94a3b8' }} width={70} />
+                                        <Tooltip cursor={{ fill: 'transparent' }} />
+                                        <Bar dataKey="value" radius={[0, 4, 4, 0]}>
+                                            {deviceData.map((_entry, index) => (
+                                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                            ))}
+                                        </Bar>
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
+                        </div>
+                    </div>
+                )}
+                
+                {userPlan === 'starter' && (
+                    <div className="starter-limit-banner" onClick={() => navigate('/paywall')}>
+                        <span>{t('plans.paywall.limitNote', 'Upgrade to Pro to see up to 90 days of history')}</span>
+                        <Zap size={14} />
+                    </div>
+                )}
             </div>
         </div>
     );

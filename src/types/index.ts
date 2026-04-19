@@ -33,7 +33,13 @@ export interface Link {
   tags?: string[];
   isPinned?: boolean;
   clicks?: number;
-  clickStats?: Record<string, number>; // Format: { "YYYY-MM-DD": count }
+  clickStats?: Record<string, number>; // Legacy simple count: { "YYYY-MM-DD": count }
+  detailedStats?: Record<string, {
+    count: number;
+    countries: Record<string, number>; // { "US": 5, "TR": 2 }
+    devices: Record<string, number>;   // { "mobile": 4, "desktop": 3 }
+    browsers: Record<string, number>;  // { "Chrome": 5, "Safari": 2 }
+  }>;
   note?: string;
   emojis?: Record<string, string>; // Format: { "userId": "emoji" }
   githubData?: {
