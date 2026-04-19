@@ -1,58 +1,51 @@
 declare global {
   interface Window {
-    Paddle: any;
+    LemonSqueezy: any;
   }
 }
 
 export class SubscriptionService {
-  private static PADDLE_CLIENT_TOKEN = import.meta.env.VITE_PADDLE_CLIENT_TOKEN || 'test_token_placeholder';
-
   /**
-   * Initialize Paddle.js
+   * Initialize LemonSqueezy (Overlay kurulumu)
    */
   static async initialize(): Promise<void> {
-    if (window.Paddle) {
-      window.Paddle.Initialize({ 
-        token: this.PADDLE_CLIENT_TOKEN
+    if (window.LemonSqueezy) {
+      window.LemonSqueezy.Setup({
+        eventHandler: (event: any) => {
+          if (event.event === 'Checkout.Success') {
+            console.log('Lemon Squeezy Checkout Success');
+          }
+        }
       });
     }
   }
 
   /**
-   * Open Paddle Checkout
+   * Open Lemon Squeezy Checkout
+   * @param userId Firebase User ID (metadataya eklenecek)
+   * @param checkoutUrl Lemon Squeezy Store'dan alınan checkout linki
    */
-  static async openCheckout(userId: string, email: string, priceId: string): Promise<void> {
-    if (!window.Paddle) {
-      console.error('Paddle.js not loaded');
+  static async openCheckout(userId: string, checkoutUrl: string): Promise<void> {
+    if (!window.LemonSqueezy) {
+      // Eğer script henüz yüklenmediyse doğrudan yönlendir
+      const url = new URL(checkoutUrl);
+      url.searchParams.append('checkout[custom][firebaseUID]', userId);
+      window.location.href = url.toString();
       return;
     }
 
-    window.Paddle.Checkout.open({
-      settings: {
-        displayMode: 'overlay',
-        theme: 'light',
-        locale: 'en'
-      },
-      customer: {
-        email: email
-      },
-      items: [
-        {
-          priceId: priceId,
-          quantity: 1
-        }
-      ],
-      customData: {
-        firebaseUID: userId
-      }
-    });
+    // Overlay modunda aç
+    // Custom veriyi URL'e ekleyerek Lemon Squeezy'nin tanımasını sağlıyoruz
+    const url = new URL(checkoutUrl);
+    url.searchParams.append('checkout[custom][firebaseUID]', userId);
+    
+    window.LemonSqueezy.Url.Open(url.toString());
   }
 
   /**
-   * Handle Billing Portal / Cancel
-   * Paddle Billing uses standard links or the customer portal
+   * Billing Portal (Lemon Squeezy'de genelde her kullanıcının özel bir portal linki olur)
    */
   static async openCustomerPortal(): Promise<void> {
-    alert('Please check your email from Paddle to manage your subscription.');
+    alert('Please check your email from Lemon Squeezy to manage your subscription or contact support.');
   }
 }

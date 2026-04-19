@@ -7,74 +7,82 @@ admin.initializeApp();
 const db = admin.firestore();
 
 // Secret tanımlamaları
-const PADDLE_WEBHOOK_SECRET = defineSecret("PADDLE_WEBHOOK_SECRET");
-const PADDLE_PRO_PRICE_ID = defineSecret("PADDLE_PRO_PRICE_ID");
-const PADDLE_PRO_PLUS_PRICE_ID = defineSecret("PADDLE_PRO_PLUS_PRICE_ID");
+const LEMON_SQUEEZY_WEBHOOK_SECRET = defineSecret("LEMON_SQUEEZY_WEBHOOK_SECRET");
+const LEMON_SQUEEZY_PRO_VARIANT_ID = defineSecret("LEMON_SQUEEZY_PRO_VARIANT_ID");
+const LEMON_SQUEEZY_PRO_PLUS_VARIANT_ID = defineSecret("LEMON_SQUEEZY_PRO_PLUS_VARIANT_ID");
 
 /**
- * PADDLE WEBHOOK DOĞRULAMA
+ * LEMON SQUEEZY WEBHOOK DOĞRULAMA
  */
-const verifyPaddleSignature = (signature: string, body: string, secret: string) => {
-  const [timestampStr, hmac] = signature.split(";").map((part) => part.split("=")[1]);
-  const signedPayload = `${timestampStr}:${body}`;
-  const expectedHmac = crypto
-    .createHmac("sha256", secret)
-    .update(signedPayload)
-    .digest("hex");
-  
-  return hmac === expectedHmac;
+const verifyLemonSqueezySignature = (signature: string, rawBody: Buffer, secret: string) => {
+  const hmac = crypto.createHmac("sha256", secret);
+  const digest = hmac.update(rawBody).digest("hex");
+  try {
+    return crypto.timingSafeEqual(Buffer.from(signature), Buffer.from(digest));
+  } catch (e) {
+    return false;
+  }
 };
 
 // Webhook Handler
-export const handlePaddleWebhook = functions.https.onRequest(
-  { secrets: [PADDLE_WEBHOOK_SECRET, PADDLE_PRO_PRICE_ID, PADDLE_PRO_PLUS_PRICE_ID] },
+export const handleLemonSqueezyWebhook = functions.https.onRequest(
+  { 
+    secrets: [
+      LEMON_SQUEEZY_WEBHOOK_SECRET, 
+      LEMON_SQUEEZY_PRO_VARIANT_ID, 
+      LEMON_SQUEEZY_PRO_PLUS_VARIANT_ID
+    ] 
+  },
   async (req, res) => {
-    const signature = req.headers["paddle-signature"] as string;
-    const webhookSecret = PADDLE_WEBHOOK_SECRET.value();
+    const signature = req.headers["x-signature"] as string;
+    const webhookSecret = LEMON_SQUEEZY_WEBHOOK_SECRET.value();
 
-    if (!signature || !verifyPaddleSignature(signature, req.rawBody.toString(), webhookSecret)) {
-      console.error("Invalid Paddle Signature");
+    if (!signature || !verifyLemonSqueezySignature(signature, (req as any).rawBody, webhookSecret)) {
+      console.error("Invalid Lemon Squeezy Signature");
       res.status(401).send("Unauthorized");
       return;
     }
 
     const event = req.body;
-    const eventType = event.event_type;
+    const eventName = event.meta.event_name;
     const data = event.data;
 
     try {
-      switch (eventType) {
-        case "subscription.created":
-        case "subscription.updated": {
-          const customData = data.custom_data || {};
-          const firebaseUID = customData.firebaseUID;
-          const status = data.status;
-          const priceId = data.items[0].price.id;
+      const customData = event.meta.custom_data || {};
+      const firebaseUID = customData.firebaseUID;
 
-          if (firebaseUID) {
-            let plan = "starter";
-            if (status === "active" || status === "trialing") {
-              if (priceId === PADDLE_PRO_PRICE_ID.value()) plan = "pro";
-              if (priceId === PADDLE_PRO_PLUS_PRICE_ID.value()) plan = "pro+";
-            }
-            
-            await db.collection("users").doc(firebaseUID).update({
-              plan: plan,
-              paddleSubscriptionId: data.id,
-              paddleCustomerId: data.customer_id
-            });
+      if (!firebaseUID) {
+        console.warn("No firebaseUID found in webhook metadata");
+        res.json({ received: true, message: "No UID" });
+        return;
+      }
+
+      switch (eventName) {
+        case "subscription_created":
+        case "subscription_updated": {
+          const status = data.attributes.status;
+          const variantId = data.attributes.variant_id.toString();
+
+          let plan = "starter";
+          if (status === "active" || status === "on_trial") {
+            // Secret .value() metodu ile okunur
+            if (variantId === LEMON_SQUEEZY_PRO_VARIANT_ID.value()) plan = "pro";
+            if (variantId === LEMON_SQUEEZY_PRO_PLUS_VARIANT_ID.value()) plan = "pro+";
           }
+
+          await db.collection("users").doc(firebaseUID).update({
+            plan: plan,
+            lemonSqueezySubscriptionId: data.id,
+            lemonSqueezyCustomerId: data.attributes.customer_id
+          });
           break;
         }
 
-        case "subscription.canceled": {
-          const customData = data.custom_data || {};
-          const firebaseUID = customData.firebaseUID;
-          if (firebaseUID) {
-            await db.collection("users").doc(firebaseUID).update({
-              plan: "starter"
-            });
-          }
+        case "subscription_cancelled":
+        case "subscription_expired": {
+          await db.collection("users").doc(firebaseUID).update({
+            plan: "starter"
+          });
           break;
         }
       }

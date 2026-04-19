@@ -51,15 +51,15 @@ const Paywall: React.FC = () => {
     
     setLoading(plan);
     try {
-      const priceId = plan === 'pro+' 
-        ? import.meta.env.VITE_PADDLE_PRO_PLUS_PRICE_ID 
-        : import.meta.env.VITE_PADDLE_PRO_PRICE_ID;
+      const checkoutUrl = plan === 'pro+' 
+        ? import.meta.env.VITE_LEMON_SQUEEZY_PRO_PLUS_CHECKOUT_URL 
+        : import.meta.env.VITE_LEMON_SQUEEZY_PRO_CHECKOUT_URL;
         
-      if (!priceId) {
-        throw new Error('Price ID not configured');
+      if (!checkoutUrl) {
+        throw new Error('Checkout URL not configured');
       }
 
-      await SubscriptionService.openCheckout(currentUser.uid, currentUser.email, priceId);
+      await SubscriptionService.openCheckout(currentUser.uid, checkoutUrl);
     } catch (error) {
       console.error('Upgrade error:', error);
       alert(t('plans.paywall.error', 'Failed to initiate payment. Please try again.'));
@@ -69,8 +69,6 @@ const Paywall: React.FC = () => {
   };
 
   const handleManageBilling = async () => {
-    // Paddle handle'ları genellikle email üzerinden veya portal linki ile yönetilir.
-    // Dashboard'da müşteriye özel bir buton yerine yardım mesajı gösterebiliriz.
     alert(t('plans.paywall.portalNote', 'You can manage your subscription through the link in your email or by contacting support.'));
   };
 
@@ -153,7 +151,7 @@ const Paywall: React.FC = () => {
                       <span className="paywall-price-free">{t('plans.paywall.free', 'Free')}</span>
                     ) : (
                       <>
-                        <span className="paywall-price-amount">${plan.price}</span>
+                        <span className="paywall-price-amount">${plan.price.toFixed(2)}</span>
                         <span className="paywall-price-period">/{t('plans.paywall.month', 'mo')}</span>
                       </>
                     )}
@@ -209,7 +207,7 @@ const Paywall: React.FC = () => {
       </div>
 
       <p className="paywall-footer-note">
-        {t('plans.paywall.note', 'Payment secured by Stripe. Cancel anytime.')}
+        {t('plans.paywall.note', 'Payment secured by Lemon Squeezy. Cancel anytime.')}
       </p>
     </div>
   );

@@ -27,7 +27,7 @@
             "error": "Failed to initiate payment. Please try again.",
             "portalError": "Failed to open billing portal.",
             "portalNote": "You can manage your subscription through the link in your email or by contacting support.",
-            "note": "Payments secured by Paddle. Cancel anytime."
+            "note": "Payments secured by Lemon Squeezy. Cancel anytime."
         }
     },
     "landing": {
