@@ -520,8 +520,16 @@
                 "confirm": "Konteyneri Sil"
             },
             "leaveContainer": {
-                "confirm": "Bu paylaşılan konteynerden ayrılmak istediğinizden emin misiniz?",
-                "success": "Konteynerden başarıyla ayrıldınız."
+                "confirm": "Bu paylaşılan konteynerden ayrılmak istediğinizden emin misiniz? Kotanızı boşaltmak için buraya yüklediğiniz tüm dosyalar silinecektir.",
+                "success": "Konteynerden ayrıldınız ve dosyalarınız temizlendi."
+            },
+            "transfer": {
+                "title": "Kullanıcı Çıkarma",
+                "desc": "Çıkardığınız kullanıcının {{count}} dosyası ({{size}}) bulunuyor. Bu dosyalara ne yapmak istersiniz?",
+                "keep": "Bana Aktar",
+                "keepDesc": "Dosyalar sizin depolama kotanızdan düşecektir.",
+                "delete": "Dosyaları Sil",
+                "deleteDesc": "Kullanıcının dosyalarını kalıcı olarak siler."
             },
             "addLink": {
                 "title": "Yeni Link Ekle",

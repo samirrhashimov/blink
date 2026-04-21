@@ -1,4 +1,4 @@
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc, increment } from 'firebase/firestore';
 import { db } from '../firebase/config';
 
 export class UserService {
@@ -57,5 +57,18 @@ export class UserService {
       return emailName.charAt(0).toUpperCase() + emailName.slice(1);
     }
     return 'Unknown User';
+  }
+  /**
+   * Update user's storage usage atomically
+   */
+  static async updateStorageUsage(userId: string, bytes: number): Promise<void> {
+    try {
+      const userRef = doc(db, 'users', userId);
+      await updateDoc(userRef, {
+        storageUsage: increment(bytes)
+      });
+    } catch (error) {
+      console.error('Error updating storage usage:', error);
+    }
   }
 }

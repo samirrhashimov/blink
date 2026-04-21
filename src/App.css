@@ -7567,6 +7567,7 @@ input:checked+.slider:before {
   line-height: 1.5;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -8264,13 +8265,19 @@ input:checked+.slider:before {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.paywall-plan-card {
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
 .paywall-plan-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+  border-color: rgba(255, 255, 255, 0.6);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
 }
 
 .dark .paywall-plan-card:hover {
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.05);
 }
 
 .paywall-plan-card--current {
@@ -8405,8 +8412,7 @@ input:checked+.slider:before {
 }
 
 .paywall-btn--upgrade:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.1);
+  filter: brightness(1.15);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
 }
 

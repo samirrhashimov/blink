@@ -10,9 +10,11 @@ import {
   where,
   orderBy,
   onSnapshot,
-  serverTimestamp
+  serverTimestamp,
+  increment
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
+import { UserService } from './userService';
 import type { Container, Link } from '../types';
 
 const CONTAINERS_COLLECTION = 'vaults';
@@ -152,8 +154,17 @@ export class ContainerService {
           id: linkId,
           ...cleanLinkData,
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
+          createdBy: cleanLinkData.createdBy || 'unknown'
         };
+
+        // If it's a file, update the uploader's quota
+        if (newLink.type === 'file' && newLink.fileData?.bytes) {
+          const uploaderId = newLink.createdBy;
+          if (uploaderId && uploaderId !== 'unknown') {
+            await UserService.updateStorageUsage(uploaderId, newLink.fileData.bytes);
+          }
+        }
 
         await updateDoc(containerRef, {
           links: [...currentLinks, newLink],
@@ -290,8 +301,13 @@ export class ContainerService {
       if (containerSnap.exists()) {
         const containerData = containerSnap.data();
         const links = containerData.links || [];
-
+        const linkToDelete = links.find((link: Link) => link.id === linkId);
         const updatedLinks = links.filter((link: Link) => link.id !== linkId);
+
+        // If it was a file, decrement the uploader's quota
+        if (linkToDelete && linkToDelete.type === 'file' && linkToDelete.fileData?.bytes && linkToDelete.createdBy) {
+          await UserService.updateStorageUsage(linkToDelete.createdBy, -linkToDelete.fileData.bytes);
+        }
 
         await updateDoc(containerRef, {
           links: updatedLinks,
@@ -425,10 +441,18 @@ export class ContainerService {
         const links = containerData.links || [];
 
         const initialCount = links.length;
+        const linksToRemove = links.filter((link: Link) => linkIds.includes(link.id));
         const updatedLinks = links.filter((link: Link) => !linkIds.includes(link.id));
 
         if (updatedLinks.length === initialCount) {
           console.warn('No links were removed. Check if link IDs are correct.');
+        }
+
+        // Subtract storage usage for removed files
+        for (const link of linksToRemove) {
+          if (link.type === 'file' && link.fileData?.bytes && link.createdBy) {
+            await UserService.updateStorageUsage(link.createdBy, -link.fileData.bytes);
+          }
         }
 
         await updateDoc(containerRef, {

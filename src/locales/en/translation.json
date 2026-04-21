@@ -520,8 +520,16 @@
                 "confirm": "Delete Container"
             },
             "leaveContainer": {
-                "confirm": "Are you sure you want to leave this shared container?",
-                "success": "You have left the container."
+                "confirm": "Are you sure you want to leave this shared container? Any files you uploaded here will be deleted to clear your storage quota.",
+                "success": "You have left the container and your files were cleared."
+            },
+            "transfer": {
+                "title": "User Removal",
+                "desc": "The user you are removing has {{count}} files ({{size}}). What would you like to do with them?",
+                "keep": "Transfer to Me",
+                "keepDesc": "Files will consume your storage quota.",
+                "delete": "Delete Files",
+                "deleteDesc": "Permanently delete user's files."
             },
             "addLink": {
                 "title": "Add New Link",

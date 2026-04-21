@@ -3,7 +3,7 @@ import { useContainer } from '../contexts/ContainerContext';
 import { X, UploadCloud, File as FileIcon, AlertCircle, CheckCircle2, Loader2, Tag, Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import { canUploadFile, getFileSizeLimit } from '../utils/plans';
+import { canUploadFile, getFileSizeLimit, getPlanConfig } from '../utils/plans';
 import PlanGate from './PlanGate';
 
 interface AddFileModalProps {
@@ -80,12 +80,28 @@ const AddFileModal: React.FC<AddFileModalProps> = ({ isOpen, onClose, containerI
   };
 
   const validateAndSetFile = (selectedFile: File) => {
-    if (selectedFile.size > MAX_FILE_SIZE) {
-      setErrorMsg(t('container.modals.addFile.errors.tooLarge', { size: '10MB' }));
+    // 1. Check if user can upload files at all
+    if (!canUploadFile(userPlan)) {
+      setErrorMsg(t('plans.limitations.noFileUpload', 'Your current plan does not support file uploads.'));
       return false;
     }
-    // We allow Cloudinary to handle other validations via Upload Preset,
-    // but a basic client check is good.
+
+    // 2. Check individual file size limit (e.g. 10MB)
+    if (selectedFile.size > MAX_FILE_SIZE) {
+      setErrorMsg(t('container.modals.addFile.errors.tooLarge', { size: `${fileSizeLimitMB}MB` }));
+      return false;
+    }
+
+    // 3. Check total storage quota
+    const storageLimitMB = getPlanConfig(userPlan).storageLimit;
+    const storageLimitBytes = storageLimitMB * 1024 * 1024;
+    const currentUsage = currentUser?.storageUsage || 0;
+
+    if (currentUsage + selectedFile.size > storageLimitBytes) {
+      setErrorMsg(t('plans.limitations.storageFull', 'Storage limit reached. Please upgrade for more space.'));
+      return false;
+    }
+
     setFile(selectedFile);
     if (!title) {
       setTitle(selectedFile.name);
@@ -179,7 +195,6 @@ const AddFileModal: React.FC<AddFileModalProps> = ({ isOpen, onClose, containerI
       setProgress(90);
 
       // Save metadata and the direct SECURE URL to Firebase
-      // No need for a separate signed URL function anymore
       await addLinkToContainer(containerId, {
         title: title || file.name,
         url: response.secure_url, // Direct link
@@ -274,7 +289,6 @@ const AddFileModal: React.FC<AddFileModalProps> = ({ isOpen, onClose, containerI
                 ref={fileInputRef}
                 className="hidden"
                 onChange={handleFileSelect}
-                // Optional: accept=".pdf,.doc,.docx" depending on preferences
               />
               <div className="w-12 h-12 rounded-full bg-[var(--bg-secondary)] flex items-center justify-center text-[var(--text-secondary)] mb-2">
                 <UploadCloud size={24} />

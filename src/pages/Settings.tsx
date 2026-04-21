@@ -27,7 +27,8 @@ import {
   Mail,
   Zap,
   Crown,
-  Star
+  Star,
+  AlertCircle
 } from 'lucide-react';
 import { getPlanConfig } from '../utils/plans';
 import type { UserPlan } from '../types';
@@ -97,6 +98,15 @@ const Settings: React.FC = () => {
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
+  };
+
+  const formatBytes = (bytes: number, decimals = 2) => {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   };
 
   const [importing, setImporting] = useState(false);
@@ -519,6 +529,45 @@ const Settings: React.FC = () => {
                     </span>
                   )}
                 </div>
+
+                {/* Storage Usage Bar */}
+                {currentUser?.plan !== 'starter' && (
+                  <div className="settings-storage-stats" style={{ marginTop: '1.5rem' }}>
+                    <div className="flex justify-between items-end mb-2">
+                      <div className="flex flex-col">
+                        <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-main)' }}>
+                          {t('settings.storage.label', 'Storage Usage')}
+                        </span>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                          {formatBytes(currentUser?.storageUsage || 0)} {t('common.of', 'of')} {getPlanConfig(currentUser?.plan as UserPlan).storageLimit} MB
+                        </span>
+                      </div>
+                      <span style={{ fontSize: '0.875rem', fontWeight: 600, color: (currentUser?.storageUsage || 0) / (getPlanConfig(currentUser?.plan as UserPlan).storageLimit * 1024 * 1024) > 0.9 ? '#ef4444' : 'var(--primary)' }}>
+                        {Math.round(((currentUser?.storageUsage || 0) / (getPlanConfig(currentUser?.plan as UserPlan).storageLimit * 1024 * 1024)) * 100)}%
+                      </span>
+                    </div>
+                    <div className="settings-storage-bar-bg" style={{ height: '8px', backgroundColor: 'var(--bg-secondary)', borderRadius: '4px', overflow: 'hidden', border: '1px solid var(--border-color)' }}>
+                      <div 
+                        className="settings-storage-bar-fill" 
+                        style={{ 
+                          height: '100%', 
+                          width: `${Math.min(100, ((currentUser?.storageUsage || 0) / (getPlanConfig(currentUser?.plan as UserPlan).storageLimit * 1024 * 1024)) * 100)}%`,
+                          background: (currentUser?.storageUsage || 0) / (getPlanConfig(currentUser?.plan as UserPlan).storageLimit * 1024 * 1024) > 0.9 
+                            ? 'linear-gradient(90deg, #ef4444, #f87171)' 
+                            : 'linear-gradient(90deg, var(--primary), #818cf8)',
+                          borderRadius: '4px',
+                          transition: 'width 0.5s ease-out'
+                        }} 
+                      />
+                    </div>
+                    {(currentUser?.storageUsage || 0) / (getPlanConfig(currentUser?.plan as UserPlan).storageLimit * 1024 * 1024) > 0.8 && (
+                      <p style={{ fontSize: '11px', color: '#ef4444', marginTop: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                        <AlertCircle size={10} />
+                        {t('settings.storage.warning', 'You are running out of storage space.')}
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
               <div style={{ display: 'flex', gap: '8px' }}>
                 {currentUser?.email === 'samirhasimov10@gmail.com' && (

@@ -14,6 +14,7 @@ export interface User {
   lemonSqueezyCustomerId?: string;
   lemonSqueezyPortalUrl?: string; // URL for managing subscription via LS portal
   lemonSqueezyUpdatePaymentUrl?: string; // URL for updating payment method
+  storageUsage?: number; // total storage used in bytes
 }
 
 export type LinkType = 'link' | 'text' | 'file';
