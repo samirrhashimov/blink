@@ -15,6 +15,7 @@ import {
   Tag
 } from 'lucide-react';
 import { SharingService } from '../services/sharingService';
+import { ContainerService } from '../services/containerService';
 import { useToast } from '../contexts/ToastContext';
 import { FiInbox } from "react-icons/fi";
 import blinkLogo from '../assets/blinklogo2.png';

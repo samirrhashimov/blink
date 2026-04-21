@@ -10,8 +10,7 @@ import {
   where,
   orderBy,
   onSnapshot,
-  serverTimestamp,
-  increment
+  serverTimestamp
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import { UserService } from './userService';
