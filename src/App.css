@@ -2299,6 +2299,49 @@ main.container {
   font-weight: 500;
 }
 
+.legal-card ul,
+.legal-card ol {
+  padding-left: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.legal-card ul {
+  list-style-type: disc;
+}
+
+.legal-card ol {
+  list-style-type: decimal;
+}
+
+.legal-card li {
+  margin-bottom: 0.75rem;
+  padding-left: 0.5rem;
+  color: inherit;
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .legal-page-container {
+    padding: 60px 1.5rem 3rem;
+  }
+
+  .legal-card h1 {
+    font-size: 2.25rem;
+  }
+
+  .legal-card h2 {
+    font-size: 1.5rem;
+    margin-top: 2rem;
+  }
+
+  .back-btn-legal {
+    top: 15px;
+    left: 15px;
+    width: 38px;
+    height: 38px;
+  }
+}
+
 .back-btn-legal {
   position: fixed;
   top: 30px;

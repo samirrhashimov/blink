@@ -7,7 +7,7 @@ const RefundPolicy = () => {
 
     return (
         <div className="legal-page-container">
-            <SEO title="Refund Policy" description="Read our Refund Policy regarding Blink PRO subscriptions." />
+            <SEO title="Refund Policy" description="Information regarding billing, cancellations, and refunds for Blink PRO." />
             <button
                 onClick={() => navigate(-1)}
                 className="back-btn-legal"
@@ -21,40 +21,53 @@ const RefundPolicy = () => {
                 <p className="last-updated">Last updated: April 21, 2026</p>
 
                 <p>
-                    Thank you for choosing Blink PRO. We want to ensure you have a great experience with our premium features. This policy outlines our terms regarding refunds and cancellations for Blink PRO subscriptions.
+                    Thank you for choosing <strong>Blink PRO</strong>. We aim to provide the best possible experience for our users. This Refund Policy outlines the terms and conditions regarding subscriptions and refunds.
                 </p>
 
-                <h2>1. Subscription Cancellations</h2>
+                <h2>1. Subscription Billing</h2>
                 <p>
-                    You can cancel your Blink PRO subscription at any time through your account settings or the platform where you purchased the subscription (e.g., Apple App Store or Google Play Store). Upon cancellation, you will continue to have access to PRO features until the end of your current billing period.
+                    Blink PRO is a subscription-based service. By subscribing, you authorize us (via our payment processors) to charge the applicable subscription fees to your designated payment method on a recurring basis.
                 </p>
 
-                <h2>2. Refund Eligibility</h2>
+                <h2>2. Cancellations</h2>
                 <p>
-                    Since Blink provides digital services and immediate access to premium features (such as increased storage and file uploads), we generally do not offer refunds once a subscription has been active. However, exceptions may be made in the following cases:
+                    You may cancel your subscription at any time. To avoid being charged for the next billing cycle, you must cancel at least 24 hours before your current subscription period ends.
                 </p>
                 <ul>
-                    <li><strong>Technical Issues:</strong> If a persistent technical issue prevents you from using the PRO features and we are unable to resolve it within a reasonable timeframe.</li>
-                    <li><strong>Accidental Duplicate Purchases:</strong> If you were charged twice for the same subscription due to a system error.</li>
+                    <li>If you subscribed via our website (Lemon Squeezy), you can cancel in your <strong>Settings</strong> or via the link in your receipt email.</li>
+                    <li>If you subscribed via the Apple App Store or Google Play Store, you must cancel through their respective subscription management interfaces.</li>
                 </ul>
+                <p>Upon cancellation, you will retain access to PRO features until the end of your current billing period.</p>
 
-                <h2>3. Platform-Specific Refunds</h2>
+                <h2>3. Refund Eligibility</h2>
                 <p>
-                    If you purchased your subscription through a third-party app store, the refund process is governed by that store's policies:
+                    As Blink provides digital content and immediate access to premium features, all sales are generally final and non-refundable. However, we may issue refunds in the following limited circumstances:
                 </p>
                 <ul>
-                    <li><strong>Apple App Store:</strong> All refunds are handled by Apple. You must request a refund through your Apple ID account.</li>
-                    <li><strong>Google Play Store:</strong> Refunds are generally handled through Google Play. You can request a refund through the Google Play website or app.</li>
+                    <li><strong>Technical Failure:</strong> If a major technical defect prevents you from accessing PRO features and we are unable to fix it within 14 days of being notified.</li>
+                    <li><strong>Duplicate Purchase:</strong> If you were accidentally charged multiple times for the same subscription due to a technical error on our part.</li>
                 </ul>
 
-                <h2>4. Contact Us</h2>
+                <h2>4. Right of Withdrawal (EU/EEA Users)</h2>
                 <p>
-                    If you believe you are entitled to a refund or have any issues with your subscription, please contact us at <a href="mailto:linzaapps@gmail.com" style={{ color: 'inherit', fontWeight: '700', textDecoration: 'underline' }}>linzaapps@gmail.com</a>. We will review each request individually and aim to respond within 5-7 business days.
+                    If you are located in the European Union or European Economic Area, you generally have a right to withdraw from a distance contract within 14 days without giving any reason.
+                </p>
+                <p>
+                    <strong>Important:</strong> By subscribing to Blink PRO and requesting immediate access to the service, you acknowledge that you lose your right of withdrawal once the digital content has been made available to you.
                 </p>
 
-                <div style={{ marginTop: '3.5rem', opacity: 0.6, fontSize: '0.9rem' }}>
-                    <p>© {new Date().getFullYear()} Blink - by LinzaApps. All rights reserved.</p>
-                </div>
+                <h2>5. Processing Refunds</h2>
+                <p>
+                    Refunds for purchases made through the Apple App Store or Google Play Store must be requested directly through those platforms. We do not have the technical ability to refund transactions processed by Apple or Google.
+                </p>
+                <p>
+                    For purchases made via <strong>Lemon Squeezy</strong>, please contact us at <a href="mailto:linzaapps@gmail.com">linzaapps@gmail.com</a> with your transaction details. As our Merchant of Record, Lemon Squeezy handles the billing and compliance for these transactions.
+                </p>
+
+                <h2>6. Contact Us</h2>
+                <p>
+                    If you have any questions regarding our Refund Policy, please contact us at <a href="mailto:linzaapps@gmail.com">linzaapps@gmail.com</a>.
+                </p>
             </div>
         </div>
     );

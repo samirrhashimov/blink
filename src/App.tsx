@@ -32,6 +32,8 @@ import SupportPage from './pages/SupportPage';
 import Profile from './pages/Profile';
 import Paywall from './pages/Paywall';
 import MobileUpgrade from './pages/MobileUpgrade';
+import RefundPolicy from './pages/RefundPolicy';
+import CookiePolicy from './pages/CookiePolicy';
 
 
 const AppRoutes: React.FC = () => {
@@ -79,6 +81,14 @@ const AppRoutes: React.FC = () => {
         <Route
           path="/legal/delete-account"
           element={<DeleteAccount />}
+        />
+        <Route
+          path="/legal/refund-policy"
+          element={<RefundPolicy />}
+        />
+        <Route
+          path="/legal/cookie-policy"
+          element={<CookiePolicy />}
         />
 
         <Route

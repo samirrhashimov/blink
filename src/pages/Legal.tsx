@@ -8,6 +8,8 @@ const Legal = () => {
     const legalItems = [
         { title: 'Privacy Policy', path: '/legal/privacy-policy', description: 'How we collect and use your data' },
         { title: 'Terms and Conditions', path: '/legal/terms-and-conditions', description: 'Rules for using our service' },
+        { title: 'Cookie Policy', path: '/legal/cookie-policy', description: 'Information about cookies and local storage' },
+        { title: 'Refund Policy', path: '/legal/refund-policy', description: 'Rules regarding payments and refunds' },
         { title: 'Account Deletion', path: '/legal/delete-account', description: 'How to request account deletion' }
     ];
 
