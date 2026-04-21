@@ -28,7 +28,8 @@ import {
   Zap,
   Crown,
   Star,
-  AlertCircle
+  AlertCircle,
+  ShieldCheck
 } from 'lucide-react';
 import { getPlanConfig } from '../utils/plans';
 import type { UserPlan } from '../types';
@@ -861,6 +862,28 @@ const Settings: React.FC = () => {
                 {t('settings.feedback')}
               </button>
             </div>
+
+            {currentUser?.role === 'admin' && (
+              <div className="settings-item settings-item-media" style={{ borderTop: '1px solid var(--border-color)', marginTop: '1rem', paddingTop: '1rem' }}>
+                <div className="settings-item-info">
+                  <h4 style={{ color: 'var(--primary)' }}>Admin Control Panel</h4>
+                  <p>Access global application statistics and manage users.</p>
+                </div>
+                <button
+                  onClick={() => navigate('/admin')}
+                  className="btn-primary"
+                  style={{
+                    backgroundColor: 'var(--primary)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '8px'
+                  }}
+                >
+                  <ShieldCheck size={16} />
+                  Admin Dashboard
+                </button>
+              </div>
+            )}
           </section>
 
           {/* Danger Zone */}

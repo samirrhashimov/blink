@@ -34,6 +34,7 @@ import Paywall from './pages/Paywall';
 import MobileUpgrade from './pages/MobileUpgrade';
 import RefundPolicy from './pages/RefundPolicy';
 import CookiePolicy from './pages/CookiePolicy';
+import AdminDashboard from './pages/AdminDashboard';
 
 
 const AppRoutes: React.FC = () => {
@@ -166,6 +167,14 @@ const AppRoutes: React.FC = () => {
           element={
             <ProtectedRoute>
               <MobileUpgrade />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin" 
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
             </ProtectedRoute>
           } 
         />

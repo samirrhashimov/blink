@@ -108,6 +108,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       hasUpdates = true;
     }
 
+    // 3. Update device/country info on login
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    const platform = isMobile ? 'mobile' : 'desktop';
+    
+    updates.lastLoginDevice = platform;
+    updates.lastActive = new Date();
+    hasUpdates = true;
+
     if (hasUpdates) {
       await updateDoc(userRef, updates);
       return { ...existingData, ...updates } as User;
