@@ -745,11 +745,31 @@ const ContainerDetails: React.FC = () => {
       '99, 102, 241';
   };
 
+  const isLightColor = React.useMemo(() => {
+    const rgb = hexToRgb(containerColor).split(',').map(Number);
+    if (rgb.length === 3) {
+      const luminance = (0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]) / 255;
+      return luminance > 0.65;
+    }
+    return false;
+  }, [containerColor]);
+
+  React.useEffect(() => {
+    if (isLightColor) {
+      document.body.classList.add('light-container-theme');
+    } else {
+      document.body.classList.remove('light-container-theme');
+    }
+    return () => {
+      document.body.classList.remove('light-container-theme');
+    };
+  }, [isLightColor]);
+
 
 
   return (
     <div
-      className="container-details-page fixed-layout-page"
+      className={`container-details-page fixed-layout-page ${isLightColor ? 'light-container-theme' : ''}`}
       style={{
         '--accent-color': containerColor,
         '--primary': containerColor,

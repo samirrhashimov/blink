@@ -1868,6 +1868,21 @@ body {
   background: rgba(0, 0, 0, 0.1) !important;
 }
 
+.light-container-theme .main-add-button,
+.light-container-theme .dropdown-toggle-button,
+.light-container-theme .btn-primary {
+  color: #1a1f2e !important;
+}
+
+.light-container-theme .main-add-button {
+  border-right: 1px solid rgba(0, 0, 0, 0.15) !important;
+}
+
+.light-container-theme .main-add-button:hover,
+.light-container-theme .dropdown-toggle-button:hover {
+  background: rgba(0, 0, 0, 0.08) !important;
+}
+
 @media (max-width: 640px) {
   .fullscreen-footer-content {
     flex-direction: column !important;
