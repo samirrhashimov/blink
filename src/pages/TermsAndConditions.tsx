@@ -54,7 +54,7 @@ const TermsAndConditions = () => {
                 <h2>5. Privacy</h2>
                 <p>
                     We aim to minimize data collection. Any personal data processing is described in
-                    our <Link to="/legal/privacy-policy" style={{ color: 'var(--primary)', fontWeight: '600' }}>Privacy Policy</Link>.
+                    our <Link to="/legal/privacy-policy" style={{ color: 'inherit', fontWeight: '700', textDecoration: 'underline' }}>Privacy Policy</Link>.
                 </p>
 
                 <h2>6. Limitation of Liability</h2>

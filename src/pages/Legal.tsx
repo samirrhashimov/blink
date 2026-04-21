@@ -1,5 +1,6 @@
 import { useNavigate, Link } from 'react-router-dom';
 import { FaArrowLeft, FaChevronRight } from 'react-icons/fa';
+import SEO from '../components/SEO';
 
 const Legal = () => {
     const navigate = useNavigate();
@@ -11,95 +12,54 @@ const Legal = () => {
     ];
 
     return (
-        <div style={{ maxWidth: '600px', margin: '0 auto', marginTop: '80px', padding: '20px' }}>
+        <div className="legal-page-container">
+            <SEO title="Legal Information" description="Review our Privacy Policy, Terms and Conditions, and more." />
+            
             <button
                 onClick={() => navigate(-1)}
-                style={{
-                    position: 'absolute',
-                    top: '20px',
-                    left: '20px',
-                    background: 'none',
-                    border: 'none',
-                    fontSize: '24px',
-                    cursor: 'pointer',
-                    color: '#999',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    width: '24px',
-                    height: '24px',
-                    padding: '0',
-                    margin: '0'
-                }}
+                className="back-btn-legal"
+                title="Go back"
             >
                 <FaArrowLeft />
             </button>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
-                {legalItems.map((item, index) => (
-                    <Link
-                        key={index}
-                        to={item.path}
-                        style={{
-                            textDecoration: 'none',
-                            background: 'white',
-                            padding: '20px',
-                            borderRadius: '12px',
-                            boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            transition: 'all 0.3s ease',
-                            border: `1px solid #f0f0f0`
-                        }}
-                        onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'translateX(5px)';
-                            e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
-                        }}
-                        onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'translateX(0)';
-                            e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.1)';
-                        }}
-                    >
-                        <div>
-                            <h3 style={{
-                                margin: '0 0 8px 0',
-                                color: '#333',
-                                fontSize: '18px',
-                                fontWeight: '600'
-                            }}>
-                                {item.title}
-                            </h3>
-                            <p style={{
-                                margin: 0,
-                                color: '#666',
-                                fontSize: '14px'
-                            }}>
-                                {item.description}
-                            </p>
-                        </div>
-                        <FaChevronRight style={{
-                            color: '#999',
-                            fontSize: '16px'
-                        }} />
-                    </Link>
-                ))}
-            </div>
-
-            <div style={{
-                marginTop: '30px',
-                padding: '20px',
-                background: 'white',
-                borderRadius: '12px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                textAlign: 'center'
-            }}>
-                <p style={{
-                    color: '#666',
-                    fontSize: '14px'
-                }}>
-                    © {new Date().getFullYear()} Blink - by LinzaApps
+            <div className="legal-card">
+                <h1 style={{ marginBottom: '2rem' }}>Legal Information</h1>
+                <p style={{ marginBottom: '3rem', opacity: 0.7 }}>
+                    Please review our documents below to understand how we handle your data and the rules of using our service.
                 </p>
+
+                <div className="legal-menu-list" style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    {legalItems.map((item, index) => (
+                        <Link
+                            key={index}
+                            to={item.path}
+                            className="legal-menu-item"
+                            style={{
+                                textDecoration: 'none',
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                padding: '2rem',
+                                borderRadius: '16px',
+                                background: 'var(--bg-surface)',
+                                border: '1px solid var(--border-color)',
+                                transition: 'all 0.3s ease',
+                                color: 'inherit'
+                            }}
+                        >
+                            <div>
+                                <h3 style={{ margin: '0 0 0.5rem 0', fontSize: '1.25rem', fontWeight: 700 }}>{item.title}</h3>
+                                <p style={{ margin: 0, fontSize: '0.95rem', opacity: 0.7 }}>{item.description}</p>
+                            </div>
+                            <FaChevronRight style={{ opacity: 0.3 }} />
+                        </Link>
+                    ))}
+                </div>
+
+                <footer style={{ marginTop: '5rem', borderTop: '1px solid var(--border-color)', paddingTop: '2rem', textAlign: 'center', opacity: 0.5, fontSize: '0.9rem' }}>
+                    <p>© {new Date().getFullYear()} Blink - by LinzaApps. All rights reserved.</p>
+                </footer>
             </div>
         </div>
     );
