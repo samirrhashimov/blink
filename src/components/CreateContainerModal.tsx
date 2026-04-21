@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useContainer } from '../contexts/ContainerContext';
 import { X, Plus, ChevronDown, Pipette } from 'lucide-react';
 
@@ -71,7 +72,7 @@ const CreateContainerModal: React.FC<CreateContainerModalProps> = ({ isOpen, onC
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
@@ -213,7 +214,8 @@ const CreateContainerModal: React.FC<CreateContainerModalProps> = ({ isOpen, onC
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

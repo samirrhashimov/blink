@@ -131,7 +131,7 @@ const QRCodeModal: React.FC<QRCodeModalProps> = ({
     };
 
     return (
-        <div className="modal-overlay" onClick={onClose} style={{ zIndex: 1000 }}>
+        <div className="modal-overlay" onClick={onClose}>
             <div className="modal-content" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '400px' }}>
                 <div className="modal-header">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>

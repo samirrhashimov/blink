@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useContainer } from '../contexts/ContainerContext';
 import { X, Link as LinkIcon, Sparkles, Tag, Plus, Loader2 } from 'lucide-react';
 import LinkPreviewService from '../services/linkPreviewService';
@@ -259,7 +260,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div
       className="modal-overlay"
       onClick={onClose}
@@ -469,7 +470,8 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

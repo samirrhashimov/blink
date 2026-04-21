@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { useContainer } from '../contexts/ContainerContext';
 import {
   X,
@@ -157,7 +158,7 @@ const AddTextModal: React.FC<AddTextModalProps> = ({ isOpen, onClose, containerI
 
   if (!isOpen) return null;
 
-  return (
+  return createPortal(
     <div
       className={`modal-overlay ${isFullscreen ? 'fullscreen-overlay' : ''}`}
       onClick={onClose}
@@ -311,7 +312,8 @@ const AddTextModal: React.FC<AddTextModalProps> = ({ isOpen, onClose, containerI
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

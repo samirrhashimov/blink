@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { useContainer } from '../contexts/ContainerContext';
 import { X, UploadCloud, File as FileIcon, AlertCircle, CheckCircle2, Loader2, Tag, Plus } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -252,7 +253,7 @@ const AddFileModal: React.FC<AddFileModalProps> = ({ isOpen, onClose, containerI
     );
   }
 
-  return (
+  return createPortal(
     <div
       className="modal-overlay"
       onClick={() => status !== 'uploading' && onClose()}
@@ -454,7 +455,8 @@ const AddFileModal: React.FC<AddFileModalProps> = ({ isOpen, onClose, containerI
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

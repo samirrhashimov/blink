@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useTranslation, Trans } from 'react-i18next';
 
 import { X, Lock } from 'lucide-react';
@@ -60,7 +61,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
 
     if (!isOpen) return null;
 
-    return (
+    return createPortal(
         <div className="modal-overlay" onClick={handleClose}>
             <div className="modal-content scale-in" onClick={(e) => e.stopPropagation()}>
                 <div className="modal-header">
@@ -175,7 +176,8 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
                     </button>
                 </div>
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };
 

@@ -387,7 +387,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
 
         {/* Transfer Ownership Modal */}
         {showTransferModal && (
-          <div className="modal-overlay z-[100]" onClick={() => setShowTransferModal(false)}>
+          <div className="modal-overlay" onClick={() => setShowTransferModal(false)}>
             <div className="modal-content max-w-md p-6" onClick={e => e.stopPropagation()}>
               <div className="flex items-center gap-3 mb-4 text-amber-500">
                 <AlertCircle size={24} />

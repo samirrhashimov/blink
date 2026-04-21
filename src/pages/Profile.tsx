@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
@@ -364,7 +365,7 @@ const Profile: React.FC = () => {
                             <h1 className="profile-display-name">{displayName}</h1>
                             <div className="profile-desktop-actions">
                                 {isOwnProfile ? (
-                                    <Link to="/settings" className="btn-secondary profile-action-btn" style={{ padding: '0.35rem 0.75rem', fontSize: '0.8rem' }}>
+                                    <Link to="/settings" className="btn-secondary profile-action-btn" style={{ fontSize: '0.8rem' }}>
                                         {t('profile.editProfile')}
                                     </Link>
                                 ) : currentUser ? (
@@ -563,7 +564,7 @@ const Profile: React.FC = () => {
             </main>
 
             {/* Follow/Following Modal */}
-            {(showFollowersModal || showFollowingModal) && (
+            {(showFollowersModal || showFollowingModal) && createPortal(
                 <div className="follow-modal-overlay" onClick={closeModals}>
                     <div className="follow-modal-content" onClick={e => e.stopPropagation()}>
                         <div className="follow-modal-header">
@@ -607,11 +608,12 @@ const Profile: React.FC = () => {
                             )}
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
 
             {/* Report Modal */}
-            {showReportModal && (
+            {showReportModal && createPortal(
                 <div className="follow-modal-overlay" onClick={() => !reportLoading && setShowReportModal(false)}>
                     <div className="follow-modal-content report-modal" onClick={e => e.stopPropagation()}>
                         <div className="follow-modal-header">
@@ -657,7 +659,8 @@ const Profile: React.FC = () => {
                             </button>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body
             )}
         </div>
     );
