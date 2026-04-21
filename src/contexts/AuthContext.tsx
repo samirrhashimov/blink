@@ -13,7 +13,9 @@ import {
   sendEmailVerification,
   reload,
   sendPasswordResetEmail,
-  verifyBeforeUpdateEmail
+  verifyBeforeUpdateEmail,
+  EmailAuthProvider,
+  reauthenticateWithCredential
 } from 'firebase/auth';
 import {
   doc,
@@ -46,6 +48,7 @@ interface AuthContextType {
   sendPasswordReset: (email: string) => Promise<void>;
   updateUserEmail: (newEmail: string) => Promise<void>;
   refreshUserProfile: () => Promise<void>;
+  reauthenticate: (password: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -354,7 +357,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     checkEmailVerification,
     sendPasswordReset,
     updateUserEmail,
-    refreshUserProfile
+    refreshUserProfile,
+    reauthenticate: async (password: string) => {
+      const user = auth.currentUser;
+      if (!user) throw new Error('No user is currently signed in');
+      const credential = EmailAuthProvider.credential(user.email!, password);
+      await reauthenticateWithCredential(user, credential);
+    }
   };
 
   return (

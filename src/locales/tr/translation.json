@@ -250,13 +250,17 @@
             "exporting": "Dışa aktarılıyor...",
             "exportSuccess": "Yer imleri başarıyla dışa aktarıldı!",
             "exportFailed": "Yer imleri dışa aktarılamadı.",
-            "noExport": "Dışa aktarılacak konteyner yok."
+            "noExport": "Dışa aktarılacak konteyner yok.",
+            "passwordRequired": "Devam etmek için şifre gereklidir.",
+            "reauthRequired": "Güvenlik doğrulaması gerekiyor. Lütfen şifrenizi girin.",
+            "wrongPassword": "Hatalı şifre. Lütfen tekrar deneyin."
         },
         "buttons": {
             "update": "Hesabı Güncelle",
             "updating": "Güncelleniyor...",
             "importHtml": "HTML İçe Aktar",
-            "exportHtml": "HTML Dışa Aktar"
+            "exportHtml": "HTML Dışa Aktar",
+            "verifyAndDelete": "Doğrula ve Sil"
         },
         "profilePhoto": {
             "label": "Profil Fotoğrafı",
@@ -785,6 +789,11 @@
                 "message": "Hesabınızı kalıcı olarak silmek istediğinizden emin misiniz? Bu işlem geri alınamaz ve tüm verileriniz kaybolacaktır."
             }
         },
+        "password": "Şifre",
+        "placeholders": {
+            "password": "Şifrenizi girin"
+        },
+        "securityVerification": "Güvenlik Doğrulaması",
         "cancel": "İptal",
         "save": "Kaydet",
         "loading": "Yükleniyor...",

@@ -250,13 +250,17 @@
             "exporting": "Exporting...",
             "exportSuccess": "Bookmarks exported successfully!",
             "exportFailed": "Failed to export bookmarks.",
-            "noExport": "No containers to export."
+            "noExport": "No containers to export.",
+            "passwordRequired": "Password is required to proceed.",
+            "reauthRequired": "Security verification required. Please enter your password.",
+            "wrongPassword": "Incorrect password. Please try again."
         },
         "buttons": {
             "update": "Update Account",
             "updating": "Updating...",
             "importHtml": "Import HTML",
-            "exportHtml": "Export HTML"
+            "exportHtml": "Export HTML",
+            "verifyAndDelete": "Verify and Delete"
         },
         "profilePhoto": {
             "label": "Profile Photo",
@@ -785,6 +789,11 @@
                 "message": "Are you sure you want to permanently delete your account? This action cannot be undone and all your data will be lost."
             }
         },
+        "password": "Password",
+        "placeholders": {
+            "password": "Enter your password"
+        },
+        "securityVerification": "Security Verification",
         "processing": "Processing...",
         "errors": {
             "operationFailed": "Operation failed"

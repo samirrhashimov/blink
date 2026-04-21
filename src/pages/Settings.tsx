@@ -42,7 +42,7 @@ import '../css/Settings.css';
 
 const Settings: React.FC = () => {
   const { t, i18n } = useTranslation();
-  const { currentUser, logout, deleteAccount, refreshUserProfile } = useAuth();
+  const { currentUser, logout, deleteAccount, refreshUserProfile, reauthenticate } = useAuth();
   const { theme, toggleTheme, animationsEnabled, toggleAnimations, searchShortcut, setSearchShortcut } = useTheme();
   const { containers } = useContainer();
   const navigate = useNavigate();
@@ -60,6 +60,8 @@ const Settings: React.FC = () => {
 
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [reauthPassword, setReauthPassword] = useState('');
+  const [requiresPassword, setRequiresPassword] = useState(false);
 
   // Sync photoPreview when currentUser changes
   useEffect(() => {
@@ -316,15 +318,31 @@ const Settings: React.FC = () => {
     }
 
     setLoading(true);
-    setShowDeleteModal(false);
 
     try {
+      if (requiresPassword) {
+        if (!reauthPassword) {
+          toast.error(t('settings.messages.passwordRequired', 'Password is required to proceed.'));
+          setLoading(false);
+          return;
+        }
+        await reauthenticate(reauthPassword);
+      }
+      
       await deleteAccount();
-      // Account deleted successfully, navigate to home
+      setShowDeleteModal(false);
       navigate('/');
     } catch (error: any) {
       console.error('Delete account error:', error);
-      toast.error(error.message || 'Failed to delete account. You may need to re-authenticate.');
+      if (error.code === 'auth/requires-recent-login' || error.message.includes('requires-recent-login')) {
+        setRequiresPassword(true);
+        toast.info(t('settings.messages.reauthRequired', 'Security verification required. Please enter your password.'));
+      } else if (error.code === 'auth/wrong-password' || error.code === 'auth/invalid-credential') {
+        toast.error(t('settings.messages.wrongPassword', 'Incorrect password. Please try again.'));
+      } else {
+        toast.error(error.message || 'Failed to delete account.');
+      }
+    } finally {
       setLoading(false);
     }
   };
@@ -904,8 +922,11 @@ const Settings: React.FC = () => {
             onConfirm={performDeleteAccount}
             title={t('settings.deleteAccount')}
             message={t('settings.deleteAccountDesc')}
-            confirmText={t('settings.deleteAccount')}
+            confirmText={requiresPassword ? t('settings.buttons.verifyAndDelete', 'Verify and Delete') : t('settings.deleteAccount')}
             confirmWord="delete"
+            showPasswordInput={requiresPassword}
+            passwordValue={reauthPassword}
+            onPasswordChange={setReauthPassword}
             variant="danger"
             icon={<LogOut className="h-4 w-4" />}
           />

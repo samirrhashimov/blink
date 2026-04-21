@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation, Trans } from 'react-i18next';
 
-import { X } from 'lucide-react';
+import { X, Lock } from 'lucide-react';
 
 interface ConfirmModalProps {
     isOpen: boolean;
@@ -14,6 +14,9 @@ interface ConfirmModalProps {
     variant?: 'danger' | 'primary';
     icon?: React.ReactNode;
     confirmWord?: string;
+    showPasswordInput?: boolean;
+    passwordValue?: string;
+    onPasswordChange?: (value: string) => void;
 }
 
 const ConfirmModal: React.FC<ConfirmModalProps> = ({
@@ -26,7 +29,10 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
     cancelText = 'Cancel',
     variant = 'primary',
     icon,
-    confirmWord
+    confirmWord,
+    showPasswordInput,
+    passwordValue,
+    onPasswordChange
 }) => {
     const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
@@ -91,6 +97,44 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({
                                 onChange={(e) => setConfirmationInput(e.target.value)}
                                 placeholder={t('common.confirmation.placeholder', { word: confirmWord })}
                                 style={{ width: '100%' }}
+                            />
+                        </div>
+                    )}
+
+                    {showPasswordInput && (
+                        <div className="security-verification-box" style={{ 
+                            marginTop: '1.5rem', 
+                            padding: '1.25rem', 
+                            backgroundColor: 'var(--bg-secondary)', 
+                            borderRadius: '12px',
+                            border: '1px solid var(--border-color)',
+                            boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.02)'
+                        }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px', color: '#ef4444' }}>
+                                <Lock size={16} />
+                                <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>
+                                    {t('common.securityVerification')}
+                                </span>
+                            </div>
+                            <p className="text-xs mb-3" style={{ color: 'var(--text-secondary)', lineHeight: '1.4' }}>
+                                {t('settings.messages.reauthRequired')}
+                            </p>
+                            <input
+                                type="password"
+                                className="form-input"
+                                value={passwordValue}
+                                onChange={(e) => onPasswordChange?.(e.target.value)}
+                                placeholder={t('common.placeholders.password')}
+                                style={{ 
+                                    width: '100%', 
+                                    fontSize: '0.95rem',
+                                    padding: '0.75rem 1rem',
+                                    borderRadius: '8px',
+                                    border: '1px solid var(--border-color)',
+                                    backgroundColor: 'var(--bg-primary)'
+                                }}
+                                autoComplete="current-password"
+                                autoFocus
                             />
                         </div>
                     )}
