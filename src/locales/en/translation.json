@@ -776,6 +776,7 @@
     },
     "common": {
         "locale": "en-US",
+        "or": "or",
         "confirm": "Confirm",
         "confirmation": {
             "typeToConfirm": "Please type <b>\"{{word}}\"</b> to confirm",

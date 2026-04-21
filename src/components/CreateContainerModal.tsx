@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useContainer } from '../contexts/ContainerContext';
-import { X, Plus } from 'lucide-react';
+import { X, Plus, ChevronDown, Pipette } from 'lucide-react';
 
 interface CreateContainerModalProps {
   isOpen: boolean;
@@ -18,6 +18,7 @@ const CreateContainerModal: React.FC<CreateContainerModalProps> = ({ isOpen, onC
     description: '',
     color: '#6366f1' // Default color
   });
+  const [showColorDropdown, setShowColorDropdown] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -130,18 +131,56 @@ const CreateContainerModal: React.FC<CreateContainerModalProps> = ({ isOpen, onC
 
           <div className="form-group">
             <label className="form-label">{t('container.modals.createContainer.color')}</label>
-            <div className="color-picker-grid">
-              {CONTAINER_COLORS.map(color => (
-                <button
-                  key={color}
-                  type="button"
-                  className={`color-option ${formData.color === color ? 'selected' : ''}`}
-                  style={{ backgroundColor: color }}
-                  onClick={() => setFormData(prev => ({ ...prev, color }))}
-                  title={color}
-                />
-              ))}
+            <div className="color-dropdown-container">
+              <button 
+                type="button" 
+                className="color-dropdown-trigger"
+                onClick={() => setShowColorDropdown(!showColorDropdown)}
+              >
+                <div className="selected-color-preview" style={{ backgroundColor: formData.color }}></div>
+                <span className="selected-color-value">{formData.color}</span>
+                <ChevronDown size={18} className={`dropdown-icon ${showColorDropdown ? 'open' : ''}`} />
+              </button>
+
+              {showColorDropdown && (
+                <div className="color-dropdown-menu scale-in">
+                  <div className="color-options-grid">
+                    {CONTAINER_COLORS.map(color => (
+                      <button
+                        key={color}
+                        type="button"
+                        className={`color-option ${formData.color === color ? 'selected' : ''}`}
+                        style={{ backgroundColor: color }}
+                        onClick={() => {
+                          setFormData(prev => ({ ...prev, color }));
+                          setShowColorDropdown(false);
+                        }}
+                      />
+                    ))}
+                  </div>
+                  <div className="custom-color-divider">
+                    <span>{t('common.or', 'or')}</span>
+                  </div>
+                  <div className="custom-color-input-wrapper">
+                    <Pipette size={16} />
+                    <input 
+                      type="color" 
+                      value={formData.color}
+                      onChange={(e) => setFormData(prev => ({ ...prev, color: e.target.value }))}
+                      className="custom-color-picker"
+                    />
+                    <input 
+                      type="text"
+                      value={formData.color}
+                      onChange={(e) => setFormData(prev => ({ ...prev, color: e.target.value }))}
+                      placeholder="#000000"
+                      className="hex-input"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
+            {showColorDropdown && <div className="dropdown-overlay" onClick={() => setShowColorDropdown(false)}></div>}
           </div>
         </form>
 

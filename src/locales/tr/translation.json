@@ -776,6 +776,7 @@
     },
     "common": {
         "locale": "tr-TR",
+        "or": "veya",
         "confirm": "Onayla",
         "confirmation": {
             "typeToConfirm": "Onaylamak için lütfen <b>\"{{word}}\"</b> yazın",
