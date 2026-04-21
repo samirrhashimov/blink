@@ -17,6 +17,7 @@
             "currentPlan": "Mevcut planın:",
             "popular": "En Popüler",
             "currentBadge": "Mevcut",
+            "address": "Adres",
             "free": "Ücretsiz",
             "month": "ay",
             "upgrade": "{{plan}}'a Geç",
@@ -106,6 +107,13 @@
                 "terms": "Şartlar",
                 "deletion": "Hesap Silme"
             }
+        },
+        "audience": {
+            "title": "Tasarlandı",
+            "students": "Öğrenciler",
+            "researchers": "Araştırmacılar",
+            "developers": "Geliştiriciler",
+            "professionals": "Profesyoneller"
         }
     },
     "tags": {
@@ -791,70 +799,6 @@
             }
         },
         "password": "Şifre",
-        "placeholders": {
-            "password": "Şifrenizi girin"
-        },
-        "securityVerification": "Güvenlik Doğrulaması",
-        "cancel": "İptal",
-        "save": "Kaydet",
-        "loading": "Yükleniyor...",
-        "undo": "Geri Al",
-        "buttons": {
-            "save": "Kaydet",
-            "cancel": "İptal",
-            "confirm": "Onayla",
-            "delete": "Sil",
-            "deleting": "Siliniyor...",
-            "download": "İndir",
-            "close": "Kapat"
-        },
-        "messages": {
-            "cannotUndone": "Bu işlem geri alınamaz.",
-            "failedToDelete": "Silme başarısız"
-        },
-        "processing": "İşleniyor...",
-        "errors": {
-            "operationFailed": "İşlem başarısız oldu"
-        },
-        "support": {
-            "buymeacoffee": "Bizi Destekle",
-            "starGithub": "GitHub'da Yıldızla",
-            "getPlayStore": "Google Play’de"
-        }
-    },
-    "profile": {
-        "notFound": "Profil bulunamadı",
-        "notFoundDesc": "Bu kullanıcı mevcut değil veya henüz bir kullanıcı adı belirlememiş.",
-        "goHome": "Panele Git",
-        "followers": "Takipçi",
-        "following": "Takip Edilen",
-        "publicContainers": "Konteynerler",
-        "publicContainersTitle": "Konteynerler",
-        "noPublicContainers": "Henüz herkese açık konteyner yok.",
-        "follow": "Takip Et",
-        "unfollow": "Takibi Bırak",
-        "followToLogin": "Takip Et",
-        "editProfile": "Profili Düzenle",
-        "noFollowers": "Henüz takipçi yok.",
-        "noFollowing": "Kimseyi takip etmiyor.",
-        "shareProfile": "Profili Paylaş",
-        "linkCopied": "Profil linki kopyalandı!",
-        "linkCopyFailed": "Link kopyalanamadı",
-        "reportUser": "Kullanıcıyı Şikayet Et",
-        "reportSent": "Şikayetiniz iletildi. Teşekkürler.",
-        "reportFailed": "Şikayet gönderilemedi. Lütfen tekrar deneyin.",
-        "alreadyReported": "Bu kullanıcıyı zaten şikayet ettiniz.",
-        "reportModalDesc": "Bu kullanıcıyı şikayet etme nedeninizi en iyi tanımlayan seçeneği işaretleyin. Tüm şikayetler dikkatlice incelenir.",
-        "reportSelectReason": "Göndermeden önce lütfen bir neden seçin.",
-        "reportCompleteCaptcha": "Lütfen CAPTCHA doğrulamasını tamamlayın.",
-        "reportSubmit": "Şikayeti Gönder",
-        "reportReasonSpam": "Spam",
-        "reportReasonHarassment": "Taciz",
-        "reportReasonFake": "Sahte Hesap",
-        "reportReasonHate": "Nefret İçeriği",
-        "reportReasonInappropriate": "Uygunsuz İçerik",
-        "reportReasonOther": "Diğer",
-        "reportOtherPlaceholder": "Lütfen şikayet nedeninizi detaylandırın...",
-        "reportProvideDetails": "Lütfen şikayetiniz için detay belirtin."
+        "login": "Giriş Yap"
     }
 }

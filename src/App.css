@@ -8865,3 +8865,115 @@ input:checked+.slider:before {
   cursor: not-allowed;
   opacity: 0.6;
 }
+
+/* Audience Section - Classic CSS */
+.audience-section {
+  position: relative;
+  z-index: 2;
+  background-color: white;
+  padding: 4rem 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.dark .audience-section {
+  background-color: #0f172a;
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.audience-title {
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  color: #1f2937;
+  letter-spacing: -0.01em;
+}
+
+.dark .audience-title {
+  color: #f3f4f6;
+}
+
+@media (min-width: 768px) {
+  .audience-title {
+    font-size: 1.5rem;
+  }
+}
+
+.audience-grid-container {
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.audience-grid-new {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2rem;
+  width: 100%;
+}
+
+.audience-item-new {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.5rem;
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: center;
+}
+
+.audience-item-new:hover {
+  background: rgba(99, 102, 241, 0.04);
+}
+
+.dark .audience-item-new:hover {
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.audience-item-new .audience-icon {
+  color: #94a3b8;
+  transition: all 0.3s ease;
+}
+
+.audience-item-new:hover .audience-icon {
+  color: #6366f1;
+  transform: scale(1.1);
+}
+
+.dark .audience-item-new:hover .audience-icon {
+  color: #818cf8;
+}
+
+.audience-item-new .audience-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #64748b;
+  transition: all 0.3s ease;
+}
+
+.audience-item-new:hover .audience-label {
+  color: #1e293b;
+}
+
+.dark .audience-item-new:hover .audience-label {
+  color: #f1f5f9;
+}
+
+@media (max-width: 1024px) {
+  .audience-grid-new {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .audience-grid-new {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .audience-item-new {
+    padding: 1rem;
+  }
+}

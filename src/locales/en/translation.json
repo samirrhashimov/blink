@@ -106,6 +106,13 @@
                 "terms": "Terms",
                 "deletion": "Account Deletion"
             }
+        },
+        "audience": {
+            "title": "Built for",
+            "students": "Students",
+            "researchers": "Researchers",
+            "developers": "Developers",
+            "professionals": "Professionals"
         }
     },
     "tags": {
@@ -791,68 +798,6 @@
             }
         },
         "password": "Password",
-        "placeholders": {
-            "password": "Enter your password"
-        },
-        "securityVerification": "Security Verification",
-        "processing": "Processing...",
-        "errors": {
-            "operationFailed": "Operation failed"
-        },
-        "loading": "Loading...",
-        "undo": "Undo",
-        "buttons": {
-            "save": "Save",
-            "cancel": "Cancel",
-            "confirm": "Confirm",
-            "delete": "Delete",
-            "deleting": "Deleting...",
-            "download": "Download",
-            "close": "Close"
-        },
-        "messages": {
-            "cannotUndone": "This action cannot be undone.",
-            "failedToDelete": "Failed to delete"
-        },
-        "support": {
-            "buymeacoffee": "Support Creator",
-            "starGithub": "Star on GitHub",
-            "getPlayStore": "On Google Play"
-        }
-    },
-    "profile": {
-        "notFound": "Profile not found",
-        "notFoundDesc": "This user doesn't exist or hasn't set a username yet.",
-        "goHome": "Go to Dashboard",
-        "followers": "Followers",
-        "following": "Following",
-        "publicContainers": "Containers",
-        "publicContainersTitle": "Containers",
-        "noPublicContainers": "No public containers yet.",
-        "follow": "Follow",
-        "unfollow": "Unfollow",
-        "followToLogin": "Follow",
-        "editProfile": "Edit Profile",
-        "noFollowers": "No followers yet.",
-        "noFollowing": "Not following anyone.",
-        "shareProfile": "Share Profile",
-        "linkCopied": "Profile link copied!",
-        "linkCopyFailed": "Failed to copy link",
-        "reportUser": "Report User",
-        "reportSent": "Report submitted. Thank you.",
-        "reportFailed": "Failed to send report. Please try again.",
-        "alreadyReported": "You have already reported this user.",
-        "reportModalDesc": "Select the reason that best describes why you are reporting this user. All reports are reviewed carefully.",
-        "reportSelectReason": "Please select a reason before submitting.",
-        "reportCompleteCaptcha": "Please complete the CAPTCHA verification.",
-        "reportSubmit": "Submit Report",
-        "reportReasonSpam": "Spam",
-        "reportReasonHarassment": "Harassment",
-        "reportReasonFake": "Fake Account",
-        "reportReasonHate": "Hate Content",
-        "reportReasonInappropriate": "Inappropriate",
-        "reportReasonOther": "Other",
-        "reportOtherPlaceholder": "Please provide more details...",
-        "reportProvideDetails": "Please provide details for your report."
+        "login": "Login"
     }
 }

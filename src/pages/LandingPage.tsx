@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Link, useNavigate } from 'react-router-dom';
 import { useTheme } from '../contexts/ThemeContext';
-import { Lock, Share2, Zap, Users, Search, Moon, Sun, Shield, Layout, Globe, Tag, Palette, Github, ArrowRight, HelpCircle } from 'lucide-react';
+import { Lock, Share2, Zap, Users, Search, Moon, Sun, Shield, Layout, Globe, Tag, Palette, Github, ArrowRight, HelpCircle, GraduationCap, Code, Briefcase } from 'lucide-react';
+import { MdScience } from "react-icons/md";
 import blinkLogo from '../assets/blinklogo2.png';
 import homepageImg from '../assets/Screenshots/homepage.png';
 import inviteImg from '../assets/Screenshots/requests.png';
@@ -139,6 +140,8 @@ const LandingPage: React.FC = () => {
           </div>
         </div>
       </section>
+
+
 
       {/* Visual Feature Breakdown */}
       <section className="feature-section-alternating">
@@ -346,6 +349,51 @@ const LandingPage: React.FC = () => {
           </div>
         </div>
 
+      </section>
+
+      {/* Audience Section */}
+      <section className="audience-section">
+        <div className="container mx-auto px-4">
+          <h2 className="audience-title">
+            {t('landing.audience.title')}
+          </h2>
+          <div className="audience-grid-container">
+            <div className="audience-grid-new">
+              <div className="audience-item-new">
+                <div className="audience-icon">
+                  <GraduationCap size={32} />
+                </div>
+                <span className="audience-label">
+                  {t('landing.audience.students')}
+                </span>
+              </div>
+              <div className="audience-item-new">
+                <div className="audience-icon">
+                  <MdScience size={32} />
+                </div>
+                <span className="audience-label">
+                  {t('landing.audience.researchers')}
+                </span>
+              </div>
+              <div className="audience-item-new">
+                <div className="audience-icon">
+                  <Code size={32} />
+                </div>
+                <span className="audience-label">
+                  {t('landing.audience.developers')}
+                </span>
+              </div>
+              <div className="audience-item-new">
+                <div className="audience-icon">
+                  <Briefcase size={32} />
+                </div>
+                <span className="audience-label">
+                  {t('landing.audience.professionals')}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* Grid Features (Why Choose Blink?) */}
