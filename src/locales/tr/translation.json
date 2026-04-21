@@ -799,6 +799,54 @@
             }
         },
         "password": "Şifre",
-        "login": "Giriş Yap"
+        "login": "Giriş Yap",
+        "processing": "İşleniyor...",
+        "buttons": {
+            "cancel": "İptal",
+            "delete": "Sil",
+            "deleting": "Siliniyor...",
+            "close": "Kapat",
+            "download": "İndir",
+            "save": "Kaydet"
+        },
+        "messages": {
+            "failedToDelete": "Silme işlemi başarısız oldu",
+            "cannotUndone": "Bu işlem geri alınamaz"
+        }
+    },
+    "profile": {
+        "followers": "Takipçi",
+        "following": "Takip",
+        "publicContainers": "Konteynerler",
+        "publicContainersTitle": "Açık Konteynerler",
+        "noPublicContainers": "Bu kullanıcının henüz konteyneri yok.",
+        "noFollowers": "Henüz takipçi yok.",
+        "noFollowing": "Henüz takip edilen kimse yok.",
+        "editProfile": "Profili Düzenle",
+        "unfollow": "Takibi Bırak",
+        "follow": "Takip Et",
+        "followToLogin": "Takip etmek için giriş yapın",
+        "shareProfile": "Profili Paylaş",
+        "reportUser": "Kullanıcıyı Şikayet Et",
+        "reportModalDesc": "Bu kullanıcıyı şikayet etme nedeninizi seçin.",
+        "reportReasonSpam": "Spam / Reklam",
+        "reportReasonHarassment": "Taciz / Kötüye Kullanım",
+        "reportReasonFake": "Sahte / Yanıltıcı İçerik",
+        "reportReasonHate": "Nefret İçeriği",
+        "reportReasonInappropriate": "Uygunsuz İçerik",
+        "reportReasonOther": "Diğer",
+        "reportOtherPlaceholder": "Lütfen şikayet nedeninizi detaylandırın...",
+        "reportSubmit": "Şikayeti Gönder",
+        "reportSent": "Şikayetiniz gönderildi",
+        "reportFailed": "Şikayet gönderilemedi",
+        "reportSelectReason": "Lütfen bir neden seçin",
+        "reportProvideDetails": "Lütfen detay belirtin",
+        "reportCompleteCaptcha": "Lütfen CAPTCHA doğrulamasını tamamlayın",
+        "alreadyReported": "Bu kullanıcıyı zaten şikayet ettiniz.",
+        "linkCopied": "Bağlantı kopyalandı!",
+        "linkCopyFailed": "Bağlantı kopyalanamadı",
+        "notFound": "Profil bulunamadı",
+        "notFoundDesc": "Aradığınız profil mevcut değil veya silinmiş olabilir.",
+        "goHome": "Panele Dön"
     }
 }

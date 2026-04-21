@@ -798,6 +798,54 @@
             }
         },
         "password": "Password",
-        "login": "Login"
+        "login": "Login",
+        "processing": "Processing...",
+        "buttons": {
+            "cancel": "Cancel",
+            "delete": "Delete",
+            "deleting": "Deleting...",
+            "close": "Close",
+            "download": "Download",
+            "save": "Save"
+        },
+        "messages": {
+            "failedToDelete": "Failed to delete",
+            "cannotUndone": "This action cannot be undone"
+        }
+    },
+    "profile": {
+        "followers": "Followers",
+        "following": "Following",
+        "publicContainers": "Containers",
+        "publicContainersTitle": "Public Containers",
+        "noPublicContainers": "This user doesn't have any public containers yet.",
+        "noFollowers": "No followers yet.",
+        "noFollowing": "Not following anyone yet.",
+        "editProfile": "Edit Profile",
+        "unfollow": "Unfollow",
+        "follow": "Follow",
+        "followToLogin": "Login to follow",
+        "shareProfile": "Share Profile",
+        "reportUser": "Report User",
+        "reportModalDesc": "Select a reason for reporting this user.",
+        "reportReasonSpam": "Spam / Promotion",
+        "reportReasonHarassment": "Harassment / Abuse",
+        "reportReasonFake": "Fake / Misleading Content",
+        "reportReasonHate": "Hate Content",
+        "reportReasonInappropriate": "Inappropriate Content",
+        "reportReasonOther": "Other",
+        "reportOtherPlaceholder": "Please provide more details...",
+        "reportSubmit": "Submit Report",
+        "reportSent": "Report submitted. Thank you.",
+        "reportFailed": "Failed to send report. Please try again.",
+        "reportSelectReason": "Please select a reason",
+        "reportProvideDetails": "Please provide details",
+        "reportCompleteCaptcha": "Please complete CAPTCHA verification",
+        "alreadyReported": "You have already reported this user.",
+        "linkCopied": "Link copied to clipboard!",
+        "linkCopyFailed": "Failed to copy link",
+        "notFound": "Profile not found",
+        "notFoundDesc": "The profile you are looking for does not exist or has been deleted.",
+        "goHome": "Go to Dashboard"
     }
 }
