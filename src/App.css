@@ -3146,11 +3146,11 @@ main.container {
 }
 
 /* Allow scrolling on overlay if modal is too tall */
-@media (max-height: 700px),
-(max-width: 768px) {
+@media (max-width: 768px) {
   .modal-overlay {
-    align-items: center;
-    padding: 1rem;
+    align-items: flex-end;
+    padding: 0;
+    overflow: hidden;
   }
 }
 
@@ -3222,6 +3222,25 @@ main.container {
   border-top-color: var(--primary);
 }
 
+@media (max-width: 768px) {
+  .modal-content {
+    max-height: 100vh;
+    height: 100vh;
+    border-radius: 0;
+    border-top: none;
+    animation: slideUpMobile 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+}
+
+@keyframes slideUpMobile {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
 @keyframes slideUp {
   from {
     transform: translateY(20px);
@@ -3244,7 +3263,8 @@ main.container {
 
 @media (max-width: 768px) {
   .modal-header {
-    padding: 0 0 1.5rem 0;
+    padding: 1rem 0.875rem;
+    border-bottom: 1px solid var(--border-color);
   }
 }
 
@@ -3260,6 +3280,12 @@ main.container {
 
 .dark .modal-header h2 {
   color: #e8ecf1;
+}
+
+@media (max-width: 768px) {
+  .modal-header h2 {
+    font-size: 1.25rem;
+  }
 }
 
 .container-select-item-selected {
@@ -3347,8 +3373,8 @@ main.container {
 
 @media (max-width: 768px) {
   .modal-body {
-    padding: 1rem 0rem;
-    gap: 0.75rem;
+    padding: 1rem 0.875rem;
+    gap: 1rem;
   }
 }
 
@@ -3364,13 +3390,17 @@ main.container {
   .modal-footer {
     flex-direction: column;
     gap: 0.75rem;
-    padding: 1.5rem 0;
+    padding: 1rem 0.875rem;
+    background-color: var(--bg-surface);
+    position: sticky;
+    bottom: 0;
   }
 
   .modal-footer button {
     width: 100%;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
+    margin: 0 !important;
+    padding: 1rem !important;
+    height: auto !important;
   }
 }
 
