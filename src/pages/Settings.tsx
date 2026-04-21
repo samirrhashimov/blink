@@ -569,7 +569,7 @@ const Settings: React.FC = () => {
                   </div>
                 )}
               </div>
-              <div style={{ display: 'flex', gap: '8px' }}>
+              <div className="settings-plan-actions">
                 {currentUser?.email === 'samirhasimov10@gmail.com' && (
                   <button
                     onClick={async () => {

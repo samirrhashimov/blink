@@ -906,13 +906,46 @@ main.container {
   .fixed-layout-page .links-section {
     height: 100%;
     overflow-y: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
     padding-bottom: 3rem;
+    padding-right: 0.75rem;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+    transition: scrollbar-color 0.3s ease;
+  }
+
+  .fixed-layout-page .links-section:hover {
+    scrollbar-color: rgba(88, 88, 88, 0.253) transparent;
   }
 
   .fixed-layout-page .links-section::-webkit-scrollbar {
-    display: none;
+    width: 6px;
+    display: block;
+  }
+
+  .fixed-layout-page .links-section::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .fixed-layout-page .links-section::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 20px;
+    transition: background 0.3s ease;
+  }
+
+  .fixed-layout-page .links-section:hover::-webkit-scrollbar-thumb {
+    background: rgba(88, 88, 88, 0.3);
+  }
+
+  .dark .fixed-layout-page .links-section:hover::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .fixed-layout-page .links-section::-webkit-scrollbar-thumb:hover {
+    background: rgba(88, 88, 88, 0.5) !important;
+  }
+
+  .dark .fixed-layout-page .links-section::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
   }
 }
 
@@ -1388,12 +1421,45 @@ main.container {
     overflow-y: auto;
     align-self: flex-start;
     padding-bottom: 3rem;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    padding-right: 0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: transparent transparent;
+    transition: scrollbar-color 0.3s ease;
+  }
+
+  .fixed-layout-page .sidebar:hover {
+    scrollbar-color: rgba(88, 88, 88, 0.253) transparent;
   }
 
   .fixed-layout-page .sidebar::-webkit-scrollbar {
-    display: none;
+    width: 6px;
+    display: block;
+  }
+
+  .fixed-layout-page .sidebar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .fixed-layout-page .sidebar::-webkit-scrollbar-thumb {
+    background: transparent;
+    border-radius: 20px;
+    transition: background 0.3s ease;
+  }
+
+  .fixed-layout-page .sidebar:hover::-webkit-scrollbar-thumb {
+    background: rgba(88, 88, 88, 0.3);
+  }
+
+  .dark .fixed-layout-page .sidebar:hover::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  .fixed-layout-page .sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(88, 88, 88, 0.5) !important;
+  }
+
+  .dark .fixed-layout-page .sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3) !important;
   }
 }
 
@@ -8452,6 +8518,25 @@ input:checked+.slider:before {
   color: white;
   border-radius: 99px;
   font-weight: 700;
+}
+
+.settings-plan-actions {
+  display: flex;
+  gap: 10px;
+}
+
+@media (max-width: 600px) {
+  .settings-plan-actions {
+    flex-direction: column;
+    width: 100%;
+    margin-top: 5px;
+  }
+
+  .settings-plan-actions button {
+    width: 100%;
+    justify-content: center;
+    padding: 10px !important;
+  }
 }
 
 /* Plan Restrictions & Badges */
