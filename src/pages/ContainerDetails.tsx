@@ -884,7 +884,7 @@ const ContainerDetails: React.FC = () => {
                     </div>
                     {showAddDropdown && (
                       <div className="add-content-menu glass-card fade-in">
-                        <button 
+                        <button
                           className="add-content-item"
                           onClick={() => {
                             setShowAddLinkModal(true);
@@ -894,7 +894,7 @@ const ContainerDetails: React.FC = () => {
                           <LinkIcon size={16} />
                           <span>{t('container.typeLink')}</span>
                         </button>
-                        <button 
+                        <button
                           className="add-content-item"
                           onClick={() => {
                             setShowAddTextModal(true);
@@ -904,7 +904,7 @@ const ContainerDetails: React.FC = () => {
                           <FileText size={16} />
                           <span>{t('container.typeText')}</span>
                         </button>
-                        <button 
+                        <button
                           className={`add-content-item ${(!currentUser?.plan || currentUser?.plan === 'starter') ? 'plan-restricted' : ''}`}
                           onClick={() => {
                             if (!currentUser?.plan || currentUser?.plan === 'starter') {

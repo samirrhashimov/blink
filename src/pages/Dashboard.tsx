@@ -85,14 +85,14 @@ const Dashboard: React.FC = () => {
 
   const handleLeaveContainer = async (container: Container) => {
     if (!currentUser) return;
-    
+
     const confirmLeave = window.confirm(t('container.modals.leaveContainer.confirm', 'Are you sure you want to leave this shared container? Any files you uploaded here will be deleted to clear your storage quota.'));
     if (!confirmLeave) return;
 
     try {
       // 1. Find the user's files in this container
       const userFiles = container.links.filter(l => l.createdBy === currentUser.uid && l.type === 'file');
-      
+
       // 2. Clear Cloudinary storage for these files
       for (const file of userFiles) {
         if (file.fileData?.publicId) {
@@ -108,9 +108,9 @@ const Dashboard: React.FC = () => {
 
       // 4. Finally leave the container
       await SharingService.removeUserFromContainer(container.id, currentUser.uid);
-      
+
       toast.success(t('container.modals.leaveContainer.success', 'You have left the container and your files were cleared.'));
-      
+
       // Refresh page to update quotas everywhere
       window.location.reload();
     } catch (err: any) {

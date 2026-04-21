@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Heart, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { BiLogoPlayStore } from "react-icons/bi";
 import { useTranslation } from 'react-i18next';
 
@@ -9,11 +9,6 @@ const SupportButton: React.FC = () => {
     const [isAnimating, setIsAnimating] = useState(false);
 
     const content = React.useMemo(() => [
-        {
-            icon: <Heart size={18} className="heart-icon" />,
-            text: t('common.support.buymeacoffee', 'Support Blink'),
-            link: 'https://buymeacoffee.com/samirrhashimov',
-        },
         {
             icon: <Star size={18} className="star-icon" />,
             text: t('common.support.starGithub', 'Star on GitHub'),
