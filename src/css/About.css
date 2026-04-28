@@ -90,6 +90,22 @@
   background-clip: text;
 }
 
+.typewriter-text {
+  color: #13a4ec;
+  font-weight: 800;
+}
+
+.typewriter-cursor {
+  color: #13a4ec;
+  animation: blink 1s step-end infinite;
+  margin-left: 2px;
+}
+
+@keyframes blink {
+  from, to { opacity: 1; }
+  50% { opacity: 0; }
+}
+
 .about-hero-subtitle {
   font-size: 1.25rem;
   color: #4b5563;

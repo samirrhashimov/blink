@@ -18,10 +18,47 @@ import LanguageToggle from '../components/LanguageToggle';
 import SupportButton from '../components/SupportButton';
 
 const LandingPage: React.FC = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { theme, toggleTheme } = useTheme();
   const [demoColor, setDemoColor] = useState('#6366f1');
   const navigate = useNavigate();
+
+  // Words for the typewriter animation
+  const words = i18n.language.startsWith('tr')
+    ? ['Linkleriniz', 'Notlarınız', 'Dosyalarınız']
+    : ['Links', 'Notes', 'Files'];
+
+  const prefix = i18n.language.startsWith('tr') ? '' : 'Your ';
+  const [currentWordIndex, setCurrentWordIndex] = useState(0);
+  const [currentText, setCurrentText] = useState(words[0]);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [speed, setSpeed] = useState(150);
+
+  React.useEffect(() => {
+    const handleType = () => {
+      const currentFullWord = words[currentWordIndex];
+
+      if (isDeleting) {
+        setCurrentText(prev => prev.substring(0, prev.length - 1));
+        setSpeed(80);
+      } else {
+        setCurrentText(prev => currentFullWord.substring(0, prev.length + 1));
+        setSpeed(150);
+      }
+
+      if (!isDeleting && currentText === currentFullWord) {
+        setSpeed(2000); // Wait before deleting
+        setIsDeleting(true);
+      } else if (isDeleting && currentText === '') {
+        setIsDeleting(false);
+        setCurrentWordIndex((prev) => (prev + 1) % words.length);
+        setSpeed(500); // Wait before starting next word
+      }
+    };
+
+    const timer = setTimeout(handleType, speed);
+    return () => clearTimeout(timer);
+  }, [currentText, isDeleting, speed, currentWordIndex, words]);
 
   return (
     <div className="landing-page bg-white dark:bg-gray-900 text-black dark:text-white overflow-hidden">
@@ -118,7 +155,7 @@ const LandingPage: React.FC = () => {
         <div className="hero-grid">
           <div className="hero-content text-left">
             <h1 className="about-hero-title text-5xl md:text-6xl font-extrabold tracking-tight mb-6">
-              {t('landing.hero.title')} <span className="about-hero-highlight block mt-2">{t('landing.hero.highlight')}</span>
+              {prefix}<span className="typewriter-text">{currentText}</span><span className="typewriter-cursor">|</span>, <span className="about-hero-highlight block mt-2">{t('landing.hero.highlight')}</span>
             </h1>
             <p className="about-hero-subtitle text-lg md:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-lg">
               {t('landing.hero.subtitle')}
