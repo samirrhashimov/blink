@@ -1,5 +1,5 @@
 <div align="center">
-<img src="./src/assets/blinklogo1.png" width="100px">
+<img src="./src/assets/blinklogonew.png" width="100px">
 </div>
 
 <h1 align="center">Blink - Your links, organized</h1>
