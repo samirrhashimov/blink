@@ -550,6 +550,14 @@
             },
             "addLink": {
                 "title": "Yeni Link Ekle",
+                "tabs": {
+                    "single": "Tekli Link",
+                    "bulk": "Toplu Ekle"
+                },
+                "bulkInputPlaceholder": "Metni veya linkleri buraya yapıştırın...",
+                "foundLinks": "{{count}} link bulundu",
+                "bulkTags": "Tüm linkler için etiket",
+                "bulkSubmit": "{{count}} Varlık Ekle",
                 "url": "URL",
                 "linkTitle": "Link Başlığı",
                 "description": "Açıklama",

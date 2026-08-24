@@ -549,6 +549,14 @@
             },
             "addLink": {
                 "title": "Add New Link",
+                "tabs": {
+                    "single": "Single Link",
+                    "bulk": "Bulk Add"
+                },
+                "bulkInputPlaceholder": "Paste your text or links here...",
+                "foundLinks": "{{count}} links found",
+                "bulkTags": "Tags for all links",
+                "bulkSubmit": "Add {{count}} Links",
                 "url": "URL",
                 "linkTitle": "Link Title",
                 "description": "Description",
