@@ -353,20 +353,26 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
           </button>
         </div>
 
-        <div className="flex border-b border-gray-200 dark:border-gray-800" style={{ padding: '0 24px' }}>
+        <div className="add-link-tabs" role="tablist" aria-label={t('container.modals.addLink.title')}>
           <button
             type="button"
-            className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTab === 'single' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'}`}
+            role="tab"
+            aria-selected={activeTab === 'single'}
+            className={`add-link-tab ${activeTab === 'single' ? 'active' : ''}`}
             onClick={() => setActiveTab('single')}
           >
-            {t('container.modals.addLink.tabs.single', 'Single Link')}
+            <LinkIcon size={16} />
+            <span>{t('container.modals.addLink.tabs.single', 'Single Link')}</span>
           </button>
           <button
             type="button"
-            className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${activeTab === 'bulk' ? 'border-primary text-primary' : 'border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300'}`}
+            role="tab"
+            aria-selected={activeTab === 'bulk'}
+            className={`add-link-tab ${activeTab === 'bulk' ? 'active' : ''}`}
             onClick={() => setActiveTab('bulk')}
           >
-            {t('container.modals.addLink.tabs.bulk', 'Bulk Add')}
+            <Plus size={16} />
+            <span>{t('container.modals.addLink.tabs.bulk', 'Bulk Add')}</span>
           </button>
         </div>
 
@@ -556,41 +562,47 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
             <form id="bulk-link-form" onSubmit={handleBulkSubmit} className="modal-body">
               {error && <div className="error-message">{error}</div>}
               
-              <div className="form-group">
+              <div className="form-group bulk-input-group">
+                <label htmlFor="bulk-links" className="form-label">
+                  {t('container.modals.addLink.bulkInputLabel', 'Paste links')}
+                </label>
                 <textarea
+                  id="bulk-links"
                   value={bulkInput}
                   onChange={(e) => setBulkInput(e.target.value)}
-                  className="form-input resize-y"
+                  className="form-input bulk-links-input"
                   rows={6}
                   placeholder={t('container.modals.addLink.bulkInputPlaceholder', 'Paste your text or links here...')}
                   disabled={loading}
-                  style={{ fontFamily: 'monospace', fontSize: '0.875rem' }}
                 />
+                <span className="bulk-input-hint">{t('container.modals.addLink.bulkInputHint', 'One link per line')}</span>
               </div>
 
               {stagedLinks.length > 0 && (
-                <div className="mt-4">
-                  <div className="flex justify-between items-center mb-2">
-                    <h3 className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                <div className="bulk-preview">
+                  <div className="bulk-preview-header">
+                    <h3>
                       {t('container.modals.addLink.foundLinks', '{{count}} links found').replace('{{count}}', stagedLinks.length.toString())}
                     </h3>
+                    <span>{t('container.modals.addLink.bulkReady', 'Ready to add')}</span>
                   </div>
-                  <div className="flex flex-col gap-2 max-h-48 overflow-y-auto pr-2 custom-scrollbar">
+                  <div className="bulk-links-list">
                     {stagedLinks.map((link) => (
-                      <div key={link.id} className="flex items-center gap-3 p-2 rounded-lg bg-gray-50 dark:bg-[#1a1b1e] border border-gray-200 dark:border-gray-800">
+                      <div key={link.id} className="bulk-link-item">
                         {link.favicon ? (
-                          <img src={link.favicon} alt="" className="w-5 h-5 rounded-sm object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                          <img src={link.favicon} alt="" className="bulk-link-favicon" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
                         ) : (
-                          <LinkIcon size={16} className="text-gray-400" />
+                          <span className="bulk-link-favicon-fallback"><LinkIcon size={15} /></span>
                         )}
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium truncate">{link.title}</p>
-                          <p className="text-xs text-gray-500 truncate">{link.url}</p>
+                        <div className="bulk-link-copy">
+                          <p>{link.title}</p>
+                          <span>{link.url}</span>
                         </div>
                         <button
                           type="button"
                           onClick={() => removeStagedLink(link.id)}
-                          className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors"
+                          className="bulk-link-remove"
+                          title={t('container.modals.addLink.tooltips.removeLink', 'Remove link')}
                         >
                           <X size={14} />
                         </button>
@@ -600,7 +612,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
                 </div>
               )}
 
-              <div className="form-group mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+              <div className="form-group bulk-tags-group">
                 <label className="form-label">{t('container.modals.addLink.bulkTags', 'Tags for all links')}</label>
                 <div className="tags-input-wrapper">
                   <div className="tags-list">
