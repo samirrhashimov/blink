@@ -154,7 +154,7 @@ const SortableContainerCard: React.FC<SortableContainerCardProps> = ({
                     <div className="container-card-stats">
                         <span className="container-card-stat">
                             <LinkIcon size={12} />
-                            {linkCount} {linkCount === 1 ? 'link' : 'links'}
+                            {linkCount} {linkCount === 1 ? t('container.asset', 'asset') : t('container.assets', 'assets')}
                         </span>
                         {container.authorizedUsers && container.authorizedUsers.length > 0 && (
                             <span className="container-card-stat">

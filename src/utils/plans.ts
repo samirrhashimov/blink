@@ -23,7 +23,7 @@ export const PLANS: Record<UserPlan, PlanConfig> = {
     maxCollaborators: 0,
     features: [
       'Unlimited containers',
-      'Unlimited links',
+      'Unlimited assets',
       'Text notes & Markdown',
       'Public containers',
       'Cross-device sync',

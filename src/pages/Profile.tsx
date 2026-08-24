@@ -545,7 +545,7 @@ const Profile: React.FC = () => {
                                             <div className="container-card-stats">
                                                 <span className="container-card-stat">
                                                     <LinkIcon size={12} />
-                                                    {linkCount} {t('container.links')}
+                                                    {linkCount} {linkCount === 1 ? t('container.asset', 'asset') : t('container.assets', 'assets')}
                                                 </span>
                                                 {container.authorizedUsers && container.authorizedUsers.length > 0 && (
                                                     <span className="container-card-stat">

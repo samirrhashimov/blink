@@ -47,7 +47,7 @@ const DeleteAccount = () => {
                 </p>
                 <ul>
                     <li><strong>Account Information:</strong> Your email address, name/surname, and profile picture.</li>
-                    <li><strong>User Content:</strong> All saved links, created folders (containers), and tags.</li>
+                    <li><strong>User Content:</strong> All saved assets (links, notes, files), created folders (containers), and tags.</li>
                     <li><strong>Relationship Data:</strong> Folder access shared with other users and invitations.</li>
                 </ul>
 
@@ -63,7 +63,7 @@ const DeleteAccount = () => {
 
                 <h2>4. Important Note</h2>
                 <p>
-                    Account deletion is <strong>permanent</strong> and cannot be undone. Once your account is deleted, you will no longer be able to access your saved links and data.
+                    Account deletion is <strong>permanent</strong> and cannot be undone. Once your account is deleted, you will no longer be able to access your saved assets and data.
                 </p>
 
                 <div style={{ marginTop: '40px', paddingTop: '20px', borderTop: '1px solid #eee' }}>

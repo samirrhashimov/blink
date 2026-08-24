@@ -46,7 +46,7 @@
         "features": {
             "containers": {
                 "title": "Merkezi Konteynerler",
-                "desc": "Farklı projeler, ekipler veya kişisel ilgi alanları için özel konteynerler oluşturun. Linklerinizi tek bir güvenli yerde özelleştirilmiş ve düzenli tutun."
+                "desc": "Farklı projeler, ekipler veya kişisel ilgi alanları için özel konteynerler oluşturun. Varlıklarınızı tek bir güvenli yerde özelleştirilmiş ve düzenli tutun."
             },
             "sharing": {
                 "title": "Kolay Paylaşım",
@@ -58,7 +58,7 @@
             },
             "tagging": {
                 "title": "Akıllı Etiketleme Sistemi",
-                "desc": "Linklerinizi güçlü etiketlerle düzenleyin. Özel etiketler oluşturun, kategorilere göre filtreleyin ve saniyeler içinde tam olarak ihtiyacınız olanı bulun. Büyük koleksiyonları yönetmek için mükemmeldir."
+                "desc": "Varlıklarınızı güçlü etiketlerle düzenleyin. Özel etiketler oluşturun, kategorilere göre filtreleyin ve saniyeler içinde tam olarak ihtiyacınız olanı bulun. Büyük koleksiyonları yönetmek için mükemmeldir."
             },
             "themes": {
                 "title": "Özelleştirilebilir Temalar",
@@ -73,7 +73,7 @@
             },
             "everything": {
                 "title": "İhtiyacınız olan her şey",
-                "subtitle": "Link yönetimini zahmetsiz ve güvenli hale getirmek için tasarlanmış güçlü özellikler.",
+                "subtitle": "Varlık yönetimini zahmetsiz ve güvenli hale getirmek için tasarlanmış güçlü özellikler.",
                 "security": {
                     "title": "Üst Düzey Güvenlik",
                     "desc": "Kurumsal düzeyde şifreleme, verilerinizi gizli ve korumalı tutmayı amaçlar."
@@ -84,7 +84,7 @@
                 },
                 "anywhere": {
                     "title": "Her Yerden Erişilebilir",
-                    "desc": "Linklerinize dünyanın her yerinden, her cihazdan erişin. Web için kişisel bulutunuz."
+                    "desc": "Varlıklarınıza dünyanın her yerinden, her cihazdan erişin. Web için kişisel bulutunuz."
                 },
                 "search": {
                     "title": "Akıllı Arama",
@@ -96,7 +96,7 @@
                 },
                 "permissions": {
                     "title": "İzin Kontrolü",
-                    "desc": "Linklerinizi kimlerin görüntüleyebileceğini, düzenleyebileceğini veya yönetebileceğini kontrol edin."
+                    "desc": "Varlıklarınızı kimlerin görüntüleyebileceğini, düzenleyebileceğini veya yönetebileceğini kontrol edin."
                 }
             },
             "cta": {
@@ -118,25 +118,25 @@
     },
     "tags": {
         "title": "Etiketlere Göre Keşfet",
-        "description": "Etiketleri kullanarak tüm konteynerlerinizdeki linkleri bulun",
+        "description": "Etiketleri kullanarak tüm konteynerlerinizdeki varlıkları bulun",
         "placeholder": "Etiketlerde ara...",
         "sidebar": {
             "title": "Tüm Etiketler ({{count}})",
             "empty": "Etiket bulunamadı"
         },
         "content": {
-            "taggedWith": "Etiketlenen linkler:",
+            "taggedWith": "Etiketlenen varlıklar:",
             "items": "{{count}} öge",
             "openContainer": "Konteyneri Aç"
         },
         "empty": {
             "noTags": {
                 "title": "Henüz etiket bulunamadı",
-                "desc": "Konteynerlerinizdeki linklere etiket eklemeye başlayarak çapraz aramayı etkinleştirin."
+                "desc": "Konteynerlerinizdeki varlıklara etiket eklemeye başlayarak çapraz aramayı etkinleştirin."
             },
             "noSelection": {
-                "title": "Linkleri görmek için bir etiket seçin",
-                "desc": "Kütüphanenizdeki tüm ilişkili linkleri görüntülemek için kenar çubuğundan bir etiket seçin."
+                "title": "Varlıkları görmek için bir etiket seçin",
+                "desc": "Kütüphanenizdeki tüm ilişkili varlıkları görüntülemek için kenar çubuğundan bir etiket seçin."
             },
             "button": "Panale Git"
         }
@@ -165,9 +165,9 @@
             "submit": "Paylaş",
             "submitting": "Paylaşılıyor...",
             "view": "Görüntüleyebilir",
-            "viewDesc": "Linklere salt okunur erişim.",
+            "viewDesc": "Varlıklara salt okunur erişim.",
             "edit": "Düzenleyebilir",
-            "editDesc": "Link ekleme, düzenleme ve silme için tam erişim.",
+            "editDesc": "Varlık ekleme, düzenleme ve silme için tam erişim.",
             "public": "Herkese Açık",
             "publicDesc": "Bağlantıya sahip olan herkes bu konteyneri görüntüleyebilir.",
             "copyLink": "Konteyner Bağlantısını Kopyala",
@@ -282,6 +282,9 @@
             "save": "Kaydet"
         }
     },
+    "spotlight": {
+        "placeholder": "Varlık, konteyner veya etiket ara..."
+    },
     "dashboard": {
         "title": "Panel",
         "library": "Kütüphanem",
@@ -305,7 +308,7 @@
         "emptyPersonal": {
             "title": "Henüz kişisel konteyner yok",
             "searchTitle": "Konteyner bulunamadı",
-            "desc": "Linklerinizi ve kaynaklarınızı düzenlemeye başlamak için ilk konteynerinizi oluşturun.",
+            "desc": "Varlıklarınızı ve kaynaklarınızı düzenlemeye başlamak için ilk konteynerinizi oluşturun.",
             "searchDesc": "Arama terimlerinizi ayarlamayı veya yeni bir konteyner oluşturmayı deneyin.",
             "button": "Konteyner Oluştur"
         },
@@ -325,7 +328,7 @@
     "auth": {
         "login": {
             "title": "Giriş Yap",
-            "subtitle": "Linklerinize erişmek için Blink hesabınıza giriş yapın.",
+            "subtitle": "Varlıklarınıza erişmek için Blink hesabınıza giriş yapın.",
             "welcome": "Tekrar hoş geldiniz",
             "signInToContinue": "Devam etmek için giriş yapın",
             "google": "Google ile giriş yap",
@@ -340,9 +343,9 @@
         },
         "signup": {
             "title": "Hesap Oluştur",
-            "subtitle": "Linklerinizi kolayca düzenlemek ve paylaşmak için Blink'e katılın.",
+            "subtitle": "Varlıklarınızı kolayca düzenlemek ve paylaşmak için Blink'e katılın.",
             "header": "Hesabınızı oluşturun",
-            "subheader": "Linklerinizi düzenlemek için bize katılın",
+            "subheader": "Varlıklarınızı düzenlemek için bize katılın",
             "google": "Google ile kaydolun",
             "github": "GitHub ile kaydolun",
             "fullName": "Ad Soyad",
@@ -410,8 +413,10 @@
             "title": "Konteyner bulunamadı",
             "return": "Kontrol Paneline Dön"
         },
-        "description": "Blink üzerindeki {{name}} konteynerindeki linklere göz atın.",
-        "links": "Linkler",
+        "description": "Blink üzerindeki {{name}} konteynerindeki varlıklara göz atın.",
+        "links": "Varlıklar",
+        "asset": "Varlık",
+        "assets": "Varlık",
         "select": "Seç",
         "cancel": "İptal",
         "selected": "seçili",
@@ -421,11 +426,11 @@
         "typeText": "Metin",
         "typeFile": "Dosya",
         "comingSoon": "Yakında",
-        "searchLinks": "Linklerde ara...",
-        "empty": "Henüz link yok",
-        "emptyDesc": "Bu konteyner harika linklerinizi bekliyor. Başlamak için birkaç tane ekleyin!",
-        "emptySearch": "Aradığınız kriterlerde link bulunamadı",
-        "emptySearchDesc": "Aramanızla eşleşen bir sonuç bulamadık. Lütfen farklı anahtar kelimeler deneyin.",
+        "searchLinks": "Varlıklarda ara...",
+        "empty": "Henüz varlık yok",
+        "emptyDesc": "Bu konteyner harika varlıklarınızı bekliyor. Başlamak için birkaç tane ekleyin!",
+        "emptySearch": "Aradığınız kriterlerde varlık bulunamadı",
+        "emptySearchDesc": "Aramanızla eşleşen bir varlık bulamadık. Lütfen farklı anahtar kelimeler deneyin.",
         "collaborators": {
             "title": "Katılımcılar",
             "owner": "Sahip",
@@ -435,7 +440,7 @@
         },
         "guest": {
             "joinTitle": "Blink'e Katıl",
-            "joinDesc": "Linklerinizi Blink ile kaydedin, düzenleyin ve paylaşın.",
+            "joinDesc": "Varlıklarınızı Blink ile kaydedin, düzenleyin ve paylaşın.",
             "signup": "Ücretsiz Kaydol"
         },
         "actions": {
@@ -482,8 +487,8 @@
             "download": "İndir"
         },
         "messages": {
-            "deleted": "{{count}} link silindi",
-            "deleteError": "Linkler silinemedi",
+            "deleted": "{{count}} varlık silindi",
+            "deleteError": "Varlıklar silinemedi",
             "orderUpdated": "Sıralama güncellendi",
             "updateOrderError": "Sıralama güncellenemedi",
             "unpinned": "Link sabitlemesi kaldırıldı",
@@ -528,7 +533,7 @@
             },
             "deleteContainer": {
                 "title": "Konteyneri Sil",
-                "message": "\"{{name}}\" isimli konteyneri silmek istediğinizden emin misiniz? Tüm linkler kalıcı olarak silinecektir.",
+                "message": "\"{{name}}\" isimli konteyneri silmek istediğinizden emin misiniz? Tüm varlıklar kalıcı olarak silinecektir.",
                 "confirm": "Konteyneri Sil"
             },
             "leaveContainer": {
@@ -670,17 +675,17 @@
             },
             "webhooks": {
                 "title": "Webhook'lar",
-                "subtitle": "Konteynere her yeni link eklendiğinde kanalı otomatik olarak bilgilendirir.",
+                "subtitle": "Konteynere her yeni varlık eklendiğinde kanalı otomatik olarak bilgilendirir.",
                 "howToDiscord": "Discord webhook nasıl alınır?",
                 "howToSlack": "Slack webhook nasıl alınır?",
                 "discordWebhook": "Discord Webhook",
-                "discordWebhookDesc": "Konteynere her yeni link eklendiğinde Discord kanalını otomatik olarak bilgilendirir.",
+                "discordWebhookDesc": "Konteynere her yeni varlık eklendiğinde Discord kanalını otomatik olarak bilgilendirir.",
                 "discordWebhookPlaceholder": "https://discord.com/api/webhooks/...",
                 "discordLanguage": "Mesaj Dili",
                 "discordLanguageEn": "İngilizce",
                 "discordLanguageTr": "Türkçe",
                 "slackWebhook": "Slack Webhook",
-                "slackWebhookDesc": "Konteynere her yeni link eklendiğinde Slack kanalını otomatik olarak bilgilendirir.",
+                "slackWebhookDesc": "Konteynere her yeni varlık eklendiğinde Slack kanalını otomatik olarak bilgilendirir.",
                 "slackWebhookPlaceholder": "https://hooks.slack.com/services/...",
                 "slackLanguage": "Mesaj Dili",
                 "slackLanguageEn": "İngilizce",
@@ -766,18 +771,18 @@
                 }
             },
             "moveLink": {
-                "title": "Linki Taşı",
-                "bulkTitle": "{{count}} linki başka bir konteynere taşı:",
-                "singleTitle": "\"{{title}}\" linkini başka bir konteynere taşı:",
+                "title": "Varlığı Taşı",
+                "bulkTitle": "{{count}} varlığı başka bir konteynere taşı:",
+                "singleTitle": "\"{{title}}\" varlığını başka bir konteynere taşı:",
                 "noContainers": "Başka konteyner mevcut değil.",
                 "buttons": {
                     "moving": "Taşınıyor...",
-                    "moveLinks": "Linkleri Taşı",
-                    "moveLink": "Linki Taşı"
+                    "moveLinks": "Varlıkları Taşı",
+                    "moveLink": "Varlığı Taşı"
                 },
                 "errors": {
                     "selectContainer": "Lütfen bir hedef konteyner seçin",
-                    "failed": "Link(ler) taşınamadı"
+                    "failed": "Varlık(lar) taşınamadı"
                 }
             }
         }
