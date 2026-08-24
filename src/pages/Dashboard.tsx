@@ -481,7 +481,7 @@ const Dashboard: React.FC = () => {
             isOpen={showDeleteModal}
             onClose={() => setShowDeleteModal(false)}
             title={t('container.modals.deleteContainer.title')}
-            message={t('container.modals.deleteContainer.message', { name: selectedContainer.name })}
+            message={t('container.modals.deleteContainer.confirmMessage')}
             onConfirm={async () => {
               try {
                 await deleteContainer(selectedContainer.id);
@@ -491,8 +491,8 @@ const Dashboard: React.FC = () => {
               }
             }}
             variant="danger"
-            confirmText={t('common.buttons.delete')}
-            confirmWord={selectedContainer.name}
+            confirmText={t('common.buttons.yes')}
+            cancelText={t('common.buttons.no')}
           />
         </>
       )}

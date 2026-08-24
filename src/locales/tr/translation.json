@@ -417,6 +417,7 @@
         "links": "Varlıklar",
         "asset": "Varlık",
         "assets": "Varlık",
+        "assetCount": "{{count}} varlık",
         "select": "Seç",
         "cancel": "İptal",
         "selected": "seçili",
@@ -539,6 +540,7 @@
             "deleteContainer": {
                 "title": "Konteyneri Sil",
                 "message": "\"{{name}}\" isimli konteyneri silmek istediğinizden emin misiniz? Tüm varlıklar kalıcı olarak silinecektir.",
+                "confirmMessage": "Bu konteyneri silmek istediğinizden emin misiniz? İçindeki tüm varlıklar kalıcı olarak silinecektir.",
                 "confirm": "Konteyneri Sil"
             },
             "leaveContainer": {
@@ -827,6 +829,8 @@
         "processing": "İşleniyor...",
         "buttons": {
             "cancel": "İptal",
+            "yes": "Evet",
+            "no": "Hayır",
             "delete": "Sil",
             "deleting": "Siliniyor...",
             "close": "Kapat",

@@ -1038,7 +1038,11 @@ const ContainerDetails: React.FC = () => {
                     <span className="asset-folder-icon"><Folder size={20} /></span>
                     <span className="asset-folder-copy">
                       <strong>{child.name}</strong>
-                      <small>{child.description || t('container.subcontainers.emptyDescription')}</small>
+                      <small>
+                        {child.description || t('container.subcontainers.emptyDescription')}
+                        {' · '}
+                        {t('container.assetCount', { count: child.links.length })}
+                      </small>
                     </span>
                     <ChevronRight size={19} className="asset-folder-arrow" />
                   </Link>
@@ -1424,11 +1428,11 @@ const ContainerDetails: React.FC = () => {
             onClose={() => setShowDeleteContainerModal(false)}
             onConfirm={confirmDeleteContainer}
             title={t('container.modals.deleteContainer.title')}
-            message={t('container.modals.deleteContainer.message', { name: container.name })}
-            confirmText={t('container.modals.deleteContainer.confirm')}
+            message={t('container.modals.deleteContainer.confirmMessage')}
+            confirmText={t('common.buttons.yes')}
+            cancelText={t('common.buttons.no')}
             variant="danger"
             icon={<Trash2 size={18} />}
-            confirmWord={container.name}
           />
         )
       }

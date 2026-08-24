@@ -416,6 +416,7 @@
         "links": "Assets",
         "asset": "asset",
         "assets": "assets",
+        "assetCount": "{{count}} assets",
         "select": "Select",
         "cancel": "Cancel",
         "selected": "selected",
@@ -538,6 +539,7 @@
             "deleteContainer": {
                 "title": "Delete Container",
                 "message": "Are you sure you want to delete \"{{name}}\"? All assets will be permanently deleted.",
+                "confirmMessage": "Are you sure you want to delete this container? All assets inside it will be permanently deleted.",
                 "confirm": "Delete Container"
             },
             "leaveContainer": {
@@ -826,6 +828,8 @@
         "processing": "Processing...",
         "buttons": {
             "cancel": "Cancel",
+            "yes": "Yes",
+            "no": "No",
             "delete": "Delete",
             "deleting": "Deleting...",
             "close": "Close",
