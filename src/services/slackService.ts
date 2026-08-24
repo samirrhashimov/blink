@@ -24,7 +24,7 @@ class SlackService {
       const language = container.slackLanguage || 'en';
       const isTurkish = language === 'tr';
 
-      const containerUrl = `${window.location.origin}/container/${container.id}`;
+      const containerUrl = `${window.location.origin}/c/${container.id}`;
       
       const headline = isTurkish
         ? `*${user.name}* konteynere yeni bir bağlantı ekledi:`

@@ -366,7 +366,7 @@ const Settings: React.FC = () => {
               <div className="hidden md:flex">
                 <SupportButton />
               </div>
-              <Link to={currentUser?.username ? `/profile/${currentUser.username}` : '#'} className="user-avatar-link" title={t('settings.profilePhoto.change')}>
+              <Link to={currentUser?.username ? `/u/${currentUser.username}` : '#'} className="user-avatar-link" title={t('settings.profilePhoto.change')}>
                 <div
                   className="user-avatar"
                   style={{

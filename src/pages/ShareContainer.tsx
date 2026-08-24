@@ -180,7 +180,7 @@ const ShareContainer: React.FC = () => {
         <div className="container">
           <div className="header-content">
             <div className="header-left">
-              <Link to={`/container/${id}`} className="back-link">
+              <Link to={`/c/${id}`} className="back-link">
                 <ArrowLeft />
               </Link>
               <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
@@ -189,7 +189,7 @@ const ShareContainer: React.FC = () => {
               <Link to="/settings" className="settings-link" title={t('dashboard.tooltips.settings')}>
                 <Settings size={20} />
               </Link>
-              <Link to={currentUser?.username ? `/profile/${currentUser.username}` : '#'} className="user-avatar-link">
+              <Link to={currentUser?.username ? `/u/${currentUser.username}` : '#'} className="user-avatar-link">
                 <div
                   className="user-avatar"
                   style={{
@@ -298,7 +298,7 @@ const ShareContainer: React.FC = () => {
                   </div>
 
                   <div className="share-form-actions mt-8">
-                    <Link to={`/container/${id}`} className="btn-cancel">
+                    <Link to={`/c/${id}`} className="btn-cancel">
                       {t('common.buttons.cancel')}
                     </Link>
                     <button
@@ -391,12 +391,12 @@ const ShareContainer: React.FC = () => {
                     </label>
                     <div className="public-link-copy-group">
                       <div className="public-link-copy-display">
-                        {window.location.origin}/container/{id}
+                        {window.location.origin}/c/{id}
                       </div>
                       <button
                         type="button"
                         onClick={() => {
-                          const url = `${window.location.origin}/container/${id}`;
+                          const url = `${window.location.origin}/c/${id}`;
                           navigator.clipboard.writeText(url);
                           setLinkCopied(true);
                           setTimeout(() => setLinkCopied(false), 2000);

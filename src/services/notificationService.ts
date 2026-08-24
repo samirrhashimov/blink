@@ -191,7 +191,7 @@ export class NotificationService {
       'Share Successful',
       `${sharerName} accepted your invitation to "${containerName}"`,
       containerId,
-      `/container/${containerId}`,
+      `/c/${containerId}`,
       sharerId,
       sharerName
     );
@@ -211,7 +211,7 @@ export class NotificationService {
       'Container Updated',
       `${updaterName} made changes to "${containerName}"`,
       containerId,
-      `/container/${containerId}`,
+      `/c/${containerId}`,
       updaterId,
       updaterName
     );
@@ -231,7 +231,7 @@ export class NotificationService {
       'Request Declined',
       `${declinerName} declined your invitation to "${containerName}"`,
       containerId,
-      `/container/${containerId}`,
+      `/c/${containerId}`,
       declinerId,
       declinerName
     );
@@ -251,7 +251,7 @@ export class NotificationService {
       'Collaborator Left',
       `${leaverName} left "${containerName}"`,
       containerId,
-      `/container/${containerId}`,
+      `/c/${containerId}`,
       leaverId,
       leaverName
     );

@@ -86,7 +86,7 @@ const Requests: React.FC = () => {
             setInvitations(prev => prev.filter(inv => inv.id !== invite.id));
 
             // Navigate to the container
-            navigate(`/container/${invite.containerId}`);
+            navigate(`/c/${invite.containerId}`);
         } catch (err: any) {
             setError(err.message || t('invitations.errors.acceptFailed'));
         } finally {
@@ -160,7 +160,7 @@ const Requests: React.FC = () => {
                             <div className="hidden md:flex">
                                 <SupportButton />
                             </div>
-                            <Link to={currentUser?.username ? `/profile/${currentUser.username}` : '#'} className="user-avatar-link">
+                            <Link to={currentUser?.username ? `/u/${currentUser.username}` : '#'} className="user-avatar-link">
                                 <div
                                     className="user-avatar"
                                     style={{

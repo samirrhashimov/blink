@@ -179,7 +179,7 @@ const Dashboard: React.FC = () => {
   const handleContainerClick = (containerId: string) => {
     setOpeningContainerId(containerId);
     setTimeout(() => {
-      navigate(`/container/${containerId}`);
+      navigate(`/c/${containerId}`);
     }, 350);
   };
 
@@ -291,7 +291,7 @@ const Dashboard: React.FC = () => {
               <div className="hidden md:flex">
                 <SupportButton />
               </div>
-              <Link to={currentUser?.username ? `/profile/${currentUser.username}` : '/settings'} className="user-avatar-link">
+              <Link to={currentUser?.username ? `/u/${currentUser.username}` : '/settings'} className="user-avatar-link">
                 <div
                   className="user-avatar"
                   style={{

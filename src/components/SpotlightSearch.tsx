@@ -182,7 +182,7 @@ const SpotlightSearch: React.FC = () => {
     const handleSelect = (result: SearchResult) => {
         setIsOpen(false);
         setQuery('');
-        navigate(`/container/${result.containerId}`);
+        navigate(`/c/${result.containerId}`);
     };
 
     const handleClose = () => {

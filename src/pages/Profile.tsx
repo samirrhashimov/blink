@@ -327,7 +327,7 @@ const Profile: React.FC = () => {
                                 <SupportButton />
                             </div>
                             {currentUser ? (
-                                <Link to={currentUser.username ? `/profile/${currentUser.username}` : '#'} className="user-avatar-link">
+                                <Link to={currentUser.username ? `/u/${currentUser.username}` : '#'} className="user-avatar-link">
                                     <div className="user-avatar" style={{ backgroundImage: currentUser.photoURL ? `url(${currentUser.photoURL})` : undefined, backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden' }}>
                                         {!currentUser.photoURL && (currentUser.displayName?.charAt(0).toUpperCase() || 'U')}
                                     </div>
@@ -505,7 +505,7 @@ const Profile: React.FC = () => {
                                 return (
                                     <Link
                                         key={container.id}
-                                        to={`/container/${container.id}`}
+                                        to={`/c/${container.id}`}
                                         className="container-card profile-public-card hover-lift"
                                         style={{ textDecoration: 'none' }}
                                     >
@@ -591,7 +591,7 @@ const Profile: React.FC = () => {
                                     {followList.map(user => (
                                         <Link
                                             key={user.uid}
-                                            to={`/profile/${user.username}`}
+                                            to={`/u/${user.username}`}
                                             className="follow-list-item"
                                             onClick={closeModals}
                                         >

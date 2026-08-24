@@ -6,6 +6,16 @@
   NPM_FLAGS = "--legacy-peer-deps"
 
 [[redirects]]
+  from = "/container/*"
+  to = "/c/:splat"
+  status = 301
+
+[[redirects]]
+  from = "/profile/*"
+  to = "/u/:splat"
+  status = 301
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200

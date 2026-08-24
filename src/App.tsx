@@ -101,11 +101,11 @@ const AppRoutes: React.FC = () => {
           }
         />
         <Route
-          path="/container/:id"
+          path="/c/:id"
           element={<ContainerDetails />}
         />
         <Route
-          path="/profile/:username"
+          path="/u/:username"
           element={<Profile />}
         />
 
@@ -114,7 +114,7 @@ const AppRoutes: React.FC = () => {
           element={<SharePage />}
         />
         <Route
-          path="/container/:id/share"
+          path="/c/:id/share"
           element={
             <ProtectedRoute>
               <ShareContainer />

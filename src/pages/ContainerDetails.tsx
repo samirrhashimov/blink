@@ -801,7 +801,7 @@ const ContainerDetails: React.FC = () => {
                 <SupportButton />
               </div>
               {currentUser ? (
-                <Link to={currentUser.username ? `/profile/${currentUser.username}` : '#'} className="user-avatar-link">
+                <Link to={currentUser.username ? `/u/${currentUser.username}` : '#'} className="user-avatar-link">
                   <div
                     className="user-avatar"
                     style={{
@@ -847,7 +847,7 @@ const ContainerDetails: React.FC = () => {
             <div className="container-header" style={{ marginBottom: '1.5rem' }}>
               <div className="container-header-info">
                 {container.parentId && (
-                  <Link to={`/container/${container.parentId}`} className="container-breadcrumb">
+                  <Link to={`/c/${container.parentId}`} className="container-breadcrumb">
                     <ArrowLeft size={14} />
                     {containers.find(parent => parent.id === container.parentId)?.name || t('container.parent')}
                   </Link>
@@ -1031,7 +1031,7 @@ const ContainerDetails: React.FC = () => {
                 {childContainers.map(child => (
                   <Link
                     key={child.id}
-                    to={`/container/${child.id}`}
+                    to={`/c/${child.id}`}
                     className="asset-folder-card"
                     style={{ '--folder-color': child.color || containerColor } as React.CSSProperties}
                   >
@@ -1125,7 +1125,7 @@ const ContainerDetails: React.FC = () => {
                   {/* Current User - Only show if member */}
                   {currentUser && isMember && (
                     <Link
-                      to={currentUser.username ? `/profile/${currentUser.username}` : '#'}
+                      to={currentUser.username ? `/u/${currentUser.username}` : '#'}
                       className="avatar overflow-hidden hover:opacity-80 transition-opacity"
                       title={currentUser.displayName || t('container.collaborators.you')}
                     >
@@ -1141,7 +1141,7 @@ const ContainerDetails: React.FC = () => {
                   {container.ownerId !== currentUser?.uid && (
                     collaboratorData[container.ownerId]?.username ? (
                       <Link
-                        to={`/profile/${collaboratorData[container.ownerId].username}`}
+                        to={`/u/${collaboratorData[container.ownerId].username}`}
                         key={container.ownerId}
                         className="avatar overflow-hidden hover:opacity-80 transition-opacity"
                         title={`${collaboratorData[container.ownerId]?.name || 'Owner'} (${t('container.collaborators.owner')})`}
@@ -1175,7 +1175,7 @@ const ContainerDetails: React.FC = () => {
                         return (
                           <Link
                             key={userId}
-                            to={`/profile/${userData.username}`}
+                            to={`/u/${userData.username}`}
                             className="avatar overflow-hidden hover:opacity-80 transition-opacity"
                             title={userName}
                           >
@@ -1230,7 +1230,7 @@ const ContainerDetails: React.FC = () => {
                   )}
                   {canEdit && (
                     <Link
-                      to={`/container/${container.id}/share`}
+                      to={`/c/${container.id}/share`}
                       className="action-button"
                     >
                       <div className="action-icon-wrapper share-icon">
