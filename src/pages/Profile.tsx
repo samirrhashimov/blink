@@ -10,6 +10,7 @@ import { ArrowLeft, UserPlus, UserMinus, X, Share2, Flag, Link as LinkIcon } fro
 import blinkLogo from '../assets/blinklogo2.png';
 import SEO from '../components/SEO';
 import SupportButton from '../components/SupportButton';
+import LinkPreviewService from '../services/linkPreviewService';
 
 const Profile: React.FC = () => {
     const { username } = useParams<{ username: string }>();
@@ -496,9 +497,9 @@ const Profile: React.FC = () => {
                             {publicContainers.map(container => {
                                 const color = getContainerColor(container);
                                 const favicons = container.links
-                                    ?.filter(link => link.favicon)
+                                    ?.filter(link => link.url && link.type !== 'text' && link.type !== 'file')
                                     .slice(0, 4)
-                                    .map(link => link.favicon!) || [];
+                                    .map(link => link.favicon || LinkPreviewService.getFaviconUrl(link.url)) || [];
                                 const linkCount = container.links?.length || 0;
 
                                 return (
@@ -524,11 +525,14 @@ const Profile: React.FC = () => {
                                                             }}
                                                         />
                                                     ))}
-                                                    {container.links && container.links.filter(l => l.favicon).length > 4 && (
-                                                        <span className="container-card-favicon-more">
-                                                            +{container.links.filter(l => l.favicon).length - 4}
-                                                        </span>
-                                                    )}
+                                                    {(() => {
+                                                        const totalFaviconLinks = container.links?.filter(l => l.url && l.type !== 'text' && l.type !== 'file').length || 0;
+                                                        return totalFaviconLinks > 4 && (
+                                                            <span className="container-card-favicon-more">
+                                                                +{totalFaviconLinks - 4}
+                                                            </span>
+                                                        );
+                                                    })()}
                                                 </div>
                                             )}
 

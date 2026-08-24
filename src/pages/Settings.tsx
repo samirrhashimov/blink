@@ -37,6 +37,7 @@ import SupportButton from '../components/SupportButton';
 import ConfirmModal from '../components/ConfirmModal';
 import { parseNetscapeBookmarks } from '../utils/bookmarkParser';
 import { downloadBookmarks } from '../utils/bookmarkExporter';
+import LinkPreviewService from '../services/linkPreviewService';
 import { ContainerService } from '../services/containerService';
 import '../css/Settings.css';
 
@@ -165,6 +166,7 @@ const Settings: React.FC = () => {
             id: `import_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
             title: item.title,
             url: item.url,
+            favicon: item.url ? LinkPreviewService.getFaviconUrl(item.url) : undefined,
             createdAt: new Date(),
             updatedAt: new Date(),
             createdBy: currentUser.uid

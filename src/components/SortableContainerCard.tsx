@@ -5,6 +5,7 @@ import { CSS } from '@dnd-kit/utilities';
 import { Link as LinkIcon, Users, Lock, Edit, Trash2, LogOut } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { Container } from '../types';
+import LinkPreviewService from '../services/linkPreviewService';
 
 interface SortableContainerCardProps {
     container: Container;
@@ -83,11 +84,11 @@ const SortableContainerCard: React.FC<SortableContainerCardProps> = ({
         zIndex: isDragging ? 100 : (menuOpen ? 50 : 'auto'),
     } as React.CSSProperties;
 
-    // Get first 4 favicons from links
+    // Get first 4 favicons from links (use stored favicon or fall back to Google's favicon service)
     const favicons = container.links
-        .filter(link => link.favicon)
+        .filter(link => link.url && link.type !== 'text' && link.type !== 'file')
         .slice(0, 4)
-        .map(link => link.favicon!);
+        .map(link => link.favicon || LinkPreviewService.getFaviconUrl(link.url));
 
     const linkCount = container.links.length;
 
@@ -133,11 +134,14 @@ const SortableContainerCard: React.FC<SortableContainerCardProps> = ({
                                     }}
                                 />
                             ))}
-                            {container.links.length > 4 && container.links.filter(l => l.favicon).length > 4 && (
-                                <span className="container-card-favicon-more">
-                                    +{container.links.filter(l => l.favicon).length - 4}
-                                </span>
-                            )}
+                            {(() => {
+                                const totalFaviconLinks = container.links.filter(l => l.url && l.type !== 'text' && l.type !== 'file').length;
+                                return totalFaviconLinks > 4 && (
+                                    <span className="container-card-favicon-more">
+                                        +{totalFaviconLinks - 4}
+                                    </span>
+                                );
+                            })()}
                         </div>
                     )}
 
