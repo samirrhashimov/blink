@@ -424,6 +424,11 @@
         "typeLink": "Link",
         "typeText": "Text",
         "typeFile": "File",
+        "parent": "Parent container",
+        "subcontainers": {
+            "add": "Subcontainer",
+            "emptyDescription": "Subcontainer"
+        },
         "comingSoon": "Coming Soon",
         "searchLinks": "Search assets...",
         "empty": "No assets yet",
@@ -554,7 +559,11 @@
                     "bulk": "Bulk Add"
                 },
                 "bulkInputPlaceholder": "Paste your text or links here...",
+                "bulkInputLabel": "Paste links",
+                "bulkInputHint": "One link per line",
                 "foundLinks": "{{count}} links found",
+                "bulkReady": "Ready to add",
+                "removeLink": "Remove link",
                 "bulkTags": "Tags for all links",
                 "bulkSubmit": "Add {{count}} Links",
                 "url": "URL",
@@ -645,6 +654,8 @@
             },
             "createContainer": {
                 "title": "Create New Container",
+                "subcontainerTitle": "New subcontainer",
+                "inside": "Inside {{name}}",
                 "name": "Container Name",
                 "description": "Description",
                 "color": "Container Color",

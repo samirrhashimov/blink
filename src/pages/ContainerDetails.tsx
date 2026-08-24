@@ -29,9 +29,11 @@ import {
   Webhook,
   FileText,
   Link as LinkIcon,
-  File
+  File,
+  Folder
 } from 'lucide-react';
 import AddLinkModal from '../components/AddLinkModal';
+import CreateContainerModal from '../components/CreateContainerModal';
 import AddTextModal from '../components/AddTextModal';
 import AddFileModal from '../components/AddFileModal';
 import ViewTextModal from '../components/ViewTextModal';
@@ -88,6 +90,7 @@ const ContainerDetails: React.FC = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const [showAddLinkModal, setShowAddLinkModal] = useState(false);
+  const [showAddSubcontainerModal, setShowAddSubcontainerModal] = useState(false);
   const [showEditLinkModal, setShowEditLinkModal] = useState(false);
 
   // Expose setShowAddLinkModal to window for mobile navigation
@@ -182,6 +185,7 @@ const ContainerDetails: React.FC = () => {
 
   // Find the current container from the containers array or fetch it if public
   const container = (containers.find(v => v.id === id) || publicContainer) || null;
+  const childContainers = container ? containers.filter(child => child.parentId === container.id) : [];
 
   const [newlyAddedLinkId, setNewlyAddedLinkId] = useState<string | null>(null);
   const [prevLinksCount, setPrevLinksCount] = useState(0);
@@ -842,6 +846,12 @@ const ContainerDetails: React.FC = () => {
           <div className="links-section">
             <div className="container-header" style={{ marginBottom: '1.5rem' }}>
               <div className="container-header-info">
+                {container.parentId && (
+                  <Link to={`/container/${container.parentId}`} className="container-breadcrumb">
+                    <ArrowLeft size={14} />
+                    {containers.find(parent => parent.id === container.parentId)?.name || t('container.parent')}
+                  </Link>
+                )}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
                   <h2 className="container-name-title" style={{ margin: 0 }}>{container.name}</h2>
                   {!isOwner && (
@@ -904,6 +914,16 @@ const ContainerDetails: React.FC = () => {
                     </div>
                     {showAddDropdown && (
                       <div className="add-content-menu glass-card fade-in">
+                        <button
+                          className="add-content-item"
+                          onClick={() => {
+                            setShowAddSubcontainerModal(true);
+                            setShowAddDropdown(false);
+                          }}
+                        >
+                          <Folder size={16} />
+                          <span>{t('container.subcontainers.add')}</span>
+                        </button>
                         <button
                           className="add-content-item"
                           onClick={() => {
@@ -1003,6 +1023,26 @@ const ContainerDetails: React.FC = () => {
                     <Trash2 size={18} />
                   </button>
                 </div>
+              </div>
+            )}
+
+            {childContainers.length > 0 && (
+              <div className="asset-folders-list">
+                {childContainers.map(child => (
+                  <Link
+                    key={child.id}
+                    to={`/container/${child.id}`}
+                    className="asset-folder-card"
+                    style={{ '--folder-color': child.color || containerColor } as React.CSSProperties}
+                  >
+                    <span className="asset-folder-icon"><Folder size={20} /></span>
+                    <span className="asset-folder-copy">
+                      <strong>{child.name}</strong>
+                      <small>{child.description || t('container.subcontainers.emptyDescription')}</small>
+                    </span>
+                    <ChevronRight size={19} className="asset-folder-arrow" />
+                  </Link>
+                ))}
               </div>
             )}
 
@@ -1266,6 +1306,15 @@ const ContainerDetails: React.FC = () => {
           />
         )
       }
+
+      {container && canEdit && (
+        <CreateContainerModal
+          isOpen={showAddSubcontainerModal}
+          onClose={() => setShowAddSubcontainerModal(false)}
+          parentId={container.id}
+          parentName={container.name}
+        />
+      )}
 
       {/* Add Text Modal */}
       {

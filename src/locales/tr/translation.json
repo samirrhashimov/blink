@@ -425,6 +425,11 @@
         "typeLink": "Link",
         "typeText": "Metin",
         "typeFile": "Dosya",
+        "parent": "Üst konteyner",
+        "subcontainers": {
+            "add": "Alt konteyner",
+            "emptyDescription": "Alt konteyner"
+        },
         "comingSoon": "Yakında",
         "searchLinks": "Varlıklarda ara...",
         "empty": "Henüz varlık yok",
@@ -555,7 +560,11 @@
                     "bulk": "Toplu Ekle"
                 },
                 "bulkInputPlaceholder": "Metni veya linkleri buraya yapıştırın...",
+                "bulkInputLabel": "Linkleri yapıştırın",
+                "bulkInputHint": "Her satıra bir link",
                 "foundLinks": "{{count}} link bulundu",
+                "bulkReady": "Eklemeye hazır",
+                "removeLink": "Linki kaldır",
                 "bulkTags": "Tüm linkler için etiket",
                 "bulkSubmit": "{{count}} Varlık Ekle",
                 "url": "URL",
@@ -646,6 +655,8 @@
             },
             "createContainer": {
                 "title": "Yeni Konteyner Oluştur",
+                "subcontainerTitle": "Yeni alt konteyner",
+                "inside": "{{name}} içinde",
                 "name": "Konteyner Adı",
                 "description": "Açıklama",
                 "color": "Konteyner Rengi",

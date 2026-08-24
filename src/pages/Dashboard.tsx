@@ -138,8 +138,9 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const personalContainers = containers.filter(container => !container.isShared);
-  const sharedContainers = containers.filter(container => container.isShared);
+  const rootContainers = containers.filter(container => !container.parentId);
+  const personalContainers = rootContainers.filter(container => !container.isShared);
+  const sharedContainers = rootContainers.filter(container => container.isShared);
 
   const [newlyAddedContainerId, setNewlyAddedContainerId] = useState<string | null>(null);
   const [prevContainersCount, setPrevContainersCount] = useState(containers.length);
@@ -217,7 +218,7 @@ const Dashboard: React.FC = () => {
 
   // Enhanced search: search in container name, description, and link titles
   // Combined filtered containers
-  const filteredContainers = containers.filter(container => {
+  const filteredContainers = rootContainers.filter(container => {
     const query = searchQuery.toLowerCase();
     const nameMatch = container.name.toLowerCase().includes(query);
     const descMatch = container.description?.toLowerCase().includes(query);

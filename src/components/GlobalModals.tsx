@@ -25,6 +25,7 @@ const GlobalModals: React.FC = () => {
             <CreateContainerModal
                 isOpen={showCreateModal}
                 onClose={() => setShowCreateModal(false)}
+                            parentId={null}
             />
         </>
     );

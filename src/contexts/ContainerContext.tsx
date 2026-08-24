@@ -10,7 +10,7 @@ interface ContainerContextType {
   containers: Container[];
   loading: boolean;
   error: string | null;
-  createContainer: (name: string, description?: string, color?: string) => Promise<void>;
+  createContainer: (name: string, description?: string, color?: string, parentId?: string | null) => Promise<void>;
   updateContainer: (containerId: string, updates: Partial<Container>) => Promise<void>;
   deleteContainer: (containerId: string) => Promise<void>;
   addLinkToContainer: (containerId: string, link: Omit<Link, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>) => Promise<string>;
@@ -69,7 +69,7 @@ export const ContainerProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
   };
 
-  const createContainer = async (name: string, description?: string, color?: string) => {
+  const createContainer = async (name: string, description?: string, color?: string, parentId?: string | null) => {
     if (!currentUser) throw new Error('User not authenticated');
 
     try {
@@ -82,6 +82,7 @@ export const ContainerProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
       const containerData = {
         name,
+        parentId: parentId || null,
         description: description || '',
         ownerId: currentUser.uid,
         authorizedUsers: [],

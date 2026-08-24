@@ -68,6 +68,7 @@ export interface Link {
 export interface Container {
   id: string;
   name: string;
+  parentId?: string | null;
   description?: string;
   ownerId: string;
   authorizedUsers: string[]; // Array of user IDs

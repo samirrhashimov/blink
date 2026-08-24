@@ -564,7 +564,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
               
               <div className="form-group bulk-input-group">
                 <label htmlFor="bulk-links" className="form-label">
-                  {t('container.modals.addLink.bulkInputLabel', 'Paste links')}
+                  {t('container.modals.addLink.bulkInputLabel')}
                 </label>
                 <textarea
                   id="bulk-links"
@@ -575,7 +575,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
                   placeholder={t('container.modals.addLink.bulkInputPlaceholder', 'Paste your text or links here...')}
                   disabled={loading}
                 />
-                <span className="bulk-input-hint">{t('container.modals.addLink.bulkInputHint', 'One link per line')}</span>
+                <span className="bulk-input-hint">{t('container.modals.addLink.bulkInputHint')}</span>
               </div>
 
               {stagedLinks.length > 0 && (
@@ -584,7 +584,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
                     <h3>
                       {t('container.modals.addLink.foundLinks', '{{count}} links found').replace('{{count}}', stagedLinks.length.toString())}
                     </h3>
-                    <span>{t('container.modals.addLink.bulkReady', 'Ready to add')}</span>
+                    <span>{t('container.modals.addLink.bulkReady')}</span>
                   </div>
                   <div className="bulk-links-list">
                     {stagedLinks.map((link) => (
@@ -602,7 +602,7 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
                           type="button"
                           onClick={() => removeStagedLink(link.id)}
                           className="bulk-link-remove"
-                          title={t('container.modals.addLink.tooltips.removeLink', 'Remove link')}
+                          title={t('container.modals.addLink.removeLink')}
                         >
                           <X size={14} />
                         </button>
