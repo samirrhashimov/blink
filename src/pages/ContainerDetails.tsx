@@ -716,26 +716,8 @@ const ContainerDetails: React.FC = () => {
   };
   // ----------------------------------
 
-
-  if (loading || fetchingPublic) {
-    return <LoadingSkeleton variant="fullscreen" />;
-  }
-
-  if (!container) {
-    return (
-      <div className="min-h-screen bg-background-light dark:bg-background-dark flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('container.notFound.title')}</h1>
-          <Link to="/dashboard" className="text-primary hover:text-primary/80">
-            {t('container.notFound.return')}
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   const colors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
-  const containerColor = container.color || colors[container.id.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0) % colors.length];
+  const containerColor = container?.color || colors[(container?.id || '').split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0) % colors.length] || '#6366f1';
 
   // Helper to get RGB from hex
   const hexToRgb = (hex: string) => {
@@ -745,6 +727,7 @@ const ContainerDetails: React.FC = () => {
       '99, 102, 241';
   };
 
+  // These hooks MUST be before any conditional returns to comply with Rules of Hooks
   const isLightColor = React.useMemo(() => {
     const rgb = hexToRgb(containerColor).split(',').map(Number);
     if (rgb.length === 3) {
@@ -764,6 +747,23 @@ const ContainerDetails: React.FC = () => {
       document.body.classList.remove('light-container-theme');
     };
   }, [isLightColor]);
+
+  if (loading || fetchingPublic) {
+    return <LoadingSkeleton variant="fullscreen" />;
+  }
+
+  if (!container) {
+    return (
+      <div className="min-h-screen bg-background-light dark:bg-background-dark flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('container.notFound.title')}</h1>
+          <Link to="/dashboard" className="text-primary hover:text-primary/80">
+            {t('container.notFound.return')}
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
 
 
