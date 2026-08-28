@@ -13,7 +13,7 @@ import {
   Menu,
   X,
   Tag,
-  MoreHorizontal,
+  MoreVertical,
   ChevronRight,
   ArrowLeft,
   CheckSquare,
@@ -67,6 +67,7 @@ const Dashboard: React.FC = () => {
   const [pinnedContainerIds, setPinnedContainerIds] = useState<Set<string>>(new Set());
   const [showHeaderMenu, setShowHeaderMenu] = useState(false);
   const [openDashboardSubmenu, setOpenDashboardSubmenu] = useState<'view' | 'sort' | null>(null);
+  const [preferencesLoaded, setPreferencesLoaded] = useState(false);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   // States for Edit/Delete modals
@@ -75,18 +76,20 @@ const Dashboard: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
+    setPreferencesLoaded(false);
     if (!currentUser) return;
     const savedSort = localStorage.getItem(`blink-sort-${currentUser.uid}`) as typeof sortMode | null;
     const savedView = localStorage.getItem(`blink-view-${currentUser.uid}`) as typeof viewMode | null;
     if (savedSort && ['manual', 'az', 'za', 'newest', 'oldest'].includes(savedSort)) setSortMode(savedSort);
     if (savedView === 'grid' || savedView === 'list') setViewMode(savedView);
+    setPreferencesLoaded(true);
   }, [currentUser]);
 
   useEffect(() => {
-    if (!currentUser) return;
+    if (!currentUser || !preferencesLoaded) return;
     localStorage.setItem(`blink-sort-${currentUser.uid}`, sortMode);
     localStorage.setItem(`blink-view-${currentUser.uid}`, viewMode);
-  }, [currentUser, sortMode, viewMode]);
+  }, [currentUser, preferencesLoaded, sortMode, viewMode]);
 
   useEffect(() => {
     setPinnedContainerIds(new Set(containers.filter(container => container.isPinned).map(container => container.id)));
@@ -508,7 +511,7 @@ const Dashboard: React.FC = () => {
                   aria-label={t('dashboard.actions.more')}
                   aria-expanded={showHeaderMenu}
                 >
-                  <MoreHorizontal size={20} />
+                  <MoreVertical size={20} />
                 </button>
                 {showHeaderMenu && (
                   <div className="link-menu-dropdown dashboard-header-menu-dropdown">

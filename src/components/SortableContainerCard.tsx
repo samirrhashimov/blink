@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Link as LinkIcon, Users, Lock, Edit, Trash2, LogOut, MoreHorizontal, Pin } from 'lucide-react';
+import { Link as LinkIcon, Users, Lock, Edit, Trash2, LogOut, MoreVertical, Pin } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { Container } from '../types';
 import LinkPreviewService from '../services/linkPreviewService';
@@ -146,7 +146,7 @@ const SortableContainerCard: React.FC<SortableContainerCardProps> = ({
                     )}
                     {isPinned && <Pin className="container-card-pin" size={15} fill="currentColor" />}
                     <button type="button" className="container-card-menu-trigger" onClick={openMenu} aria-label="More actions">
-                        <MoreHorizontal size={18} />
+                        <MoreVertical size={18} />
                     </button>
                 </div>
 
