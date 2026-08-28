@@ -575,7 +575,6 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
                   placeholder={t('container.modals.addLink.bulkInputPlaceholder', 'Paste your text or links here...')}
                   disabled={loading}
                 />
-                <span className="bulk-input-hint">{t('container.modals.addLink.bulkInputHint')}</span>
               </div>
 
               {stagedLinks.length > 0 && (

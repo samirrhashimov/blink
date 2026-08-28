@@ -332,19 +332,19 @@
             "oldest": "En eski"
         },
         "view": {
-            "change": "Konteyner görünümünü değiştir",
-            "grid": "Izgara görünümü",
-            "list": "Liste görünümü"
+            "change": "Görünüm",
+            "grid": "Izgara",
+            "list": "Liste"
         },
         "actions": {
             "more": "Daha fazla panel işlemi",
-            "selectContainers": "Konteynerleri seç",
-            "exitSelection": "Seçimden çık",
+            "selectContainers": "Seç",
+            "exitSelection": "Çık",
             "selectAll": "Tümünü seç",
-            "clearSelection": "Seçimi temizle",
+            "clearSelection": "Tümünü temizle",
             "selected": "{{count}} seçildi",
-            "pinSelected": "Seçilenleri sabitle",
-            "deleteSelected": "Seçilenleri sil",
+            "pinSelected": "Sabitle",
+            "deleteSelected": "Sil",
             "pinFailed": "Sabitleme durumu güncellenemedi."
         }
     },
@@ -587,12 +587,11 @@
             "addLink": {
                 "title": "Yeni Link Ekle",
                 "tabs": {
-                    "single": "Tekli Link",
-                    "bulk": "Toplu Ekle"
+                    "single": "Tekli",
+                    "bulk": "Toplu"
                 },
                 "bulkInputPlaceholder": "Metni veya linkleri buraya yapıştırın...",
                 "bulkInputLabel": "Linkleri yapıştırın",
-                "bulkInputHint": "Her satıra bir link",
                 "foundLinks": "{{count}} link bulundu",
                 "bulkReady": "Eklemeye hazır",
                 "removeLink": "Linki kaldır",

@@ -351,14 +351,10 @@
 .about-btn-primary {
   background: #13a4ec;
   color: #ffffff;
-  border: 1px solid #13a4ec;
 }
 
 .about-btn-primary:hover,
 .btn-primary:hover {
-  background: transparent !important;
-  color: #13a4ec !important;
-  border-color: #13a4ec !important;
   box-shadow: none !important;
   transform: none !important;
 }
@@ -512,7 +508,6 @@ body,
 .btn-primary {
   background: #13a4ec;
   color: #ffffff;
-  border: 1px solid #13a4ec;
 }
 
 .about-btn-secondary,

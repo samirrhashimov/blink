@@ -338,12 +338,12 @@
         "actions": {
             "more": "More dashboard actions",
             "selectContainers": "Select",
-            "exitSelection": "Exit selection",
+            "exitSelection": "Exit",
             "selectAll": "Select all",
-            "clearSelection": "Clear selection",
+            "clearSelection": "Clear All",
             "selected": "{{count}} selected",
-            "pinSelected": "Pin selected",
-            "deleteSelected": "Delete selected",
+            "pinSelected": "Pin",
+            "deleteSelected": "Delete",
             "pinFailed": "Could not update the pinned state."
         }
     },
@@ -591,7 +591,6 @@
                 },
                 "bulkInputPlaceholder": "Paste your text or links here...",
                 "bulkInputLabel": "Paste links",
-                "bulkInputHint": "One link per line",
                 "foundLinks": "{{count}} links found",
                 "bulkReady": "Ready to add",
                 "removeLink": "Remove link",

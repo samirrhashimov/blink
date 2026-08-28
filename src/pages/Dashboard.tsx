@@ -12,6 +12,7 @@ import {
   Search,
   Menu,
   X,
+  XCircle,
   Tag,
   MoreVertical,
   ChevronRight,
@@ -586,7 +587,7 @@ const Dashboard: React.FC = () => {
             <div className="dashboard-selection-bar">
               <span>{t('dashboard.actions.selected', { count: selectedContainerIds.size })}</span>
               <button type="button" onClick={toggleSelectionMode}>
-                <CheckSquare size={15} /> {t('dashboard.actions.exitSelection')}
+                <XCircle size={15} /> {t('dashboard.actions.exitSelection')}
               </button>
               <button type="button" onClick={selectAllContainers}>
                 <CheckSquare size={15} /> {selectedContainerIds.size === sortedContainers.length ? t('dashboard.actions.clearSelection') : t('dashboard.actions.selectAll')}

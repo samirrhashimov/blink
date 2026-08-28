@@ -10,7 +10,7 @@
   /* RGB for #13a4ec */
 
   /* Theme Variables (Light Default) */
-  --bg-body: #f9fafb;
+  --bg-body: #dfdfdf;
   --bg-surface: #ffffff;
   --bg-hover: #f3f4f6;
   --bg-active: #e5e7eb;
@@ -506,18 +506,12 @@ body {
   color: white;
   padding: 0.75rem 1.5rem;
   border-radius: 10px;
-  border: 1px solid transparent;
   font-weight: 600;
   cursor: pointer;
   transition: opacity 0.2s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-}
-
-.btn-primary:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
 }
 
 .btn-secondary {

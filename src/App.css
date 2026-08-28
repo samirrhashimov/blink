@@ -669,21 +669,6 @@ textarea {
   transform: none;
 }
 
-.user-avatar {
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: 50%;
-  background: #000000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  font-weight: 700;
-  font-size: 1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
 /* ============================================
    Main Content
    ============================================ */
@@ -2295,8 +2280,6 @@ main.container {
   color: white !important;
   background: var(--primary, #6366f1) !important;
   border-radius: 10px;
-  border: 1px solid transparent;
-  box-shadow: 0 4px 12px rgba(var(--primary-rgb, 99, 102, 241), 0.2);
   transition: all 0.3s ease;
   cursor: pointer;
   display: inline-flex;
@@ -2304,11 +2287,11 @@ main.container {
   justify-content: center;
   gap: 0.5rem;
   line-height: 1;
+  opacity: 0.85;
 }
 
 .btn-primary:hover {
-  box-shadow: 0 6px 18px rgba(var(--primary-rgb, 99, 102, 241), 0.3);
-  opacity: 0.95;
+  opacity: 1.0;
 }
 
 .btn-secondary {
@@ -3103,10 +3086,10 @@ main.container {
 .container-card-select {
   appearance: none;
   -webkit-appearance: none;
-  width: 22px;
-  height: 22px;
-  border: 2px solid rgba(255, 255, 255, 0.85);
-  border-radius: 5px;
+  width: 2rem;
+  height: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 8px;
   background: rgba(0, 0, 0, 0.25);
   cursor: pointer;
   position: relative;
@@ -3121,8 +3104,8 @@ main.container {
 .container-card-select:checked::after {
   content: '';
   position: absolute;
-  left: 5px;
-  top: 2px;
+  left: 11px;
+  top: 7px;
   width: 6px;
   height: 10px;
   border: solid #ffffff;
@@ -3158,6 +3141,27 @@ main.container {
   background: rgba(0, 0, 0, 0.2);
   color: #ffffff;
   filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.35));
+}
+
+.container-card-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0.45rem;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  color: #ffffff;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.35));
+}
+
+.container-card.light-color .container-card-badge {
+  border-color: rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.3);
+  color: #1e293b;
+  filter: none;
 }
 
 .container-card-pin + .container-card-menu-trigger {
@@ -4105,9 +4109,8 @@ main.container {
 }
 
 .btn-cancel:hover {
-  background: rgba(var(--primary-rgb, 99, 102, 241), 0.1);
+  background: rgba(var(--bg-active), 0.1);
   color: var(--primary, #6366f1);
-  border-color: rgba(var(--primary-rgb, 99, 102, 241), 0.2);
 }
 
 .btn-danger {
@@ -4142,7 +4145,7 @@ main.container {
 }
 
 .dark .btn-cancel:hover {
-  background: rgba(var(--primary-rgb, 99, 102, 241), 0.15);
+  background: rgba(255, 255, 255, 0.1);
   color: var(--primary, #6366f1);
 }
 
@@ -6604,6 +6607,11 @@ tr:hover {
   font-size: 1rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
   transition: all 0.3s ease;
+  border-radius: 50%;
+}
+
+.user-avatar:hover {
+  border-color: #ffffff;
 }
 
 /* ============================================
