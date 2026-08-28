@@ -1138,11 +1138,6 @@ body {
   transform: scale(1.02);
 }
 
-.animations-enabled .hover-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-}
-
 .animations-enabled .btn-primary:active,
 .animations-enabled .btn-secondary:active,
 .animations-enabled .btn-danger:active {

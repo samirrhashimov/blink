@@ -341,7 +341,6 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
                         </div>
                         <div className="flex flex-col">
                           {collab.username && <p className="text-xs text-gray-500 dark:text-gray-400">@{collab.username}</p>}
-                          <p className="collaborator-email-modern truncate">{obfuscateEmail(collab.email)}</p>
                         </div>
                       </div>
                     </div>

@@ -2524,7 +2524,7 @@ main.container {
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
 .form-label {
@@ -3040,6 +3040,7 @@ main.container {
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
 }
 
 .container-card-overlay {
@@ -3056,11 +3057,10 @@ main.container {
 .dark .container-card {
   background: rgba(255, 255, 255, 0.03);
   border-color: rgba(255, 255, 255, 0.06);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
 }
 
 .container-card:hover {
-  box-shadow: 0 12px 24px -6px color-mix(in srgb, var(--container-color, #6366f1), transparent 70%);
+  border-bottom: 2px solid #cccccc;
 }
 
 .container-card.is-selected {
@@ -3210,10 +3210,6 @@ main.container {
   transition: transform 0.3s ease;
 }
 
-.container-card:hover .container-card-image {
-  transform: scale(1.05);
-}
-
 
 /* Handled above */
 
@@ -3277,10 +3273,6 @@ main.container {
   filter: none;
 }
 
-.container-card:hover .container-card-badge {
-  transform: translateY(-2px);
-  opacity: 1;
-}
 
 .container-card-title {
   font-size: 1.25rem;
@@ -3342,9 +3334,6 @@ main.container {
   margin-left: 0;
 }
 
-.container-card:hover .container-card-favicon {
-  transform: translateY(-2px);
-}
 
 .container-card-favicon-more {
   width: 22px;
@@ -6453,7 +6442,6 @@ tr:hover {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  /* Prevents overflow in grid */
   overflow: hidden;
 }
 
@@ -6464,9 +6452,7 @@ tr:hover {
 }
 
 .tag-link-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--primary, #6366f1);
-  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  border-color: #9ca3af;
 }
 
 .container-indicator {
@@ -7583,7 +7569,11 @@ tr:hover {
 .share-invite-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.8rem;
+}
+
+.form-label2 {
+  margin-bottom: 1rem;
 }
 
 .form-input-container {
@@ -7828,14 +7818,12 @@ input:checked+.slider:before {
 }
 
 .permission-option-card:hover {
-  border-color: var(--primary);
-  background: rgba(var(--primary-rgb), 0.02);
+  border-color: rgba(255, 255, 255, 0.20);
 }
 
 .permission-option-card.selected {
   border-color: var(--primary);
   background: rgba(var(--primary-rgb), 0.04);
-  box-shadow: 0 0 0 1px var(--primary);
 }
 
 .permission-option-icon {

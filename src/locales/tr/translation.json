@@ -162,20 +162,20 @@
     },
     "share": {
         "title": "\"{{name}}\" Paylaş",
-        "subtitle": "Konteynerinize iş ortakları davet edin",
+        "subtitle": "Konteynerinizi dünyayla paylaşın",
         "form": {
-            "label": "E-posta ile davet et",
+            "label": "Yeni bir katılımcı ekle",
             "placeholder": "E-posta girin",
-            "permissions": "İzinler",
-            "submit": "Paylaş",
-            "submitting": "Paylaşılıyor...",
+            "submit": "Davet et",
+            "submitting": "Davet gönderiliyor...",
             "view": "Görüntüleyebilir",
             "viewDesc": "Varlıklara salt okunur erişim.",
             "edit": "Düzenleyebilir",
             "editDesc": "Varlık ekleme, düzenleme ve silme için tam erişim.",
             "public": "Herkese Açık",
+            "label2" : "Paylaş",
             "publicDesc": "Bağlantıya sahip olan herkes bu konteyneri görüntüleyebilir.",
-            "copyLink": "Konteyner Bağlantısını Kopyala",
+            "copyLink": "Konteyner Bağlantısı",
             "linkCopied": "Bağlantı kopyalandı!"
         },
         "pending": {

@@ -161,20 +161,20 @@
     },
     "share": {
         "title": "Share \"{{name}}\"",
-        "subtitle": "Invite collaborators to your link container",
+        "subtitle": "Share your container with the world",
         "form": {
-            "label": "Invite by email",
+            "label": "Add new collaborator",
             "placeholder": "Enter email",
-            "permissions": "Permissions",
-            "submit": "Share",
-            "submitting": "Sharing...",
+            "submit": "Invite",
+            "submitting": "Invite sending...",
             "view": "Can view",
             "viewDesc": "Read-only access to assets.",
             "edit": "Can edit",
             "editDesc": "Full access to add, edit, and delete assets.",
             "public": "Public View",
+            "label2" : "Share",
             "publicDesc": "Anyone with the link can view this container.",
-            "copyLink": "Copy Container Link",
+            "copyLink": "Container Link",
             "linkCopied": "Link copied!"
         },
         "pending": {

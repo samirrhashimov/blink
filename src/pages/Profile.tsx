@@ -550,7 +550,7 @@ const Profile: React.FC = () => {
                                         <Link
                                             key={container.id}
                                             to={`/c/${container.id}`}
-                                            className="container-card profile-public-card hover-lift"
+                                            className="container-card profile-public-card"
                                             style={{ textDecoration: 'none' }}
                                         >
                                             <div className="container-card-overlay" style={{ backgroundColor: color }} />

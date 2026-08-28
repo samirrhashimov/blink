@@ -208,15 +208,8 @@ const ShareContainer: React.FC = () => {
               {/* Invite Form Section */}
               <section className="share-section">
                 <div className="section-header" style={{ marginBottom: '16px' }}>
-                  <h3 style={{ fontSize: '1.05rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-primary)' }}>
-                    <UserPlus size={18} />
-                    {t('container.modals.collaborators.title', 'Collaborators')}
-                  </h3>
-                  <p style={{ margin: '4px 0 0 26px', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-                    {t('share.subtitle')}
-                  </p>
                 </div>
-                  <form onSubmit={handleSubmit} className="share-invite-form">
+                <form onSubmit={handleSubmit} className="share-invite-form">
                   <div className="form-group">
                     <label className="form-label" htmlFor="invite-input">
                       {t('share.form.label')}
@@ -235,8 +228,7 @@ const ShareContainer: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="form-group" style={{ marginTop: '1.5rem' }}>
-                    <label className="form-label">{t('share.form.permissions')}</label>
+                  <div className="form-group">
                     <div className="permission-grid">
                       <label
                         className={`permission-option-card ${permission === 'view' ? 'selected' : ''}`}
@@ -283,9 +275,6 @@ const ShareContainer: React.FC = () => {
                   </div>
 
                   <div className="share-form-actions mt-8">
-                    <Link to={`/c/${id}`} className="btn-cancel">
-                      {t('common.buttons.cancel')}
-                    </Link>
                     <button
                       type="submit"
                       disabled={loading}
@@ -350,6 +339,9 @@ const ShareContainer: React.FC = () => {
 
               {/* Public Section */}
               <section className="share-section">
+                <label className="form-label form-label2">
+                  {t('share.form.label2')}
+                </label>
                 <div className="public-toggle-wrapper">
                   <div className="public-toggle-info">
                     <div className="public-toggle-title">

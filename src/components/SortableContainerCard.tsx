@@ -116,7 +116,7 @@ const SortableContainerCard: React.FC<SortableContainerCardProps> = ({
                 style={style}
                 {...attributes}
                 {...listeners}
-                className={`container-card hover-lift ${isLightColor ? 'light-color' : ''} ${isNewlyAdded ? 'newly-added' : ''} ${isDragging ? 'is-dragging' : ''} ${isOpening ? 'container-card-opening' : ''} ${isSelected ? 'is-selected' : ''}`}
+                className={`container-card ${isLightColor ? 'light-color' : ''} ${isNewlyAdded ? 'newly-added' : ''} ${isDragging ? 'is-dragging' : ''} ${isOpening ? 'container-card-opening' : ''} ${isSelected ? 'is-selected' : ''}`}
                 onClick={onClick}
                 onContextMenu={handleContextMenu}
             >
