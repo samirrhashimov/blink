@@ -80,6 +80,7 @@ export interface Container {
   coverImage?: string;
   color?: string;
   order?: number;
+  isPinned?: boolean;
   isPublic?: boolean;
   discordWebhookUrl?: string;
   discordLanguage?: 'en' | 'tr';

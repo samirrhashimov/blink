@@ -322,6 +322,30 @@
             "searchTitle": "Paylaşılan konteyner bulunamadı",
             "desc": "Sizinle paylaşılan konteynerler burada görünecektir.",
             "searchDesc": "Arama terimlerinizi ayarlamayı deneyin."
+        },
+        "sort": {
+            "label": "Sırala",
+            "manual": "Manuel",
+            "az": "A–Z",
+            "za": "Z–A",
+            "newest": "En yeni",
+            "oldest": "En eski"
+        },
+        "view": {
+            "change": "Konteyner görünümünü değiştir",
+            "grid": "Izgara görünümü",
+            "list": "Liste görünümü"
+        },
+        "actions": {
+            "more": "Daha fazla panel işlemi",
+            "selectContainers": "Konteynerleri seç",
+            "exitSelection": "Seçimden çık",
+            "selectAll": "Tümünü seç",
+            "clearSelection": "Seçimi temizle",
+            "selected": "{{count}} seçildi",
+            "pinSelected": "Seçilenleri sabitle",
+            "deleteSelected": "Seçilenleri sil",
+            "pinFailed": "Sabitleme durumu güncellenemedi."
         }
     },
     "bottomNav": {

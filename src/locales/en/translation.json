@@ -321,6 +321,30 @@
             "searchTitle": "No shared containers found",
             "desc": "Containers shared with you will appear here.",
             "searchDesc": "Try adjusting your search terms."
+        },
+        "sort": {
+            "label": "Sort",
+            "manual": "Manual",
+            "az": "A–Z",
+            "za": "Z–A",
+            "newest": "Newest",
+            "oldest": "Oldest"
+        },
+        "view": {
+            "change": "View",
+            "grid": "Grid",
+            "list": "List"
+        },
+        "actions": {
+            "more": "More dashboard actions",
+            "selectContainers": "Select",
+            "exitSelection": "Exit selection",
+            "selectAll": "Select all",
+            "clearSelection": "Clear selection",
+            "selected": "{{count}} selected",
+            "pinSelected": "Pin selected",
+            "deleteSelected": "Delete selected",
+            "pinFailed": "Could not update the pinned state."
         }
     },
     "bottomNav": {
@@ -432,8 +456,8 @@
         "typeFile": "File",
         "parent": "Parent container",
         "subcontainers": {
-            "add": "Subcontainer",
-            "emptyDescription": "Subcontainer"
+            "add": "Sub-container",
+            "emptyDescription": "Sub-container"
         },
         "comingSoon": "Coming Soon",
         "searchLinks": "Search assets...",

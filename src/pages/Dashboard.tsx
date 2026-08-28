@@ -12,7 +12,12 @@ import {
   Search,
   Menu,
   X,
-  Tag
+  Tag,
+  MoreHorizontal,
+  ChevronRight,
+  ArrowLeft,
+  CheckSquare,
+  Trash2
 } from 'lucide-react';
 import { SharingService } from '../services/sharingService';
 import { ContainerService } from '../services/containerService';
@@ -48,19 +53,48 @@ import {
 const Dashboard: React.FC = () => {
   const { t } = useTranslation();
   const { currentUser } = useAuth();
-  const { containers, loading, error, reorderContainers, deleteContainer } = useContainer();
+  const { containers, loading, error, reorderContainers, deleteContainer, updateContainer } = useContainer();
   const toast = useToast();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sortMode, setSortMode] = useState<'manual' | 'az' | 'za' | 'newest' | 'oldest'>('manual');
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [selectionMode, setSelectionMode] = useState(false);
+  const [selectedContainerIds, setSelectedContainerIds] = useState<Set<string>>(new Set());
+  const [pinnedContainerIds, setPinnedContainerIds] = useState<Set<string>>(new Set());
+  const [showHeaderMenu, setShowHeaderMenu] = useState(false);
+  const [openDashboardSubmenu, setOpenDashboardSubmenu] = useState<'view' | 'sort' | null>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   // States for Edit/Delete modals
   const [selectedContainer, setSelectedContainer] = useState<Container | null>(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  useEffect(() => {
+    if (!currentUser) return;
+    const savedSort = localStorage.getItem(`blink-sort-${currentUser.uid}`) as typeof sortMode | null;
+    const savedView = localStorage.getItem(`blink-view-${currentUser.uid}`) as typeof viewMode | null;
+    if (savedSort && ['manual', 'az', 'za', 'newest', 'oldest'].includes(savedSort)) setSortMode(savedSort);
+    if (savedView === 'grid' || savedView === 'list') setViewMode(savedView);
+  }, [currentUser]);
+
+  useEffect(() => {
+    if (!currentUser) return;
+    localStorage.setItem(`blink-sort-${currentUser.uid}`, sortMode);
+    localStorage.setItem(`blink-view-${currentUser.uid}`, viewMode);
+  }, [currentUser, sortMode, viewMode]);
+
+  useEffect(() => {
+    setPinnedContainerIds(new Set(containers.filter(container => container.isPinned).map(container => container.id)));
+  }, [containers]);
+
+  useEffect(() => {
+    setSelectedContainerIds(prev => new Set([...prev].filter(id => containers.some(container => container.id === id))));
+  }, [containers]);
 
   const handleEditInitiate = (container: Container) => {
     setSelectedContainer(container);
@@ -70,6 +104,59 @@ const Dashboard: React.FC = () => {
   const handleDeleteInitiate = (container: Container) => {
     setSelectedContainer(container);
     setShowDeleteModal(true);
+  };
+
+  const toggleContainerSelection = (containerId: string) => {
+    setSelectedContainerIds(prev => {
+      const next = new Set(prev);
+      if (next.has(containerId)) next.delete(containerId);
+      else next.add(containerId);
+      return next;
+    });
+  };
+
+  const toggleContainerPin = async (containerId: string) => {
+    const isPinned = pinnedContainerIds.has(containerId);
+    setPinnedContainerIds(prev => {
+      const next = new Set(prev);
+      if (isPinned) next.delete(containerId);
+      else next.add(containerId);
+      return next;
+    });
+
+    try {
+      await updateContainer(containerId, { isPinned: !isPinned });
+    } catch (err) {
+      setPinnedContainerIds(prev => {
+        const next = new Set(prev);
+        if (isPinned) next.add(containerId);
+        else next.delete(containerId);
+        return next;
+      });
+      toast.error(t('dashboard.actions.pinFailed'));
+    }
+  };
+
+  const toggleSelectionMode = () => {
+    setSelectionMode(prev => !prev);
+    setSelectedContainerIds(new Set());
+    setShowHeaderMenu(false);
+  };
+
+  const selectAllContainers = () => {
+    setSelectedContainerIds(prev => prev.size === sortedContainers.length
+      ? new Set()
+      : new Set(sortedContainers.map(container => container.id)));
+  };
+
+  const deleteSelectedContainers = async () => {
+    if (selectedContainerIds.size === 0) return;
+    if (!window.confirm(`Delete ${selectedContainerIds.size} selected container(s)?`)) return;
+    for (const containerId of selectedContainerIds) {
+      await deleteContainer(containerId);
+    }
+    setSelectedContainerIds(new Set());
+    setSelectionMode(false);
   };
 
   const deleteCloudinaryFile = async (publicId: string, resourceType?: string) => {
@@ -230,6 +317,32 @@ const Dashboard: React.FC = () => {
     return nameMatch || descMatch || linkMatch;
   });
 
+  const getContainerTime = (container: Container) => {
+    const raw = container.createdAt as any;
+    if (raw instanceof Date) return raw.getTime();
+    if (raw && typeof raw.toDate === 'function') return raw.toDate().getTime();
+    return 0;
+  };
+
+  const sortedContainers = [...filteredContainers].sort((a, b) => {
+    const pinnedDifference = Number(pinnedContainerIds.has(b.id)) - Number(pinnedContainerIds.has(a.id));
+    if (pinnedDifference !== 0) return pinnedDifference;
+
+    switch (sortMode) {
+      case 'az':
+        return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
+      case 'za':
+        return b.name.localeCompare(a.name, undefined, { sensitivity: 'base' });
+      case 'newest':
+        return getContainerTime(b) - getContainerTime(a);
+      case 'oldest':
+        return getContainerTime(a) - getContainerTime(b);
+      case 'manual':
+      default:
+        return 0;
+    }
+  });
+
   if (loading) {
     return <LoadingSkeleton variant="fullscreen" />;
   }
@@ -242,7 +355,9 @@ const Dashboard: React.FC = () => {
         <div className="container">
           <div className="header-content">
             <div className="header-left">
-              <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto' }} />
+              <Link to="/" className="header-logo-link" aria-label="Blink home">
+                <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto' }} />
+              </Link>
             </div>
 
 
@@ -365,35 +480,124 @@ const Dashboard: React.FC = () => {
       {/* Main Content */}
       <main className="container">
         <div className="container-header">
-          <div className="flex items-center justify-between mb-6">
-            <h2>{t('dashboard.library')}</h2>
+          <div className="dashboard-control-row">
+            <h2 className="dashboard-library-title">{t('dashboard.library')}</h2>
+
+            <div className="dashboard-search-menu-row">
+              <div className="dashboard-search-wrap">
+                <Search className="modern-search-icon" size={18} />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  placeholder={t('dashboard.searchPlaceholder')}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="modern-search-input dashboard-search-input"
+                />
+              </div>
+
+              <div className="dashboard-header-actions">
+              <div className="dashboard-header-menu-wrap">
+                <button
+                  type="button"
+                  className="dashboard-header-menu-trigger"
+                  onClick={() => {
+                    setShowHeaderMenu(prev => !prev);
+                    setOpenDashboardSubmenu(null);
+                  }}
+                  aria-label={t('dashboard.actions.more')}
+                  aria-expanded={showHeaderMenu}
+                >
+                  <MoreHorizontal size={20} />
+                </button>
+                {showHeaderMenu && (
+                  <div className="link-menu-dropdown dashboard-header-menu-dropdown">
+                    <div className={`dashboard-menu-page ${openDashboardSubmenu ? 'is-subpage' : ''}`}>
+                      {openDashboardSubmenu ? (
+                        <>
+                          <button type="button" className="dashboard-menu-back" onClick={() => setOpenDashboardSubmenu(null)}>
+                            <ArrowLeft size={16} />
+                            <span>{openDashboardSubmenu === 'view' ? t('dashboard.view.change') : t('dashboard.sort.label')}</span>
+                          </button>
+                          <div className="menu-divider"></div>
+                          {openDashboardSubmenu === 'view' ? (
+                            <>
+                              <button type="button" className={`menu-item ${viewMode === 'grid' ? 'selected-menu-item' : ''}`} onClick={() => { setViewMode('grid'); setShowHeaderMenu(false); }}>
+                                <span>{t('dashboard.view.grid')}</span>
+                              </button>
+                              <button type="button" className={`menu-item ${viewMode === 'list' ? 'selected-menu-item' : ''}`} onClick={() => { setViewMode('list'); setShowHeaderMenu(false); }}>
+                                <span>{t('dashboard.view.list')}</span>
+                              </button>
+                            </>
+                          ) : [
+                            ['manual', t('dashboard.sort.manual')],
+                            ['az', t('dashboard.sort.az')],
+                            ['za', t('dashboard.sort.za')],
+                            ['newest', t('dashboard.sort.newest')],
+                            ['oldest', t('dashboard.sort.oldest')]
+                          ].map(([key, label]) => (
+                            <button key={key} type="button" className={`menu-item ${sortMode === key ? 'selected-menu-item' : ''}`} onClick={() => { setSortMode(key as typeof sortMode); setShowHeaderMenu(false); }}>
+                              <span>{label}</span>
+                            </button>
+                          ))}
+                        </>
+                      ) : (
+                        <>
+                          <button type="button" className="menu-item dashboard-menu-parent" onClick={() => setOpenDashboardSubmenu('view')}>
+                            <span>{t('dashboard.view.change')}</span>
+                            <ChevronRight size={16} />
+                          </button>
+                          <button type="button" className="menu-item dashboard-menu-parent" onClick={() => setOpenDashboardSubmenu('sort')}>
+                            <span>{t('dashboard.sort.label')}</span>
+                            <ChevronRight size={16} />
+                          </button>
+                          <div className="menu-divider"></div>
+                          <button type="button" className="menu-item" onClick={toggleSelectionMode}>
+                            <CheckSquare size={16} />
+                            <span>{selectionMode ? t('dashboard.actions.exitSelection') : t('dashboard.actions.selectContainers')}</span>
+                          </button>
+                          {selectionMode && (
+                            <button type="button" className="menu-item" onClick={selectAllContainers}>
+                              <CheckSquare size={16} />
+                              <span>{selectedContainerIds.size === sortedContainers.length ? t('dashboard.actions.clearSelection') : t('dashboard.actions.selectAll')}</span>
+                            </button>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+              </div>
+            </div>
+
             <button
               onClick={() => (window as any).dispatchSetShowCreateModal?.(true)}
-              className="add-link-button mediaforbuttons"
+              className="add-link-button mediaforbuttons dashboard-create-button"
             >
               <Plus className="h-5 w-5" />
               {t('dashboard.newContainer')}
             </button>
           </div>
-
-
-          {/* Search Bar */}
-          <div className="modern-search-bar">
-            <Search className="modern-search-icon" size={18} />
-            <input
-              ref={searchInputRef}
-              type="text"
-              placeholder={t('dashboard.searchPlaceholder')}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="modern-search-input"
-            />
-          </div>
+          {selectionMode && (
+            <div className="dashboard-selection-bar">
+              <span>{t('dashboard.actions.selected', { count: selectedContainerIds.size })}</span>
+              <button type="button" onClick={toggleSelectionMode}>
+                <CheckSquare size={15} /> {t('dashboard.actions.exitSelection')}
+              </button>
+              <button type="button" onClick={selectAllContainers}>
+                <CheckSquare size={15} /> {selectedContainerIds.size === sortedContainers.length ? t('dashboard.actions.clearSelection') : t('dashboard.actions.selectAll')}
+              </button>
+              <button type="button" className="danger" onClick={deleteSelectedContainers} disabled={selectedContainerIds.size === 0}>
+                <Trash2 size={15} /> {t('dashboard.actions.deleteSelected')}
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Unified Containers Section */}
         <section className="fade-in">
-          {filteredContainers.length === 0 ? (
+          {sortedContainers.length === 0 ? (
             <div className="fade-in">
               <EmptyState
                 type={searchQuery ? 'search' : 'personal'}
@@ -420,8 +624,8 @@ const Dashboard: React.FC = () => {
                 items={filteredContainers.map(c => c.id)}
                 strategy={rectSortingStrategy}
               >
-                <div className="container-grid">
-                  {filteredContainers.map((container) => {
+                <div className={`container-grid ${viewMode === 'list' ? 'list-view' : ''}`}>
+                  {sortedContainers.map((container) => {
                     const containerColor = getContainerColor(container);
                     return (
                       <SortableContainerCard
@@ -434,10 +638,19 @@ const Dashboard: React.FC = () => {
                         onEdit={handleEditInitiate}
                         onDelete={handleDeleteInitiate}
                         onLeave={handleLeaveContainer}
+                        onToggleSelect={toggleContainerSelection}
+                        onTogglePin={toggleContainerPin}
+                        isSelected={selectedContainerIds.has(container.id)}
+                        isPinned={pinnedContainerIds.has(container.id)}
+                        selectionMode={selectionMode}
                         currentUserId={currentUser?.uid}
                         onClick={(e) => {
                           e.preventDefault();
-                          handleContainerClick(container.id);
+                          if (selectionMode) {
+                            toggleContainerSelection(container.id);
+                          } else {
+                            handleContainerClick(container.id);
+                          }
                         }}
                       />
                     );
