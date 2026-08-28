@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { isAppWebView } from '../utils/device';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
@@ -25,14 +24,8 @@ import {
   AtSign,
   User,
   Mail,
-  Zap,
-  Crown,
-  Star,
-  AlertCircle,
   ShieldCheck
 } from 'lucide-react';
-import { getPlanConfig } from '../utils/plans';
-import type { UserPlan } from '../types';
 import SupportButton from '../components/SupportButton';
 import ConfirmModal from '../components/ConfirmModal';
 import { parseNetscapeBookmarks } from '../utils/bookmarkParser';
@@ -102,15 +95,6 @@ const Settings: React.FC = () => {
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
-  };
-
-  const formatBytes = (bytes: number, decimals = 2) => {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   };
 
   const [importing, setImporting] = useState(false);
@@ -522,129 +506,6 @@ const Settings: React.FC = () => {
               >
                 {loading ? t('settings.buttons.updating') : t('settings.buttons.update')}
               </button>
-            </div>
-
-            {/* Subscription Plan Sub-Item */}
-            <div className="settings-item settings-item-media" style={{ marginTop: '2rem', paddingTop: '1.5rem', borderTop: '1px solid var(--border-color)' }}>
-              <div className="settings-item-info">
-                <h4>{t('settings.plan.title', 'Subscription Plan')}</h4>
-                <p>{t('settings.plan.desc', 'Manage your Blink subscription and unlock more features.')}</p>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '8px' }}>
-                  <span
-                    className="settings-plan-badge"
-                    style={{
-                      backgroundColor:
-                        currentUser?.plan === 'pro+' ? '#f59e0b' :
-                          currentUser?.plan === 'pro' ? '#8b5cf6' :
-                            'var(--text-secondary)'
-                    }}
-                  >
-                    {currentUser?.plan === 'pro+' ? <Crown size={13} /> :
-                      currentUser?.plan === 'pro' ? <Zap size={13} /> :
-                        <Star size={13} />}
-                    {getPlanConfig(currentUser?.plan as UserPlan | undefined).name}
-                  </span>
-                  {(!currentUser?.plan || currentUser?.plan === 'starter') && (
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                      {t('settings.plan.upgradeHint', 'Upgrade to unlock file uploads and more.')}
-                    </span>
-                  )}
-                </div>
-
-                {/* Storage Usage Bar */}
-                {currentUser?.plan !== 'starter' && (
-                  <div className="settings-storage-stats" style={{ marginTop: '1.5rem' }}>
-                    <div className="flex justify-between items-end mb-2">
-                      <div className="flex flex-col">
-                        <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--text-main)' }}>
-                          {t('settings.storage.label', 'Storage Usage')}
-                        </span>
-                        <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
-                          {formatBytes(currentUser?.storageUsage || 0)} {t('common.of', 'of')} {getPlanConfig(currentUser?.plan as UserPlan).storageLimit} MB
-                        </span>
-                      </div>
-                      <span style={{ fontSize: '0.875rem', fontWeight: 600, color: (currentUser?.storageUsage || 0) / (getPlanConfig(currentUser?.plan as UserPlan).storageLimit * 1024 * 1024) > 0.9 ? '#ef4444' : 'var(--primary)' }}>
-                        {Math.round(((currentUser?.storageUsage || 0) / (getPlanConfig(currentUser?.plan as UserPlan).storageLimit * 1024 * 1024)) * 100)}%
-                      </span>
-                    </div>
-                    <div className="settings-storage-bar-bg" style={{ height: '8px', backgroundColor: 'var(--bg-secondary)', borderRadius: '4px', overflow: 'hidden', border: '1px solid var(--border-color)' }}>
-                      <div 
-                        className="settings-storage-bar-fill" 
-                        style={{ 
-                          height: '100%', 
-                          width: `${Math.min(100, ((currentUser?.storageUsage || 0) / (getPlanConfig(currentUser?.plan as UserPlan).storageLimit * 1024 * 1024)) * 100)}%`,
-                          background: (currentUser?.storageUsage || 0) / (getPlanConfig(currentUser?.plan as UserPlan).storageLimit * 1024 * 1024) > 0.9 
-                            ? 'linear-gradient(90deg, #ef4444, #f87171)' 
-                            : 'linear-gradient(90deg, var(--primary), #818cf8)',
-                          borderRadius: '4px',
-                          transition: 'width 0.5s ease-out'
-                        }} 
-                      />
-                    </div>
-                    {(currentUser?.storageUsage || 0) / (getPlanConfig(currentUser?.plan as UserPlan).storageLimit * 1024 * 1024) > 0.8 && (
-                      <p style={{ fontSize: '11px', color: '#ef4444', marginTop: '6px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        <AlertCircle size={10} />
-                        {t('settings.storage.warning', 'You are running out of storage space.')}
-                      </p>
-                    )}
-                  </div>
-                )}
-              </div>
-              <div className="settings-plan-actions">
-                {currentUser?.email === 'samirhasimov10@gmail.com' && (
-                  <button
-                    onClick={async () => {
-                      if (!currentUser) return;
-                      try {
-                        const order: UserPlan[] = ['starter', 'pro', 'pro+'];
-                        const currentIdx = order.indexOf((currentUser.plan as UserPlan) ?? 'starter');
-                        const nextPlan = order[(currentIdx + 1) % order.length];
-                        const userRef = doc(db, 'users', currentUser.uid);
-                        await updateDoc(userRef, { plan: nextPlan });
-                        toast.success(`Debug: Plan updated to ${nextPlan}. Reloading...`);
-                        setTimeout(() => window.location.reload(), 1500);
-                      } catch (err: any) {
-                        toast.error('Failed to change plan: ' + err.message);
-                      }
-                    }}
-                    className="btn-secondary"
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                      whiteSpace: 'nowrap'
-                    }}
-                  >
-                    {t('settings.plan.devBtn', 'Change Plan (Dev)')}
-                  </button>
-                )}
-                <button
-                  onClick={() => {
-                    if (isAppWebView()) {
-                      navigate('/mobile-upgrade');
-                    } else {
-                      navigate('/paywall');
-                    }
-                  }}
-                  className="btn-primary"
-                  style={{
-                    background:
-                      currentUser?.plan === 'pro+' ? 'linear-gradient(135deg, #f59e0b, #ef4444)' :
-                        currentUser?.plan === 'pro' ? 'linear-gradient(135deg, #8b5cf6, #6366f1)' :
-                          'linear-gradient(135deg, #8b5cf6, #6366f1)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '6px',
-                    whiteSpace: 'nowrap'
-                  }}
-                >
-                  <Zap size={15} />
-                  {currentUser?.plan === 'starter' || !currentUser?.plan
-                    ? t('settings.plan.upgradeBtn', 'Upgrade Plan')
-                    : t('settings.plan.manageBtn', 'Manage Plan')
-                  }
-                </button>
-              </div>
             </div>
           </section>
 

@@ -11,6 +11,7 @@
             "desc": "This feature requires the {{required}} plan. You are currently on the {{current}} plan.",
             "cta": "Upgrade Now"
         },
+        "privateContainerRequired": "Private containers require Pro.",
         "paywall": {
             "title": "Choose Your Plan",
             "subtitle": "Unlock more features with a Blink subscription",
@@ -19,6 +20,10 @@
             "currentBadge": "Current",
             "free": "Free",
             "month": "mo",
+            "year": "year",
+            "monthly": "Monthly",
+            "yearly": "Yearly",
+            "billingPeriod": "Billing period",
             "upgrade": "Upgrade to {{plan}}",
             "downgrade": "Continue with Free",
             "currentBtn": "Current Plan",
@@ -845,6 +850,7 @@
         "followers": "Followers",
         "following": "Following",
         "publicContainers": "Containers",
+        "verifiedBadge": "Verified Pro subscriber",
         "publicContainersTitle": "Public Containers",
         "noPublicContainers": "This user doesn't have any public containers yet.",
         "noFollowers": "No followers yet.",

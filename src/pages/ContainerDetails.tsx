@@ -6,7 +6,6 @@ import { useToast } from '../contexts/ToastContext';
 import { SharingService } from '../services/sharingService';
 import { NotificationService } from '../services/notificationService';
 import { UserService } from '../services/userService';
-import { isMobileDevice } from '../utils/device';
 import type { Link as LinkType } from '../types';
 import blinkLogo from '../assets/blinklogo2.png';
 import { ContainerService } from '../services/containerService';
@@ -29,13 +28,11 @@ import {
   Webhook,
   FileText,
   Link as LinkIcon,
-  File,
   Folder
 } from 'lucide-react';
 import AddLinkModal from '../components/AddLinkModal';
 import CreateContainerModal from '../components/CreateContainerModal';
 import AddTextModal from '../components/AddTextModal';
-import AddFileModal from '../components/AddFileModal';
 import ViewTextModal from '../components/ViewTextModal';
 import EditLinkModal from '../components/EditLinkModal';
 import EditContainerModal from '../components/EditContainerModal';
@@ -114,7 +111,6 @@ const ContainerDetails: React.FC = () => {
   const [showQRCodeModal, setShowQRCodeModal] = useState(false);
   const [selectedLink, setSelectedLink] = useState<LinkType | null>(null);
   const [showAddTextModal, setShowAddTextModal] = useState(false);
-  const [showAddFileModal, setShowAddFileModal] = useState(false);
   const [showViewTextModal, setShowViewTextModal] = useState(false);
   const [showAddDropdown, setShowAddDropdown] = useState(false);
   const addDropdownRef = useRef<HTMLDivElement>(null);
@@ -944,21 +940,6 @@ const ContainerDetails: React.FC = () => {
                           <FileText size={16} />
                           <span>{t('container.typeText')}</span>
                         </button>
-                        <button
-                          className={`add-content-item ${(!currentUser?.plan || currentUser?.plan === 'starter') ? 'plan-restricted' : ''}`}
-                          onClick={() => {
-                            if (!currentUser?.plan || currentUser?.plan === 'starter') {
-                              navigate(isMobileDevice() ? '/mobile-upgrade' : '/paywall');
-                              return;
-                            }
-                            setShowAddFileModal(true);
-                            setShowAddDropdown(false);
-                          }}
-                        >
-                          <File size={16} />
-                          <span>{t('container.typeFile')}</span>
-                          {(!currentUser?.plan || currentUser?.plan === 'starter') && <span className="pro-badge-mini">PRO</span>}
-                        </button>
                       </div>
                     )}
                   </div>
@@ -1241,22 +1222,12 @@ const ContainerDetails: React.FC = () => {
                     </Link>
                   )}
                   {isOwner && (
-                    <button
-                      onClick={() => {
-                        if (!currentUser?.plan || currentUser?.plan === 'starter') {
-                          navigate(isMobileDevice() ? '/mobile-upgrade' : '/paywall');
-                          return;
-                        }
-                        setShowWebhooksModal(true);
-                      }}
-                      className={`action-button ${(!currentUser?.plan || currentUser?.plan === 'starter') ? 'plan-restricted' : ''}`}
-                    >
+                    <button onClick={() => setShowWebhooksModal(true)} className="action-button">
                       <div className="action-icon-wrapper edit-icon">
                         <Webhook size={18} />
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
                         <span>{t('container.actions.webhooks')}</span>
-                        {(!currentUser?.plan || currentUser?.plan === 'starter') && <span className="pro-badge-mini">PRO</span>}
                       </div>
                       <ChevronRight size={18} className="action-button-arrow" />
                     </button>
@@ -1336,17 +1307,6 @@ const ContainerDetails: React.FC = () => {
         )
       }
 
-      {/* Add File Modal */}
-      {
-        container && canEdit && (
-          <AddFileModal
-            isOpen={showAddFileModal}
-            onClose={() => setShowAddFileModal(false)}
-            containerId={container.id}
-            containerColor={containerColor}
-          />
-        )
-      }
 
       {/* View Text Modal */}
       {

@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../contexts/AuthContext';
-import { isMobileDevice } from '../utils/device';
 import { useContainer } from '../contexts/ContainerContext';
 import { useToast } from '../contexts/ToastContext';
 import { SharingService } from '../services/sharingService';
@@ -25,13 +24,10 @@ import {
   Share2
 } from 'lucide-react';
 import SEO from '../components/SEO';
-import PlanGate from '../components/PlanGate';
-import { getMaxCollaborators } from '../utils/plans';
 
 const ShareContainer: React.FC = () => {
   const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
   const { currentUser } = useAuth();
   const { containers, updateContainer } = useContainer();
   const toast = useToast();
@@ -73,16 +69,6 @@ const ShareContainer: React.FC = () => {
     e.preventDefault();
 
     if (!id || !currentUser) return;
-
-    const maxCollabs = getMaxCollaborators(currentUser.plan);
-    const authUsersCount = Math.max(0, (container?.authorizedUsers?.length || 1) - 1);
-    const currentCount = authUsersCount + pendingInvites.length;
-
-    if (maxCollabs !== -1 && currentCount >= maxCollabs) {
-      toast.error(t('plans.limitReached', `You have reached your limit of ${maxCollabs} collaborators. Upgrade for more.`));
-      navigate(isMobileDevice() ? '/mobile-upgrade' : '/paywall');
-      return;
-    }
 
     setLoading(true);
 
@@ -230,7 +216,6 @@ const ShareContainer: React.FC = () => {
                     {t('share.subtitle')}
                   </p>
                 </div>
-                <PlanGate requiredPlan="pro">
                   <form onSubmit={handleSubmit} className="share-invite-form">
                   <div className="form-group">
                     <label className="form-label" htmlFor="invite-input">
@@ -321,7 +306,6 @@ const ShareContainer: React.FC = () => {
                     </button>
                   </div>
                 </form>
-                </PlanGate>
               </section>
 
               {/* Pending Invitations Section */}

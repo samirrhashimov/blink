@@ -12,15 +12,7 @@ service cloud.firestore {
       // Only authenticated users can create their own document
       allow create: if request.auth != null && request.auth.uid == userId;
 
-      // Users can update their own profile BUT cannot change their own 'plan' field.
-      // The 'plan' field is managed server-side only (via Admin SDK / Cloud Functions).
-      // Exception: admin email samirhasimov10@gmail.com can bypass this restriction for testing.
-      allow update: if request.auth != null
-        && request.auth.uid == userId
-        && (
-             !request.resource.data.diff(resource.data).affectedKeys().hasAny(['plan'])
-             || request.auth.token.email == 'samirhasimov10@gmail.com'
-           );
+      allow update: if request.auth != null && request.auth.uid == userId;
 
       // Only the account owner can delete their own document
       allow delete: if request.auth != null && request.auth.uid == userId;

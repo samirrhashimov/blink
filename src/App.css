@@ -7576,6 +7576,13 @@ input:checked+.slider:before {
   color: #f1f5f9;
 }
 
+.profile-verified-badge {
+  display: inline-block;
+  margin-left: 0.4rem;
+  color: #2563eb;
+  vertical-align: -0.15em;
+}
+
 .profile-username {
   font-size: 0.95rem;
   color: #6366f1;

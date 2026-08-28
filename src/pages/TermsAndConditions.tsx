@@ -62,9 +62,9 @@ const TermsAndConditions = () => {
                     By uploading content to the Service, you grant us a worldwide, non-exclusive, royalty-free license to store and display that content for the purpose of providing the Service to you.
                 </p>
 
-                <h2>6. Subscriptions and Payments</h2>
+                <h2>6. Payments</h2>
                 <p>
-                    Some features are available through a paid subscription (Blink PRO). Payments are processed by third-party providers (Lemon Squeezy, Apple, or Google). Refunds for Google Play purchases are handled by Google&apos;s refund policy. For direct purchases via Lemon Squeezy, refund requests may be submitted within 14 days to <a href="mailto:linzaapps@gmail.com">linzaapps@gmail.com</a>. Detailed terms can be found in our <Link to="/legal/refund-policy" style={{ color: 'inherit', fontWeight: '700', textDecoration: 'underline' }}>Refund Policy</Link>.
+                    Blink is currently provided as a free service. Historical purchases made while paid plans were offered remain subject to our <Link to="/legal/refund-policy" style={{ color: 'inherit', fontWeight: '700', textDecoration: 'underline' }}>Refund Policy</Link>.
                 </p>
 
                 <h2>7. Limitation of Liability</h2>

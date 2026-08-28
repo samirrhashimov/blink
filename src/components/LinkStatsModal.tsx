@@ -1,6 +1,5 @@
 import React from 'react';
-import { X, TrendingUp, Clock, MousePointer2, Eye, Download, Zap } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { X, TrendingUp, Clock, MousePointer2, Eye, Download } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import {
     XAxis,
@@ -16,7 +15,6 @@ import {
     BarChart,
     Bar
 } from 'recharts';
-import { useAuth } from '../contexts/AuthContext';
 import type { Link } from '../types';
 
 interface LinkStatsModalProps {
@@ -33,10 +31,6 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
     containerColor = '#6366f1'
 }) => {
     const { t } = useTranslation();
-    const navigate = useNavigate();
-
-    const { currentUser } = useAuth();
-    const userPlan = currentUser?.plan || 'starter';
 
     if (!isOpen) return null;
 
@@ -48,10 +42,7 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
     const analyticsHeader = isFile ? t('container.modals.linkStats.analyticsFile', 'File Analytics') : isText ? t('container.modals.linkStats.analyticsText') : t('container.modals.linkStats.analytics');
     const shortLabel = isFile ? t('container.modals.linkStats.downloadsShort', 'Downloads') : isText ? t('container.modals.linkStats.viewsShort') : t('container.modals.linkStats.clicksShort');
 
-    // --- PLAN BASED LIMITS ---
-    let limitDays = 7;
-    if (userPlan === 'pro') limitDays = 90;
-    if (userPlan === 'pro+') limitDays = 3650; // Effectively unlimited
+    const limitDays = 90;
 
     // Prepare data for the chart
     const stats = link.clickStats || {};
@@ -97,8 +88,6 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
 
     // --- EXPORT LOGIC ---
     const handleExport = () => {
-        if (userPlan === 'starter') return;
-        
         const headers = ['Date', 'Clicks'];
         const rows = chartData.map(d => [d.date, d.clicks]);
         
@@ -168,13 +157,11 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
 
                 <div className="premium-chart-area">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                        <h3 className="chart-section-title" style={{ margin: 0 }}>{historyHeader} ({limitDays} {t('plans.paywall.days', 'days')})</h3>
-                        {userPlan !== 'starter' && (
-                            <button onClick={handleExport} className="export-btn-stats">
-                                <Download size={14} />
-                                {t('common.export', 'Export')}
-                            </button>
-                        )}
+                        <h3 className="chart-section-title" style={{ margin: 0 }}>{historyHeader} ({limitDays} {t('container.modals.linkStats.days', 'days')})</h3>
+                        <button onClick={handleExport} className="export-btn-stats">
+                            <Download size={14} />
+                            {t('common.export', 'Export')}
+                        </button>
                     </div>
                     <div className="chart-wrapper-inner">
                         {/* CHART CONTENT ... */}
@@ -228,67 +215,58 @@ const LinkStatsModal: React.FC<LinkStatsModalProps> = ({
                     </div>
                 </div>
 
-                {userPlan === 'pro+' && (
-                    <div className="advanced-analytics-grid">
-                        <div className="advanced-chart-box">
-                            <h4>{t('plans.paywall.countries', 'Countries')}</h4>
-                            <div style={{ height: '200px' }}>
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <PieChart>
-                                        <Pie
-                                            data={countryData}
-                                            cx="50%"
-                                            cy="50%"
-                                            innerRadius={60}
-                                            outerRadius={80}
-                                            paddingAngle={5}
-                                            dataKey="value"
-                                        >
-                                            {countryData.map((_entry, index) => (
-                                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                            ))}
-                                        </Pie>
-                                        <Tooltip />
-                                    </PieChart>
-                                </ResponsiveContainer>
-                            </div>
-                            <div className="mini-legend">
-                                {countryData.map((d, i) => (
-                                    <div key={d.name} className="legend-item">
-                                        <span className="dot" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
-                                        <span className="name">{d.name}</span>
-                                        <span className="val">{d.value}</span>
-                                    </div>
-                                ))}
-                            </div>
+                <div className="advanced-analytics-grid">
+                    <div className="advanced-chart-box">
+                        <h4>{t('container.modals.linkStats.countries', 'Countries')}</h4>
+                        <div style={{ height: '200px' }}>
+                            <ResponsiveContainer width="100%" height="100%">
+                                <PieChart>
+                                    <Pie
+                                        data={countryData}
+                                        cx="50%"
+                                        cy="50%"
+                                        innerRadius={60}
+                                        outerRadius={80}
+                                        paddingAngle={5}
+                                        dataKey="value"
+                                    >
+                                        {countryData.map((_entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                        ))}
+                                    </Pie>
+                                    <Tooltip />
+                                </PieChart>
+                            </ResponsiveContainer>
                         </div>
+                        <div className="mini-legend">
+                            {countryData.map((d, i) => (
+                                <div key={d.name} className="legend-item">
+                                    <span className="dot" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
+                                    <span className="name">{d.name}</span>
+                                    <span className="val">{d.value}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
 
-                        <div className="advanced-chart-box">
-                            <h4>{t('plans.paywall.devices', 'Devices')}</h4>
-                            <div style={{ height: '200px' }}>
-                                <ResponsiveContainer width="100%" height="100%">
-                                    <BarChart data={deviceData} layout="vertical" margin={{ left: -20 }}>
-                                        <XAxis type="number" hide />
-                                        <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#94a3b8' }} width={70} />
-                                        <Tooltip cursor={{ fill: 'transparent' }} />
-                                        <Bar dataKey="value" radius={[0, 4, 4, 0]}>
-                                            {deviceData.map((_entry, index) => (
-                                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                            ))}
-                                        </Bar>
-                                    </BarChart>
-                                </ResponsiveContainer>
-                            </div>
+                    <div className="advanced-chart-box">
+                        <h4>{t('container.modals.linkStats.devices', 'Devices')}</h4>
+                        <div style={{ height: '200px' }}>
+                            <ResponsiveContainer width="100%" height="100%">
+                                <BarChart data={deviceData} layout="vertical" margin={{ left: -20 }}>
+                                    <XAxis type="number" hide />
+                                    <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#94a3b8' }} width={70} />
+                                    <Tooltip cursor={{ fill: 'transparent' }} />
+                                    <Bar dataKey="value" radius={[0, 4, 4, 0]}>
+                                        {deviceData.map((_entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                        ))}
+                                    </Bar>
+                                </BarChart>
+                            </ResponsiveContainer>
                         </div>
                     </div>
-                )}
-                
-                {userPlan === 'starter' && (
-                    <div className="starter-limit-banner" onClick={() => navigate('/paywall')}>
-                        <span>{t('plans.paywall.limitNote', 'Upgrade to Pro to see up to 90 days of history')}</span>
-                        <Zap size={14} />
-                    </div>
-                )}
+                </div>
             </div>
         </div>
     );

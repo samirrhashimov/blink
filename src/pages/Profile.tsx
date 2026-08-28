@@ -6,7 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
 import { ProfileService } from '../services/profileService';
 import type { User, Container } from '../types';
-import { ArrowLeft, UserPlus, UserMinus, X, Share2, Flag, Link as LinkIcon } from 'lucide-react';
+import { ArrowLeft, UserPlus, UserMinus, X, Share2, Flag, Link as LinkIcon, BadgeCheck } from 'lucide-react';
 import blinkLogo from '../assets/blinklogo2.png';
 import SEO from '../components/SEO';
 import SupportButton from '../components/SupportButton';
@@ -363,7 +363,12 @@ const Profile: React.FC = () => {
                     {/* Info */}
                     <div className="profile-info">
                         <div className="profile-name-row">
-                            <h1 className="profile-display-name">{displayName}</h1>
+                            <h1 className="profile-display-name">
+                                {displayName}
+                                {profileUser.isVerified && (
+                                    <BadgeCheck className="profile-verified-badge" size={20} aria-label={t('profile.verifiedBadge')} />
+                                )}
+                            </h1>
                             <div className="profile-desktop-actions">
                                 {isOwnProfile ? (
                                     <Link to="/settings" className="btn-secondary profile-action-btn" style={{ fontSize: '0.8rem' }}>

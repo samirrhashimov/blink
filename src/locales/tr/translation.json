@@ -11,6 +11,7 @@
             "desc": "Bu özellik {{required}} planını gerektiriyor. Şu anda {{current}} planındasın.",
             "cta": "Şimdi Yükselt"
         },
+        "privateContainerRequired": "Özel konteynerler Pro planını gerektirir.",
         "paywall": {
             "title": "Planını Seç",
             "subtitle": "Blink aboneliğiyle daha fazla özelliğin kilidini aç",
@@ -20,6 +21,10 @@
             "address": "Adres",
             "free": "Ücretsiz",
             "month": "ay",
+            "year": "yıl",
+            "monthly": "Aylık",
+            "yearly": "Yıllık",
+            "billingPeriod": "Ödeme dönemi",
             "upgrade": "{{plan}}'a Geç",
             "downgrade": "Ücretsiz Devam Et",
             "currentBtn": "Mevcut Plan",
@@ -846,6 +851,7 @@
         "followers": "Takipçi",
         "following": "Takip",
         "publicContainers": "Konteynerler",
+        "verifiedBadge": "Doğrulanmış Pro abonesi",
         "publicContainersTitle": "Açık Konteynerler",
         "noPublicContainers": "Bu kullanıcının henüz konteyneri yok.",
         "noFollowers": "Henüz takipçi yok.",

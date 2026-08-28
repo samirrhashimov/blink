@@ -1,4 +1,4 @@
-export type UserPlan = 'starter' | 'pro' | 'pro+';
+export type UserPlan = 'free' | 'pro';
 
 export interface User {
   uid: string;
@@ -10,6 +10,7 @@ export interface User {
   following?: string[]; // array of user UIDs
   createdAt: Date;
   plan?: UserPlan; // subscription plan
+  isVerified?: boolean;
   lemonSqueezySubscriptionId?: string;
   lemonSqueezyCustomerId?: string;
   lemonSqueezyPortalUrl?: string; // URL for managing subscription via LS portal
