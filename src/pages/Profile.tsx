@@ -513,7 +513,7 @@ const Profile: React.FC = () => {
                 <section className="profile-containers-section fade-in">
                     <div className="profile-section-header profile-sort-header">
                         <h2>{t('profile.publicContainersTitle')}</h2>
-                        <div className="profile-sort-tools">
+                        {/* <div className="profile-sort-tools">
                             {[
                                 { key: 'manual', label: t('dashboard.sort.manual') },
                                 { key: 'az', label: t('dashboard.sort.az') },
@@ -529,7 +529,7 @@ const Profile: React.FC = () => {
                                     {option.label}
                                 </button>
                             ))}
-                        </div>
+                        </div> */}
                     </div>
 
                     {publicContainers.length === 0 ? (
