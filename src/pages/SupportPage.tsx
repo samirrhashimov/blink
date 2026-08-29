@@ -4,8 +4,10 @@ import { ArrowLeft, Send, CheckCircle, MessageSquare } from 'lucide-react';
 import blinkLogo from '../assets/blinklogo2.png';
 import SEO from '../components/SEO';
 import '../css/About.css';
+import { useTranslation } from 'react-i18next';
 
 const SupportPage: React.FC = () => {
+    const { t, i18n } = useTranslation();
     const [status, setStatus] = useState<'IDLE' | 'SUBMITTING' | 'SUCCESS' | 'ERROR'>('IDLE');
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -58,105 +60,109 @@ const SupportPage: React.FC = () => {
 
             <main className="container py-20">
                 <div className="max-w-2xl mx-auto">
-                    <div className="text-center mb-12">
-                        <div style={{display: "flex", justifyContent: "center", alignItems: "center", gap: "1rem"}} className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl text-blue-600 dark:text-blue-400">
-                            <MessageSquare size={32} />
-                             <h1 className="text-4xl font-bold" style={{ display: "inline" }}>How can we help?</h1>
-                        </div>
-                        <p style={{fontSize: "14px"}} className="text-gray-600 dark:text-gray-400 text-lg">
-                            Have a question, feedback, or found a bug? Send us a message and we'll get back to you as soon as possible.
-                        </p>
-                    </div>
-
                     <div className='support-container'>
                         {status === 'SUCCESS' ? (
                             <div className="text-center py-12">
-                                <div className="inline-flex items-center justify-center p-4 bg-green-100 dark:bg-green-900/30 rounded-full mb-6 text-green-600 dark:text-green-400">
-                                    <CheckCircle size={48} />
+                                <div
+                                    className="inline-flex items-center justify-center bg-green-100 dark:bg-green-900/30 rounded-full text-green-600 dark:text-green-400"
+                                    style={{ margin: "50px 0 15px 0" }}>
+                                    <CheckCircle size={56} />
                                 </div>
-                                <h2 className="text-2xl font-bold mb-4">Message Sent!</h2>
+                                <h2 className="text-2xl font-bold">{t('support.success')}</h2>
                                 <p className="text-gray-600 dark:text-gray-400 mb-8">
-                                    Thank you for reaching out. We've received your message and will respond shortly.
+                                    {t('support.successSubtitle')}
                                 </p>
                                 <button
                                     onClick={() => setStatus('IDLE')}
                                     className="btn-primary px-8 py-3 rounded-full"
+                                    style={{ marginTop: "30px" }}
                                 >
-                                    Send another message
+                                    {t('support.sendAnotherMessage')}
                                 </button>
                             </div>
                         ) : (
-                            <form onSubmit={handleSubmit} className="space-y-6 support-form">
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <div className="text-center mb-12">
+                                    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "1rem" }} className="p-3 bg-blue-100 dark:bg-blue-900/30 rounded-xl text-blue-600 dark:text-blue-400">
+                                        <MessageSquare size={32} />
+                                        <h1 className="text-4xl font-bold" style={{ display: "inline" }}>{t('support.title')}</h1>
+                                    </div>
+                                    <p style={{ fontSize: "14px" }} className="text-gray-600 dark:text-gray-400 text-lg">
+                                        {t('support.subtitle')}
+                                    </p>
+                                </div>
+                                <form onSubmit={handleSubmit} className="space-y-6 support-form">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className="space-y-2">
+                                            <label htmlFor="name" className="text-sm font-medium ml-1">{t('support.form.name')}</label>
+                                            <input
+                                                type="text"
+                                                id="name"
+                                                name="name"
+                                                required
+                                                placeholder={t('support.placeholders.name')}
+                                                className="input-field w-full px-4 py-3 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                            />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label htmlFor="email" className="text-sm font-medium ml-1">{t('support.form.email')}</label>
+                                            <input
+                                                type="email"
+                                                id="email"
+                                                name="_replyto"
+                                                required
+                                                placeholder={t('support.placeholders.email')}
+                                                className="input-field w-full px-4 py-3 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
+                                            />
+                                        </div>
+                                    </div>
+
                                     <div className="space-y-2">
-                                        <label htmlFor="name" className="text-sm font-medium ml-1">Full Name</label>
+                                        <label htmlFor="subject" className="text-sm font-medium ml-1">{t('support.form.subject')}</label>
                                         <input
                                             type="text"
-                                            id="name"
-                                            name="name"
+                                            id="subject"
+                                            name="subject"
                                             required
-                                            placeholder="John Doe"
+                                            placeholder={t('support.placeholders.subject')}
                                             className="input-field w-full px-4 py-3 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
                                         />
                                     </div>
+
                                     <div className="space-y-2">
-                                        <label htmlFor="email" className="text-sm font-medium ml-1">Email Address</label>
-                                        <input
-                                            type="email"
-                                            id="email"
-                                            name="_replyto"
+                                        <label htmlFor="message" className="text-sm font-medium ml-1">{t('support.form.message')}</label>
+                                        <textarea
+                                            id="message"
+                                            name="message"
                                             required
-                                            placeholder="john@example.com"
-                                            className="input-field w-full px-4 py-3 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                                        />
+                                            rows={6}
+                                            placeholder={t('support.placeholders.message')}
+                                            className="input-field w-full px-4 py-3 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"
+                                        ></textarea>
                                     </div>
-                                </div>
 
-                                <div className="space-y-2">
-                                    <label htmlFor="subject" className="text-sm font-medium ml-1">Subject</label>
-                                    <input
-                                        type="text"
-                                        id="subject"
-                                        name="subject"
-                                        required
-                                        placeholder="Bug report / Feature request"
-                                        className="input-field w-full px-4 py-3 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                                    />
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label htmlFor="message" className="text-sm font-medium ml-1">Message</label>
-                                    <textarea
-                                        id="message"
-                                        name="message"
-                                        required
-                                        rows={6}
-                                        placeholder="How can we help you?"
-                                        className="input-field w-full px-4 py-3 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-blue-500 transition-all resize-none"
-                                    ></textarea>
-                                </div>
-
-                                {status === 'ERROR' && (
-                                    <p className="text-red-500 text-sm font-medium">
-                                        Something went wrong. Please try again or contact us directly.
-                                    </p>
-                                )}
-
-                                <button
-                                    type="submit"
-                                    disabled={status === 'SUBMITTING'}
-                                    className="w-full btn-primary py-4 rounded-xl flex items-center justify-center gap-2 text-lg font-bold shadow-lg hover:shadow-xl transition-all disabled:opacity-70"
-                                >
-                                    {status === 'SUBMITTING' ? (
-                                        <>Sending...</>
-                                    ) : (
-                                        <>
-                                            <Send size={20} />
-                                            Send Message
-                                        </>
+                                    {status === 'ERROR' && (
+                                        <p className="text-red-500 text-sm font-medium">
+                                            {t('support.error')}
+                                        </p>
                                     )}
-                                </button>
-                            </form>
+
+                                    <button
+                                        type="submit"
+                                        disabled={status === 'SUBMITTING'}
+                                        className="w-full btn-primary py-4 rounded-xl flex items-center justify-center gap-2 text-lg font-bold shadow-lg hover:shadow-xl transition-all disabled:opacity-70"
+                                    >
+                                        {status === 'SUBMITTING' ? (
+                                            <>{t('support.submitting')}</>
+                                        ) : (
+                                            <>
+                                                <Send size={20} />
+                                                {t('support.submit')}
+                                            </>
+                                        )}
+                                    </button>
+                                </form>
+                            </div>
                         )}
                     </div>
                 </div>

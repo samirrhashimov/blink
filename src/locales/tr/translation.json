@@ -173,7 +173,7 @@
             "edit": "Düzenleyebilir",
             "editDesc": "Varlık ekleme, düzenleme ve silme için tam erişim.",
             "public": "Herkese Açık",
-            "label2" : "Paylaş",
+            "label2": "Paylaş",
             "publicDesc": "Bağlantıya sahip olan herkes bu konteyneri görüntüleyebilir.",
             "copyLink": "Konteyner Bağlantısı",
             "linkCopied": "Bağlantı kopyalandı!"
@@ -287,6 +287,28 @@
             "placeholder": "kullaniciadi",
             "save": "Kaydet"
         }
+    },
+    "support": {
+        "title": "Nasıl yardımcı olabiliriz?",
+        "subtitle": "Bir sorunuz, geri bildiriminiz mi var yoksa bir hata mı buldunuz? Bize mesaj gönderin, en kısa sürede size geri dönelim.",
+        "form": {
+            "name": "Ad Soyad",
+            "email": "E-posta",
+            "subject": "Konu",
+            "message": "Mesaj"
+        },
+        "placeholders": {
+            "name": "Ahmet Yılmaz",
+            "email": "ahmet@ornek.com",
+            "subject": "Hata Bildirimi / Özellik İsteği",
+            "message": "Size nasıl yardımcı olabiliriz?"
+        },
+        "submit": "Mesaj Gönder",
+        "submitting": "Gönderiliyor...",
+        "success": "Mesaj Gönderildi!",
+        "successSubtitle": "Bize ulaştığınız için teşekkür ederiz. Mesajınızı aldık, en kısa sürede yanıtlayacağız.",
+        "sendAnotherMessage": "Başka bir mesaj gönder",
+        "error": "Bir şeyler yanlış gitti. Lütfen tekrar deneyin veya doğrudan bizimle iletişime geçin (linzaapps@gmail.com)."
     },
     "spotlight": {
         "placeholder": "Varlık, konteyner veya etiket ara..."

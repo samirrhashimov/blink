@@ -172,7 +172,7 @@
             "edit": "Can edit",
             "editDesc": "Full access to add, edit, and delete assets.",
             "public": "Public View",
-            "label2" : "Share",
+            "label2": "Share",
             "publicDesc": "Anyone with the link can view this container.",
             "copyLink": "Container Link",
             "linkCopied": "Link copied!"
@@ -286,6 +286,28 @@
             "placeholder": "yourname",
             "save": "Save"
         }
+    },
+    "support": {
+        "title": "How can we help?",
+        "subtitle": "Have a question, feedback, or found a bug? Send us a message and we'll get back to you as soon as possible.",
+        "form": {
+            "name": "Full Name",
+            "email": "Email",
+            "subject": "Subject",
+            "message": "Message"
+        },
+        "placeholders": {
+            "name": "John Doe",
+            "email": "john@example.com",
+            "subject": "Bug Report / Feature Request",
+            "message": "How can we help you?"
+        },
+        "submit": "Send Message",
+        "submitting": "Sending...",
+        "success": "Message Sent!",
+        "successSubtitle": "Thank you for reaching out. We've received your message and will respond shortly.",
+        "sendAnotherMessage": "Send another message",
+        "error": "Something went wrong. Please try again or contact us directly (linzaapps@gmail.com)."
     },
     "spotlight": {
         "placeholder": "Search assets, containers, tags..."
