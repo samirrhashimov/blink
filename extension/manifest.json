@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
-    "name": "Blink - Save Links to Container",
-    "version": "1.0",
+    "name": "Blink: Organize Anything",
+    "version": "2.0.0",
     "description": "Save any webpage URL to your Blink containers with one click.",
     "permissions": [
         "activeTab",

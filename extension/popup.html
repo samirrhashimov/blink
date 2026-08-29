@@ -5,8 +5,8 @@
   <meta charset="UTF-8">
   <style>
     :root {
-      --primary: #6366f1;
-      --primary-hover: #4f46e5;
+      --primary: #13a4eccc;
+      --primary-hover: #13a4ec;
       --bg: #ffffff;
       --text: #1e293b;
       --text-muted: #64748b;
@@ -16,7 +16,7 @@
 
     @media (prefers-color-scheme: dark) {
       :root {
-        --bg: #0f172a;
+        --bg: #171d24;
         --text: #f1f5f9;
         --text-muted: #94a3b8;
         --border: #1e293b;
@@ -152,7 +152,6 @@
     .btn-save:hover,
     .btn-login:hover {
       background: var(--primary-hover);
-      transform: translateY(-1px);
     }
 
     .btn-save:disabled,
@@ -240,8 +239,7 @@
 
   <!-- Login View -->
   <div id="login-view" class="view">
-    <p style="font-size: 13px; margin-bottom: 20px; color: var(--text-muted);">Sign in to your Blink account to sync
-      your containers.</p>
+    <p style="font-size: 13px; margin-bottom: 20px; color: var(--text-muted);">Sign in to your Blink account to start saving links.</p>
 
     <div class="form-group">
       <label for="email">E-MAIL</label>
