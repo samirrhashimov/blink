@@ -32,7 +32,7 @@ const Profile: React.FC = () => {
     const [followList, setFollowList] = useState<User[]>([]);
     const [listLoading, setListLoading] = useState(false);
     const [reportLoading, setReportLoading] = useState(false);
-    const [sortMode, setSortMode] = useState<'manual' | 'az' | 'za' | 'newest'>('manual');
+    const [sortMode] = useState<'manual' | 'az' | 'za' | 'newest'>('manual');
     const [showReportModal, setShowReportModal] = useState(false);
     const [selectedReason, setSelectedReason] = useState<string>('');
     const [otherReasonText, setOtherReasonText] = useState<string>('');

@@ -33,6 +33,7 @@ import { downloadBookmarks } from '../utils/bookmarkExporter';
 import LinkPreviewService from '../services/linkPreviewService';
 import { ContainerService } from '../services/containerService';
 import '../css/Settings.css';
+import packageJson from '../../package.json';
 
 
 const Settings: React.FC = () => {
@@ -315,7 +316,7 @@ const Settings: React.FC = () => {
         }
         await reauthenticate(reauthPassword);
       }
-      
+
       await deleteAccount();
       setShowDeleteModal(false);
       navigate('/');
@@ -747,6 +748,10 @@ const Settings: React.FC = () => {
                 </button>
               </div>
             )}
+            <div style={{ display: "flex", width: "100%", justifyContent: "flex-end" }}>
+              <p style={{ fontSize: '10px', color: "#cccccc", marginTop: "10px" }}>App Version: v{packageJson.version}</p>
+            </div>
+
           </section>
 
           {/* Danger Zone */}
