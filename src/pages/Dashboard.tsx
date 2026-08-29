@@ -386,9 +386,6 @@ const Dashboard: React.FC = () => {
               <Link to="/tags" className="theme-toggle mediaforbuttons" title={t('dashboard.tooltips.tags')}>
                 <Tag className="h-5 w-5" />
               </Link>
-              <Link to="/requests" className="theme-toggle mediaforbuttons" title={t('dashboard.tooltips.invitations')}>
-                <FiInbox className="h-5 w-5" />
-              </Link>
               <button
                 type="button"
                 onClick={() => setShowNotifications(prev => !prev)}

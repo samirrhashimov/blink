@@ -135,7 +135,8 @@ const Requests: React.FC = () => {
         });
         const timeStr = d.toLocaleTimeString(locale, {
             hour: '2-digit',
-            minute: '2-digit'
+            minute: '2-digit',
+            hour12: false
         });
         return `${dateStr}, ${timeStr}`;
     };
@@ -226,13 +227,13 @@ const Requests: React.FC = () => {
                                                 )}
                                                 <div className="flex items-center gap-2 mt-2 flex-wrap">
                                                     <span className={`permission-badge permission-badge-${invite.permission}`}>
-                                                        {invite.permission === 'view' && <Eye className="h-3 w-3" />}
-                                                        {invite.permission === 'comment' && <MessageCircle className="h-3 w-3" />}
-                                                        {invite.permission === 'edit' && <Edit3 className="h-3 w-3" />}
+                                                        {invite.permission === 'view' && <Eye className="request-permission-icon" />}
+                                                        {invite.permission === 'comment' && <MessageCircle className="request-permission-icon" />}
+                                                        {invite.permission === 'edit' && <Edit3 className="request-permission-icon" />}
                                                         <span className="capitalize">{invite.permission}</span>
                                                     </span>
                                                     <span className="flex items-center gap-1 text-xs text-gray-500 dark:text-gray-400">
-                                                        <Clock className="h-3 w-3" />
+                                                        <Clock className="request-time-icon" />
                                                         {formatDate(invite.createdAt)}
                                                     </span>
                                                 </div>

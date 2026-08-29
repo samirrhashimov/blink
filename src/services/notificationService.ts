@@ -168,8 +168,8 @@ export class NotificationService {
     await this.createNotification(
       userId,
       'invite',
-      'New Container Request',
-      `${inviterName} invited you to collaborate on "${containerName}"`,
+      'Collaboration Invite',
+      `${inviterName} invited you to join "${containerName}"`,
       inviteId,
       `/requests`,
       inviterId,

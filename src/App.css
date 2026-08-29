@@ -1690,11 +1690,6 @@ main.container {
   color: #94a3b8;
 }
 
-.link-item:hover .link-icon {
-  background: var(--accent-color, linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%));
-  color: white;
-}
-
 .link-favicon {
   width: 24px;
   height: 24px;
@@ -5081,14 +5076,6 @@ tr:hover {
   border-color: var(--border-color);
 }
 
-.invitation-item:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.dark .invitation-item:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-}
-
 .invitation-avatar {
   width: 40px;
   height: 40px;
@@ -5123,41 +5110,46 @@ tr:hover {
   align-items: center;
   gap: 0.375rem;
   padding: 0.25rem 0.625rem;
-  border-radius: 6px;
-  font-size: 0.75rem;
+  border-radius: 10px;
+  font-size: 0.7rem;
   font-weight: 600;
   line-height: 1;
   transition: all 0.2s ease;
 }
 
 .permission-badge-view {
-  background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-  color: #1e40af;
+  background: rgba(0, 0, 0, 0.15);
+  color: #1a1a1a;
 }
 
 .dark .permission-badge-view {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2) 0%, rgba(59, 130, 246, 0.15) 100%);
-  color: #93c5fd;
+  background: rgba(255, 255, 255, 0.15);
+  color: #f1f5f9;
 }
 
 .permission-badge-comment {
-  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-  color: #065f46;
+  background: rgba(0, 0, 0, 0.15);
+  color: #1a1a1a;
 }
 
 .dark .permission-badge-comment {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(16, 185, 129, 0.15) 100%);
-  color: #6ee7b7;
+  background: rgba(255, 255, 255, 0.15);
+  color: #f1f5f9;
 }
 
 .permission-badge-edit {
-  background: linear-gradient(135deg, #e9d5ff 0%, #d8b4fe 100%);
-  color: #6b21a8;
+  background: rgba(0, 0, 0, 0.15);
+  color: #1a1a1a;
 }
 
 .dark .permission-badge-edit {
-  background: linear-gradient(135deg, rgba(168, 85, 247, 0.2) 0%, rgba(168, 85, 247, 0.15) 100%);
-  color: #c084fc;
+  background: rgba(255, 255, 255, 0.15);
+  color: #f1f5f9;
+}
+
+.request-permission-icon, .request-time-icon {
+  height: 16px;
+  width: 16px;
 }
 
 /* Invitation Item */
@@ -5198,29 +5190,21 @@ tr:hover {
 }
 
 .invitation-btn-accept {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background-color: #10b98199;
   color: white;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
 }
 
 .invitation-btn-accept:hover:not(:disabled) {
-  background: linear-gradient(135deg, #059669 0%, #047857 100%);
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
-}
-
-.invitation-btn-accept:active:not(:disabled) {
-  transform: translateY(0);
+  background-color: #10b981;
 }
 
 .invitation-btn-decline {
-  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  background-color: #ef444499;
   color: white;
-  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
 }
 
 .invitation-btn-decline:hover:not(:disabled) {
-  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
+  background-color: #dc2626;
 }
 
 .invitation-btn-decline:active:not(:disabled) {

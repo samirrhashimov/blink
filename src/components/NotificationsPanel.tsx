@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { X, Check, Trash2, CheckCheck } from 'lucide-react';
+import { FiInbox } from "react-icons/fi";
 import { NotificationService } from '../services/notificationService';
 import type { Notification } from '../types/notification';
 import LoadingSkeleton from './LoadingSkeleton';
@@ -148,6 +149,9 @@ const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onClose
                 <CheckCheck className="h-5 w-5" />
               </button>
             )}
+            <Link to="/requests" className="notification-header-btn" title={t('dashboard.tooltips.invitations')}>
+                <FiInbox className="h-5 w-5" />
+            </Link>
             <button
               onClick={onClose}
               className="notification-header-btn"
@@ -198,17 +202,17 @@ const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onClose
                     </p>
                   </div>
 
-                  <div className="flex flex-col gap-1 ml-2">
+                  <div className="notification-actions">
                     {!notification.read && (
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           handleMarkAsRead(notification.id);
                         }}
-                        className="p-1 rounded hover:bg-gray-200 text-gray-600"
+                        className="notification-read"
                         title={t('notifications.markRead')}
                       >
-                        <Check className="h-4 w-4" />
+                        <Check className="notification-icon" />
                       </button>
                     )}
                     <button
@@ -216,10 +220,10 @@ const NotificationsPanel: React.FC<NotificationsPanelProps> = ({ isOpen, onClose
                         e.stopPropagation();
                         handleDelete(notification.id);
                       }}
-                      className="p-1 rounded hover:bg-red-100 text-red-600"
+                      className="notification-delete"
                       title={t('notifications.delete')}
                     >
-                      <Trash2 className="h-4 w-4" />
+                      <Trash2 className="notification-icon" />
                     </button>
                   </div>
                 </div>
