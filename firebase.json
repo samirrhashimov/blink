@@ -17,5 +17,31 @@
   ],
   "firestore": {
     "rules": "firestore.rules"
+  },
+  "hosting": {
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "redirects": [
+      {
+        "source": "/container/**",
+        "destination": "/c/:splat",
+        "type": 301
+      },
+      {
+        "source": "/profile/**",
+        "destination": "/u/:splat",
+        "type": 301
+      }
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
   }
 }

@@ -25,8 +25,8 @@ const LandingPage: React.FC = () => {
 
   // Words for the typewriter animation
   const words = i18n.language.startsWith('tr')
-    ? ['Linkleriniz', 'Notlarınız', 'Dosyalarınız']
-    : ['Links', 'Notes', 'Files'];
+    ? ['Linkleriniz', 'Notlarınız']
+    : ['Links', 'Notes'];
 
   const prefix = i18n.language.startsWith('tr') ? '' : 'Your ';
   const [currentWordIndex, setCurrentWordIndex] = useState(0);

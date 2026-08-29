@@ -43,7 +43,6 @@ const AdminDashboard: React.FC = () => {
   
   // Filtering states
   const [roleFilter, setRoleFilter] = useState<'all' | 'admin' | 'user'>('all');
-  const [planFilter, setPlanFilter] = useState<'all' | 'starter' | 'pro' | 'pro+'>('all');
   const [dateFilter, setDateFilter] = useState<'all' | 'today' | 'week' | 'month'>('all');
 
   useEffect(() => {
@@ -91,9 +90,6 @@ const AdminDashboard: React.FC = () => {
       // Role
       const matchesRole = roleFilter === 'all' || (u.role || 'user') === roleFilter;
       
-      // Plan
-      const matchesPlan = planFilter === 'all' || (u.plan || 'starter') === planFilter;
-      
       // Date
       let matchesDate = true;
       if (dateFilter !== 'all') {
@@ -110,7 +106,7 @@ const AdminDashboard: React.FC = () => {
         }
       }
       
-      return matchesSearch && matchesRole && matchesPlan && matchesDate;
+      return matchesSearch && matchesRole && matchesDate;
     });
   };
 
@@ -293,7 +289,6 @@ const AdminDashboard: React.FC = () => {
                         </div>
                       </div>
                       <div className="user-meta">
-                        <span className="tag-plan">{user.plan || 'starter'}</span>
                         <span className="user-date">{new Date(user.createdAt).toLocaleDateString()}</span>
                       </div>
                     </div>
@@ -326,15 +321,6 @@ const AdminDashboard: React.FC = () => {
                     </div>
 
                     <div className="filter-group">
-                      <select value={planFilter} onChange={(e) => setPlanFilter(e.target.value as any)}>
-                        <option value="all">All Plans</option>
-                        <option value="starter">Starter</option>
-                        <option value="pro">Pro</option>
-                        <option value="pro+">Pro+</option>
-                      </select>
-                    </div>
-
-                    <div className="filter-group">
                       <select value={dateFilter} onChange={(e) => setDateFilter(e.target.value as any)}>
                         <option value="all">Joined (All Time)</option>
                         <option value="today">Joined Today</option>
@@ -356,7 +342,6 @@ const AdminDashboard: React.FC = () => {
                     <tr>
                       <th>User</th>
                       <th>Username</th>
-                      <th>Plan</th>
                       <th>Joined</th>
                       <th>Last Active</th>
                       <th>Role</th>
@@ -377,11 +362,6 @@ const AdminDashboard: React.FC = () => {
                           </div>
                         </td>
                         <td>@{user.username || '-'}</td>
-                        <td>
-                          <span className={`plan-badge ${user.plan || 'starter'}`}>
-                            {user.plan || 'starter'}
-                          </span>
-                        </td>
                         <td>{new Date(user.createdAt).toLocaleDateString()}</td>
                         <td>{user.lastActive ? new Date(user.lastActive).toLocaleDateString() : 'Never'}</td>
                         <td>

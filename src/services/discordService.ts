@@ -38,7 +38,7 @@ class DiscordService {
         embedColor = parseInt(container.color.replace('#', ''), 16);
       }
 
-      const containerUrl = `${window.location.origin}/container/${container.id}`;
+      const containerUrl = `${window.location.origin}/c/${container.id}`;
 
       const payload: any = {
         embeds: [

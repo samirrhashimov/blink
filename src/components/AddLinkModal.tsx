@@ -16,7 +16,10 @@ import { useTranslation } from 'react-i18next';
 const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerId, containerColor }) => {
   const { t } = useTranslation();
 
-  const { addLinkToContainer, updateLinkInContainer } = useContainer();
+  const { addLinkToContainer, updateLinkInContainer, bulkAddLinksToContainer } = useContainer();
+  const [activeTab, setActiveTab] = useState<'single' | 'bulk'>('single');
+  const [bulkInput, setBulkInput] = useState('');
+  const [stagedLinks, setStagedLinks] = useState<{ id: string, url: string, title: string, favicon: string | null }[]>([]);
   const [formData, setFormData] = useState<{
     title: string;
     url: string;
@@ -132,6 +135,79 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
     }
   };
 
+  // Parse links from bulk input
+  useEffect(() => {
+    if (activeTab !== 'bulk') return;
+
+    const regex = /(https?:\/\/[^\s]+)/g;
+    const matches = bulkInput.match(regex);
+    
+    if (matches) {
+      const newStaged = matches.map((url, i) => {
+        let title = url;
+        try {
+          const u = new URL(url);
+          title = u.hostname.replace(/^www\./, '');
+        } catch(e) {}
+        
+        return {
+          id: `staged_${Date.now()}_${i}`,
+          url: url,
+          title: title,
+          favicon: LinkPreviewService.getFaviconUrl(url)
+        };
+      });
+      // Remove duplicates by url
+      const uniqueLinks = Array.from(new Map(newStaged.map(item => [item.url, item])).values());
+      setStagedLinks(uniqueLinks);
+    } else {
+      setStagedLinks([]);
+    }
+  }, [bulkInput, activeTab]);
+
+  const removeStagedLink = (idToRemove: string) => {
+    setStagedLinks(prev => prev.filter(l => l.id !== idToRemove));
+  };
+
+  const handleBulkSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (stagedLinks.length === 0) return;
+    
+    try {
+      setError('');
+      setLoading(true);
+      
+      let finalTags = [...tags];
+      if (tagInput.trim()) {
+        const remainingTags = tagInput.split(',')
+          .map(t => t.trim().toLowerCase())
+          .filter(t => t !== "" && !finalTags.includes(t));
+        finalTags.push(...remainingTags);
+      }
+
+      const linksData = stagedLinks.map(link => ({
+        title: link.title,
+        url: link.url,
+        description: '',
+        tags: finalTags,
+        favicon: link.favicon || undefined
+      }));
+
+      await bulkAddLinksToContainer(containerId, linksData);
+
+      setBulkInput('');
+      setStagedLinks([]);
+      setTags([]);
+      setTagInput('');
+      setLoading(false);
+      onClose();
+
+    } catch (err: any) {
+      setError(err.message || t('container.modals.addLink.errors.failed'));
+      setLoading(false);
+    }
+  };
+
   const handleUrlScan = (url: string) => {
     const trimmedUrl = url.trim();
     if (!trimmedUrl) {
@@ -237,6 +313,9 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
   useEffect(() => {
     if (!isOpen) {
       setFormData({ title: '', url: '', description: '' });
+      setBulkInput('');
+      setStagedLinks([]);
+      setActiveTab('single');
       setTags([]);
       setTagInput('');
       setIsTitleAutoFilled(false);
@@ -274,12 +353,37 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
           </button>
         </div>
 
-        <form id="add-link-form" onSubmit={handleSubmit} className="modal-body">
-          {error && (
-            <div className="error-message">
-              {error}
-            </div>
-          )}
+        <div className="add-link-tabs" role="tablist" aria-label={t('container.modals.addLink.title')}>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'single'}
+            className={`add-link-tab ${activeTab === 'single' ? 'active' : ''}`}
+            onClick={() => setActiveTab('single')}
+          >
+            <LinkIcon size={16} />
+            <span>{t('container.modals.addLink.tabs.single', 'Single Link')}</span>
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'bulk'}
+            className={`add-link-tab ${activeTab === 'bulk' ? 'active' : ''}`}
+            onClick={() => setActiveTab('bulk')}
+          >
+            <Plus size={16} />
+            <span>{t('container.modals.addLink.tabs.bulk', 'Bulk Add')}</span>
+          </button>
+        </div>
+
+        {activeTab === 'single' ? (
+          <>
+            <form id="add-link-form" onSubmit={handleSubmit} className="modal-body">
+              {error && (
+                <div className="error-message">
+                  {error}
+                </div>
+              )}
 
           <div className="form-group">
             <label htmlFor="url" className="form-label">
@@ -440,35 +544,131 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, containerI
             </div>
           </div>
         </form>
-
         <div className="modal-footer">
-          <button
-            type="button"
-            onClick={onClose}
-            disabled={loading}
-            className="btn-cancel"
-          >
+          <button type="button" onClick={onClose} disabled={loading} className="btn-cancel">
             {t('container.modals.addLink.buttons.cancel')}
-          </button>
-          <button
-            type="submit"
-            form="add-link-form"
-            disabled={loading}
-            className="btn-primary flex items-center gap-2"
-          >
-            {loading ? (
-              <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                {t('container.modals.addLink.buttons.adding')}
-              </>
-            ) : (
-              <>
-                <LinkIcon className="h-4 w-4" />
-                {t('container.modals.addLink.buttons.add')}
-              </>
-            )}
-          </button>
-        </div>
+              </button>
+              <button type="submit" form="add-link-form" disabled={loading} className="btn-primary flex items-center gap-2">
+                {loading ? (
+                  <><div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>{t('container.modals.addLink.buttons.adding')}</>
+                ) : (
+                  <><LinkIcon className="h-4 w-4" />{t('container.modals.addLink.buttons.add')}</>
+                )}
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <form id="bulk-link-form" onSubmit={handleBulkSubmit} className="modal-body">
+              {error && <div className="error-message">{error}</div>}
+              
+              <div className="form-group bulk-input-group">
+                <label htmlFor="bulk-links" className="form-label">
+                  {t('container.modals.addLink.bulkInputLabel')}
+                </label>
+                <textarea
+                  id="bulk-links"
+                  value={bulkInput}
+                  onChange={(e) => setBulkInput(e.target.value)}
+                  className="form-input bulk-links-input"
+                  rows={6}
+                  placeholder={t('container.modals.addLink.bulkInputPlaceholder', 'Paste your text or links here...')}
+                  disabled={loading}
+                />
+              </div>
+
+              {stagedLinks.length > 0 && (
+                <div className="bulk-preview">
+                  <div className="bulk-preview-header">
+                    <h3>
+                      {t('container.modals.addLink.foundLinks', '{{count}} links found').replace('{{count}}', stagedLinks.length.toString())}
+                    </h3>
+                    <span>{t('container.modals.addLink.bulkReady')}</span>
+                  </div>
+                  <div className="bulk-links-list">
+                    {stagedLinks.map((link) => (
+                      <div key={link.id} className="bulk-link-item">
+                        {link.favicon ? (
+                          <img src={link.favicon} alt="" className="bulk-link-favicon" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />
+                        ) : (
+                          <span className="bulk-link-favicon-fallback"><LinkIcon size={15} /></span>
+                        )}
+                        <div className="bulk-link-copy">
+                          <p>{link.title}</p>
+                          <span>{link.url}</span>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removeStagedLink(link.id)}
+                          className="bulk-link-remove"
+                          title={t('container.modals.addLink.removeLink')}
+                        >
+                          <X size={14} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="form-group bulk-tags-group">
+                <label className="form-label">{t('container.modals.addLink.bulkTags', 'Tags for all links')}</label>
+                <div className="tags-input-wrapper">
+                  <div className="tags-list">
+                    {tags.map(tag => (
+                      <span key={tag} className="tag-badge">
+                        {tag}
+                        <button type="button" onClick={() => removeTag(tag)} className="remove-tag">
+                          <X size={10} />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                  <div className="tag-input-field-wrapper">
+                    <div className="tag-input-icon">
+                      <Tag size={16} />
+                    </div>
+                    <input
+                      type="text"
+                      value={tagInput}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        if (value.endsWith(',')) {
+                          handleAddTag(value);
+                        } else {
+                          setTagInput(value);
+                        }
+                      }}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault();
+                          handleAddTag();
+                        }
+                      }}
+                      className="form-input tag-input-padding"
+                      placeholder={t('container.modals.addLink.placeholders.tags')}
+                    />
+                    <button type="button" onClick={() => handleAddTag()} className="tag-add-btn" title={t('container.modals.addLink.tooltips.addTag')}>
+                      <Plus size={16} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+            <div className="modal-footer">
+              <button type="button" onClick={onClose} disabled={loading} className="btn-cancel">
+                {t('container.modals.addLink.buttons.cancel')}
+              </button>
+              <button type="submit" form="bulk-link-form" disabled={loading || stagedLinks.length === 0} className="btn-primary flex items-center gap-2">
+                {loading ? (
+                  <><div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div></>
+                ) : (
+                  <><Plus className="h-4 w-4" />{t('container.modals.addLink.bulkSubmit', 'Add {{count}} Links').replace('{{count}}', stagedLinks.length.toString())}</>
+                )}
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>,
     document.body

@@ -10,7 +10,7 @@
   /* RGB for #13a4ec */
 
   /* Theme Variables (Light Default) */
-  --bg-body: #f9fafb;
+  --bg-body: #dfdfdf;
   --bg-surface: #ffffff;
   --bg-hover: #f3f4f6;
   --bg-active: #e5e7eb;
@@ -506,18 +506,12 @@ body {
   color: white;
   padding: 0.75rem 1.5rem;
   border-radius: 10px;
-  border: 1px solid transparent;
   font-weight: 600;
   cursor: pointer;
   transition: opacity 0.2s;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-}
-
-.btn-primary:hover {
-  opacity: 0.9;
-  transform: translateY(-1px);
 }
 
 .btn-secondary {
@@ -684,13 +678,11 @@ body {
 }
 
 .notification-item.unread {
-  background-color: rgba(19, 164, 236, 0.1);
-  /* primary tint */
-  box-shadow: 0 0 0 1px rgba(19, 164, 236, 0.3);
+  background-color: rgba(19, 164, 236, 0.05);
 }
 
 .notification-item:hover {
-  background-color: var(--bg-hover);
+  background-color: rgba(19, 164, 236, 0.1);
 }
 
 .notification-icon-container {
@@ -701,6 +693,48 @@ body {
   justify-content: center;
   flex-shrink: 0;
   font-size: 1.5rem;
+}
+
+.notification-actions {
+  display: flex;
+  flex-direction: column;
+  margin-right: 0.5rem;
+  gap: 0.5rem;
+}
+
+.notification-icon {
+  height: 18px;
+  width: 18px;
+}
+
+.notification-read {
+  display: flex;
+  padding: 0.35rem;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #94a3b8;
+  justify-content: center;
+  align-items: center;
+}
+
+.notification-read:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #f1f5f9;
+}
+
+.notification-delete {
+  display: flex;
+  padding: 0.35rem;
+  border-radius: 5px;
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+  justify-content: center;
+  align-items: center;
+}
+
+.notification-delete:hover {
+  background: #ef4444;
+  color: white;
 }
 
 .font-display {
@@ -1142,11 +1176,6 @@ body {
 /* Specific Interactive Animations */
 .animations-enabled .hover-scale:hover {
   transform: scale(1.02);
-}
-
-.animations-enabled .hover-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .animations-enabled .btn-primary:active,

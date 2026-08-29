@@ -11,6 +11,7 @@
             "desc": "This feature requires the {{required}} plan. You are currently on the {{current}} plan.",
             "cta": "Upgrade Now"
         },
+        "privateContainerRequired": "Private containers require Pro.",
         "paywall": {
             "title": "Choose Your Plan",
             "subtitle": "Unlock more features with a Blink subscription",
@@ -19,6 +20,10 @@
             "currentBadge": "Current",
             "free": "Free",
             "month": "mo",
+            "year": "year",
+            "monthly": "Monthly",
+            "yearly": "Yearly",
+            "billingPeriod": "Billing period",
             "upgrade": "Upgrade to {{plan}}",
             "downgrade": "Continue with Free",
             "currentBtn": "Current Plan",
@@ -45,7 +50,7 @@
         "features": {
             "containers": {
                 "title": "Centralized Containers",
-                "desc": "Create dedicated containers for different projects, teams, or personal interests. Keep your links customized and organized in one secure place."
+                "desc": "Create dedicated containers for different projects, teams, or personal interests. Keep your assets customized and organized in one secure place."
             },
             "sharing": {
                 "title": "Easy Sharing",
@@ -57,7 +62,7 @@
             },
             "tagging": {
                 "title": "Smart Tagging System",
-                "desc": "Organize your links with powerful tags. Create custom tags, filter by categories, and find exactly what you need in seconds. Perfect for managing large collections."
+                "desc": "Organize your assets with powerful tags. Create custom tags, filter by categories, and find exactly what you need in seconds. Perfect for managing large collections."
             },
             "themes": {
                 "title": "Customizable Themes",
@@ -72,7 +77,7 @@
             },
             "everything": {
                 "title": "Everything you need",
-                "subtitle": "Powerful features designed to make link management effortless and secure.",
+                "subtitle": "Powerful features designed to make asset management effortless and secure.",
                 "security": {
                     "title": "Top-tier Security",
                     "desc": "Enterprise-grade encryption aim to keep your data private and protected."
@@ -83,7 +88,7 @@
                 },
                 "anywhere": {
                     "title": "Accessible Anywhere",
-                    "desc": "Access your links from any device, anywhere in the world. Your personal cloud for the web."
+                    "desc": "Access your assets from any device, anywhere in the world. Your personal cloud for the web."
                 },
                 "search": {
                     "title": "Smart Search",
@@ -95,7 +100,7 @@
                 },
                 "permissions": {
                     "title": "Permission Control",
-                    "desc": "Control who can view, edit, or manage your links."
+                    "desc": "Control who can view, edit, or manage your assets."
                 }
             },
             "cta": {
@@ -117,25 +122,25 @@
     },
     "tags": {
         "title": "Explore by Tags",
-        "description": "Find your links across all containers using tags",
+        "description": "Find your assets across all containers using tags",
         "placeholder": "Search tags...",
         "sidebar": {
             "title": "All Tags ({{count}})",
             "empty": "No tags found"
         },
         "content": {
-            "taggedWith": "Links tagged with",
+            "taggedWith": "Assets tagged with",
             "items": "{{count}} items",
             "openContainer": "Open Container"
         },
         "empty": {
             "noTags": {
                 "title": "No tags found yet",
-                "desc": "Start adding tags to your links in your containers to enable cross-searching."
+                "desc": "Start adding tags to your assets in your containers to enable cross-searching."
             },
             "noSelection": {
-                "title": "Select a tag to see links",
-                "desc": "Choose a tag from the sidebar to view all associated links across your library."
+                "title": "Select a tag to see assets",
+                "desc": "Choose a tag from the sidebar to view all associated assets across your library."
             },
             "button": "Go to Dashboard"
         }
@@ -156,20 +161,20 @@
     },
     "share": {
         "title": "Share \"{{name}}\"",
-        "subtitle": "Invite collaborators to your link container",
+        "subtitle": "Share your container with the world",
         "form": {
-            "label": "Invite by email",
+            "label": "Add new collaborator",
             "placeholder": "Enter email",
-            "permissions": "Permissions",
-            "submit": "Share",
-            "submitting": "Sharing...",
+            "submit": "Invite",
+            "submitting": "Invite sending...",
             "view": "Can view",
-            "viewDesc": "Read-only access to links.",
+            "viewDesc": "Read-only access to assets.",
             "edit": "Can edit",
-            "editDesc": "Full access to add, edit, and delete links.",
+            "editDesc": "Full access to add, edit, and delete assets.",
             "public": "Public View",
+            "label2" : "Share",
             "publicDesc": "Anyone with the link can view this container.",
-            "copyLink": "Copy Container Link",
+            "copyLink": "Container Link",
             "linkCopied": "Link copied!"
         },
         "pending": {
@@ -281,6 +286,9 @@
             "save": "Save"
         }
     },
+    "spotlight": {
+        "placeholder": "Search assets, containers, tags..."
+    },
     "dashboard": {
         "title": "Dashboard",
         "library": "My Library",
@@ -304,7 +312,7 @@
         "emptyPersonal": {
             "title": "No personal containers yet",
             "searchTitle": "No containers found",
-            "desc": "Create your first container to start organizing your links and resources.",
+            "desc": "Create your first container to start organizing your assets and resources.",
             "searchDesc": "Try adjusting your search terms or create a new container.",
             "button": "Create Container"
         },
@@ -313,6 +321,30 @@
             "searchTitle": "No shared containers found",
             "desc": "Containers shared with you will appear here.",
             "searchDesc": "Try adjusting your search terms."
+        },
+        "sort": {
+            "label": "Sort",
+            "manual": "Manual",
+            "az": "A–Z",
+            "za": "Z–A",
+            "newest": "Newest",
+            "oldest": "Oldest"
+        },
+        "view": {
+            "change": "View",
+            "grid": "Grid",
+            "list": "List"
+        },
+        "actions": {
+            "more": "More dashboard actions",
+            "selectContainers": "Select",
+            "exitSelection": "Exit",
+            "selectAll": "Select all",
+            "clearSelection": "Clear All",
+            "selected": "{{count}} selected",
+            "pinSelected": "Pin",
+            "deleteSelected": "Delete",
+            "pinFailed": "Could not update the pinned state."
         }
     },
     "bottomNav": {
@@ -324,7 +356,7 @@
     "auth": {
         "login": {
             "title": "Log In",
-            "subtitle": "Log in to your Blink account to access your links.",
+            "subtitle": "Log in to your Blink account to access your assets.",
             "welcome": "Welcome back",
             "signInToContinue": "Sign in to continue",
             "google": "Sign in with Google",
@@ -339,9 +371,9 @@
         },
         "signup": {
             "title": "Create Account",
-            "subtitle": "Join Blink to organize and share your links with ease.",
+            "subtitle": "Join Blink to organize and share your assets with ease.",
             "header": "Create your account",
-            "subheader": "Join us to organize your links",
+            "subheader": "Join us to organize your assets",
             "google": "Sign up with Google",
             "github": "Sign up with GitHub",
             "fullName": "Full Name",
@@ -409,8 +441,11 @@
             "title": "Container not found",
             "return": "Return to Dashboard"
         },
-        "description": "Browse links in the {{name}} container on Blink.",
-        "links": "Links",
+        "description": "Browse assets in the {{name}} container on Blink.",
+        "links": "Assets",
+        "asset": "asset",
+        "assets": "assets",
+        "assetCount": "{{count}} assets",
         "select": "Select",
         "cancel": "Cancel",
         "selected": "selected",
@@ -419,12 +454,17 @@
         "typeLink": "Link",
         "typeText": "Text",
         "typeFile": "File",
+        "parent": "Parent container",
+        "subcontainers": {
+            "add": "Sub-container",
+            "emptyDescription": "Sub-container"
+        },
         "comingSoon": "Coming Soon",
-        "searchLinks": "Search links...",
-        "empty": "No links yet",
-        "emptyDesc": "This container is waiting for your awesome links. Add some to get started!",
-        "emptySearch": "No links match your search",
-        "emptySearchDesc": "We couldn't find any links matching your search. Try changing the query.",
+        "searchLinks": "Search assets...",
+        "empty": "No assets yet",
+        "emptyDesc": "This container is waiting for your awesome assets. Add some to get started!",
+        "emptySearch": "No assets match your search",
+        "emptySearchDesc": "We couldn't find any assets matching your search. Try changing the query.",
         "collaborators": {
             "title": "Collaborators",
             "owner": "Owner",
@@ -434,7 +474,7 @@
         },
         "guest": {
             "joinTitle": "Join the blink",
-            "joinDesc": "Save, organize and share your links with Blink.",
+            "joinDesc": "Save, organize and share your assets with Blink.",
             "signup": "Sign up for free"
         },
         "actions": {
@@ -481,8 +521,8 @@
             "download": "Download"
         },
         "messages": {
-            "deleted": "Deleted {{count}} links",
-            "deleteError": "Failed to delete links",
+            "deleted": "Deleted {{count}} assets",
+            "deleteError": "Failed to delete assets",
             "orderUpdated": "Order updated",
             "updateOrderError": "Failed to update order",
             "unpinned": "Link unpinned",
@@ -527,7 +567,8 @@
             },
             "deleteContainer": {
                 "title": "Delete Container",
-                "message": "Are you sure you want to delete \"{{name}}\"? All links will be permanently deleted.",
+                "message": "Are you sure you want to delete \"{{name}}\"? All assets will be permanently deleted.",
+                "confirmMessage": "Are you sure you want to delete this container? All assets inside it will be permanently deleted.",
                 "confirm": "Delete Container"
             },
             "leaveContainer": {
@@ -544,6 +585,17 @@
             },
             "addLink": {
                 "title": "Add New Link",
+                "tabs": {
+                    "single": "Single Link",
+                    "bulk": "Bulk Add"
+                },
+                "bulkInputPlaceholder": "Paste your text or links here...",
+                "bulkInputLabel": "Paste links",
+                "foundLinks": "{{count}} links found",
+                "bulkReady": "Ready to add",
+                "removeLink": "Remove link",
+                "bulkTags": "Tags for all links",
+                "bulkSubmit": "Add {{count}} Links",
                 "url": "URL",
                 "linkTitle": "Link Title",
                 "description": "Description",
@@ -632,6 +684,8 @@
             },
             "createContainer": {
                 "title": "Create New Container",
+                "subcontainerTitle": "New subcontainer",
+                "inside": "Inside {{name}}",
                 "name": "Container Name",
                 "description": "Description",
                 "color": "Container Color",
@@ -669,17 +723,17 @@
             },
             "webhooks": {
                 "title": "Webhooks",
-                "subtitle": "Notifies a channel automatically when a new link is added.",
+                "subtitle": "Notifies a channel automatically when a new asset is added.",
                 "howToDiscord": "How to get a Discord webhook?",
                 "howToSlack": "How to get a Slack webhook?",
                 "discordWebhook": "Discord Webhook",
-                "discordWebhookDesc": "Notifies a Discord channel automatically when a new link is added.",
+                "discordWebhookDesc": "Notifies a Discord channel automatically when a new asset is added.",
                 "discordWebhookPlaceholder": "https://discord.com/api/webhooks/...",
                 "discordLanguage": "Message Language",
                 "discordLanguageEn": "English",
                 "discordLanguageTr": "Turkish",
                 "slackWebhook": "Slack Webhook",
-                "slackWebhookDesc": "Notifies a Slack channel automatically when a new link is added.",
+                "slackWebhookDesc": "Notifies a Slack channel automatically when a new asset is added.",
                 "slackWebhookPlaceholder": "https://hooks.slack.com/services/...",
                 "slackLanguage": "Message Language",
                 "slackLanguageEn": "English",
@@ -765,18 +819,18 @@
                 }
             },
             "moveLink": {
-                "title": "Move Link",
-                "bulkTitle": "Move {{count}} links to another container:",
+                "title": "Move Asset",
+                "bulkTitle": "Move {{count}} assets to another container:",
                 "singleTitle": "Move \"{{title}}\" to another container:",
                 "noContainers": "No other containers available.",
                 "buttons": {
                     "moving": "Moving...",
-                    "moveLinks": "Move Links",
-                    "moveLink": "Move Link"
+                    "moveLinks": "Move Assets",
+                    "moveLink": "Move Asset"
                 },
                 "errors": {
                     "selectContainer": "Please select a target container",
-                    "failed": "Failed to move link(s)"
+                    "failed": "Failed to move asset(s)"
                 }
             }
         }
@@ -802,6 +856,8 @@
         "processing": "Processing...",
         "buttons": {
             "cancel": "Cancel",
+            "yes": "Yes",
+            "no": "No",
             "delete": "Delete",
             "deleting": "Deleting...",
             "close": "Close",
@@ -817,6 +873,7 @@
         "followers": "Followers",
         "following": "Following",
         "publicContainers": "Containers",
+        "verifiedBadge": "Verified Pro subscriber",
         "publicContainersTitle": "Public Containers",
         "noPublicContainers": "This user doesn't have any public containers yet.",
         "noFollowers": "No followers yet.",

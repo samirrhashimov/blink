@@ -6,11 +6,13 @@ import { X, Plus, ChevronDown, Pipette } from 'lucide-react';
 interface CreateContainerModalProps {
   isOpen: boolean;
   onClose: () => void;
+  parentId?: string | null;
+  parentName?: string;
 }
 
 import { useTranslation } from 'react-i18next';
 
-const CreateContainerModal: React.FC<CreateContainerModalProps> = ({ isOpen, onClose }) => {
+const CreateContainerModal: React.FC<CreateContainerModalProps> = ({ isOpen, onClose, parentId, parentName }) => {
   const { t } = useTranslation();
 
   const { createContainer } = useContainer();
@@ -47,7 +49,7 @@ const CreateContainerModal: React.FC<CreateContainerModalProps> = ({ isOpen, onC
     try {
       setError('');
       setLoading(true);
-      await createContainer(formData.name.trim(), formData.description.trim(), formData.color);
+      await createContainer(formData.name.trim(), formData.description.trim(), formData.color, parentId);
       setFormData({ name: '', description: '', color: '#6366f1' });
       onClose();
     } catch (err: any) {
@@ -76,7 +78,10 @@ const CreateContainerModal: React.FC<CreateContainerModalProps> = ({ isOpen, onC
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
-          <h2>{t('container.modals.createContainer.title')}</h2>
+          <div>
+            <h2>{parentId ? t('container.modals.createContainer.subcontainerTitle') : t('container.modals.createContainer.title')}</h2>
+            {parentName && <p className="modal-context-label">{t('container.modals.createContainer.inside', { name: parentName })}</p>}
+          </div>
           <button onClick={onClose} className="modal-close">
             <X className="h-6 w-6" />
           </button>

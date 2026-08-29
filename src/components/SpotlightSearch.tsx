@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { useContainer } from '../contexts/ContainerContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
@@ -28,6 +29,7 @@ interface SearchResult {
 }
 
 const SpotlightSearch: React.FC = () => {
+    const { t } = useTranslation();
     const { currentUser } = useAuth();
     const { containers } = useContainer();
     const navigate = useNavigate();
@@ -91,7 +93,7 @@ const SpotlightSearch: React.FC = () => {
                 found.push({
                     type: 'container',
                     title: container.name,
-                    subtitle: container.description || `${container.links.length} links`,
+                    subtitle: container.description || `${container.links.length} ${container.links.length === 1 ? t('container.asset', 'asset') : t('container.assets', 'assets')}`,
                     containerId: container.id,
                     containerName: container.name,
                     containerColor,
@@ -180,7 +182,7 @@ const SpotlightSearch: React.FC = () => {
     const handleSelect = (result: SearchResult) => {
         setIsOpen(false);
         setQuery('');
-        navigate(`/container/${result.containerId}`);
+        navigate(`/c/${result.containerId}`);
     };
 
     const handleClose = () => {
@@ -210,7 +212,7 @@ const SpotlightSearch: React.FC = () => {
                         ref={inputRef}
                         type="text"
                         className="spotlight-input"
-                        placeholder="Search links, containers, tags..."
+                        placeholder={t('spotlight.placeholder', 'Search assets, containers, tags...')}
                         value={query}
                         onChange={e => setQuery(e.target.value)}
                         autoComplete="off"

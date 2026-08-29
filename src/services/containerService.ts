@@ -179,6 +179,52 @@ export class ContainerService {
     }
   }
 
+  // Bulk add multiple links to a container
+  static async bulkAddLinksToContainer(
+    containerId: string,
+    links: Omit<Link, 'id' | 'createdAt' | 'updatedAt'>[]
+  ): Promise<string[]> {
+    try {
+      const containerRef = doc(db, CONTAINERS_COLLECTION, containerId);
+      const containerSnap = await getDoc(containerRef);
+
+      if (containerSnap.exists()) {
+        const containerData = containerSnap.data();
+        const currentLinks = containerData.links || [];
+
+        const newLinks: Link[] = [];
+        const addedIds: string[] = [];
+
+        for (const link of links) {
+          const linkId = `link_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+          const cleanLinkData = JSON.parse(JSON.stringify(link));
+
+          const newLink: Link = {
+            id: linkId,
+            ...cleanLinkData,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            createdBy: cleanLinkData.createdBy || 'unknown'
+          };
+          
+          newLinks.push(newLink);
+          addedIds.push(linkId);
+        }
+
+        await updateDoc(containerRef, {
+          links: [...currentLinks, ...newLinks],
+          updatedAt: serverTimestamp()
+        });
+
+        return addedIds;
+      }
+      throw new Error('Container not found');
+    } catch (error) {
+      console.error('Error bulk adding links to container:', error);
+      throw new Error('Failed to bulk add links to container');
+    }
+  }
+
   // Update a link in a container
   static async updateLinkInContainer(containerId: string, linkId: string, updates: Partial<Link>): Promise<void> {
     try {

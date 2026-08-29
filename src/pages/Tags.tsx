@@ -77,7 +77,7 @@ const Tags: React.FC = () => {
                             <div className="hidden md:flex">
                                 <SupportButton />
                             </div>
-                            <Link to={currentUser?.username ? `/profile/${currentUser.username}` : '#'} className="user-avatar-link">
+                            <Link to={currentUser?.username ? `/u/${currentUser.username}` : '#'} className="user-avatar-link">
                                 <div
                                     className="user-avatar"
                                     style={{
@@ -176,7 +176,7 @@ const Tags: React.FC = () => {
                                                     <ExternalLink size={14} />
                                                 </a>
                                                 <Link
-                                                    to={`/container/${link.containerId}`}
+                                                    to={`/c/${link.containerId}`}
                                                     className="view-container-link"
                                                     title={t('tags.content.openContainer')}
                                                 >

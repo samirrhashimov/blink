@@ -311,7 +311,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
                   <div key={collab.userId} className="collaborator-card">
                     <div className="collaborator-card-main">
                       {collab.username ? (
-                        <Link to={`/profile/${collab.username}`} className="collaborator-avatar-modern shrink-0 hover:opacity-80 transition-opacity overflow-hidden">
+                        <Link to={`/u/${collab.username}`} className="collaborator-avatar-modern shrink-0 hover:opacity-80 transition-opacity overflow-hidden">
                           {collab.photoURL ? (
                             <img src={collab.photoURL} alt={collab.displayName} className="w-full h-full object-cover" />
                           ) : (
@@ -327,7 +327,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
                       <div className="collaborator-info min-w-0">
                         <div className="collaborator-name-row flex flex-wrap items-center gap-x-2">
                           {collab.username ? (
-                            <Link to={`/profile/${collab.username}`} className="collaborator-name-modern hover:underline decoration-primary/50">
+                            <Link to={`/u/${collab.username}`} className="collaborator-name-modern hover:underline decoration-primary/50">
                               {collab.displayName}
                             </Link>
                           ) : (
@@ -341,7 +341,6 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
                         </div>
                         <div className="flex flex-col">
                           {collab.username && <p className="text-xs text-gray-500 dark:text-gray-400">@{collab.username}</p>}
-                          <p className="collaborator-email-modern truncate">{obfuscateEmail(collab.email)}</p>
                         </div>
                       </div>
                     </div>

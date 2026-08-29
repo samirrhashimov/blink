@@ -10,10 +10,11 @@ interface ContainerContextType {
   containers: Container[];
   loading: boolean;
   error: string | null;
-  createContainer: (name: string, description?: string, color?: string) => Promise<void>;
+  createContainer: (name: string, description?: string, color?: string, parentId?: string | null) => Promise<void>;
   updateContainer: (containerId: string, updates: Partial<Container>) => Promise<void>;
   deleteContainer: (containerId: string) => Promise<void>;
   addLinkToContainer: (containerId: string, link: Omit<Link, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>) => Promise<string>;
+  bulkAddLinksToContainer: (containerId: string, links: Omit<Link, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>[]) => Promise<string[]>;
   updateLinkInContainer: (containerId: string, linkId: string, updates: Partial<Link>) => Promise<void>;
   deleteLinkFromContainer: (containerId: string, linkId: string) => Promise<void>;
   deleteLinksFromContainer: (containerId: string, linkIds: string[]) => Promise<void>;
@@ -68,7 +69,7 @@ export const ContainerProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
   };
 
-  const createContainer = async (name: string, description?: string, color?: string) => {
+  const createContainer = async (name: string, description?: string, color?: string, parentId?: string | null) => {
     if (!currentUser) throw new Error('User not authenticated');
 
     try {
@@ -81,6 +82,7 @@ export const ContainerProvider: React.FC<{ children: React.ReactNode }> = ({ chi
 
       const containerData = {
         name,
+        parentId: parentId || null,
         description: description || '',
         ownerId: currentUser.uid,
         authorizedUsers: [],
@@ -211,6 +213,46 @@ export const ContainerProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       return linkId;
     } catch (err: any) {
       setError(err.message || 'Failed to add link');
+      throw err;
+    }
+  };
+
+  const bulkAddLinksToContainer = async (containerId: string, links: Omit<Link, 'id' | 'createdAt' | 'updatedAt' | 'createdBy'>[]) => {
+    if (!currentUser) throw new Error('User not authenticated');
+
+    try {
+      setError(null);
+      const linksData = links.map(link => ({
+        ...link,
+        createdBy: currentUser.uid
+      }));
+
+      // Get the generated link IDs from the service
+      const linkIds = await ContainerService.bulkAddLinksToContainer(containerId, linksData);
+
+      // Update local state
+      const newLinks: Link[] = linksData.map((linkData, index) => ({
+        id: linkIds[index],
+        ...linkData,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }));
+
+      setContainers(prevContainers =>
+        prevContainers.map(container =>
+          container.id === containerId
+            ? {
+              ...container,
+              links: [...container.links, ...newLinks],
+              updatedAt: new Date()
+            }
+            : container
+        )
+      );
+
+      return linkIds;
+    } catch (err: any) {
+      setError(err.message || 'Failed to bulk add links');
       throw err;
     }
   };
@@ -441,6 +483,7 @@ export const ContainerProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     updateContainer,
     deleteContainer,
     addLinkToContainer,
+    bulkAddLinksToContainer,
     updateLinkInContainer,
     deleteLinkFromContainer,
     deleteLinksFromContainer,

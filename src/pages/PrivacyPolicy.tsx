@@ -42,7 +42,6 @@ const PrivacyPolicy = () => {
                     <li>Email address</li>
                     <li>Display name</li>
                     <li>Profile information</li>
-                    <li>Payment information (processed securely via Lemon Squeezy)</li>
                 </ul>
 
                 <h3>2.2 Content Data</h3>
@@ -59,8 +58,7 @@ const PrivacyPolicy = () => {
                 <p>We use your data for the following purposes:</p>
                 <ul>
                     <li>To provide and maintain our Service.</li>
-                    <li>To manage your account and subscription.</li>
-                    <li>To process transactions and send related information.</li>
+                    <li>To manage your account.</li>
                     <li>To provide customer support and respond to inquiries.</li>
                     <li>To detect, prevent, and address technical issues or security breaches.</li>
                     <li>To comply with legal obligations and Google Play policies.</li>
@@ -79,8 +77,7 @@ const PrivacyPolicy = () => {
                 <p>We rely on trusted third-party providers to facilitate our Service:</p>
                 <ul>
                     <li><strong>Google Firebase:</strong> Used for authentication and database management.</li>
-                    <li><strong>Cloudinary:</strong> Used for secure storage and delivery of user-uploaded files and images.</li>
-                    <li><strong>Lemon Squeezy:</strong> Used for secure payment processing and subscription management (Merchant of Record).</li>
+                    <li><strong>Cloudinary:</strong> Used for storage and delivery of existing uploaded files and images.</li>
                 </ul>
 
                 <h2>6. Your Rights</h2>
@@ -101,7 +98,7 @@ const PrivacyPolicy = () => {
 
                 <h2>8. International Data Transfers</h2>
                 <p>
-                    Your information may be transferred to and maintained on computers located outside of your state, province, or country where the data protection laws may differ. Such transfers are safeguarded by the standard contractual clauses and data processing agreements maintained by our sub-processors (Google, Cloudinary, Lemon Squeezy).
+                    Your information may be transferred to and maintained on computers located outside of your state, province, or country where the data protection laws may differ. Such transfers are safeguarded by the standard contractual clauses and data processing agreements maintained by our sub-processors (Google, Cloudinary).
                 </p>
 
                 <h2>9. Children&apos;s Privacy (Target Audience 13+)</h2>

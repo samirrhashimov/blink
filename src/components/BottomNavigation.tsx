@@ -14,7 +14,7 @@ const BottomNavigation: React.FC = () => {
     if (!currentUser) return null;
 
     const handlePlusClick = () => {
-        const isContainerDetails = location.pathname.startsWith('/container/');
+        const isContainerDetails = location.pathname.startsWith('/c/');
 
         if (isContainerDetails) {
             if ((window as any).dispatchSetShowAddLinkModal) {
@@ -38,7 +38,7 @@ const BottomNavigation: React.FC = () => {
                 <span>{t('bottomNav.tags')}</span>
             </NavLink>
             <div className="bottom-nav-item center-item" onClick={handlePlusClick}>
-                <div className="center-item-inner hover-lift">
+                <div className="center-item-inner">
                     <Plus size={32} />
                 </div>
             </div>

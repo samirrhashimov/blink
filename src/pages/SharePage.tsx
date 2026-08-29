@@ -35,7 +35,7 @@ const SharePage: React.FC = () => {
                 // Store permission or other metadata in session if needed?
                 // Actually, for now, just redirect to the container page
                 // The container page needs to know that this is a public access
-                navigate(`/container/${shareLink.containerId}`);
+                navigate(`/c/${shareLink.containerId}`);
             } catch (err: any) {
                 console.error('Error accessing share link:', err);
                 toast.error(err.message || 'Failed to access share link');

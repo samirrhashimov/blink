@@ -6,7 +6,6 @@ import { useToast } from '../contexts/ToastContext';
 import { SharingService } from '../services/sharingService';
 import { NotificationService } from '../services/notificationService';
 import { UserService } from '../services/userService';
-import { isMobileDevice } from '../utils/device';
 import type { Link as LinkType } from '../types';
 import blinkLogo from '../assets/blinklogo2.png';
 import { ContainerService } from '../services/containerService';
@@ -29,11 +28,11 @@ import {
   Webhook,
   FileText,
   Link as LinkIcon,
-  File
+  Folder
 } from 'lucide-react';
 import AddLinkModal from '../components/AddLinkModal';
+import CreateContainerModal from '../components/CreateContainerModal';
 import AddTextModal from '../components/AddTextModal';
-import AddFileModal from '../components/AddFileModal';
 import ViewTextModal from '../components/ViewTextModal';
 import EditLinkModal from '../components/EditLinkModal';
 import EditContainerModal from '../components/EditContainerModal';
@@ -88,6 +87,7 @@ const ContainerDetails: React.FC = () => {
   const navigate = useNavigate();
   const toast = useToast();
   const [showAddLinkModal, setShowAddLinkModal] = useState(false);
+  const [showAddSubcontainerModal, setShowAddSubcontainerModal] = useState(false);
   const [showEditLinkModal, setShowEditLinkModal] = useState(false);
 
   // Expose setShowAddLinkModal to window for mobile navigation
@@ -111,7 +111,6 @@ const ContainerDetails: React.FC = () => {
   const [showQRCodeModal, setShowQRCodeModal] = useState(false);
   const [selectedLink, setSelectedLink] = useState<LinkType | null>(null);
   const [showAddTextModal, setShowAddTextModal] = useState(false);
-  const [showAddFileModal, setShowAddFileModal] = useState(false);
   const [showViewTextModal, setShowViewTextModal] = useState(false);
   const [showAddDropdown, setShowAddDropdown] = useState(false);
   const addDropdownRef = useRef<HTMLDivElement>(null);
@@ -182,6 +181,7 @@ const ContainerDetails: React.FC = () => {
 
   // Find the current container from the containers array or fetch it if public
   const container = (containers.find(v => v.id === id) || publicContainer) || null;
+  const childContainers = container ? containers.filter(child => child.parentId === container.id) : [];
 
   const [newlyAddedLinkId, setNewlyAddedLinkId] = useState<string | null>(null);
   const [prevLinksCount, setPrevLinksCount] = useState(0);
@@ -716,26 +716,8 @@ const ContainerDetails: React.FC = () => {
   };
   // ----------------------------------
 
-
-  if (loading || fetchingPublic) {
-    return <LoadingSkeleton variant="fullscreen" />;
-  }
-
-  if (!container) {
-    return (
-      <div className="min-h-screen bg-background-light dark:bg-background-dark flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('container.notFound.title')}</h1>
-          <Link to="/dashboard" className="text-primary hover:text-primary/80">
-            {t('container.notFound.return')}
-          </Link>
-        </div>
-      </div>
-    );
-  }
-
   const colors = ['#6366f1', '#10b981', '#f43f5e', '#d97706', '#8b5cf6', '#3b82f6', '#0891b2', '#ea580c', '#6d28d9', '#be185d'];
-  const containerColor = container.color || colors[container.id.split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0) % colors.length];
+  const containerColor = container?.color || colors[(container?.id || '').split('').reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0) % colors.length] || '#6366f1';
 
   // Helper to get RGB from hex
   const hexToRgb = (hex: string) => {
@@ -745,6 +727,7 @@ const ContainerDetails: React.FC = () => {
       '99, 102, 241';
   };
 
+  // These hooks MUST be before any conditional returns to comply with Rules of Hooks
   const isLightColor = React.useMemo(() => {
     const rgb = hexToRgb(containerColor).split(',').map(Number);
     if (rgb.length === 3) {
@@ -764,6 +747,23 @@ const ContainerDetails: React.FC = () => {
       document.body.classList.remove('light-container-theme');
     };
   }, [isLightColor]);
+
+  if (loading || fetchingPublic) {
+    return <LoadingSkeleton variant="fullscreen" />;
+  }
+
+  if (!container) {
+    return (
+      <div className="min-h-screen bg-background-light dark:bg-background-dark flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">{t('container.notFound.title')}</h1>
+          <Link to="/dashboard" className="text-primary hover:text-primary/80">
+            {t('container.notFound.return')}
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
 
 
@@ -797,7 +797,7 @@ const ContainerDetails: React.FC = () => {
                 <SupportButton />
               </div>
               {currentUser ? (
-                <Link to={currentUser.username ? `/profile/${currentUser.username}` : '#'} className="user-avatar-link">
+                <Link to={currentUser.username ? `/u/${currentUser.username}` : '#'} className="user-avatar-link">
                   <div
                     className="user-avatar"
                     style={{
@@ -842,6 +842,12 @@ const ContainerDetails: React.FC = () => {
           <div className="links-section">
             <div className="container-header" style={{ marginBottom: '1.5rem' }}>
               <div className="container-header-info">
+                {container.parentId && (
+                  <Link to={`/c/${container.parentId}`} className="container-breadcrumb">
+                    <ArrowLeft size={14} />
+                    {containers.find(parent => parent.id === container.parentId)?.name || t('container.parent')}
+                  </Link>
+                )}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '1rem' }}>
                   <h2 className="container-name-title" style={{ margin: 0 }}>{container.name}</h2>
                   {!isOwner && (
@@ -907,6 +913,16 @@ const ContainerDetails: React.FC = () => {
                         <button
                           className="add-content-item"
                           onClick={() => {
+                            setShowAddSubcontainerModal(true);
+                            setShowAddDropdown(false);
+                          }}
+                        >
+                          <Folder size={16} />
+                          <span>{t('container.subcontainers.add')}</span>
+                        </button>
+                        <button
+                          className="add-content-item"
+                          onClick={() => {
                             setShowAddLinkModal(true);
                             setShowAddDropdown(false);
                           }}
@@ -923,21 +939,6 @@ const ContainerDetails: React.FC = () => {
                         >
                           <FileText size={16} />
                           <span>{t('container.typeText')}</span>
-                        </button>
-                        <button
-                          className={`add-content-item ${(!currentUser?.plan || currentUser?.plan === 'starter') ? 'plan-restricted' : ''}`}
-                          onClick={() => {
-                            if (!currentUser?.plan || currentUser?.plan === 'starter') {
-                              navigate(isMobileDevice() ? '/mobile-upgrade' : '/paywall');
-                              return;
-                            }
-                            setShowAddFileModal(true);
-                            setShowAddDropdown(false);
-                          }}
-                        >
-                          <File size={16} />
-                          <span>{t('container.typeFile')}</span>
-                          {(!currentUser?.plan || currentUser?.plan === 'starter') && <span className="pro-badge-mini">PRO</span>}
                         </button>
                       </div>
                     )}
@@ -1003,6 +1004,30 @@ const ContainerDetails: React.FC = () => {
                     <Trash2 size={18} />
                   </button>
                 </div>
+              </div>
+            )}
+
+            {childContainers.length > 0 && (
+              <div className="asset-folders-list">
+                {childContainers.map(child => (
+                  <Link
+                    key={child.id}
+                    to={`/c/${child.id}`}
+                    className="asset-folder-card"
+                    style={{ '--folder-color': child.color || containerColor } as React.CSSProperties}
+                  >
+                    <span className="asset-folder-icon"><Folder size={20} /></span>
+                    <span className="asset-folder-copy">
+                      <strong>{child.name}</strong>
+                      <small>
+                        {child.description || t('container.subcontainers.emptyDescription')}
+                        {' · '}
+                        {t('container.assetCount', { count: child.links.length })}
+                      </small>
+                    </span>
+                    <ChevronRight size={19} className="asset-folder-arrow" />
+                  </Link>
+                ))}
               </div>
             )}
 
@@ -1081,7 +1106,7 @@ const ContainerDetails: React.FC = () => {
                   {/* Current User - Only show if member */}
                   {currentUser && isMember && (
                     <Link
-                      to={currentUser.username ? `/profile/${currentUser.username}` : '#'}
+                      to={currentUser.username ? `/u/${currentUser.username}` : '#'}
                       className="avatar overflow-hidden hover:opacity-80 transition-opacity"
                       title={currentUser.displayName || t('container.collaborators.you')}
                     >
@@ -1097,7 +1122,7 @@ const ContainerDetails: React.FC = () => {
                   {container.ownerId !== currentUser?.uid && (
                     collaboratorData[container.ownerId]?.username ? (
                       <Link
-                        to={`/profile/${collaboratorData[container.ownerId].username}`}
+                        to={`/u/${collaboratorData[container.ownerId].username}`}
                         key={container.ownerId}
                         className="avatar overflow-hidden hover:opacity-80 transition-opacity"
                         title={`${collaboratorData[container.ownerId]?.name || 'Owner'} (${t('container.collaborators.owner')})`}
@@ -1131,7 +1156,7 @@ const ContainerDetails: React.FC = () => {
                         return (
                           <Link
                             key={userId}
-                            to={`/profile/${userData.username}`}
+                            to={`/u/${userData.username}`}
                             className="avatar overflow-hidden hover:opacity-80 transition-opacity"
                             title={userName}
                           >
@@ -1186,7 +1211,7 @@ const ContainerDetails: React.FC = () => {
                   )}
                   {canEdit && (
                     <Link
-                      to={`/container/${container.id}/share`}
+                      to={`/c/${container.id}/share`}
                       className="action-button"
                     >
                       <div className="action-icon-wrapper share-icon">
@@ -1197,22 +1222,12 @@ const ContainerDetails: React.FC = () => {
                     </Link>
                   )}
                   {isOwner && (
-                    <button
-                      onClick={() => {
-                        if (!currentUser?.plan || currentUser?.plan === 'starter') {
-                          navigate(isMobileDevice() ? '/mobile-upgrade' : '/paywall');
-                          return;
-                        }
-                        setShowWebhooksModal(true);
-                      }}
-                      className={`action-button ${(!currentUser?.plan || currentUser?.plan === 'starter') ? 'plan-restricted' : ''}`}
-                    >
+                    <button onClick={() => setShowWebhooksModal(true)} className="action-button">
                       <div className="action-icon-wrapper edit-icon">
                         <Webhook size={18} />
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flex: 1 }}>
                         <span>{t('container.actions.webhooks')}</span>
-                        {(!currentUser?.plan || currentUser?.plan === 'starter') && <span className="pro-badge-mini">PRO</span>}
                       </div>
                       <ChevronRight size={18} className="action-button-arrow" />
                     </button>
@@ -1267,6 +1282,15 @@ const ContainerDetails: React.FC = () => {
         )
       }
 
+      {container && canEdit && (
+        <CreateContainerModal
+          isOpen={showAddSubcontainerModal}
+          onClose={() => setShowAddSubcontainerModal(false)}
+          parentId={container.id}
+          parentName={container.name}
+        />
+      )}
+
       {/* Add Text Modal */}
       {
         container && canEdit && (
@@ -1283,17 +1307,6 @@ const ContainerDetails: React.FC = () => {
         )
       }
 
-      {/* Add File Modal */}
-      {
-        container && canEdit && (
-          <AddFileModal
-            isOpen={showAddFileModal}
-            onClose={() => setShowAddFileModal(false)}
-            containerId={container.id}
-            containerColor={containerColor}
-          />
-        )
-      }
 
       {/* View Text Modal */}
       {
@@ -1375,11 +1388,11 @@ const ContainerDetails: React.FC = () => {
             onClose={() => setShowDeleteContainerModal(false)}
             onConfirm={confirmDeleteContainer}
             title={t('container.modals.deleteContainer.title')}
-            message={t('container.modals.deleteContainer.message', { name: container.name })}
-            confirmText={t('container.modals.deleteContainer.confirm')}
+            message={t('container.modals.deleteContainer.confirmMessage')}
+            confirmText={t('common.buttons.yes')}
+            cancelText={t('common.buttons.no')}
             variant="danger"
             icon={<Trash2 size={18} />}
-            confirmWord={container.name}
           />
         )
       }

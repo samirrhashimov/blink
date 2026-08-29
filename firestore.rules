@@ -12,15 +12,7 @@ service cloud.firestore {
       // Only authenticated users can create their own document
       allow create: if request.auth != null && request.auth.uid == userId;
 
-      // Users can update their own profile BUT cannot change their own 'plan' field.
-      // The 'plan' field is managed server-side only (via Admin SDK / Cloud Functions).
-      // Exception: admin email samirhasimov10@gmail.com can bypass this restriction for testing.
-      allow update: if request.auth != null
-        && request.auth.uid == userId
-        && (
-             !request.resource.data.diff(resource.data).affectedKeys().hasAny(['plan'])
-             || request.auth.token.email == 'samirhasimov10@gmail.com'
-           );
+      allow update: if request.auth != null && request.auth.uid == userId;
 
       // Only the account owner can delete their own document
       allow delete: if request.auth != null && request.auth.uid == userId;
@@ -32,7 +24,13 @@ service cloud.firestore {
     match /vaults/{vaultId} {
       // Creation: must be authenticated and set themselves as owner
       allow create: if request.auth != null
-        && request.resource.data.ownerId == request.auth.uid;
+        && request.resource.data.ownerId == request.auth.uid
+        && (
+          !('parentId' in request.resource.data)
+          || request.resource.data.parentId == null
+          || get(/databases/$(database)/documents/vaults/$(request.resource.data.parentId)).data.ownerId == request.auth.uid
+          || request.auth.uid in get(/databases/$(database)/documents/vaults/$(request.resource.data.parentId)).data.authorizedUsers
+        );
 
       // Read: public containers are open; private ones need auth + membership
       allow read: if resource.data.isPublic == true

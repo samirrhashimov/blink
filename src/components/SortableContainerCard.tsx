@@ -2,9 +2,10 @@ import React, { useState, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Link as LinkIcon, Users, Lock, Edit, Trash2, LogOut } from 'lucide-react';
+import { Link as LinkIcon, Users, Lock, Edit, Trash2, LogOut, MoreVertical, Pin } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import type { Container } from '../types';
+import LinkPreviewService from '../services/linkPreviewService';
 
 interface SortableContainerCardProps {
     container: Container;
@@ -16,6 +17,11 @@ interface SortableContainerCardProps {
     onEdit?: (container: Container) => void;
     onDelete?: (container: Container) => void;
     onLeave?: (container: Container) => void;
+    onToggleSelect?: (containerId: string) => void;
+    onTogglePin?: (containerId: string) => void;
+    isSelected?: boolean;
+    isPinned?: boolean;
+    selectionMode?: boolean;
     canEdit?: boolean;
     currentUserId?: string;
 }
@@ -30,6 +36,11 @@ const SortableContainerCard: React.FC<SortableContainerCardProps> = ({
     onEdit,
     onDelete,
     onLeave,
+    onToggleSelect,
+    onTogglePin,
+    isSelected = false,
+    isPinned = false,
+    selectionMode = false,
     canEdit = true,
     currentUserId,
 }) => {
@@ -69,6 +80,13 @@ const SortableContainerCard: React.FC<SortableContainerCardProps> = ({
         setMenuOpen(true);
     };
 
+    const openMenu = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+        setMenuPosition({ x: rect.right, y: rect.bottom + 8 });
+        setMenuOpen(true);
+    };
+
     const handleAction = (e: React.MouseEvent, action: () => void) => {
         e.stopPropagation();
         setMenuOpen(false);
@@ -83,11 +101,11 @@ const SortableContainerCard: React.FC<SortableContainerCardProps> = ({
         zIndex: isDragging ? 100 : (menuOpen ? 50 : 'auto'),
     } as React.CSSProperties;
 
-    // Get first 4 favicons from links
+    // Get first 4 favicons from links (use stored favicon or fall back to Google's favicon service)
     const favicons = container.links
-        .filter(link => link.favicon)
+        .filter(link => link.url && link.type !== 'text' && link.type !== 'file')
         .slice(0, 4)
-        .map(link => link.favicon!);
+        .map(link => link.favicon || LinkPreviewService.getFaviconUrl(link.url));
 
     const linkCount = container.links.length;
 
@@ -98,7 +116,7 @@ const SortableContainerCard: React.FC<SortableContainerCardProps> = ({
                 style={style}
                 {...attributes}
                 {...listeners}
-                className={`container-card hover-lift ${isLightColor ? 'light-color' : ''} ${isNewlyAdded ? 'newly-added' : ''} ${isDragging ? 'is-dragging' : ''} ${isOpening ? 'container-card-opening' : ''}`}
+                className={`container-card ${isLightColor ? 'light-color' : ''} ${isNewlyAdded ? 'newly-added' : ''} ${isDragging ? 'is-dragging' : ''} ${isOpening ? 'container-card-opening' : ''} ${isSelected ? 'is-selected' : ''}`}
                 onClick={onClick}
                 onContextMenu={handleContextMenu}
             >
@@ -106,6 +124,16 @@ const SortableContainerCard: React.FC<SortableContainerCardProps> = ({
 
                 {/* Status Badges - Moved here to be relative to the card itself */}
                 <div className="container-card-badges">
+                    {selectionMode && (
+                        <input
+                            type="checkbox"
+                            checked={isSelected}
+                            onChange={() => onToggleSelect?.(container.id)}
+                            onClick={(e) => e.stopPropagation()}
+                            className="container-card-select"
+                            aria-label={isSelected ? 'Deselect container' : 'Select container'}
+                        />
+                    )}
                     {container.isShared && (
                         <div className="container-card-badge shared" title="Shared Space">
                             <Users size={16} />
@@ -116,6 +144,10 @@ const SortableContainerCard: React.FC<SortableContainerCardProps> = ({
                             <Lock size={16} />
                         </div>
                     )}
+                    {isPinned && <Pin className="container-card-pin" size={15} fill="currentColor" />}
+                    <button type="button" className="container-card-menu-trigger" onClick={openMenu} aria-label="More actions">
+                        <MoreVertical size={18} />
+                    </button>
                 </div>
 
                 <div className="container-card-content">
@@ -133,11 +165,14 @@ const SortableContainerCard: React.FC<SortableContainerCardProps> = ({
                                     }}
                                 />
                             ))}
-                            {container.links.length > 4 && container.links.filter(l => l.favicon).length > 4 && (
-                                <span className="container-card-favicon-more">
-                                    +{container.links.filter(l => l.favicon).length - 4}
-                                </span>
-                            )}
+                            {(() => {
+                                const totalFaviconLinks = container.links.filter(l => l.url && l.type !== 'text' && l.type !== 'file').length;
+                                return totalFaviconLinks > 4 && (
+                                    <span className="container-card-favicon-more">
+                                        +{totalFaviconLinks - 4}
+                                    </span>
+                                );
+                            })()}
                         </div>
                     )}
 
@@ -150,7 +185,7 @@ const SortableContainerCard: React.FC<SortableContainerCardProps> = ({
                     <div className="container-card-stats">
                         <span className="container-card-stat">
                             <LinkIcon size={12} />
-                            {linkCount} {linkCount === 1 ? 'link' : 'links'}
+                            {linkCount} {linkCount === 1 ? t('container.asset', 'asset') : t('container.assets', 'assets')}
                         </span>
                         {container.authorizedUsers && container.authorizedUsers.length > 0 && (
                             <span className="container-card-stat">
@@ -180,6 +215,10 @@ const SortableContainerCard: React.FC<SortableContainerCardProps> = ({
                         minWidth: '160px'
                     }}
                 >
+                    <button className="menu-item" onClick={(e) => handleAction(e, () => onTogglePin?.(container.id))}>
+                        <Pin size={16} fill={isPinned ? 'currentColor' : 'none'} />
+                        <span>{isPinned ? t('container.menu.unpin') : t('container.menu.pin')}</span>
+                    </button>
                     {container.ownerId === currentUserId ? (
                         <>
                             {canEdit && (

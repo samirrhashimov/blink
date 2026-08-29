@@ -6,10 +6,11 @@ import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../contexts/ToastContext';
 import { ProfileService } from '../services/profileService';
 import type { User, Container } from '../types';
-import { ArrowLeft, UserPlus, UserMinus, X, Share2, Flag, Link as LinkIcon } from 'lucide-react';
+import { ArrowLeft, UserPlus, UserMinus, X, Share2, Flag, Link as LinkIcon, BadgeCheck } from 'lucide-react';
 import blinkLogo from '../assets/blinklogo2.png';
 import SEO from '../components/SEO';
 import SupportButton from '../components/SupportButton';
+import LinkPreviewService from '../services/linkPreviewService';
 
 const Profile: React.FC = () => {
     const { username } = useParams<{ username: string }>();
@@ -31,6 +32,7 @@ const Profile: React.FC = () => {
     const [followList, setFollowList] = useState<User[]>([]);
     const [listLoading, setListLoading] = useState(false);
     const [reportLoading, setReportLoading] = useState(false);
+    const [sortMode, setSortMode] = useState<'manual' | 'az' | 'za' | 'newest'>('manual');
     const [showReportModal, setShowReportModal] = useState(false);
     const [selectedReason, setSelectedReason] = useState<string>('');
     const [otherReasonText, setOtherReasonText] = useState<string>('');
@@ -284,7 +286,9 @@ const Profile: React.FC = () => {
                                 <button onClick={() => navigate(-1)} className="back-link">
                                     <ArrowLeft />
                                 </button>
-                                <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
+                                <Link to="/" className="header-logo-link" aria-label="Blink home">
+                                    <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
+                                </Link>
                             </div>
                         </div>
                     </div>
@@ -304,6 +308,23 @@ const Profile: React.FC = () => {
     const displayName = profileUser.displayName || profileUser.username || 'User';
     const uname = profileUser.username ? `@${profileUser.username}` : '';
 
+    const sortedProfileContainers = [...publicContainers].sort((a, b) => {
+        switch (sortMode) {
+            case 'az':
+                return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
+            case 'za':
+                return b.name.localeCompare(a.name, undefined, { sensitivity: 'base' });
+            case 'newest': {
+                const aTime = new Date(a.createdAt).getTime();
+                const bTime = new Date(b.createdAt).getTime();
+                return bTime - aTime;
+            }
+            case 'manual':
+            default:
+                return 0;
+        }
+    });
+
     return (
         <div className="profile-page">
             <SEO
@@ -319,14 +340,16 @@ const Profile: React.FC = () => {
                             <button onClick={() => navigate(-1)} className="back-link">
                                 <ArrowLeft />
                             </button>
-                            <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
+                            <Link to="/" className="header-logo-link" aria-label="Blink home">
+                                <img src={blinkLogo} alt="Blink" className="logo-image" style={{ height: '40px', width: 'auto', marginLeft: '1rem' }} />
+                            </Link>
                         </div>
                         <div className="header-right">
                             <div className="hidden md:flex">
                                 <SupportButton />
                             </div>
                             {currentUser ? (
-                                <Link to={currentUser.username ? `/profile/${currentUser.username}` : '#'} className="user-avatar-link">
+                                <Link to={currentUser.username ? `/u/${currentUser.username}` : '#'} className="user-avatar-link">
                                     <div className="user-avatar" style={{ backgroundImage: currentUser.photoURL ? `url(${currentUser.photoURL})` : undefined, backgroundSize: 'cover', backgroundPosition: 'center', overflow: 'hidden' }}>
                                         {!currentUser.photoURL && (currentUser.displayName?.charAt(0).toUpperCase() || 'U')}
                                     </div>
@@ -362,7 +385,12 @@ const Profile: React.FC = () => {
                     {/* Info */}
                     <div className="profile-info">
                         <div className="profile-name-row">
-                            <h1 className="profile-display-name">{displayName}</h1>
+                            <h1 className="profile-display-name">
+                                {displayName}
+                                {profileUser.isVerified && (
+                                    <BadgeCheck className="profile-verified-badge" size={20} aria-label={t('profile.verifiedBadge')} />
+                                )}
+                            </h1>
                             <div className="profile-desktop-actions">
                                 {isOwnProfile ? (
                                     <Link to="/settings" className="btn-secondary profile-action-btn" style={{ fontSize: '0.8rem' }}>
@@ -483,8 +511,25 @@ const Profile: React.FC = () => {
 
                 {/* Public Containers */}
                 <section className="profile-containers-section fade-in">
-                    <div className="profile-section-header">
+                    <div className="profile-section-header profile-sort-header">
                         <h2>{t('profile.publicContainersTitle')}</h2>
+                        {/* <div className="profile-sort-tools">
+                            {[
+                                { key: 'manual', label: t('dashboard.sort.manual') },
+                                { key: 'az', label: t('dashboard.sort.az') },
+                                { key: 'za', label: t('dashboard.sort.za') },
+                                { key: 'newest', label: t('dashboard.sort.newest') }
+                            ].map(option => (
+                                <button
+                                    key={option.key}
+                                    type="button"
+                                    className={`sort-chip ${sortMode === option.key ? 'active' : ''}`}
+                                    onClick={() => setSortMode(option.key as typeof sortMode)}
+                                >
+                                    {option.label}
+                                </button>
+                            ))}
+                        </div> */}
                     </div>
 
                     {publicContainers.length === 0 ? (
@@ -493,71 +538,72 @@ const Profile: React.FC = () => {
                         </div>
                     ) : (
                         <div className="profile-public-grid fade-in">
-                            {publicContainers.map(container => {
-                                const color = getContainerColor(container);
-                                const favicons = container.links
-                                    ?.filter(link => link.favicon)
-                                    .slice(0, 4)
-                                    .map(link => link.favicon!) || [];
-                                const linkCount = container.links?.length || 0;
+                            {sortedProfileContainers.map(container => {
+                                    const color = getContainerColor(container);
+                                    const favicons = container.links
+                                        ?.filter(link => link.url && link.type !== 'text' && link.type !== 'file')
+                                        .slice(0, 4)
+                                        .map(link => link.favicon || LinkPreviewService.getFaviconUrl(link.url)) || [];
+                                    const linkCount = container.links?.length || 0;
 
-                                return (
-                                    <Link
-                                        key={container.id}
-                                        to={`/container/${container.id}`}
-                                        className="container-card profile-public-card hover-lift"
-                                        style={{ textDecoration: 'none' }}
-                                    >
-                                        <div className="container-card-overlay" style={{ backgroundColor: color }} />
-                                        <div className="container-card-content">
-                                            {/* Favicon previews */}
-                                            {favicons.length > 0 && (
-                                                <div className="container-card-favicons">
-                                                    {favicons.map((favicon, idx) => (
-                                                        <img
-                                                            key={idx}
-                                                            src={favicon}
-                                                            alt=""
-                                                            className="container-card-favicon"
-                                                            onError={(e) => {
-                                                                (e.target as HTMLImageElement).style.display = 'none';
-                                                            }}
-                                                        />
-                                                    ))}
-                                                    {container.links && container.links.filter(l => l.favicon).length > 4 && (
-                                                        <span className="container-card-favicon-more">
-                                                            +{container.links.filter(l => l.favicon).length - 4}
+                                    return (
+                                        <Link
+                                            key={container.id}
+                                            to={`/c/${container.id}`}
+                                            className="container-card profile-public-card"
+                                            style={{ textDecoration: 'none' }}
+                                        >
+                                            <div className="container-card-overlay" style={{ backgroundColor: color }} />
+                                            <div className="container-card-content">
+                                                {favicons.length > 0 && (
+                                                    <div className="container-card-favicons">
+                                                        {favicons.map((favicon, idx) => (
+                                                            <img
+                                                                key={idx}
+                                                                src={favicon}
+                                                                alt=""
+                                                                className="container-card-favicon"
+                                                                onError={(e) => {
+                                                                    (e.target as HTMLImageElement).style.display = 'none';
+                                                                }}
+                                                            />
+                                                        ))}
+                                                        {(() => {
+                                                            const totalFaviconLinks = container.links?.filter(l => l.url && l.type !== 'text' && l.type !== 'file').length || 0;
+                                                            return totalFaviconLinks > 4 && (
+                                                                <span className="container-card-favicon-more">
+                                                                    +{totalFaviconLinks - 4}
+                                                                </span>
+                                                            );
+                                                        })()}
+                                                    </div>
+                                                )}
+
+                                                <h3 className="container-card-title">{container.name}</h3>
+                                                {container.description && (
+                                                    <p className="container-card-description">{container.description}</p>
+                                                )}
+
+                                                <div className="container-card-stats">
+                                                    <span className="container-card-stat">
+                                                        <LinkIcon size={12} />
+                                                        {linkCount} {linkCount === 1 ? t('container.asset', 'asset') : t('container.assets', 'assets')}
+                                                    </span>
+                                                    {container.authorizedUsers && container.authorizedUsers.length > 0 && (
+                                                        <span className="container-card-stat">
+                                                            <span className="container-card-collab-dots">
+                                                                {container.authorizedUsers.slice(0, 3).map((_, i) => (
+                                                                    <span key={i} className="container-card-collab-dot" />
+                                                                ))}
+                                                            </span>
+                                                            {container.authorizedUsers.length}
                                                         </span>
                                                     )}
                                                 </div>
-                                            )}
-
-                                            <h3 className="container-card-title">{container.name}</h3>
-                                            {container.description && (
-                                                <p className="container-card-description">{container.description}</p>
-                                            )}
-
-                                            {/* Link count badge */}
-                                            <div className="container-card-stats">
-                                                <span className="container-card-stat">
-                                                    <LinkIcon size={12} />
-                                                    {linkCount} {t('container.links')}
-                                                </span>
-                                                {container.authorizedUsers && container.authorizedUsers.length > 0 && (
-                                                    <span className="container-card-stat">
-                                                        <span className="container-card-collab-dots">
-                                                            {container.authorizedUsers.slice(0, 3).map((_, i) => (
-                                                                <span key={i} className="container-card-collab-dot" />
-                                                            ))}
-                                                        </span>
-                                                        {container.authorizedUsers.length}
-                                                    </span>
-                                                )}
                                             </div>
-                                        </div>
-                                    </Link>
-                                );
-                            })}
+                                        </Link>
+                                    );
+                                })}
                         </div>
                     )}
                 </section>
@@ -587,7 +633,7 @@ const Profile: React.FC = () => {
                                     {followList.map(user => (
                                         <Link
                                             key={user.uid}
-                                            to={`/profile/${user.username}`}
+                                            to={`/u/${user.username}`}
                                             className="follow-list-item"
                                             onClick={closeModals}
                                         >

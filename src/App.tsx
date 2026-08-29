@@ -6,7 +6,6 @@ import { ThemeProvider } from './contexts/ThemeContext';
 import { ContainerProvider } from './contexts/ContainerContext';
 import { ToastProvider } from './contexts/ToastContext';
 import { useAuth } from './contexts/AuthContext';
-import { isAppWebView } from './utils/device';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
@@ -30,8 +29,6 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import DeleteAccount from './pages/DeleteAccount';
 import SupportPage from './pages/SupportPage';
 import Profile from './pages/Profile';
-import Paywall from './pages/Paywall';
-import MobileUpgrade from './pages/MobileUpgrade';
 import RefundPolicy from './pages/RefundPolicy';
 import CookiePolicy from './pages/CookiePolicy';
 import AdminDashboard from './pages/AdminDashboard';
@@ -101,11 +98,11 @@ const AppRoutes: React.FC = () => {
           }
         />
         <Route
-          path="/container/:id"
+          path="/c/:id"
           element={<ContainerDetails />}
         />
         <Route
-          path="/profile/:username"
+          path="/u/:username"
           element={<Profile />}
         />
 
@@ -114,7 +111,7 @@ const AppRoutes: React.FC = () => {
           element={<SharePage />}
         />
         <Route
-          path="/container/:id/share"
+          path="/c/:id/share"
           element={
             <ProtectedRoute>
               <ShareContainer />
@@ -145,38 +142,13 @@ const AppRoutes: React.FC = () => {
             </ProtectedRoute>
           }
         />
-        {/* Planlar ve Upgrade - Mobilde gizle/engelle */}
-        <Route 
-          path="/paywall" 
-          element={
-            <ProtectedRoute>
-              {isAppWebView() ? <Navigate to="/mobile-upgrade" replace /> : <Paywall />}
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
-          path="/upgrade" 
-          element={
-            <ProtectedRoute>
-              {isAppWebView() ? <Navigate to="/mobile-upgrade" replace /> : <Paywall />}
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
-          path="/mobile-upgrade" 
-          element={
-            <ProtectedRoute>
-              <MobileUpgrade />
-            </ProtectedRoute>
-          } 
-        />
-        <Route 
-          path="/admin" 
+        <Route
+          path="/admin"
           element={
             <ProtectedRoute>
               <AdminDashboard />
             </ProtectedRoute>
-          } 
+          }
         />
       </Routes>
       <BottomNavigation />
