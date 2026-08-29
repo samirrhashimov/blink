@@ -1172,3 +1172,17 @@ body,
     padding: 1.5rem;
   }
 }
+
+@media (min-width: 640px) {
+  .support-form {
+    min-width: 640px;
+    max-width: 800px;
+    margin-top: 30px;
+  }
+
+  .support-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

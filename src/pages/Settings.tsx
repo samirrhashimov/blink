@@ -723,7 +723,7 @@ const Settings: React.FC = () => {
                 className="btn-secondary"
               >
                 <MessageSquare className="h-4 w-4" />
-                {t('settings.feedback')}
+                {t('settings.feedbackCta')}
               </button>
             </div>
 
