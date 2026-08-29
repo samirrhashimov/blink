@@ -23,7 +23,6 @@ import {
 import { SharingService } from '../services/sharingService';
 import { ContainerService } from '../services/containerService';
 import { useToast } from '../contexts/ToastContext';
-import { FiInbox } from "react-icons/fi";
 import blinkLogo from '../assets/blinklogo2.png';
 import NotificationsPanel from '../components/NotificationsPanel';
 import LoadingSkeleton from '../components/LoadingSkeleton';
