@@ -198,7 +198,7 @@ const Profile: React.FC = () => {
                 const rawSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
                 const siteKey = (typeof rawSiteKey === 'string' && rawSiteKey.trim() !== '' && rawSiteKey !== 'undefined' && rawSiteKey !== 'null')
                     ? rawSiteKey.trim()
-                    : '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
+                    : '6LesqY4sAAAAAOrGlOMHkPPc4XRYbcH0XODv2C-w';
                 captchaWidgetId.current = (window as any).grecaptcha.render(captchaRef.current, {
                     sitekey: siteKey,
                     callback: (token: string) => setCaptchaToken(token),
