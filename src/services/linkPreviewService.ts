@@ -83,10 +83,11 @@ class LinkPreviewService {
 
     try {
       // --- 1. NEW LOGIC: LINKPREVIEW.NET API ---
-      const apiKey = import.meta.env.VITE_LINK_PREVIEW_API_KEY;
-      if (apiKey && apiKey.trim() !== '') {
+      const rawApiKey = import.meta.env.VITE_LINK_PREVIEW_API_KEY;
+      const apiKey = typeof rawApiKey === 'string' ? rawApiKey.trim() : '';
+      if (apiKey && apiKey !== 'undefined' && apiKey !== 'null') {
         try {
-          const apiRes = await fetch(`https://api.linkpreview.net/?key=${apiKey}&q=${encodeURIComponent(url)}`);
+          const apiRes = await fetch(`https://api.linkpreview.net/?key=${encodeURIComponent(apiKey)}&q=${encodeURIComponent(url)}`);
           if (apiRes.ok) {
             const data = await apiRes.json();
             return {

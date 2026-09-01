@@ -162,17 +162,6 @@ const Dashboard: React.FC = () => {
     setSelectionMode(false);
   };
 
-  const deleteCloudinaryFile = async (publicId: string, resourceType?: string) => {
-    try {
-      await fetch('/.netlify/functions/deleteFile', {
-        method: 'POST',
-        body: JSON.stringify({ publicId, resourceType })
-      });
-    } catch (err) {
-      console.error('Failed to delete file from Cloudinary:', err);
-    }
-  };
-
   const handleLeaveContainer = async (container: Container) => {
     if (!currentUser) return;
 
@@ -183,20 +172,13 @@ const Dashboard: React.FC = () => {
       // 1. Find the user's files in this container
       const userFiles = container.links.filter(l => l.createdBy === currentUser.uid && l.type === 'file');
 
-      // 2. Clear Cloudinary storage for these files
-      for (const file of userFiles) {
-        if (file.fileData?.publicId) {
-          await deleteCloudinaryFile(file.fileData.publicId, file.fileData.resourceType);
-        }
-      }
-
-      // 3. Clear from container (this handles Firebase and User Storage Quota in ContainerService)
+      // 2. Clear from container (this handles Firebase and User Storage Quota in ContainerService)
       if (userFiles.length > 0) {
         const fileIds = userFiles.map(f => f.id);
         await ContainerService.deleteLinksFromContainer(container.id, fileIds);
       }
 
-      // 4. Finally leave the container
+      // 3. Finally leave the container
       await SharingService.removeUserFromContainer(container.id, currentUser.uid);
 
       toast.success(t('container.modals.leaveContainer.success', 'You have left the container and your files were cleared.'));

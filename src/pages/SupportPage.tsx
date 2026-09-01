@@ -18,7 +18,8 @@ const SupportPage: React.FC = () => {
         const data = new FormData(form);
 
         try {
-            const response = await fetch('https://formspree.io/f/mojleqkq', {
+            const formUrl = import.meta.env.VITE_FORMSPREE_SUPPORT_URL || 'https://formspree.io/f/mojleqkq';
+            const response = await fetch(formUrl, {
                 method: 'POST',
                 body: data,
                 headers: {

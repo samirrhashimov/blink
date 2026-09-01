@@ -653,7 +653,10 @@ const ContainerDetails: React.FC = () => {
     const tryRender = () => {
       if (containerCaptchaRef.current && (window as any).grecaptcha && containerCaptchaWidgetId.current === null) {
         containerCaptchaRef.current.innerHTML = '';
-        const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
+        const rawSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+        const siteKey = (typeof rawSiteKey === 'string' && rawSiteKey.trim() !== '' && rawSiteKey !== 'undefined' && rawSiteKey !== 'null')
+          ? rawSiteKey.trim()
+          : '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
         containerCaptchaWidgetId.current = (window as any).grecaptcha.render(containerCaptchaRef.current, {
           sitekey: siteKey,
           callback: (token: string) => setContainerCaptchaToken(token),
@@ -695,7 +698,8 @@ const ContainerDetails: React.FC = () => {
         body.append('reporter_uid', currentUser.uid);
         body.append('reporter_email', currentUser.email || '');
       }
-      const res = await fetch('https://formspree.io/f/mqeywpqv', {
+      const formUrl = import.meta.env.VITE_FORMSPREE_REPORT_CONTAINER_URL || 'https://formspree.io/f/mqeywpqv';
+      const res = await fetch(formUrl, {
         method: 'POST',
         body,
         headers: { Accept: 'application/json' },

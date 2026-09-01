@@ -195,7 +195,10 @@ const Profile: React.FC = () => {
             if (captchaRef.current && (window as any).grecaptcha && captchaWidgetId.current === null) {
                 // Clear previous content
                 captchaRef.current.innerHTML = '';
-                const siteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY || '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
+                const rawSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+                const siteKey = (typeof rawSiteKey === 'string' && rawSiteKey.trim() !== '' && rawSiteKey !== 'undefined' && rawSiteKey !== 'null')
+                    ? rawSiteKey.trim()
+                    : '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI';
                 captchaWidgetId.current = (window as any).grecaptcha.render(captchaRef.current, {
                     sitekey: siteKey,
                     callback: (token: string) => setCaptchaToken(token),
@@ -239,7 +242,8 @@ const Profile: React.FC = () => {
                 body.append('reporter_email', currentUser.email || '');
                 body.append('reporter_username', (currentUser as any).username || '');
             }
-            const res = await fetch('https://formspree.io/f/xaqpaqky', {
+            const formUrl = import.meta.env.VITE_FORMSPREE_REPORT_USER_URL || 'https://formspree.io/f/xaqpaqky';
+            const res = await fetch(formUrl, {
                 method: 'POST',
                 body,
                 headers: { Accept: 'application/json' },

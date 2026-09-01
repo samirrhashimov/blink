@@ -174,17 +174,6 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
     }
   };
 
-  const deleteCloudinaryFile = async (publicId: string, resourceType?: string) => {
-    try {
-      await fetch('/.netlify/functions/deleteFile', {
-        method: 'POST',
-        body: JSON.stringify({ publicId, resourceType })
-      });
-    } catch (err) {
-      console.error('Failed to delete file from Cloudinary:', err);
-    }
-  };
-
   const proceedWithRemoval = async (userId: string, transferOwnership: boolean = false) => {
     try {
       setLoading(true);
@@ -198,7 +187,7 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
         if (transferOwnership) {
           const totalBytes = userFiles.reduce((sum: number, l: AppLink) => sum + (l.fileData?.bytes || 0), 0);
 
-          // 2. Update links metadata locally first if we want
+          // 1. Update links metadata locally first if we want
           const updatedLinks = container.links.map((l: AppLink) => {
             if (l.createdBy === userId && l.type === 'file') {
               return { ...l, createdBy: currentUserId, updatedAt: new Date() };
@@ -206,25 +195,18 @@ const CollaboratorsModal: React.FC<CollaboratorsModalProps> = ({
             return l;
           });
 
-          // 3. Update the container in Firestore with new ownership
+          // 2. Update the container in Firestore with new ownership
           const containerRef = doc(db, 'vaults', containerId);
           await updateDoc(containerRef, {
             links: updatedLinks,
             updatedAt: new Date()
           });
 
-          // 4. Update quotas: Subtract from leaving user, add to admin
+          // 3. Update quotas: Subtract from leaving user, add to admin
           await UserService.updateStorageUsage(userId, -totalBytes);
           await UserService.updateStorageUsage(currentUserId, totalBytes);
         } else {
-          // 1. Delete from Cloudinary
-          for (const file of userFiles) {
-            if (file.fileData?.publicId) {
-              await deleteCloudinaryFile(file.fileData.publicId, file.fileData.resourceType);
-            }
-          }
-
-          // 2. Clear from container 
+          // Clear from container 
           if (userFiles.length > 0) {
             const fileIdsToDelete = userFiles.map(l => l.id);
             const totalBytesToDelete = userFiles.reduce((sum: number, l: AppLink) => sum + (l.fileData?.bytes || 0), 0);

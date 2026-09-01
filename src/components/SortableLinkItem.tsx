@@ -167,14 +167,7 @@ const SortableLinkItem: React.FC<SortableLinkItemProps> = ({
             // Track the click
             onTrackClick?.(link.id);
 
-            // Inject fl_attachment to Cloudinary URL to force download
-            // Standard Cloudinary URL: .../upload/v12345/public_id.ext
-            // We want: .../upload/fl_attachment/v12345/public_id.ext
-            let downloadUrl = link.url;
-            if (downloadUrl.includes('cloudinary.com') && !downloadUrl.includes('fl_attachment')) {
-                downloadUrl = downloadUrl.replace('/upload/', '/upload/fl_attachment/');
-            }
-
+            const downloadUrl = link.url;
             const a = document.createElement('a');
             a.href = downloadUrl;
             // Use original name if available
