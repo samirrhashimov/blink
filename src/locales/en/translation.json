@@ -927,5 +927,22 @@
         "notFound": "Profile not found",
         "notFoundDesc": "The profile you are looking for does not exist or has been deleted.",
         "goHome": "Go to Dashboard"
+    },
+    "announcement": {
+        "text": "🎉 Our website is live!",
+        "linkLabel": "Click here to visit →",
+        "adminTitle": "Announcement Banner",
+        "adminSubtitle": "Manage the global banner shown to all users below the navbar.",
+        "fieldEnabled": "Banner enabled",
+        "fieldMessage": "Message (TR)",
+        "fieldMessageEn": "Message (EN)",
+        "fieldLinkLabel": "Link label (TR)",
+        "fieldLinkLabelEn": "Link label (EN)",
+        "fieldUrl": "Target URL",
+        "fieldDismissKey": "Dismiss key",
+        "dismissKeyHint": "Change this value to reset banner for all users (e.g. bump app version).",
+        "save": "Save changes",
+        "saved": "Saved! Reload the app to see changes.",
+        "note": "Note: Changes are written to the config file. Redeploy the app to apply in production."
     }
 }

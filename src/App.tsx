@@ -22,6 +22,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import ErrorBoundary from './components/ErrorBoundary';
 import BottomNavigation from './components/BottomNavigation';
 import GlobalModals from './components/GlobalModals';
+import AnnouncementBanner from './components/AnnouncementBanner';
 import SpotlightSearch from './components/SpotlightSearch';
 import Legal from './pages/Legal';
 import TermsAndConditions from './pages/TermsAndConditions';
@@ -32,6 +33,7 @@ import Profile from './pages/Profile';
 import RefundPolicy from './pages/RefundPolicy';
 import CookiePolicy from './pages/CookiePolicy';
 import AdminDashboard from './pages/AdminDashboard';
+import AnnouncementPage from './pages/AnnouncementPage';
 
 
 const AppRoutes: React.FC = () => {
@@ -39,6 +41,7 @@ const AppRoutes: React.FC = () => {
 
   return (
     <>
+      <AnnouncementBanner />
       <Routes>
         <Route
           path="/"
@@ -87,6 +90,14 @@ const AppRoutes: React.FC = () => {
         <Route
           path="/legal/cookie-policy"
           element={<CookiePolicy />}
+        />
+        <Route
+          path="/announcement"
+          element={<AnnouncementPage />}
+        />
+        <Route
+          path="/notice"
+          element={<Navigate to="/announcement" replace />}
         />
 
         <Route

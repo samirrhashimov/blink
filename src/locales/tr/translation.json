@@ -928,5 +928,22 @@
         "notFound": "Profil bulunamadı",
         "notFoundDesc": "Aradığınız profil mevcut değil veya silinmiş olabilir.",
         "goHome": "Panele Dön"
+    },
+    "announcement": {
+        "text": "🎉 Uygulamanın web sitesi yayında!",
+        "linkLabel": "Ziyaret etmek için tıklayın →",
+        "adminTitle": "Duyuru Bandı",
+        "adminSubtitle": "Tüm kullanıcılara navbarın altında gösterilen global bandı yönetin.",
+        "fieldEnabled": "Band aktif",
+        "fieldMessage": "Mesaj (TR)",
+        "fieldMessageEn": "Mesaj (EN)",
+        "fieldLinkLabel": "Link etiketi (TR)",
+        "fieldLinkLabelEn": "Link etiketi (EN)",
+        "fieldUrl": "Hedef URL",
+        "fieldDismissKey": "Kapat anahtarı",
+        "dismissKeyHint": "Tüm kullanıcılar için bandı sıfırlamak istiyorsanız bu değeri değiştirin (örn. uygulama versiyonunu artırın).",
+        "save": "Değişiklikleri kaydet",
+        "saved": "Kaydedildi! Değişiklikleri görmek için uygulamayı yeniden yükleyin.",
+        "note": "Not: Değişiklikler config dosyasına yazılır. Üretimde geçerli olması için uygulamayı yeniden deploy edin."
     }
 }
