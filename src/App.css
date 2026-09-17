@@ -204,7 +204,7 @@ textarea {
 
 @media (min-width: 1600px) {
   .container {
-    max-width: 1600px;
+    max-width: 1440px;
   }
 }
 
@@ -3021,8 +3021,20 @@ main.container {
 
 @media (min-width: 600px) {
   .container-grid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1440px) {
+  .dashboard-page > main.container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .dashboard-page .container-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.75rem;
   }
 }
 
