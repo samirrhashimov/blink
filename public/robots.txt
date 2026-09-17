@@ -6,4 +6,4 @@ Disallow: /settings
 Disallow: /invitations
 Disallow: /tags
 
-Sitemap: https://blinklinknet.netlify.app/sitemap.xml
+Sitemap: https://blink.linzaapps.duckdns.org/sitemap.xml

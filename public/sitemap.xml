@@ -1,55 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://blinklinknet.netlify.app/</loc>
+    <loc>https://blink.linzaapps.duckdns.org/</loc>
     <lastmod>2026-01-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://blinklinknet.netlify.app/login</loc>
+    <loc>https://blink.linzaapps.duckdns.org/login</loc>
     <lastmod>2026-01-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://blinklinknet.netlify.app/signup</loc>
+    <loc>https://blink.linzaapps.duckdns.org/signup</loc>
     <lastmod>2026-01-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://blinklinknet.netlify.app/forgot-password</loc>
+    <loc>https://blink.linzaapps.duckdns.org/forgot-password</loc>
     <lastmod>2026-01-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://blinklinknet.netlify.app/legal</loc>
+    <loc>https://blink.linzaapps.duckdns.org/legal</loc>
     <lastmod>2026-01-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://blinklinknet.netlify.app/legal/terms-and-conditions</loc>
+    <loc>https://blink.linzaapps.duckdns.org/legal/terms-and-conditions</loc>
     <lastmod>2026-01-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://blinklinknet.netlify.app/legal/privacy-policy</loc>
+    <loc>https://blink.linzaapps.duckdns.org/legal/privacy-policy</loc>
     <lastmod>2026-01-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://blinklinknet.netlify.app/legal/delete-account</loc>
+    <loc>https://blink.linzaapps.duckdns.org/legal/delete-account</loc>
     <lastmod>2026-02-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.3</priority>
   </url>
   <url>
-    <loc>https://blinklinknet.netlify.app/verify-email</loc>
+    <loc>https://blink.linzaapps.duckdns.org/verify-email</loc>
     <lastmod>2026-01-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>

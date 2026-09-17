@@ -2,7 +2,7 @@
 <img src="./src/assets/blinklogonew.png" width="100px">
 </div>
 
-<h1 align="center">Blink - Your links, organized</h1>
+<h1 align="center">Blink: Organize Anything</h1>
 
 
 <p align="center">
@@ -14,7 +14,7 @@
    <img src="https://api.netlify.com/api/v1/badges/ef10eda2-aa73-433a-9afd-c0c084e76bf9/deploy-status">
 </p>
 
-<p align="center">A minimalist, web-based link storage and collaboration app built with React.js, TypeScript, and Firebase.</p>
+<p align="center">A web-based link and note storage and collab app built with React.js, TypeScript, and Firebase.</p>
 
 ## Features
 
@@ -60,7 +60,7 @@ Take your links on the go with the official **Blink Android App**! Access your w
 ## Tech Stack
 
 - **Frontend**: React 18, TypeScript, Vite
-- **Styling**: Classic CSS , Tailwind CSS, PostCSS
+- **Styling**: CSS , Tailwind CSS, PostCSS
 - **Backend**: Firebase (Authentication + Firestore)
 - **Icons**: Lucide React
 - **Data Visualization**: Recharts
@@ -69,7 +69,7 @@ Take your links on the go with the official **Blink Android App**! Access your w
 
 ## Getting Started
 
-### Prerequisites
+### Minimum requirements
 
 - Node.js (v16 or higher)
 - npm or yarn
@@ -84,6 +84,7 @@ git clone https://github.com/samirrhashimov/blink.git
 
 2. Install dependencies:
 ```bash
+cd blink
 npm install
 ```
 
@@ -96,6 +97,8 @@ npm install
 ```bash
 npm run dev
 ```
+
+5. Create a .env file using the template in [.env.example](.env.example) and fill in the necessary tokens.
 
 5. Open [http://localhost:5173](http://localhost:5173) in your browser
 

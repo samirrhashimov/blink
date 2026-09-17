@@ -13,7 +13,7 @@ interface SEOProps {
 const SEO: React.FC<SEOProps> = ({
     title,
     description = "Blink - Your links, organized. A minimalist web-based link storage and collaboration app.",
-    canonical = "https://blinklinknet.netlify.app",
+    canonical = "https://blink.linzaapps.duckdns.org",
     ogType = "website",
     ogImage = "./src/assets/og-image.png", // Make sure to have an OG image
     twitterHandle = "@linzaapps"
