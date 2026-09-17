@@ -1,9 +1,0 @@
-User-agent: *
-Allow: /
-Disallow: /dashboard
-Disallow: /vault/
-Disallow: /settings
-Disallow: /invitations
-Disallow: /tags
-
-Sitemap: https://blink.linzaapps.duckdns.org/sitemap.xml
