@@ -16,11 +16,11 @@ lerna-debug.log*
 # =============================================
 # Build Output & Cache
 # =============================================
-dist/
-dist-ssr/
-build/
-.vite/
-node_modules/.vite/
+# dist/
+# dist-ssr/
+# build/
+# .vite/
+# node_modules/.vite/
 
 # TypeScript
 *.tsbuildinfo
