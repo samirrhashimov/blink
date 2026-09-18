@@ -2195,10 +2195,19 @@ main.container {
 }
 
 .landing-header {
-  padding: 1rem 1rem;
+  padding: 1rem 0;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.landing-header > .container {
+  width: min(100%, 1280px);
+  max-width: 1280px;
+  margin: 0 auto;
+  padding-left: clamp(1rem, 2vw, 2rem);
+  padding-right: clamp(1rem, 2vw, 2rem);
+  box-sizing: border-box;
 }
 
 .dark .landing-header {
