@@ -2,6 +2,13 @@
   command = "npm run build"
   publish = "dist"
 
+[[redirects]]
+  from = "https://blinklinknet.netlify.app/*"
+  to = "https://blink.linzaapps.duckdns.org/:splat"
+  status = 301
+  force = true
+
+
 [build.environment]
   NPM_FLAGS = "--legacy-peer-deps"
 
